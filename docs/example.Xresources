@@ -1,0 +1,54 @@
+!! spmenu
+!!
+!! colors
+spmenu.font:               DejaVu Sans Mono 8
+spmenu.normfgcolor:        #bbbbbb
+spmenu.normbgcolor:        #222222
+spmenu.selfgcolor:         #eeeeee
+spmenu.selbgcolor:         #005577
+spmenu.normhlfgcolor:      #ffffff
+spmenu.normhlbgcolor:      #000000
+spmenu.selhlfgcolor:       #ffffff
+spmenu.selhlbgcolor:       #000000
+spmenu.outfgcolor:         #000000
+spmenu.outbgcolor:         #5e81ac
+spmenu.caretfgcolor:       #222222
+spmenu.sgrcolor0:          #000000
+spmenu.sgrcolor1:          #7f0000
+spmenu.sgrcolor2:          #007f00
+spmenu.sgrcolor3:          #7f7f00
+spmenu.sgrcolor4:          #00007f
+spmenu.sgrcolor5:          #7f007f
+spmenu.sgrcolor6:          #007f7f
+spmenu.sgrcolor7:          #cccccc
+spmenu.sgrcolor8:          #333333
+spmenu.sgrcolor9:          #ff0000
+spmenu.sgrcolor10:         #00ff00
+spmenu.sgrcolor11:         #ffff00
+spmenu.sgrcolor12:         #0000ff
+spmenu.sgrcolor13:         #ff00ff
+spmenu.sgrcolor14:         #00ffff
+spmenu.sgrcolor15:         #ffffff
+
+!! misc
+spmenu.alpha:              1
+spmenu.bordercentered:     1
+spmenu.borderwidth:        2
+spmenu.lines:              0
+spmenu.columns:            10
+spmenu.lineheight:         5
+spmenu.minlineheight:      5
+spmenu.maxhist:            64
+spmenu.histnodup:          1
+spmenu.casesensitive:      0
+spmenu.menuposition:       1
+spmenu.menupaddingv:       0
+spmenu.menupaddingh:       0
+spmenu.colorprompt:        1
+spmenu.preselected:        0
+spmenu.type:               1
+spmenu.class:              spmenu
+spmenu.leftarrow:          <
+spmenu.rightarrow:         >
+
+spmenu.hidematchcount:     0

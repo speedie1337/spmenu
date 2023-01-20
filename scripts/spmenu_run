@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# get path
+PATH() {
+	echo "$PATH" | tr ':' '\n' | uniq | sed 's#$#/#' | # List directories in $PATH
+    xargs ls -lu --time-style=+%s |              # Add atime epoch
+    awk '/^(-|l)/ { print $6, $7 }' |            # Only print timestamp and name
+    sort -rn | cut -d' ' -f 2
+}
+
+# Run spmenu and parse it
+PARSE() {
+    DOUT="$(PATH | spmenu -H "${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist" "$@")"
+
+    [ "$(printf '%c' "$DOUT")" = "#" ] && RUN_ARG="$TERMINAL" || RUN_ARG="$SHELL"
+    [ "$RUN_ARG" != "$TERMINAL" ] && printf "%s" "$DOUT" | sed "s/#//g" | ${SHELL:-"/bin/sh"} &
+    [ "$RUN_ARG" = "$TERMINAL" ] && $TERMINAL -e "$(printf "%s" "$DOUT" | sed "s/#//g")"
+}
+
+PARSE "$@"
+
+rm -f "$HOME/.cache/spmenu_run"
