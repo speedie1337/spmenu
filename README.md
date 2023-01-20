@@ -1,6 +1,5 @@
 # spmenu
-
-Simply my build of suckless's dmenu
+![image](/docs/preview.png)
 
 ### What is spmenu?
 
