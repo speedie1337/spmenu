@@ -38,7 +38,7 @@ dist: clean
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f spmenu scripts/* $(DESTDIR)$(PREFIX)/bin
+	cp -rf spmenu scripts/* $(DESTDIR)$(PREFIX)/bin
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/spmenu*
 	rm -f *.o
 	rm -f spmenu
