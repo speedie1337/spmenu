@@ -15,6 +15,7 @@ It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [
 This build of spmenu has some features written for this build.
 Of course if you want, this is free software so you can use it in your own build.
 
+- dwm-like keybind array (See keybinds.h)
 - 256 color support through SGR codes.
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
