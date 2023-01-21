@@ -23,6 +23,8 @@
 #include "main.h"
 
 /* macros */
+#define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
+#define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define INTERSECT(x,y,w,h,r)  (MAX(0, MIN((x)+(w),(r).x_org+(r).width)  - MAX((x),(r).x_org)) \
                              && MAX(0, MIN((y)+(h),(r).y_org+(r).height) - MAX((y),(r).y_org)))
 #define LENGTH(X)             (sizeof X / sizeof X[0])
@@ -32,6 +34,14 @@
 /* number */
 #define NUMBERSMAXDIGITS      100
 #define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
+
+/* user friendly names for all the modifiers */
+#define CONTROL ControlMask
+#define SHIFT ShiftMask
+#define ALT Mod1Mask
+#define ALTR Mod3Mask
+#define SUPER Mod4Mask
+#define SUPERR Mod5Mask
 
 /* alpha */
 #define opaque                0xffU
@@ -54,9 +64,24 @@ struct item {
 	double distance;
 };
 
+typedef union {
+	int i;
+	unsigned int ui;
+	float f;
+	const void *v;
+} Arg;
+
+typedef struct {
+	unsigned int mod;
+	KeySym keysym;
+	void (*func)(const Arg *);
+	const Arg arg;
+} Key;
+
 static char numbers[NUMBERSBUFSIZE] = "";
 static char text[BUFSIZ] = "";
 static char *embed;
+static int numlockmask = 0;
 static int bh, mw, mh;
 static int dmx = 0; /* put spmenu at this x offset */
 static int dmy = 0; /* put spmenu at this y offset (measured from the bottom if menuposition is 0) */
@@ -104,9 +129,28 @@ typedef struct {
 
 static void load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
+static void savehistory(char *input);
+
+/* keybind functions */
+static void move(const Arg *arg);
+static void moveend(const Arg *arg);
+static void movestart(const Arg *arg);
+static void movenext(const Arg *arg);
+static void moveprev(const Arg *arg);
+static void paste(const Arg *arg);
+static void restoresel(const Arg *arg);
+static void clear(const Arg *arg);
+static void viewhist(const Arg *arg);
+static void moveword(const Arg *arg);
+static void navhistory(const Arg *arg);
+static void backspace(const Arg *arg);
+static void selectitem(const Arg *arg);
+static void quit(const Arg *arg);
+static void complete(const Arg *arg);
 
 
 #include "options.h" /* Include user configuration */
+#include "keybinds.h" /* Include keybinds */
 #include "colors.h" /* Include colors */
 #include "xresources.h" /* Include .Xresources */
 
@@ -114,7 +158,7 @@ static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
-static void
+void
 appenditem(struct item *item, struct item **list, struct item **last)
 {
 	if (*last)
@@ -127,7 +171,7 @@ appenditem(struct item *item, struct item **list, struct item **last)
 	*last = item;
 }
 
-static void
+void
 recalculatenumbers(void)
 {
 	unsigned int numer = 0, denom = 0;
@@ -142,7 +186,7 @@ recalculatenumbers(void)
 	snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
 }
 
-static void
+void
 calcoffsets(void)
 {
 	int i, n;
@@ -174,7 +218,7 @@ max_textw(void)
 	return len;
 }
 
-static void
+void
 cleanup(void)
 {
 	size_t i;
@@ -205,7 +249,7 @@ cistrstr(const char *h, const char *n)
 	return NULL;
 }
 
-static void
+void
 drawhighlights(struct item *item, int x, int y, int maxw)
 {
 	char restorechar, tokens[sizeof text], *highlight,  *token;
@@ -361,7 +405,7 @@ sixd_to_8bit(int x)
 	return x == 0 ? 0 : 0x37 + 0x28 * x;
 }
 
-static void
+void
 drawmenu(void)
 {
 	unsigned int curpos;
@@ -442,7 +486,7 @@ drawmenu(void)
 	drw_map(drw, win, 0, 0, mw, mh);
 }
 
-static void
+void
 grabfocus(void)
 {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 10000000  };
@@ -469,7 +513,7 @@ grabfocus(void)
 	die("cannot grab focus");
 }
 
-static void
+void
 grabkeyboard(void)
 {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
@@ -577,7 +621,7 @@ fuzzymatch(void)
 	calcoffsets();
 }
 
-static void
+void
 match(void)
 {
 	if (fuzzy) {
@@ -635,7 +679,7 @@ match(void)
 	calcoffsets();
 }
 
-static void
+void
 insert(const char *str, ssize_t n)
 {
 	if (strlen(text) + n > sizeof text - 1)
@@ -659,7 +703,7 @@ nextrune(int inc)
 	return n;
 }
 
-static void
+void
 movewordedge(int dir)
 {
 	if (dir < 0) { /* move cursor to the start of the word*/
@@ -675,7 +719,7 @@ movewordedge(int dir)
 	}
 }
 
-static void
+void
 loadhistory(void)
 {
 	FILE *fp = NULL;
@@ -721,8 +765,8 @@ loadhistory(void)
 	}
 }
 
-static void
-navhistory(int dir)
+void
+navighistory(int dir)
 {
 	static char def[BUFSIZ];
 	char *p = NULL;
@@ -761,7 +805,298 @@ navhistory(int dir)
 	match();
 }
 
-static void
+void
+paste(const Arg *arg)
+{
+    int clipboard;
+
+    if (arg->i == 1)
+        clipboard = XA_PRIMARY;
+    else
+        clipboard = clip;
+
+	XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
+	return;
+
+}
+
+void
+quit(const Arg *arg)
+{
+	cleanup();
+	exit(1);
+}
+
+void
+viewhist(const Arg *arg)
+{
+    int i;
+
+    if (histfile) {
+		if (!backup_items) {
+			backup_items = items;
+			items = calloc(histsz + 1, sizeof(struct item));
+
+			if (!items) {
+				die("spmenu: cannot allocate memory");
+			}
+
+			for (i = 0; i < histsz; i++) {
+				items[i].text = history[i];
+			}
+		} else {
+			free(items);
+			items = backup_items;
+			backup_items = NULL;
+		}
+	}
+
+	match();
+    drawmenu();
+}
+
+void
+moveword(const Arg *arg)
+{
+    movewordedge(arg->i);
+    drawmenu();
+}
+
+void
+backspace(const Arg *arg)
+{
+    if (cursor == 0)
+        return;
+
+    insert(NULL, nextrune(-1) - cursor);
+    drawmenu();
+}
+
+void
+selectitem(const Arg *arg)
+{
+    char *selection;
+
+    if (arg->i)
+        selection = sel->text;
+    else
+        selection = text;
+
+    if (!sel)
+        return;
+
+    puts(selection);
+    savehistory(selection);
+	cleanup();
+	exit(0);
+}
+
+void
+movenext(const Arg *arg)
+{
+	if (!next)
+		return;
+
+	sel = curr = next;
+	calcoffsets();
+    drawmenu();
+}
+
+void
+moveprev(const Arg *arg)
+{
+    if (!prev)
+        return;
+
+    sel = curr = prev;
+    calcoffsets();
+    drawmenu();
+}
+
+void
+movestart(const Arg *arg)
+{
+  	if (sel == matches) {
+		cursor = 0;
+        drawmenu();
+        return;
+	}
+
+	sel = curr = matches;
+	calcoffsets();
+    drawmenu();
+}
+
+void
+moveend(const Arg *arg)
+{
+    if (text[cursor] != '\0') {
+		cursor = strlen(text);
+        drawmenu();
+        return;
+	}
+
+	if (next) {
+		curr = matchend;
+		calcoffsets();
+		curr = prev;
+		calcoffsets();
+
+		while (next && (curr = curr->right))
+			calcoffsets();
+	}
+
+	sel = matchend;
+    drawmenu();
+}
+
+void
+navhistory(const Arg *arg)
+{
+  	char buf[64];
+
+    navighistory(arg->i);
+    buf[0] = 0;
+    drawmenu();
+}
+
+void
+restoresel(const Arg *arg)
+{
+    text[cursor] = '\0';
+    match();
+    drawmenu();
+}
+
+void
+clear(const Arg *arg)
+{
+    insert(NULL, 0 - cursor);
+    drawmenu();
+}
+
+void
+complete(const Arg *arg)
+{
+ 	if (!sel)
+		return;
+
+	strncpy(text, sel->text, sizeof text - 1);
+	text[sizeof text - 1] = '\0';
+	cursor = strlen(text);
+	match();
+    drawmenu();
+}
+
+void
+move(const Arg *arg)
+{
+    struct item *tmpsel;
+    int i, offscreen = 0;
+
+    if (arg->i == 3) { /* left */
+    	if (columns > 1) {
+			if (!sel)
+				return;
+			tmpsel = sel;
+			for (i = 0; i < lines; i++) {
+				if (!tmpsel->left || tmpsel->left->right != tmpsel) {
+					if (offscreen)
+						drawmenu();
+					return;
+				}
+				if (tmpsel == curr)
+					offscreen = 1;
+				tmpsel = tmpsel->left;
+			}
+			sel = tmpsel;
+			if (offscreen) {
+				curr = prev;
+				calcoffsets();
+			}
+			drawmenu();
+		}
+
+		if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
+			cursor = nextrune(-1);
+			drawmenu();
+		}
+		if (lines > 0)
+			return;
+    } else if (arg->i == 4) {
+        	if (columns > 1) {
+			if (!sel)
+				return;
+			tmpsel = sel;
+			for (i = 0; i < lines; i++) {
+				if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
+					if (offscreen)
+						drawmenu();
+					return;
+				}
+				tmpsel = tmpsel->right;
+				if (tmpsel == next)
+					offscreen = 1;
+			}
+			sel = tmpsel;
+			if (offscreen) {
+				curr = next;
+				calcoffsets();
+			}
+			drawmenu();
+		}
+
+		if (text[cursor] != '\0') {
+			cursor = nextrune(+1);
+			drawmenu();
+		}
+
+		if (lines > 0)
+			return;
+    } else if (arg->i == 2) {
+       	if (sel && sel->right && (sel = sel->right) == next) {
+			curr = next;
+			calcoffsets();
+		}
+		drawmenu();
+    } else if (arg->i == 1) {
+        if (sel && sel->left && (sel = sel->left)->right == curr) {
+			curr = prev;
+			calcoffsets();
+		}
+        drawmenu();
+    }
+}
+
+void
+keypress(XEvent *e)
+{
+	unsigned int i;
+	KeySym keysym;
+	XKeyEvent *ev;
+  	char buf[64];
+    KeySym ksym = NoSymbol;
+    Status status;
+
+    int len = 0;
+	ev = &e->xkey;
+    len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
+
+	keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+
+	for (i = 0; i < LENGTH(keys); i++) {
+		if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
+			keys[i].func(&(keys[i].arg));
+    }
+
+   	if (!iscntrl(*buf) && type) {
+		insert(buf, len);
+
+        drawmenu();
+    }
+}
+
+void
 savehistory(char *input)
 {
 	unsigned int i;
@@ -798,296 +1133,7 @@ out:
 	free(history);
 }
 
-static void
-keypress(XKeyEvent *ev)
-{
-	char buf[64];
-	int len;
-	KeySym ksym = NoSymbol;
-	Status status;
-	int i, offscreen = 0;
-	struct item *tmpsel;
-
-	len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
-	switch (status) {
-	default: /* XLookupNone, XBufferOverflow */
-		return;
-    case XLookupChars: /* composed string from input method */
-		goto insert;
-	case XLookupKeySym:
-    case XLookupBoth: /* a KeySym and a string are returned: use keysym */
-		break;
-	}
-
-	if (ev->state & ControlMask) {
-		switch(ksym) {
-		case XK_a: ksym = XK_Home;      break;
-		case XK_b: ksym = XK_Left;      break;
-		case XK_c: ksym = XK_Escape;    break;
-		case XK_d: ksym = XK_Delete;    break;
-		case XK_e: ksym = XK_End;       break;
-		case XK_f: ksym = XK_Right;     break;
-		case XK_g: ksym = XK_Escape;    break;
-		case XK_h: ksym = XK_BackSpace; break;
-		case XK_i: ksym = XK_Tab;       break;
-		case XK_j: /* fallthrough */
-		case XK_J: /* fallthrough */
-		case XK_m: /* fallthrough */
-		case XK_M: ksym = XK_Return; ev->state &= ~ControlMask; break;
-		case XK_n: ksym = XK_Down;      break;
-		case XK_p: ksym = XK_Up;        break;
-
-		case XK_k: /* delete right */
-			text[cursor] = '\0';
-			match();
-			break;
-		case XK_u: /* delete left */
-			insert(NULL, 0 - cursor);
-			break;
-		case XK_w: /* delete word */
-			while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
-				insert(NULL, nextrune(-1) - cursor);
-			while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
-				insert(NULL, nextrune(-1) - cursor);
-			break;
-
-		/* v to paste */
-		case XK_v:
-		case XK_V:
-			XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
-			                  utf8, utf8, win, CurrentTime);
-			return;
-
-		case XK_y: /* paste selection */
-		case XK_Y:
-			XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
-			                  utf8, utf8, win, CurrentTime);
-			return;
-		case XK_r:
-			if (histfile) {
-				if (!backup_items) {
-					backup_items = items;
-					items = calloc(histsz + 1, sizeof(struct item));
-					if (!items) {
-						die("cannot allocate memory");
-					}
-
-					for (i = 0; i < histsz; i++) {
-						items[i].text = history[i];
-					}
-				} else {
-					free(items);
-					items = backup_items;
-					backup_items = NULL;
-				}
-			}
-			match();
-			goto draw;
-		case XK_Left:
-		case XK_KP_Left:
-			movewordedge(-1);
-			goto draw;
-		case XK_Right:
-		case XK_KP_Right:
-			movewordedge(+1);
-			goto draw;
-		case XK_Return:
-		case XK_KP_Enter:
-			break;
-		case XK_bracketleft:
-			cleanup();
-			exit(1);
-		default:
-			return;
-		}
-	} else if (ev->state & Mod1Mask) {
-		switch(ksym) {
-		case XK_b:
-			movewordedge(-1);
-			goto draw;
-		case XK_f:
-			movewordedge(+1);
-			goto draw;
-		case XK_g: ksym = XK_Home;  break;
-		case XK_G: ksym = XK_End;   break;
-		case XK_h: ksym = XK_Up;    break;
-		case XK_j: ksym = XK_Next;  break;
-		case XK_k: ksym = XK_Prior; break;
-		case XK_l: ksym = XK_Down;  break;
-		case XK_p:
-			navhistory(-1);
-			buf[0]=0;
-			break;
-		case XK_n:
-			navhistory(1);
-			buf[0]=0;
-			break;
-		default:
-			return;
-		}
-	}
-
-	switch(ksym) {
-	default:
-	insert:
-		if (!iscntrl(*buf) && type)
-			insert(buf, len);
-		break;
-	case XK_Delete:
-	case XK_KP_Delete:
-		if (text[cursor] == '\0')
-			return;
-		cursor = nextrune(+1);
-		/* fallthrough */
-	case XK_BackSpace:
-		if (cursor == 0)
-			return;
-		insert(NULL, nextrune(-1) - cursor);
-		break;
-	case XK_End:
-	case XK_KP_End:
-		if (text[cursor] != '\0') {
-			cursor = strlen(text);
-			break;
-		}
-		if (next) {
-			/* jump to end of list and position items in reverse */
-			curr = matchend;
-			calcoffsets();
-			curr = prev;
-			calcoffsets();
-			while (next && (curr = curr->right))
-				calcoffsets();
-		}
-		sel = matchend;
-		break;
-	case XK_Escape:
-		cleanup();
-		exit(1);
-	case XK_Home:
-	case XK_KP_Home:
-		if (sel == matches) {
-			cursor = 0;
-			break;
-		}
-		sel = curr = matches;
-		calcoffsets();
-		break;
-	case XK_Left:
-	if (columns > 1) {
-			if (!sel)
-				return;
-			tmpsel = sel;
-			for (i = 0; i < lines; i++) {
-				if (!tmpsel->left || tmpsel->left->right != tmpsel) {
-					if (offscreen)
-						break;
-					return;
-				}
-				if (tmpsel == curr)
-					offscreen = 1;
-				tmpsel = tmpsel->left;
-			}
-			sel = tmpsel;
-			if (offscreen) {
-				curr = prev;
-				calcoffsets();
-			}
-			break;
-		}
-	case XK_KP_Left:
-		if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
-			cursor = nextrune(-1);
-			break;
-		}
-		if (lines > 0)
-			return;
-		/* fallthrough */
-	case XK_Up:
-	case XK_KP_Up:
-		if (sel && sel->left && (sel = sel->left)->right == curr) {
-			curr = prev;
-			calcoffsets();
-		}
-		break;
-	case XK_Next:
-	case XK_KP_Next:
-		if (!next)
-			return;
-		sel = curr = next;
-		calcoffsets();
-		break;
-	case XK_Prior:
-	case XK_KP_Prior:
-		if (!prev)
-			return;
-		sel = curr = prev;
-		calcoffsets();
-		break;
-	case XK_Return:
-	case XK_KP_Enter:
-		puts((sel && !(ev->state & ShiftMask)) ? sel->text : text);
-		if (!(ev->state & ControlMask)) {
-		   		savehistory((sel && !(ev->state & ShiftMask))
-				    ? sel->text : text);
-			cleanup();
-			exit(0);
-		}
-		if (sel)
-			sel->out = 1;
-		break;
-	case XK_Right:
-	if (columns > 1) {
-			if (!sel)
-				return;
-			tmpsel = sel;
-			for (i = 0; i < lines; i++) {
-				if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
-					if (offscreen)
-						break;
-					return;
-				}
-				tmpsel = tmpsel->right;
-				if (tmpsel == next)
-					offscreen = 1;
-			}
-			sel = tmpsel;
-			if (offscreen) {
-				curr = next;
-				calcoffsets();
-			}
-			break;
-		}
-	case XK_KP_Right:
-		if (text[cursor] != '\0') {
-			cursor = nextrune(+1);
-			break;
-		}
-		if (lines > 0)
-			return;
-		/* fallthrough */
-	case XK_Down:
-	case XK_KP_Down:
-		if (sel && sel->right && (sel = sel->right) == next) {
-			curr = next;
-			calcoffsets();
-		}
-		break;
-	case XK_Tab:
-		if (!sel)
-			return;
-		strncpy(text, sel->text, sizeof text - 1);
-		text[sizeof text - 1] = '\0';
-		cursor = strlen(text);
-		match();
-		break;
-	}
-
-draw:
-	drawmenu();
-}
-
-static void
+void
 mousemove(XEvent *e)
 {
 	struct item *item;
@@ -1126,7 +1172,7 @@ mousemove(XEvent *e)
 	}
 }
 
-static void
+void
 buttonpress(XEvent *e)
 {
 	struct item *item;
@@ -1245,8 +1291,8 @@ buttonpress(XEvent *e)
 	}
 }
 
-static void
-paste(void)
+void
+pastesel(void)
 {
 	char *p, *q;
 	int di;
@@ -1263,7 +1309,7 @@ paste(void)
 	drawmenu();
 }
 
-static void
+void
 xinitvisual()
 {
 	XVisualInfo *infos;
@@ -1300,7 +1346,7 @@ xinitvisual()
 	}
 }
 
-static void
+void
 readstdin(void)
 {
 	char buf[sizeof text], *p;
@@ -1384,7 +1430,7 @@ load_xresources(void)
 	XCloseDisplay(display);
 }
 
-static void
+void
 run(void)
 {
 	XEvent ev;
@@ -1414,11 +1460,11 @@ run(void)
 				grabfocus();
 			break;
 		case KeyPress:
-			keypress(&ev.xkey);
+			keypress(&ev);
 			break;
 		case SelectionNotify:
 			if (ev.xselection.property == utf8)
-				paste();
+				pastesel();
 			break;
 		case VisibilityNotify:
 			if (ev.xvisibility.state != VisibilityUnobscured)
@@ -1428,7 +1474,7 @@ run(void)
 	}
 }
 
-static void
+void
 setup(void)
 {
 	int x, y, i, j;
@@ -1609,7 +1655,7 @@ setup(void)
 	drawmenu();
 }
 
-static void
+void
 usage(void)
 {
 	fputs("spmenu: dynamic menu\n\n"
