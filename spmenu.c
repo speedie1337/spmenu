@@ -1763,6 +1763,7 @@ usage(void)
 		  "spmenu -sb <color>    Set the selected background color\n"
 		  "spmenu -sf <color>    Set the selected foreground color\n"
           "spmenu -cc <color>    Set the caret color\n"
+          "spmenu -bcb <color>   Set the border color\n"
 		  "spmenu -nhf <color>   Set the normal highlight foreground color\n"
 		  "spmenu -nhb <color>   Set the normal highlight background color\n"
 		  "spmenu -shf <color>   Set the selected highlight foreground color\n"
@@ -1927,6 +1928,8 @@ main(int argc, char *argv[])
 			colors[SchemeNumber][ColBg] = argv[++i];
 		else if (!strcmp(argv[i], "-nfg"))  /* numfgcolor */
 			colors[SchemeNumber][ColFg] = argv[++i];
+		else if (!strcmp(argv[i], "-bcb"))  /* border */
+			colors[SchemeBorder][ColBg] = argv[++i];
         /* sgr colors */
 		else if (!strcmp(argv[i], "-sgr0")) textcolors[0] = argv[++i]; /* sgr color 0 */
 		else if (!strcmp(argv[i], "-sgr1")) textcolors[1] = argv[++i]; /* sgr color 1 */
