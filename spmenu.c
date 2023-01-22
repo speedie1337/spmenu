@@ -1166,45 +1166,6 @@ out:
 }
 
 void
-mousemove(XEvent *e)
-{
-	struct item *item;
-	XPointerMovedEvent *ev = &e->xmotion;
-	int x = 0, y = 0, h = bh, w, item_num = 0;
-
-	if (lines > 0) {
-		w = mw - x;
-		for (item = curr; item != next; item = item->right) {
-            if (item_num++ == lines) {
-                item_num = 1;
-                x += w / columns;
-                y = 0;
-            }
-			y += h;
-			if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
-				sel = item;
-				calcoffsets();
-				drawmenu();
-				return;
-			}
-		}
-	} else if (matches) {
-		x += inputw + promptw;
-		w = TEXTW(leftarrow);
-		for (item = curr; item != next; item = item->right) {
-			x += w;
-			w = MIN(TEXTW(item->text), mw - x - TEXTW(rightarrow));
-			if (ev->x >= x && ev->x <= x + w) {
-				sel = item;
-				calcoffsets();
-				drawmenu();
-				return;
-			}
-		}
-	}
-}
-
-void
 buttonpress(XEvent *e)
 {
 	struct item *item;
@@ -1500,9 +1461,6 @@ run(void)
 			exit(1);
 		case ButtonPress:
 			buttonpress(&ev);
-			break;
-        case MotionNotify:
-			mousemove(&ev);
 			break;
 		case Expose:
 			if (ev.xexpose.count == 0)
