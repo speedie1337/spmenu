@@ -1894,9 +1894,10 @@ main(int argc, char *argv[])
 		    rightarrow = argv[++i];
 		} else if (!strcmp(argv[i], "-m")) /* monitor */
 			mon = atoi(argv[++i]);
-		else if (!strcmp(argv[i], "-bw")) /* border width */
+		else if (!strcmp(argv[i], "-bw")) { /* border width */
+            bordercentered = 0;
 		    borderwidth = atoi(argv[++i]);
-	    else if (!strcmp(argv[i], "-H")) /* hist file location */
+        } else if (!strcmp(argv[i], "-H")) /* hist file location */
 			histfile = argv[++i];
 	    else if (!strcmp(argv[i], "-x"))   /* window x offset */
 			dmx = atoi(argv[++i]);
