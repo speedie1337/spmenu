@@ -25,12 +25,13 @@ Of course if you want, this is free software so you can use it in your own build
 ### Other features
 
 Note: This is an incomplete list, it's just here to give you an idea of what this build has to offer.
-- Pango markup support.
+- Pango markup support
 - Alpha transparency
 - Pywal/.Xresources support
 - Grid
 - Colored Emoji/Font support
 - Highlighting
+- Right-to-left language support
 - Case-insensitive by default
 - Padding; useful with patched dwm with barpadding or speedwm.
 - Fuzzy-finding
