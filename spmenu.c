@@ -9,6 +9,17 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef FRIBIDI
+#define USERTL 1
+#else
+#define USERTL 0
+#endif
+
+#if USERTL
+#include <fribidi.h>
+static char fribidi_text[BUFSIZ] = "";
+#endif
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -148,6 +159,9 @@ static void selectitem(const Arg *arg);
 static void quit(const Arg *arg);
 static void complete(const Arg *arg);
 
+#if USERTL
+static void apply_fribidi(char *str);
+#endif
 
 #include "options.h" /* Include user configuration */
 #include "keybinds.h" /* Include keybinds */
@@ -209,7 +223,7 @@ calcoffsets(void)
 			break;
 }
 
-static int
+int
 max_textw(void)
 {
 	int len = 0;
@@ -231,7 +245,7 @@ cleanup(void)
 	XCloseDisplay(dpy);
 }
 
-static char *
+char *
 cistrstr(const char *h, const char *n)
 {
 	size_t i;
@@ -286,7 +300,7 @@ drawhighlights(struct item *item, int x, int y, int maxw)
 	}
 }
 
-static int
+int
 drawitem(struct item *item, int x, int y, int w)
 {
 	if (item == sel)
@@ -393,13 +407,19 @@ drawitem(struct item *item, int x, int y, int w)
 	}
 
 	buffer[wr] = '\0';
+
+    #if USERTL
+    apply_fribidi(buffer);
+	int r = drw_text(drw, x, y, w, bh, lrpad / 2, fribidi_text, 0, False);
+    #else
 	int r = drw_text(drw, x, y, w, bh, lrpad / 2, buffer, 0, False);
+    #endif
 
     drawhighlights(item, x, y, w);
     return r;
 }
 
-unsigned char
+char
 sixd_to_8bit(int x)
 {
 	return x == 0 ? 0 : 0x37 + 0x28 * x;
@@ -429,9 +449,21 @@ drawmenu(void)
 	if (passwd) {
 	        censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
+        #if USERTL
+        apply_fribidi(censort);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, True);
+        #else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, censort, 0, True);
+        #endif
 		free(censort);
-	} else drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0, True);
+	} else {
+        #if USERTL
+        apply_fribidi(text);
+        drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, True);
+        #else
+        drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0, True);
+        #endif
+    }
 
 	curpos = TEXTW(text) - TEXTW(&text[cursor]);
 	if ((curpos += lrpad / 2 - 1) < w) {
@@ -692,7 +724,7 @@ insert(const char *str, ssize_t n)
 	match();
 }
 
-static size_t
+size_t
 nextrune(int inc)
 {
 	ssize_t n;
@@ -1290,6 +1322,28 @@ buttonpress(XEvent *e)
 		}
 	}
 }
+
+#if USERTL
+void
+apply_fribidi(char *str)
+{
+  FriBidiStrIndex len = strlen(str);
+  FriBidiChar logical[BUFSIZ];
+  FriBidiChar visual[BUFSIZ];
+  FriBidiParType base = FRIBIDI_PAR_ON;
+  FriBidiCharSet charset;
+  fribidi_boolean result;
+
+  fribidi_text[0] = 0;
+  if (len>0)
+  {
+    charset = fribidi_parse_charset("UTF-8");
+    len = fribidi_charset_to_unicode(charset, str, len, logical);
+    result = fribidi_log2vis(logical, len, &base, visual, NULL, NULL, NULL);
+    len = fribidi_unicode_to_charset(charset, visual, len, fribidi_text);
+  }
+}
+#endif
 
 void
 pastesel(void)

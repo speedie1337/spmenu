@@ -6,3 +6,8 @@
 # Comment these lines if you don't need it.
 XINERAMALIBS  = -lXinerama
 XINERAMAFLAGS = -DXINERAMA
+
+# Right to left language support
+# Comment these lines if you don't need it.
+BDLIBS = -lfribidi
+BDINC = /usr/include/fribidi
