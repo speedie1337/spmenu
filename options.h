@@ -32,6 +32,7 @@ static char *rightarrow                = ">"; /* Right arrow, used to indicate y
 static int type                        = 1; /* Allow typing into spmenu or only allow keybinds. */
 static int casesensitive               = 0; /* Case-sensitive by default? (0/1) */
 static int preselected                 = 0; /* Which line should spmenu preselect? */
+static int accuratewidth               = 1; /* Enable accurate width. May have a performance hit if you are matching a lot of items at once */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
 
 /* Line options */
@@ -55,48 +56,52 @@ static int hidematchcount              = 0; /* Hide match count (0/1) */
  *
  * Normal foreground colors
  */
-static char normfgcolor[]              = "#bbbbbb"; /* Text color for unselected */
-static char normbgcolor[]              = "#222222"; /* Background color for unselected */
+static char col_normfgcolor[]          = "#bbbbbb"; /* Text color for unselected */
+static char col_normbgcolor[]          = "#222222"; /* Background color for unselected */
 
 /* Selected foreground colors */
-static char selfgcolor[]               = "#eeeeee"; /* Text color for selected */
-static char selbgcolor[]               = "#5e81ac"; /* Background color for selected */
+static char col_selfgcolor[]           = "#eeeeee"; /* Text color for selected */
+static char col_selbgcolor[]           = "#005577"; /* Background color for selected */
 
 /* Normal highlight colors */
-static char normhlfgcolor[]            = "#ffffff"; /* Text highlight color for unselected */
-static char normhlbgcolor[]            = "#000000"; /* Background highlight color for unselected */
+static char col_normhlfgcolor[]        = "#ffffff"; /* Text highlight color for unselected */
+static char col_normhlbgcolor[]        = "#000000"; /* Background highlight color for unselected */
 
 /* Selected highlight colors */
-static char selhlfgcolor[]             = "#ffffff"; /* Text highlight color for selected */
-static char selhlbgcolor[]             = "#000000"; /* Background highlight color for selected */
+static char col_selhlfgcolor[]         = "#ffffff"; /* Text highlight color for selected */
+static char col_selhlbgcolor[]         = "#000000"; /* Background highlight color for selected */
 
 /* Match count colors */
-static char numfgcolor[]               = "#ffffff"; /* Match count text color */
-static char numbgcolor[]               = "#000000"; /* Match count background color */
+static char col_numfgcolor[]           = "#ffffff"; /* Match count text color */
+static char col_numbgcolor[]           = "#000000"; /* Match count background color */
+
+/* Border color */
+static char col_bordercolor[]          = "#005577"; /* Border color */
 
 /* Caret colors */
-static char caretfgcolor[]             = "#222222"; /* Caret color */
+static char col_caretfgcolor[]         = "#ffffff"; /* Caret color */
 
 /* SGR colors */
-static char sgrcolor0[]                = "#000000"; /* SGR color #0 */
-static char sgrcolor1[]                = "#7f0000"; /* SGR color #1 */
-static char sgrcolor2[]                = "#007f00"; /* SGR color #2 */
-static char sgrcolor3[]                = "#7f7f00"; /* SGR color #3 */
-static char sgrcolor4[]                = "#00007f"; /* SGR color #4 */
-static char sgrcolor5[]                = "#7f007f"; /* SGR color #5 */
-static char sgrcolor6[]                = "#007f7f"; /* SGR color #6 */
-static char sgrcolor7[]                = "#cccccc"; /* SGR color #7 */
-static char sgrcolor8[]                = "#333333"; /* SGR color #8 */
-static char sgrcolor9[]                = "#ff0000"; /* SGR color #9 */
-static char sgrcolor10[]               = "#00ff00"; /* SGR color #10 */
-static char sgrcolor11[]               = "#ffff00"; /* SGR color #11 */
-static char sgrcolor12[]               = "#0000ff"; /* SGR color #12 */
-static char sgrcolor13[]               = "#ff00ff"; /* SGR color #13 */
-static char sgrcolor14[]               = "#00ffff"; /* SGR color #14 */
-static char sgrcolor15[]               = "#ffffff"; /* SGR color #15 */
+static char col_sgrcolor0[]            = "#000000"; /* SGR color #0 */
+static char col_sgrcolor1[]            = "#7f0000"; /* SGR color #1 */
+static char col_sgrcolor2[]            = "#007f00"; /* SGR color #2 */
+static char col_sgrcolor3[]            = "#7f7f00"; /* SGR color #3 */
+static char col_sgrcolor4[]            = "#00007f"; /* SGR color #4 */
+static char col_sgrcolor5[]            = "#7f007f"; /* SGR color #5 */
+static char col_sgrcolor6[]            = "#007f7f"; /* SGR color #6 */
+static char col_sgrcolor7[]            = "#cccccc"; /* SGR color #7 */
+static char col_sgrcolor8[]            = "#333333"; /* SGR color #8 */
+static char col_sgrcolor9[]            = "#ff0000"; /* SGR color #9 */
+static char col_sgrcolor10[]           = "#00ff00"; /* SGR color #10 */
+static char col_sgrcolor11[]           = "#ffff00"; /* SGR color #11 */
+static char col_sgrcolor12[]           = "#0000ff"; /* SGR color #12 */
+static char col_sgrcolor13[]           = "#ff00ff"; /* SGR color #13 */
+static char col_sgrcolor14[]           = "#00ffff"; /* SGR color #14 */
+static char col_sgrcolor15[]           = "#ffffff"; /* SGR color #15 */
 
 /* Alpha options */
-#define baralpha                       200 /* Bar alpha */
+#define fgalpha                        opaque /* Foreground alpha */
+#define bgalpha                        200 /* Background alpha */
 #define borderalpha                    opaque /* Border alpha */
 
 /* Misc */

@@ -66,6 +66,7 @@ enum { SchemeNorm,
        SchemeNumber,
        SchemeNormHighlight,
        SchemeSelHighlight,
+       SchemeBorder,
        SchemeLast }; /* color schemes */
 
 struct item {
@@ -108,7 +109,7 @@ static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
 
-static Atom clip, utf8;
+static Atom clip, utf8, types, dock;
 static Display *dpy;
 static Window root, parentwin, win;
 static XIC xic;
@@ -1510,6 +1511,9 @@ setup(void)
 {
 	int x, y, i, j;
 	unsigned int du;
+    unsigned int tmp, minstrlen = 0, curstrlen = 0;
+    int numwidthchecks = 100;
+    struct item *item;
 	XSetWindowAttributes swa;
 	XIM xim;
 	Window w, dw, *dws;
@@ -1573,6 +1577,8 @@ setup(void)
 
 	clip = XInternAtom(dpy, "CLIPBOARD",   False);
 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
+   	types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
+	dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
 
 	/* calculate menu geometry */
 	bh = drw->font->h + 2;
@@ -1580,6 +1586,21 @@ setup(void)
 	lines = MAX(lines, 0);
 	mh = (lines + 1) * bh;
 	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
+
+    if (accuratewidth) {
+        for (item = items; !lines && item && item->text; ++item) {
+            curstrlen = strlen(item->text);
+            if (numwidthchecks || minstrlen < curstrlen) {
+                numwidthchecks = MAX(numwidthchecks - 1, 0);
+                minstrlen = MAX(minstrlen, curstrlen);
+                if ((tmp = MIN(TEXTW(item->text), mw/3) > inputw)) {
+                    inputw = tmp;
+                    if (tmp == mw/3)
+                        break;
+                }
+            }
+        }
+    }
 #ifdef XINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
@@ -1636,7 +1657,9 @@ setup(void)
 			mw = wa.width;
 		}
 	}
-	inputw = MIN(inputw, mw/3);
+
+	/* might be faster in some instances, most of the time unnecessary */
+    if (!accuratewidth) inputw = MIN(inputw, mw/3);
 	match();
 
 	/* create menu window */
@@ -1661,8 +1684,9 @@ setup(void)
 				}
 
     }
-    XSetWindowBorder(dpy, win, scheme[SchemeSel][ColBg].pixel);
+    XSetWindowBorder(dpy, win, scheme[SchemeBorder][ColBg].pixel);
 	XSetClassHint(dpy, win, &ch);
+   	XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1);
 
 
 	/* input methods */
@@ -1694,6 +1718,8 @@ usage(void)
 		  "spmenu -l <line>      Set line count to stdin\n"
 		  "spmenu -h <height>    Set spmenu height to <height>\n"
 		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
+          "spmenu -rw            Enable relative input width\n"
+          "spmenu -nrw           Disable relative input width\n"
           "spmenu -f             Grabs keyboard before reading stdin\n"
 		  "spmenu -F             Enable fuzzy matching\n"
 		  "spmenu -P             Hide characters\n"
@@ -1806,9 +1832,13 @@ main(int argc, char *argv[])
         } else if (!strcmp(argv[i], "-bc")) { /* draw border when centered */
 		    bordercentered = 1;
             centered = 1;
-        } else if (!strcmp(argv[i], "-f"))   /* grabs keyboard before reading stdin */
+        } else if (!strcmp(argv[i], "-f")) {   /* grabs keyboard before reading stdin */
 			fast = 1;
-		else if (!strcmp(argv[i], "-xrdb"))   /* xresources */
+        } else if (!strcmp(argv[i], "-rw")) {  /* relative width */
+			accuratewidth = 1;
+        } else if (!strcmp(argv[i], "-nrw")) {   /* no relative width */
+			accuratewidth = 0;
+        } else if (!strcmp(argv[i], "-xrdb"))   /* xresources */
 			xresources = 1;
 		else if (!strcmp(argv[i], "-nxrdb"))   /* no xresources */
 			xresources = 0;
