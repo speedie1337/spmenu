@@ -31,6 +31,11 @@ XRENDERLIBS = -lXrender
 # OpenBSD (uncomment)
 #FREETYPEINC = $(X11INC)/freetype2
 
+# macOS with XQuartz (uncomment)
+#FREETYPEINC = /usr/local/include/freetype2
+#X11INC = /opt/X11/include
+#X11LIB = /opt/X11/lib
+
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XINERAMAFLAGS)
 CFLAGS   = -std=c99 -pedantic -Wall -Ofast $(INCS) $(CPPFLAGS)
 LDFLAGS  = $(LIBS)
