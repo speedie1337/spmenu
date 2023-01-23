@@ -28,8 +28,8 @@ ResourcePref resources[] = {
 
 	/* Pywal support    */
 	{ "color10",        STRING,  &col_caretfgcolor },
-	{ "color10",        STRING,  &col_larrowfg },
-	{ "color10",        STRING,  &col_rarrowfg },
+	{ "color4",         STRING,  &col_larrowfg },
+	{ "color4",         STRING,  &col_rarrowfg },
 	{ "color10",        STRING,  &col_itemnormfg },
 	{ "color10",        STRING,  &col_inputfg },
 	{ "color0",         STRING,  &col_itemnormbg },
@@ -38,15 +38,15 @@ ResourcePref resources[] = {
 	{ "color0",         STRING,  &col_rarrowbg },
 	{ "color0",         STRING,  &col_itemselfg },
 	{ "color0",         STRING,  &col_inputbg },
-	{ "color6",         STRING,  &col_promptbg },
+	{ "color12",        STRING,  &col_promptbg },
 	{ "color0",         STRING,  &col_promptfg },
 	{ "color6",         STRING,  &col_itemselbg },
 	{ "color6",         STRING,  &col_bordercolor },
 	{ "color0",         STRING,  &col_numfgcolor },
-	{ "color6",         STRING,  &col_numbgcolor },
+	{ "color5",         STRING,  &col_numbgcolor },
 	{ "color2",         STRING,  &col_normhlbgcolor },
 	{ "color3",         STRING,  &col_selhlbgcolor },
-	{ "color3",         STRING,  &col_normhlfgcolor },
+	{ "color0",         STRING,  &col_normhlfgcolor },
 	{ "color0",         STRING,  &col_selhlfgcolor },
 
     /* sgr colors */
