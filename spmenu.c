@@ -63,6 +63,7 @@ enum { SchemeLArrow,
        SchemeItemNorm,
        SchemeItemSel,
        SchemeMenu,
+       SchemeInput,
        SchemePrompt,
        SchemeNormHighlight,
        SchemeSelHighlight,
@@ -443,7 +444,7 @@ drawmenu(void)
 	}
 	/* draw input field */
 	w = (lines > 0 || !matches) ? mw - x : inputw;
-	drw_setscheme(drw, scheme[SchemeMenu]);
+	drw_setscheme(drw, scheme[SchemeInput]);
 	if (passwd) {
 	        censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
@@ -1758,6 +1759,8 @@ usage(void)
           "spmenu -sib <color>   Set the selected item background color\n"
           "spmenu -pfg <color>   Set the prompt foreground color\n"
           "spmenu -pbg <color>   Set the prompt background color\n"
+          "spmenu -ifg <color>   Set input foreground color\n"
+          "spmenu -ibg <color>   Set input background color\n"
           "spmenu -mbg <color>   Set the menu background color\n"
 		  "spmenu -nhf <color>   Set the normal highlight foreground color\n"
 		  "spmenu -nhb <color>   Set the normal highlight background color\n"
@@ -1921,18 +1924,22 @@ main(int argc, char *argv[])
         } else if (!strcmp(argv[i], "-nb")) {  /* normal background color */
 			colors[SchemeItemNorm][ColBg] = argv[++i];
             colors[SchemeMenu][ColBg] = argv[++i];
+            colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-nf")) {  /* normal foreground color */
 			colors[SchemeItemNorm][ColFg] = argv[++i];
             colors[SchemeMenu][ColFg] = argv[++i];
+            colors[SchemeInput][ColFg] = argv[++i];
             colors[SchemePrompt][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-sb")) {  /* selected background color */
 			colors[SchemeItemSel][ColBg] = argv[++i];
             colors[SchemeMenu][ColBg] = argv[++i];
+            colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-sf")) {  /* selected foreground color */
 			colors[SchemeItemSel][ColFg] = argv[++i];
             colors[SchemeMenu][ColFg] = argv[++i];
+            colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColFg] = argv[++i];
 
         /* spmenu colors */
@@ -1950,6 +1957,10 @@ main(int argc, char *argv[])
 			colors[SchemePrompt][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-pbg")) { /* prompt bg color */
 			colors[SchemePrompt][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-ifg")) { /* input fg color */
+			colors[SchemeInput][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-pfg")) { /* input bg color */
+			colors[SchemeInput][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-shf")) { /* selected highlight foreground color */
 			colors[SchemeSelHighlight][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-shf")) { /* selected highlight foreground color */

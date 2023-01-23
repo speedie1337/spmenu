@@ -60,6 +60,10 @@ static char col_itemnormbg[]           = "#222222"; /* Normal background item co
 static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
 static char col_itemselbg[]            = "#005577"; /* Selected background item color */
 
+/* Input colors */
+static char col_inputbg[]              = "#222222"; /* Input field background color */
+static char col_inputfg[]              = "#eeeeee"; /* Input field foreground color */
+
 /* Menu colors */
 static char col_menubgcolor[]          = "#222222"; /* Menu background color */
 

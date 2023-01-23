@@ -10,6 +10,8 @@ spmenu.col_larrowfg:       #bbbbbb
 spmenu.col_rarrowfg:       #bbbbbb
 spmenu.col_larrowbg:       #222222
 spmenu.col_rarrowbg:       #222222
+spmenu.col_inputfg:        #eeeeee
+spmenu.col_inputbg:        #222222
 spmenu.col_numfgcolor:     #ffffff
 spmenu.col_numbgcolor:     #000000
 spmenu.col_normhlfgcolor:  #ffffff
