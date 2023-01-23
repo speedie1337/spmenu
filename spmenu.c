@@ -72,6 +72,8 @@ enum { SchemeLArrow,
        SchemeBorder,
        SchemeLast }; /* color schemes */
 
+static char text[BUFSIZ] = "";
+
 struct item {
 	char *text;
 	struct item *left, *right;
@@ -93,7 +95,6 @@ typedef struct {
 } Key;
 
 static char numbers[NUMBERSBUFSIZE] = "";
-static char text[BUFSIZ] = "";
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
@@ -841,10 +842,11 @@ paste(const Arg *arg)
 {
     int clipboard;
 
-    if (arg->i == 1)
+    if (arg->i == 1) {
         clipboard = XA_PRIMARY;
-    else
+    } else {
         clipboard = clip;
+    }
 
 	XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
 	return;
@@ -984,10 +986,7 @@ moveend(const Arg *arg)
 void
 navhistory(const Arg *arg)
 {
-  	char buf[64];
-
     navighistory(arg->i);
-    buf[0] = 0;
     drawmenu();
 }
 
