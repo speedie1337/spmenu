@@ -15,7 +15,7 @@ static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
 static int minwidth                    = 500; /* Minimum width */
 static int centered                    = 0; /* Whether or not to center spmenu by default */
 
-static int colorsupport                = 0; /* Support 256 colors? Otherwise the default 16 colors will be used. */
+static int colorsupport                = 1; /* Support 256 colors? Otherwise the default 16 colors will be used. */
 
 /* Window border options */
 static int borderwidth                 = 2; /* Width of the border */
@@ -54,14 +54,24 @@ static int hidematchcount              = 0; /* Hide match count (0/1) */
 
 /* Color options
  *
- * Normal foreground colors
- */
-static char col_normfgcolor[]          = "#bbbbbb"; /* Text color for unselected */
-static char col_normbgcolor[]          = "#222222"; /* Background color for unselected */
+ * Item colors */
+static char col_itemnormfg[]           = "#bbbbbb"; /* Normal foreground item color */
+static char col_itemnormbg[]           = "#222222"; /* Normal background item color */
+static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
+static char col_itemselbg[]            = "#005577"; /* Selected background item color */
 
-/* Selected foreground colors */
-static char col_selfgcolor[]           = "#eeeeee"; /* Text color for selected */
-static char col_selbgcolor[]           = "#005577"; /* Background color for selected */
+/* Menu colors */
+static char col_menubgcolor[]          = "#222222"; /* Menu background color */
+
+/* Prompt colors */
+static char col_promptfg[]             = "#eeeeee"; /* Prompt foreground color */
+static char col_promptbg[]             = "#005577"; /* Prompt background color */
+
+/* Arrow colors */
+static char col_larrowfg[]             = "#bbbbbb"; /* Left arrow color */
+static char col_rarrowfg[]             = "#bbbbbb"; /* Right arrow color */
+static char col_larrowbg[]             = "#222222"; /* Left arrow color */
+static char col_rarrowbg[]             = "#222222"; /* Right arrow color */
 
 /* Normal highlight colors */
 static char col_normhlfgcolor[]        = "#ffffff"; /* Text highlight color for unselected */

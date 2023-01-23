@@ -1,8 +1,17 @@
 spmenu.font:               DejaVu Sans Mono 8
-spmenu.col_normfgcolor:    #bbbbbb
-spmenu.col_normbgcolor:    #222222
-spmenu.col_selfgcolor:     #eeeeee
-spmenu.col_selbgcolor:     #005577
+spmenu.col_itemnormfg:     #bbbbbb
+spmenu.col_itemnormbg:     #222222
+spmenu.col_itemselfg:      #eeeeee
+spmenu.col_itemselbg:      #005577
+spmenu.col_menubgcolor:    #222222
+spmenu.col_promptfg:       #eeeeee
+spmenu.col_promptbg:       #005577
+spmenu.col_larrowfg:       #bbbbbb
+spmenu.col_rarrowfg:       #bbbbbb
+spmenu.col_larrowbg:       #222222
+spmenu.col_rarrowbg:       #222222
+spmenu.col_numfgcolor:     #ffffff
+spmenu.col_numbgcolor:     #000000
 spmenu.col_normhlfgcolor:  #ffffff
 spmenu.col_normhlbgcolor:  #000000
 spmenu.col_selhlfgcolor:   #ffffff

@@ -1766,8 +1766,10 @@ usage(void)
 		  "spmenu -shb <color>   Set the selected highlight background color\n"
           "spmenu -nfg <color>   Set the foreground color for the match count\n"
           "spmenu -nbg <color>   Set the background color for the match count\n"
-          "spmenu -laf <color>   Set the left arrow color\n"
-          "spmenu -raf <color>   Set the left arrow color\n"
+          "spmenu -laf <color>   Set the left arrow foreground color\n"
+          "spmenu -raf <color>   Set the left arrow foreground color\n"
+          "spmenu -lab <color>   Set the left arrow background color\n"
+          "spmenu -rab <color>   Set the left arrow background color\n"
           "spmenu -cc  <color>   Set the caret color\n"
           "spmenu -bcb <color>   Set the border color\n"
 		  "spmenu -sgr0          Set the SGR 0 color\n"
@@ -1963,6 +1965,10 @@ main(int argc, char *argv[])
         } else if (!strcmp(argv[i], "-laf")) { /* left arrow fg */
 			colors[SchemeLArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-raf")) { /* right arrow fg */
+			colors[SchemeRArrow][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-lab")) { /* left arrow bg */
+			colors[SchemeLArrow][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-rab")) { /* right arrow bg */
 			colors[SchemeRArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-bcb")) { /* border */
 			colors[SchemeBorder][ColBg] = argv[++i];

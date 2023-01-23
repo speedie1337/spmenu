@@ -19,12 +19,12 @@ static const unsigned int alphas[][3]      = {
 /* Colors */
 static const char *colors[SchemeLast][2] = {
 	/*                        fg                 bg                  */
-	[SchemeLArrow]        = { col_normfgcolor,   col_normbgcolor     },
-	[SchemeRArrow]        = { col_normfgcolor,   col_normbgcolor     },
-	[SchemeItemNorm]      = { col_normfgcolor,   col_normbgcolor     },
-	[SchemeItemSel]       = { col_selfgcolor,    col_selbgcolor      },
-	[SchemeMenu]          = { NULL,              col_normbgcolor     },
-	[SchemePrompt]        = { col_selfgcolor,    col_selbgcolor      },
+	[SchemeLArrow]        = { col_larrowfg,      col_larrowbg        },
+	[SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg        },
+	[SchemeItemNorm]      = { col_itemnormfg,    col_itemnormbg      },
+	[SchemeItemSel]       = { col_itemselfg,     col_itemselbg       },
+	[SchemeMenu]          = { NULL,              col_menubgcolor     },
+	[SchemePrompt]        = { col_promptfg,      col_promptbg        }, /* this one is left */
     [SchemeNormHighlight] = { col_normhlfgcolor, col_normhlbgcolor   },
     [SchemeSelHighlight]  = { col_selhlfgcolor,  col_selhlbgcolor    },
     [SchemeCaret]         = { col_caretfgcolor,  NULL                },
