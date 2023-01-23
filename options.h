@@ -58,7 +58,7 @@ static int hidematchcount              = 0; /* Hide match count (0/1) */
 static char col_itemnormfg[]           = "#bbbbbb"; /* Normal foreground item color */
 static char col_itemnormbg[]           = "#222222"; /* Normal background item color */
 static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
-static char col_itemselbg[]            = "#005577"; /* Selected background item color */
+static char col_itemselbg[]            = "#35638A"; /* Selected background item color */
 
 /* Input colors */
 static char col_inputbg[]              = "#222222"; /* Input field background color */
@@ -69,7 +69,7 @@ static char col_menubgcolor[]          = "#222222"; /* Menu background color */
 
 /* Prompt colors */
 static char col_promptfg[]             = "#eeeeee"; /* Prompt foreground color */
-static char col_promptbg[]             = "#005577"; /* Prompt background color */
+static char col_promptbg[]             = "#35526b"; /* Prompt background color */
 
 /* Arrow colors */
 static char col_larrowfg[]             = "#bbbbbb"; /* Left arrow color */
@@ -87,10 +87,10 @@ static char col_selhlbgcolor[]         = "#000000"; /* Background highlight colo
 
 /* Match count colors */
 static char col_numfgcolor[]           = "#ffffff"; /* Match count text color */
-static char col_numbgcolor[]           = "#000000"; /* Match count background color */
+static char col_numbgcolor[]           = "#2d3856"; /* Match count background color */
 
 /* Border color */
-static char col_bordercolor[]          = "#005577"; /* Border color */
+static char col_bordercolor[]          = "#35638A"; /* Border color */
 
 /* Caret colors */
 static char col_caretfgcolor[]         = "#ffffff"; /* Caret color */
