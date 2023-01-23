@@ -58,21 +58,22 @@ static char fribidi_text[BUFSIZ] = "";
 #define opaque                0xffU
 
 /* enums */
-enum { SchemeNorm,
-       SchemeSel,
+enum { SchemeLArrow,
+       SchemeRArrow,
+       SchemeItemNorm,
+       SchemeItemSel,
+       SchemeMenu,
        SchemePrompt,
-       SchemeCaret,
-       SchemeOut,
-       SchemeNumber,
        SchemeNormHighlight,
        SchemeSelHighlight,
+       SchemeCaret,
+       SchemeNumber,
        SchemeBorder,
        SchemeLast }; /* color schemes */
 
 struct item {
 	char *text;
 	struct item *left, *right;
-	int out;
 	double distance;
 };
 
@@ -305,11 +306,9 @@ int
 drawitem(struct item *item, int x, int y, int w)
 {
 	if (item == sel)
-		drw_setscheme(drw, scheme[SchemeSel]);
-	else if (item->out)
-		drw_setscheme(drw, scheme[SchemeOut]);
+		drw_setscheme(drw, scheme[SchemeItemSel]);
 	else
-		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_setscheme(drw, scheme[SchemeItemNorm]);
 
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
@@ -321,11 +320,9 @@ drawitem(struct item *item, int x, int y, int w)
     int bgfg = 0;
 
     if (item == sel)
-        memcpy(scm, scheme[SchemeSel], sizeof(scm));
-    else if (item->out)
-        memcpy(scm, scheme[SchemeOut], sizeof(scm));
+        memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
     else
-        memcpy(scm, scheme[SchemeNorm], sizeof(scm));
+        memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
 
     drw_setscheme(drw, scm); /* set scheme to what we copied */
 
@@ -434,7 +431,7 @@ drawmenu(void)
 	int x = 0, y = 0, fh = drw->font->h, w;
 	char *censort;
 
-	drw_setscheme(drw, scheme[SchemeNorm]);
+	drw_setscheme(drw, scheme[SchemeMenu]);
 	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
 	if (prompt && *prompt) {
@@ -446,7 +443,7 @@ drawmenu(void)
 	}
 	/* draw input field */
 	w = (lines > 0 || !matches) ? mw - x : inputw;
-	drw_setscheme(drw, scheme[SchemeNorm]);
+	drw_setscheme(drw, scheme[SchemeMenu]);
 	if (passwd) {
 	        censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
@@ -490,7 +487,7 @@ drawmenu(void)
 		x += inputw;
 		w = TEXTW(leftarrow);
 		if (curr->left) {
-			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_setscheme(drw, scheme[SchemeLArrow]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, True);
 		}
 		x += w;
@@ -502,7 +499,7 @@ drawmenu(void)
             }
 		if (next) {
 			w = TEXTW(rightarrow);
-			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_setscheme(drw, scheme[SchemeRArrow]);
 
             if (hidematchcount) {
                 drw_text(drw, mw - w, 0, w, bh, lrpad / 2, rightarrow, 0, True);
@@ -1258,7 +1255,6 @@ buttonpress(XEvent *e)
 					exit(0);
 				sel = item;
 				if (sel) {
-					sel->out = 1;
 					drawmenu();
 				}
 				return;
@@ -1286,7 +1282,6 @@ buttonpress(XEvent *e)
 					exit(0);
 				sel = item;
 				if (sel) {
-					sel->out = 1;
 					drawmenu();
 				}
 				return;
@@ -1404,7 +1399,6 @@ readstdin(void)
 			*p = '\0';
 		if (!(items[i].text = strdup(buf)))
 			die("cannot strdup %u bytes:", strlen(buf) + 1);
-		items[i].out = 0;
 		drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
 		if (tmpmax > inputw) {
 			inputw = tmpmax;
@@ -1756,14 +1750,15 @@ usage(void)
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -v             Print spmenu version to stdout\n"
           "\n"
-          "- Color arguments -\n"
-		  "spmenu -fn <font>     Set the spmenu font to <font>\n"
-	      "spmenu -nb <color>    Set the normal background color\n"
-		  "spmenu -nf <color>    Set the normal foreground color\n"
-		  "spmenu -sb <color>    Set the selected background color\n"
-		  "spmenu -sf <color>    Set the selected foreground color\n"
-          "spmenu -cc <color>    Set the caret color\n"
-          "spmenu -bcb <color>   Set the border color\n"
+          "- Appearance arguments -\n"
+		  "spmenu -fn  <font>    Set the spmenu font to <font>\n"
+          "spmenu -nif <color>   Set the normal item foreground color\n"
+          "spmenu -nib <color>   Set the normal item background color\n"
+          "spmenu -sif <color>   Set the selected item foreground color\n"
+          "spmenu -sib <color>   Set the selected item background color\n"
+          "spmenu -pfg <color>   Set the prompt foreground color\n"
+          "spmenu -pbg <color>   Set the prompt background color\n"
+          "spmenu -mbg <color>   Set the menu background color\n"
 		  "spmenu -nhf <color>   Set the normal highlight foreground color\n"
 		  "spmenu -nhb <color>   Set the normal highlight background color\n"
 		  "spmenu -shf <color>   Set the selected highlight foreground color\n"
@@ -1771,6 +1766,10 @@ usage(void)
 		  "spmenu -shb <color>   Set the selected highlight background color\n"
           "spmenu -nfg <color>   Set the foreground color for the match count\n"
           "spmenu -nbg <color>   Set the background color for the match count\n"
+          "spmenu -laf <color>   Set the left arrow color\n"
+          "spmenu -raf <color>   Set the left arrow color\n"
+          "spmenu -cc  <color>   Set the caret color\n"
+          "spmenu -bcb <color>   Set the border color\n"
 		  "spmenu -sgr0          Set the SGR 0 color\n"
 		  "spmenu -sgr1          Set the SGR 1 color\n"
 		  "spmenu -sgr2          Set the SGR 2 color\n"
@@ -1787,6 +1786,12 @@ usage(void)
           "spmenu -sgr13         Set the SGR 13 color\n"
 		  "spmenu -sgr14         Set the SGR 14 color\n"
 		  "spmenu -sgr15         Set the SGR 15 color\n"
+          "\n"
+          "- dmenu compatibility -\n"
+	      "spmenu -nb <color>    Set the normal background color\n"
+		  "spmenu -nf <color>    Set the normal foreground color\n"
+		  "spmenu -sb <color>    Set the selected background color\n"
+		  "spmenu -sf <color>    Set the selected foreground color\n"
           "\n"
           "- Example usage -\n"
           "`echo 'Hello\\nWorld' | spmenu -l 2` will allow you to pick either 'Hello' or 'World'. The selected then gets printed to stdout. This means you can pipe it into `sed` or `grep`.\n"
@@ -1907,30 +1912,62 @@ main(int argc, char *argv[])
 			dmw = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
 			prompt = argv[++i];
-		else if (!strcmp(argv[i], "-fn"))  /* font or font set */
+		else if (!strcmp(argv[i], "-fn")) {  /* font or font set */
 			strcpy(font, argv[++i]); /* font[0] = argv[++i]; */
-	   	else if (!strcmp(argv[i], "-nb"))  /* normal background color */
-			colors[SchemeNorm][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-nf"))  /* normal foreground color */
-			colors[SchemeNorm][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-sb"))  /* selected background color */
-			colors[SchemeSel][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-sf"))  /* selected foreground color */
-			colors[SchemeSel][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-shf"))  /* selected highlight foreground color */
+
+        /* dmenu compatibility options */
+        } else if (!strcmp(argv[i], "-nb")) {  /* normal background color */
+			colors[SchemeItemNorm][ColBg] = argv[++i];
+            colors[SchemeMenu][ColBg] = argv[++i];
+            colors[SchemePrompt][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nf")) {  /* normal foreground color */
+			colors[SchemeItemNorm][ColFg] = argv[++i];
+            colors[SchemeMenu][ColFg] = argv[++i];
+            colors[SchemePrompt][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-sb")) {  /* selected background color */
+			colors[SchemeItemSel][ColBg] = argv[++i];
+            colors[SchemeMenu][ColBg] = argv[++i];
+            colors[SchemePrompt][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-sf")) {  /* selected foreground color */
+			colors[SchemeItemSel][ColFg] = argv[++i];
+            colors[SchemeMenu][ColFg] = argv[++i];
+            colors[SchemePrompt][ColFg] = argv[++i];
+
+        /* spmenu colors */
+        } else if (!strcmp(argv[i], "-nif")) { /* normal item foreground color */
+			colors[SchemeItemNorm][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nib")) { /* normal item background color */
+			colors[SchemeItemNorm][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-sif")) { /* selected item foreground color */
+			colors[SchemeItemSel][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-sib")) { /* selected item background color */
+			colors[SchemeItemSel][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-mbg")) { /* menu color */
+			colors[SchemeMenu][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-pfg")) { /* prompt fg color */
+			colors[SchemePrompt][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-pbg")) { /* prompt bg color */
+			colors[SchemePrompt][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-shf")) { /* selected highlight foreground color */
 			colors[SchemeSelHighlight][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-nhf"))  /* normal highlight foreground color */
-			colors[SchemeNormHighlight][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-shb"))  /* selected highlight foreground color */
+        } else if (!strcmp(argv[i], "-shf")) { /* selected highlight foreground color */
 			colors[SchemeSelHighlight][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-nhb"))  /* normal highlight foreground color */
+        } else if (!strcmp(argv[i], "-nhf")) {  /* normal highlight foreground color */
 			colors[SchemeNormHighlight][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-nbg"))  /* numbgcolor */
+        } else if (!strcmp(argv[i], "-shb")) { /* selected highlight foreground color */
+			colors[SchemeSelHighlight][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nhb")) { /* normal highlight foreground color */
+			colors[SchemeNormHighlight][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nbg")) { /* numbgcolor */
 			colors[SchemeNumber][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-nfg"))  /* numfgcolor */
-			colors[SchemeNumber][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-bcb"))  /* border */
+        } else if (!strcmp(argv[i], "-laf")) { /* left arrow fg */
+			colors[SchemeLArrow][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-raf")) { /* right arrow fg */
+			colors[SchemeRArrow][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-bcb")) { /* border */
 			colors[SchemeBorder][ColBg] = argv[++i];
+        }
+
         /* sgr colors */
 		else if (!strcmp(argv[i], "-sgr0")) textcolors[0] = argv[++i]; /* sgr color 0 */
 		else if (!strcmp(argv[i], "-sgr1")) textcolors[1] = argv[++i]; /* sgr color 1 */

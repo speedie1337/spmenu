@@ -3,8 +3,11 @@
 /* Alpha */
 static const unsigned int alphas[][3]      = {
 	/*                         fg       bg        border     */
-	[SchemeNorm]           = { fgalpha, bgalpha,  borderalpha },
-	[SchemeSel]            = { fgalpha, bgalpha,  borderalpha },
+	[SchemeLArrow]         = { fgalpha, bgalpha,  borderalpha },
+	[SchemeRArrow]         = { fgalpha, bgalpha,  borderalpha },
+	[SchemeItemNorm]       = { fgalpha, bgalpha,  borderalpha },
+	[SchemeItemSel]        = { fgalpha, bgalpha,  borderalpha },
+	[SchemeMenu]           = { fgalpha, bgalpha,  borderalpha },
 	[SchemePrompt]         = { fgalpha, bgalpha,  borderalpha },
 	[SchemeNormHighlight]  = { fgalpha, bgalpha,  borderalpha },
 	[SchemeSelHighlight]   = { fgalpha, bgalpha,  borderalpha },
@@ -16,14 +19,17 @@ static const unsigned int alphas[][3]      = {
 /* Colors */
 static const char *colors[SchemeLast][2] = {
 	/*                        fg                 bg                  */
-	[SchemeNorm]          = { col_normfgcolor,   col_normbgcolor     },
-	[SchemeSel]           = { col_selfgcolor,    col_selbgcolor      },
-    [SchemeBorder]        = { NULL,              col_bordercolor     },
+	[SchemeLArrow]        = { col_normfgcolor,   col_normbgcolor     },
+	[SchemeRArrow]        = { col_normfgcolor,   col_normbgcolor     },
+	[SchemeItemNorm]      = { col_normfgcolor,   col_normbgcolor     },
+	[SchemeItemSel]       = { col_selfgcolor,    col_selbgcolor      },
+	[SchemeMenu]          = { NULL,              col_normbgcolor     },
 	[SchemePrompt]        = { col_selfgcolor,    col_selbgcolor      },
     [SchemeNormHighlight] = { col_normhlfgcolor, col_normhlbgcolor   },
     [SchemeSelHighlight]  = { col_selhlfgcolor,  col_selhlbgcolor    },
     [SchemeCaret]         = { col_caretfgcolor,  NULL                },
     [SchemeNumber]        = { col_numfgcolor,    col_numbgcolor      },
+    [SchemeBorder]        = { NULL,              col_bordercolor     },
 };
 
 /* sgr colors */
