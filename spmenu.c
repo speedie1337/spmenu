@@ -374,9 +374,9 @@ drawitem(struct item *item, int x, int y, int w)
 					     "0123456789;");
 			if (item->text[rd + alen + 2] == 'm') {
 				buffer[wr] = '\0';
-                rw = TEXTW(buffer) - lrpad / 2;
-				drw_text(drw, x, y, rw + lrpad / 2, bh, lrpad / 2, buffer, 0, False);
-				x += rw + lrpad / 2;
+                rw = TEXTW(buffer);
+				drw_text(drw, x, y, rw, bh, lrpad / 2, buffer, 0, False);
+				x += rw;
 
 				char *ep = item->text + rd + 1;
 				while (*ep != 'm') {
