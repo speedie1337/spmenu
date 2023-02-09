@@ -317,7 +317,7 @@ drawitem(struct item *item, int x, int y, int w)
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
     int wr, rd;
-	int pw;
+	int rw;
 	int fg = 7;
 	int bg = 0;
     int ignore = 0;
@@ -374,9 +374,9 @@ drawitem(struct item *item, int x, int y, int w)
 					     "0123456789;");
 			if (item->text[rd + alen + 2] == 'm') {
 				buffer[wr] = '\0';
-                pw = TEXTW(buffer) - lrpad / 2;
-				drw_text(drw, x, y, pw + lrpad / 2, bh, lrpad / 2, buffer, 0, False);
-				x += pw + lrpad / 2;
+                rw = TEXTW(buffer) - lrpad / 2;
+				drw_text(drw, x, y, rw + lrpad / 2, bh, lrpad / 2, buffer, 0, False);
+				x += rw + lrpad / 2;
 
 				char *ep = item->text + rd + 1;
 				while (*ep != 'm') {
