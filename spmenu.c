@@ -323,10 +323,11 @@ drawitem(struct item *item, int x, int y, int w)
     int ignore = 0;
     int bgfg = 0;
 
-    if (item == sel)
+    if (item == sel) {
         memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
-    else
+    } else {
         memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+    }
 
     drw_setscheme(drw, scm); /* set scheme to what we copied */
 
@@ -358,8 +359,9 @@ drawitem(struct item *item, int x, int y, int w)
 					}
             }
 
-				rd += alen + 2;
-				continue;
+			rd += alen + 2;
+			continue;
+
 			}
 		}
 		buffer[wr++] = item->text[rd];
