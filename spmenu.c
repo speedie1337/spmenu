@@ -1728,18 +1728,17 @@ usage(void)
           "spmenu -na            Disable alpha\n"
           "spmenu -cp            Color prompt\n"
           "spmenu -ncp           Don't color prompt\n"
-          "spmenu -t             Allow the user to type\n"
+          "spmenu -tp            Allow the user to type\n"
           "spmenu -nt            Don't allow typing, the user must select an option\n"
 		  "spmenu -x <x offset>  Offset spmenu x position by <x offset>\n"
 		  "spmenu -y <y offset>  Offset spmenu y position by <y offset>\n"
           "spmenu -n <line>      Preselect <line> in the list of items\n"
 		  "spmenu -z <width>     Width of the spmenu window\n"
-		  "spmenu -bc            Display border around prompt when centered\n"
 		  "spmenu -bw            Width of the border. 0 will disable the border\n"
 		  "spmenu -s             Use case-sensitive matching\n"
 		  "spmenu -i             Use case-insnsitive matching\n"
 		  "spmenu -s             Use case-snsitive matching\n"
-		  "spmenu -to            Position spmenu at the top of the screen\n"
+		  "spmenu -t             Position spmenu at the top of the screen\n"
 		  "spmenu -b             Position spmenu at the bottom of the screen\n"
 		  "spmenu -c             Position spmenu at the center of the screen\n"
           "spmenu -hmc           Hide match count\n"
@@ -1779,7 +1778,7 @@ usage(void)
           "spmenu -lab <color>   Set the left arrow background color\n"
           "spmenu -rab <color>   Set the left arrow background color\n"
           "spmenu -cc  <color>   Set the caret color\n"
-          "spmenu -bcb <color>   Set the border color\n"
+          "spmenu -bc  <color>   Set the border color\n"
 		  "spmenu -sgr0          Set the SGR 0 color\n"
 		  "spmenu -sgr1          Set the SGR 1 color\n"
 		  "spmenu -sgr2          Set the SGR 2 color\n"
@@ -1841,13 +1840,10 @@ main(int argc, char *argv[])
 			exit(0);
 		} else if (!strcmp(argv[i], "-b")) { /* appears at the bottom of the screen */
 			menuposition = 0;
-		} else if (!strcmp(argv[i], "-to")) { /* appears at the top of the screen */
+		} else if (!strcmp(argv[i], "-t")) { /* appears at the top of the screen */
 			menuposition = 1;
         } else if (!strcmp(argv[i], "-c")) {  /* appears at the center of the screen */
 		    centered = 1;
-        } else if (!strcmp(argv[i], "-bc")) { /* draw border when centered */
-		    bordercentered = 1;
-            centered = 1;
         } else if (!strcmp(argv[i], "-f")) {   /* grabs keyboard before reading stdin */
 			fast = 1;
         } else if (!strcmp(argv[i], "-rw")) {  /* relative width */
@@ -1876,7 +1872,7 @@ main(int argc, char *argv[])
                 colorprompt = 1;
         } else if (!strcmp(argv[i], "-ncp")) { /* no color prompt */
                 colorprompt = 0;
-        } else if (!strcmp(argv[i], "-t")) { /*  allow the user to type */
+        } else if (!strcmp(argv[i], "-tp")) { /*  allow the user to type */
                 type = 1;
         } else if (!strcmp(argv[i], "-nt")) { /*  don't allow the user to type */
                 type = 0;
@@ -1985,7 +1981,7 @@ main(int argc, char *argv[])
 			colors[SchemeLArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-rab")) { /* right arrow bg */
 			colors[SchemeRArrow][ColFg] = argv[++i];
-        } else if (!strcmp(argv[i], "-bcb")) { /* border */
+        } else if (!strcmp(argv[i], "-bc")) { /* border */
 			colors[SchemeBorder][ColBg] = argv[++i];
         }
 
