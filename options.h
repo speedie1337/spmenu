@@ -36,10 +36,9 @@ static int accuratewidth               = 1; /* Enable accurate width. May have a
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
 
 /* Line options */
+static int lineheight                  = 0; /* Line height (0: Calculate automatically) */
 static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */
-static int lineheight                  = 20; /* Height of each line */
-static int minlineheight               = 5; /* Minimum line height */
 
 /* History options */
 static unsigned int maxhist            = 64; /* Max number of history entries */

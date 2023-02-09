@@ -40,10 +40,9 @@ spmenu.alpha:              1
 spmenu.accuratewidth:      1
 spmenu.bordercentered:     1
 spmenu.borderwidth:        2
+spmenu.lineheight:         0
 spmenu.lines:              0
 spmenu.columns:            10
-spmenu.lineheight:         5
-spmenu.minlineheight:      5
 spmenu.maxhist:            64
 spmenu.histnodup:          1
 spmenu.casesensitive:      0

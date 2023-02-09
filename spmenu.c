@@ -98,6 +98,8 @@ static char numbers[NUMBERSBUFSIZE] = "";
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
+static int reqlineheight; /* required menu height */
+static int clineheight; /* menu height added through argument */
 static int dmx = 0; /* put spmenu at this x offset */
 static int dmy = 0; /* put spmenu at this y offset (measured from the bottom if menuposition is 0) */
 static unsigned int dmw = 0; /* make spmenu this wide */
@@ -1574,9 +1576,13 @@ setup(void)
    	types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
 
+    if (!clineheight)
+        reqlineheight += lineheight;
+    else
+        reqlineheight = clineheight;
+
 	/* calculate menu geometry */
-	bh = drw->font->h + 2;
-	bh = MAX(bh, lineheight);	/* make a menu line AT LEAST 'lineheight' tall */
+	bh = drw->font->h + 2 + reqlineheight;
 	lines = MAX(lines, 0);
 	mh = (lines + 1) * bh;
 	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
@@ -1710,7 +1716,7 @@ usage(void)
 	fputs("spmenu: dynamic menu\n\n"
 		  "- Arguments -\n"
 		  "spmenu -l <line>      Set line count to stdin\n"
-		  "spmenu -h <height>    Set spmenu height to <height>\n"
+		  "spmenu -h <height>    Set spmenu line height to <height>\n"
 		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
           "spmenu -rw            Enable relative input width\n"
           "spmenu -nrw           Disable relative input width\n"
@@ -1890,8 +1896,7 @@ main(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-l")) { /* number of lines in grid */
 			lines = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-h")) { /* minimum height of one menu line */
-			lineheight = atoi(argv[++i]);
-			lineheight = MAX(lineheight, minlineheight);
+	        clineheight += atoi(argv[++i]);
 			if (columns == 0) columns = 1;
 		} else if (!strcmp(argv[i], "-lp")) {
 		    menupaddingv = atoi(argv[++i]);
