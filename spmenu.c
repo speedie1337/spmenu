@@ -318,6 +318,7 @@ drawitem(struct item *item, int x, int y, int w)
 	int fg = 7;
 	int bg = 0;
     int bgfg = 0;
+    int ib = 0;
 
     if (item == sel) {
         memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
@@ -344,8 +345,10 @@ drawitem(struct item *item, int x, int y, int w)
                 #else
 				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, True);
                 #endif
+
+                drawhighlights(item, x, y, rw + lp);
 				x += rw + lp;
-                lp = 0; /* no l padding, we only want it once */
+                ib = 1;
 
 				char *ep = item->text + rd + 1;
 
@@ -397,7 +400,7 @@ drawitem(struct item *item, int x, int y, int w)
 	int r = drw_text(drw, x, y, w, bh, lp, buffer, 0, True);
     #endif
 
-    drawhighlights(item, x, y, w);
+    if (!ib) drawhighlights(item, x, y, w);
     return r;
 }
 
