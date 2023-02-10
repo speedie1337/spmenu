@@ -310,11 +310,6 @@ drawhighlights(struct item *item, int x, int y, int maxw)
 int
 drawitem(struct item *item, int x, int y, int w)
 {
-	if (item == sel)
-		drw_setscheme(drw, scheme[SchemeItemSel]);
-	else
-		drw_setscheme(drw, scheme[SchemeItemNorm]);
-
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
     int lp = lrpad / 2;
@@ -322,7 +317,6 @@ drawitem(struct item *item, int x, int y, int w)
 	int rw;
 	int fg = 7;
 	int bg = 0;
-    int ignore = 0;
     int bgfg = 0;
 
     if (item == sel) {
@@ -333,43 +327,7 @@ drawitem(struct item *item, int x, int y, int w)
 
     drw_setscheme(drw, scm); /* set scheme to what we copied */
 
-	for (wr = 0, rd = 0; item->text[rd]; rd++) {
-		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
-			size_t alen = strspn(item->text + rd + 2,
-					     "0123456789;");
-			if (item->text[rd + alen + 2] == 'm') {
-				buffer[wr] = '\0';
-				wr = 0;
-
-				char *ep = item->text + rd + 1;
-				while (*ep != 'm') {
-                    unsigned v = strtoul(ep + 1, &ep, 10);
-                    if (ignore)
-						continue;
-					if (bgfg) {
-						if (bgfg < 4 && v == 5) {
-							bgfg <<= 1;
-							continue;
-						}
-						if (bgfg == 4)
-							scm[0] = textclrs[fg = v];
-						else if (bgfg == 6)
-							scm[1] = textclrs[bg = v];
-						ignore = 1;
-
-						continue;
-					}
-            }
-
-			rd += alen + 2;
-			continue;
-
-			}
-		}
-		buffer[wr++] = item->text[rd];
-	}
-	buffer[wr] = '\0';
-
+    /* parse item text */
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
 			size_t alen = strspn(item->text + rd + 2,
