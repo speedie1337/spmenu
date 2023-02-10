@@ -325,21 +325,26 @@ drawitem(struct item *item, int x, int y, int w)
         memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
     }
 
-    drw_setscheme(drw, scm); /* set scheme to what we copied */
+    /* set scheme */
+    drw_setscheme(drw, scm);
 
     /* parse item text */
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
 			size_t alen = strspn(item->text + rd + 2,
 					     "0123456789;");
-			if (item->text[rd + alen + 2] == 'm') {
-				buffer[wr] = '\0';
+			if (item->text[rd + alen + 2] == 'm') { /* character is 'm' which is the last character in the sequence */
+				buffer[wr] = '\0'; /* clear out character */
+
+                /* draw text */
                 rw = TEXTW(buffer) - lrpad;
 				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, False);
 				x += rw + lp;
-                lp = 0;
+                lp = 0; /* no l padding, we only want it once */
 
 				char *ep = item->text + rd + 1;
+
+                /* parse hex colors in scm */
 				while (*ep != 'm') {
 					unsigned v = strtoul(ep + 1, &ep, 10);
 					if (v == 1) {
@@ -365,14 +370,17 @@ drawitem(struct item *item, int x, int y, int w)
 				wr = 0;
 
 				drw_setscheme(drw, scm);
+
 				continue;
 			}
 		}
+
 		buffer[wr++] = item->text[rd];
 	}
 
 	buffer[wr] = '\0';
 
+    /* draw any text that doesn't use sgr sequences */
     #if USERTL
     apply_fribidi(buffer);
 	int r = drw_text(drw, x, y, w, bh, lp, fribidi_text, 0, False);
