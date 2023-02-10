@@ -105,6 +105,7 @@ ResourcePref resources[] = {
 	{ "columns",        INTEGER, &columns },
 	{ "maxhist",        INTEGER, &maxhist },
     { "hidematchcount", INTEGER, &hidematchcount },
+    { "hidehighlight",  INTEGER, &hidehighlight },
 	{ "histnodup",      INTEGER, &histnodup },
     { "casesensitive",  INTEGER, &casesensitive },
 };

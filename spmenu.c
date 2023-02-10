@@ -346,9 +346,9 @@ drawitem(struct item *item, int x, int y, int w)
 				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, True);
                 #endif
 
-                drawhighlights(item, x, y, rw + lp);
 				x += rw + lp;
                 ib = 1;
+                lp = 0; /* no padding */
 
 				char *ep = item->text + rd + 1;
 
@@ -388,19 +388,15 @@ drawitem(struct item *item, int x, int y, int w)
 
 	buffer[wr] = '\0';
 
-    /* width needs to be decreased now because we've already drawn some text
-     * if we haven't drawn text, this does nothing at all. */
-    w -= rw;
-
     /* draw any text that doesn't use sgr sequences */
     #if USERTL
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w, bh, lp, fribidi_text, 0, True);
+	int r = drw_text(drw, x, y, w - rw, bh, lp, fribidi_text, 0, True);
     #else
-	int r = drw_text(drw, x, y, w, bh, lp, buffer, 0, True);
+	int r = drw_text(drw, x, y, w - rw, bh, lp, buffer, 0, True);
     #endif
 
-    if (!ib) drawhighlights(item, x, y, w);
+    if (!hidehighlight && !ib) drawhighlights(item, x, y, w - rw);
     return r;
 }
 
