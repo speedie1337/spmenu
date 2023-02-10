@@ -889,11 +889,19 @@ backspace(const Arg *arg)
 void
 selectitem(const Arg *arg)
 {
-    if (!text)
+    char *selection;
+
+    if (sel) {
+        selection = sel->text;
+    } else {
+        selection = text;
+    }
+
+    if (!selection)
         return;
 
-    puts(text);
-    savehistory(text);
+    puts(selection);
+    savehistory(selection);
 
 	cleanup();
 	exit(0);
