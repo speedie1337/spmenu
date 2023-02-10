@@ -312,9 +312,9 @@ drawitem(struct item *item, int x, int y, int w)
 {
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
-    int lp = lrpad / 2;
+    int lp = lrpad / 2; /* padding */
     int wr, rd;
-	int rw;
+	int rw; /* width of text */
 	int fg = 7;
 	int bg = 0;
     int bgfg = 0;
@@ -337,8 +337,13 @@ drawitem(struct item *item, int x, int y, int w)
 				buffer[wr] = '\0'; /* clear out character */
 
                 /* draw text */
-                rw = TEXTW(buffer) - lrpad;
-				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, False);
+                rw = TEXTWM(buffer) - lrpad;
+                #if USERTL
+                apply_fribidi(buffer);
+				drw_text(drw, x, y, rw + lp, bh, lp, fribidi_text, 0, True);
+                #else
+				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, True);
+                #endif
 				x += rw + lp;
                 lp = 0; /* no l padding, we only want it once */
 
@@ -380,12 +385,16 @@ drawitem(struct item *item, int x, int y, int w)
 
 	buffer[wr] = '\0';
 
+    /* width needs to be decreased now because we've already drawn some text
+     * if we haven't drawn text, this does nothing at all. */
+    w -= rw;
+
     /* draw any text that doesn't use sgr sequences */
     #if USERTL
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w, bh, lp, fribidi_text, 0, False);
+	int r = drw_text(drw, x, y, w, bh, lp, fribidi_text, 0, True);
     #else
-	int r = drw_text(drw, x, y, w, bh, lp, buffer, 0, False);
+	int r = drw_text(drw, x, y, w, bh, lp, buffer, 0, True);
     #endif
 
     drawhighlights(item, x, y, w);
