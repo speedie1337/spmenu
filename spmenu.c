@@ -20,6 +20,7 @@
 static char fribidi_text[BUFSIZ] = "";
 #endif
 
+#include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -1136,7 +1137,8 @@ keypress(XEvent *e)
         ev = &e->xkey;
         len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
 
-        keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+        //keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+        keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
         for (i = 0; i < LENGTH(keys); i++) {
             if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
@@ -1580,10 +1582,11 @@ setup(void)
    	types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
 
-    if (!clineheight)
+    if (!clineheight) {
         reqlineheight += lineheight;
-    else
+    } else {
         reqlineheight = clineheight;
+    }
 
 	/* calculate menu geometry */
 	bh = drw->font->h + 2 + reqlineheight;
@@ -1758,8 +1761,8 @@ usage(void)
           "spmenu -ra <symbol>   Set the right arrow to <symbol>\n"
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -v             Print spmenu version to stdout\n"
-          "\n"
-          "- Appearance arguments -\n"
+          "\n", stdout);
+          fputs("- Appearance arguments -\n"
 		  "spmenu -fn  <font>    Set the spmenu font to <font>\n"
           "spmenu -nif <color>   Set the normal item foreground color\n"
           "spmenu -nib <color>   Set the normal item background color\n"
@@ -1799,8 +1802,8 @@ usage(void)
           "spmenu -sgr13         Set the SGR 13 color\n"
 		  "spmenu -sgr14         Set the SGR 14 color\n"
 		  "spmenu -sgr15         Set the SGR 15 color\n"
-          "\n"
-          "- dmenu compatibility -\n"
+          "\n", stdout);
+          fputs("- dmenu compatibility -\n"
 	      "spmenu -nb <color>    Set the normal background color\n"
 		  "spmenu -nf <color>    Set the normal foreground color\n"
 		  "spmenu -sb <color>    Set the selected background color\n"

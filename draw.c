@@ -168,7 +168,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 {
 	char buf[1024];
 	int ty;
-	unsigned int ew;
+	unsigned int ew = 0;
 	XftDraw *d = NULL;
 	size_t i, len;
 	int render = x || y || w || h;
