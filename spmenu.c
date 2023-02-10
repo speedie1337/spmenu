@@ -316,6 +316,7 @@ drawitem(struct item *item, int x, int y, int w)
 
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
+    int lp = lrpad / 2;
     int wr, rd;
 	int rw;
 	int fg = 7;
@@ -375,8 +376,9 @@ drawitem(struct item *item, int x, int y, int w)
 			if (item->text[rd + alen + 2] == 'm') {
 				buffer[wr] = '\0';
                 rw = TEXTW(buffer) - lrpad;
-				drw_text(drw, x, y, rw, bh, lrpad / 2, buffer, 0, False);
-				x += rw;
+				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, False);
+				x += rw + lp;
+                lp = 0;
 
 				char *ep = item->text + rd + 1;
 				while (*ep != 'm') {
@@ -414,9 +416,9 @@ drawitem(struct item *item, int x, int y, int w)
 
     #if USERTL
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w, bh, lrpad / 2, fribidi_text, 0, False);
+	int r = drw_text(drw, x, y, w, bh, lp, fribidi_text, 0, False);
     #else
-	int r = drw_text(drw, x, y, w, bh, lrpad / 2, buffer, 0, False);
+	int r = drw_text(drw, x, y, w, bh, lp, buffer, 0, False);
     #endif
 
     drawhighlights(item, x, y, w);
