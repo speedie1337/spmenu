@@ -70,6 +70,10 @@ If you are on Gentoo GNU/Linux, you can add
 [my overlay](https://codeberg.org/speedie/speedie-overlay) which includes
 `x11-misc/spmenu` as well as other useful packages.
 
+### Images
+
+To use an image, pipe `IMG:/path/to/image` to spmenu. If you want you can specify arguments.
+
 ### .Xresources values
 
 This build allows you to define .Xresources values to load on startup. See docs/example.Xresources for a list of default values.
