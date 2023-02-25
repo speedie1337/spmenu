@@ -16,8 +16,12 @@ static int minwidth                    = 500; /* Minimum width */
 static int centered                    = 0; /* Whether or not to center spmenu by default */
 
 /* Image options */
+static int imagesize                   = 86; /* Default image size */
+static int imagegaps                   = 0; /* Image gaps */
+static int imageposition               = 0; /* Image position (0: Top, 1: Bottom, 2: Center, 3: Top center) */
 static int generatecache               = 0; /* Generate image cache by default */
 
+/* Color support */
 static int colorsupport                = 1; /* Support 256 colors? Otherwise the default 16 colors will be used. */
 
 /* Window border options */

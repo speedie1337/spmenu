@@ -108,4 +108,8 @@ ResourcePref resources[] = {
     { "hidehighlight",  INTEGER, &hidehighlight },
 	{ "histnodup",      INTEGER, &histnodup },
     { "casesensitive",  INTEGER, &casesensitive },
+    { "imagesize",      INTEGER, &imagesize },
+    { "imagegaps",      INTEGER, &imagegaps },
+    { "imageposition",  INTEGER, &imageposition },
+    { "generatecache",  INTEGER, &generatecache },
 };

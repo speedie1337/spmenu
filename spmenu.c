@@ -108,7 +108,6 @@ typedef struct {
 } Key;
 
 #if USEIMAGE
-static int imagesize = 86;
 static Imlib_Image image = NULL;
 #endif
 
@@ -647,7 +646,7 @@ drawmenu(void)
 	if (lines > 0) {
 #if USEIMAGE
         if (imagesize)
-            x += 4 + imagesize;
+            x += imagegaps + imagesize;
 #endif
 		/* draw grid */
 		int i = 0;
@@ -1731,7 +1730,19 @@ run(void)
             imlib_free_image();
             image = NULL;
         } if (image && imagesize) {
-            imlib_render_image_on_drawable(imagesize-width, (imagesize-height)/2+bh);
+            int leftmargin = imagegaps;
+
+            if (!imageposition) { /* top mode = 0 */
+                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, bh+imagegaps);
+            } else if (imageposition == 1) { /* bottom mode = 1 */
+                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, mh-height-imagegaps);
+            } else if (imageposition == 2) { /* center mode = 2 */
+                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, (mh-bh-height)/2+bh);
+            } else {
+                int minh = MIN(imagesize, mh-bh-imagegaps*2);
+                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, (minh-height)/2+bh+imagegaps);
+            }
+
 
         } if (sel) {
             limg = sel->image;
@@ -2011,11 +2022,16 @@ usage(void)
 		  "spmenu -m <monitor>   Specify a monitor to run spmenu on\n"
 		  "spmenu -w <window id> Embed spmenu inside <window id>\n"
 		  "spmenu -H <hist file> Specify a path to save the history to\n"
+          "spmenu -ig <gaps>     Set image gaps to <gaps>\n"
 		  "spmenu -lp <padding>  Set the vertical padding\n"
 		  "spmenu -hp <padding>  Set the horizontal padding\n"
           "spmenu -la <symbol>   Set the left arrow to <symbol>\n"
           "spmenu -ra <symbol>   Set the right arrow to <symbol>\n"
           "spmenu -is <size>     Image size\n"
+          "spmenu -it            Position the image at the top\n"
+          "spmenu -ib            Position the image at the bottom\n"
+          "spmenu -ic            Position the image in the center\n"
+          "spmenu -itc            Position the image in the top center\n"
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -v             Print spmenu version to stdout\n"
           "\n", stdout);
@@ -2102,6 +2118,14 @@ main(int argc, char *argv[])
         if (!strcmp(argv[i], "-v")) {      /* prints version information */
 			puts("spmenu-"VERSION);
 			exit(0);
+		} else if (!strcmp(argv[i], "-it")) { /* image: top */
+			imageposition = 0;
+		} else if (!strcmp(argv[i], "-ib")) { /* image: bottom */
+			imageposition = 1;
+		} else if (!strcmp(argv[i], "-ic")) { /* image: center */
+			imageposition = 2;
+		} else if (!strcmp(argv[i], "-itc")) { /* image: top center */
+			imageposition = 3;
 		} else if (!strcmp(argv[i], "-b")) { /* appears at the bottom of the screen */
 			menuposition = 0;
 		} else if (!strcmp(argv[i], "-t")) { /* appears at the top of the screen */
@@ -2164,6 +2188,8 @@ main(int argc, char *argv[])
 		    menupaddingv = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-hp")) {
 		    menupaddingh = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-ig")) {
+		    imagegaps = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-la")) {
 		    leftarrow = argv[++i];
 		} else if (!strcmp(argv[i], "-ra")) {

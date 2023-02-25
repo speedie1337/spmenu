@@ -57,3 +57,7 @@ spmenu.leftarrow:          <
 spmenu.rightarrow:         >
 spmenu.hidematchcount:     0
 spmenu.hidehighlight:      0
+spmenu.imagesize:          86
+spmenu.imagegaps:          0
+spmenu.imageposition:      0
+spmenu.generatecache:      0
