@@ -15,6 +15,9 @@ static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
 static int minwidth                    = 500; /* Minimum width */
 static int centered                    = 0; /* Whether or not to center spmenu by default */
 
+/* Image options */
+static int generatecache               = 0; /* Generate image cache by default */
+
 static int colorsupport                = 1; /* Support 256 colors? Otherwise the default 16 colors will be used. */
 
 /* Window border options */

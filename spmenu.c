@@ -9,6 +9,15 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "toggle.h"
+
+#if USEIMAGE
+#include <errno.h>
+#include <pwd.h>
+#include <Imlib2.h>
+#include <openssl/md5.h>
+#endif
+
 #ifdef FRIBIDI
 #define USERTL 1
 #else
@@ -77,6 +86,9 @@ static char text[BUFSIZ] = "";
 
 struct item {
 	char *text;
+#if USEIMAGE
+    char *image;
+#endif
 	struct item *left, *right;
 	double distance;
 };
@@ -95,6 +107,11 @@ typedef struct {
 	const Arg arg;
 } Key;
 
+#if USEIMAGE
+static int imagesize = 86;
+static Imlib_Image image = NULL;
+#endif
+
 static char numbers[NUMBERSBUFSIZE] = "";
 static char *embed;
 static int numlockmask = 0;
@@ -109,6 +126,7 @@ static int lrpad; /* sum of left and right padding */
 static int vp;    /* vertical padding for bar */
 static int sp;    /* side padding for bar */
 static size_t cursor;
+static unsigned int selected = 0;
 static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
@@ -179,6 +197,171 @@ static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
+#if USEIMAGE
+void
+createifnexist(const char *dir)
+{
+	if(access(dir, F_OK) == 0)
+        return;
+
+	if(errno == EACCES)
+        fprintf(stderr, "spmenu: no access to create directory: %s\n", dir);
+
+	if(mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
+		fprintf(stderr, "spmenu: failed to create directory: %s\n", dir);
+}
+
+void
+createifnexist_rec(const char *dir)
+{
+	char *buf, *s = (char*)dir, *bs;
+
+    if(!(buf = malloc(strlen(s)+1)))
+		return;
+
+	memset(buf, 0, strlen(s)+1);
+
+	for(bs = buf; *s; ++s, ++bs) {
+		if(*s == '/' && *buf)
+            createifnexist(buf);
+
+		*bs = *s;
+	}
+
+	free(buf);
+}
+
+void
+loadimage(const char *file, int *width, int *height)
+{
+	image = imlib_load_image(file);
+	if (!image)
+        return;
+
+	imlib_context_set_image(image);
+
+	*width = imlib_image_get_width();
+	*height = imlib_image_get_height();
+}
+
+void
+scaleimage(int width, int height)
+{
+	int nwidth, nheight;
+	float aspect = 1.0f;
+
+	if (width > height)
+        aspect = (float)imagesize/width;
+	else
+        aspect = (float)imagesize/height;
+
+	nwidth = width * aspect;
+	nheight = height * aspect;
+
+	if(nwidth == width && nheight == height)
+        return;
+
+	image = imlib_create_cropped_scaled_image(0,0,width,height,nwidth,nheight);
+	imlib_free_image();
+
+	if (!image)
+        return;
+
+	imlib_context_set_image(image);
+}
+
+void
+loadimagecache(const char *file, int *width, int *height)
+{
+	int slen = 0, i;
+	unsigned char digest[MD5_DIGEST_LENGTH];
+	char md5[MD5_DIGEST_LENGTH*2+1];
+	char *xdg_cache, *home = NULL, *dsize, *buf;
+	struct passwd *pw = NULL;
+
+	/* just load and don't store or try cache */
+	if(imagesize > 256) {
+		loadimage(file, width, height);
+		return;
+	}
+
+	/* try find image from cache first */
+	if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
+		if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
+			home = pw->pw_dir;
+		if(!home) {
+			fprintf(stderr, "spmenu: could not find home directory");
+			return;
+		}
+	}
+
+	/* which cache do we try? */
+	dsize = "normal";
+	if (imagesize > 128)
+        dsize = "large";
+
+	slen = snprintf(NULL, 0, "file://%s", file)+1;
+
+	if(!(buf = malloc(slen))) {
+		fprintf(stderr, "spmenu: out of memory");
+		return;
+	}
+
+	/* calculate md5 from path */
+	sprintf(buf, "file://%s", file);
+	MD5((unsigned char*)buf, slen, digest);
+
+	free(buf);
+
+	for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
+        sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
+
+	/* path for cached thumbnail */
+	if (xdg_cache)
+        slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
+	else
+        slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
+
+	if(!(buf = malloc(slen))) {
+		fprintf(stderr, "out of memory");
+		return;
+	}
+
+	if (xdg_cache)
+        sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
+	else
+        sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
+
+	loadimage(buf, width, height);
+
+	if (image && *width < imagesize && *height < imagesize) {
+		imlib_free_image();
+		image = NULL;
+	} else if(image && (*width > imagesize || *height > imagesize)) {
+		scaleimage(*width, *height);
+	}
+
+	/* we are done */
+    if (image) {
+		free(buf);
+		return;
+	}
+
+    /* we din't find anything from cache, or it was just wrong */
+	loadimage(file, width, height);
+	if (!image) {
+		free(buf);
+		return;
+	}
+
+	scaleimage(*width, *height);
+	imlib_image_set_format("png");
+	createifnexist_rec(buf);
+	imlib_save_image(buf);
+	free(buf);
+}
+#endif
+
 void
 appenditem(struct item *item, struct item **list, struct item **last)
 {
@@ -244,6 +427,12 @@ cleanup(void)
 {
 	size_t i;
 
+#if USEIMAGE
+    if (image) {
+        imlib_free_image();
+        image = NULL;
+    }
+#endif
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);
@@ -456,6 +645,10 @@ drawmenu(void)
     if (!hidematchcount) recalculatenumbers();
 
 	if (lines > 0) {
+#if USEIMAGE
+        if (imagesize)
+            x += 4 + imagesize;
+#endif
 		/* draw grid */
 		int i = 0;
 		for (item = curr; item != next; item = item->right, i++)
@@ -1366,7 +1559,10 @@ readstdin(void)
 	char buf[sizeof text], *p;
 	size_t i, imax = 0, itemsiz = 0;
 	unsigned int tmpmax = 0;
-	if(passwd){
+    int w, h;
+    char *limg = NULL;
+
+	if (passwd){
     	inputw = lines = 0;
     	return;
   	}
@@ -1388,11 +1584,49 @@ readstdin(void)
 			inputw = tmpmax;
 			imax = i;
 		}
+
+#if USEIMAGE
+        if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
+            if(!(items[i].image = malloc(strlen(items[i].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
+            if(sscanf(items[i].text, "IMG:%[^\t]", items[i].image)) {
+                if(!(items[i].image = realloc(items[i].image, strlen(items[i].image)+1)))
+                    fprintf(stderr, "spmenu: cannot realloc %lu bytes\n", strlen(items[i].image)+1);
+                items[i].text += strlen("IMG:")+strlen(items[i].image)+1;
+            } else {
+                free(items[i].image);
+                items[i].image = NULL;
+            }
+        } else {
+            items[i].image = NULL;
+        }
+
+        if (generatecache && imagesize <= 256 && items[i].image && strcmp(items[i].image, limg?limg:"")) {
+            loadimagecache(items[i].image, &w, &h);
+            fprintf(stdout, "-!- Generating thumbnail for: %s\n", items[i].image);
+        }
+
+        if(items[i].image)
+            limg = items[i].image;
+#endif
 	}
-	if (items)
+
+	if (items) {
+#if USEIMAGE
+        items[i].image = NULL;
+#endif
 		items[i].text = NULL;
+    }
+#if USEIMAGE
+    if (!limg)
+        imagesize = 0;
+#endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
+#if USEIMAGE
+    if(lines * drw->font->h < imagesize)
+        lines = imagesize/drw->font->h+2;
+#endif
 }
 
 void
@@ -1447,6 +1681,10 @@ void
 run(void)
 {
 	XEvent ev;
+#if USEIMAGE
+    int width = 0, height = 0;
+	char *limg = NULL;
+#endif
 
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, win))
@@ -1481,6 +1719,26 @@ run(void)
 				XRaiseWindow(dpy, win);
 			break;
 		}
+
+#if USEIMAGE
+        if (!lines)
+            continue;
+
+        if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
+            if (imagesize)
+                loadimagecache(sel->image, &width, &height);
+        } else if ((!sel || !sel->image) && image) {
+            imlib_free_image();
+            image = NULL;
+        } if (image && imagesize) {
+            imlib_render_image_on_drawable(imagesize-width, (imagesize-height)/2+bh);
+
+        } if (sel) {
+            limg = sel->image;
+        } else {
+            limg = NULL;
+        }
+#endif
 	}
 }
 
@@ -1643,7 +1901,19 @@ setup(void)
 
 	/* might be faster in some instances, most of the time unnecessary */
     if (!accuratewidth) inputw = MIN(inputw, mw/3);
+
 	match();
+
+    #if USEIMAGE
+    /*
+    for(i = 1; i < selected; ++i) {
+		if(sel && sel->right && (sel = sel->right) == next) {
+			curr = next;
+			calcoffsets();
+		}
+	}
+    */
+    #endif
 
 	/* create menu window */
 	swa.override_redirect = managed ? False : True;
@@ -1671,6 +1941,16 @@ setup(void)
 	XSetClassHint(dpy, win, &ch);
    	XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1);
 
+    #if USEIMAGE
+    imlib_set_cache_size(8192 * 1024);
+	imlib_context_set_blend(1);
+	imlib_context_set_dither(1);
+	imlib_set_color_usage(128);
+	imlib_context_set_display(dpy);
+	imlib_context_set_visual(visual);
+	imlib_context_set_colormap(cmap);
+	imlib_context_set_drawable(win);
+    #endif
 
 	/* input methods */
 	if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL)
@@ -1701,6 +1981,7 @@ usage(void)
 		  "spmenu -l <line>      Set line count to stdin\n"
 		  "spmenu -h <height>    Set spmenu line height to <height>\n"
 		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
+          "spmenu -gc            Generate image cache\n"
           "spmenu -rw            Enable relative input width\n"
           "spmenu -nrw           Disable relative input width\n"
           "spmenu -f             Grabs keyboard before reading stdin\n"
@@ -1734,6 +2015,7 @@ usage(void)
 		  "spmenu -hp <padding>  Set the horizontal padding\n"
           "spmenu -la <symbol>   Set the left arrow to <symbol>\n"
           "spmenu -ra <symbol>   Set the right arrow to <symbol>\n"
+          "spmenu -is <size>     Image size\n"
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -v             Print spmenu version to stdout\n"
           "\n", stdout);
@@ -1844,6 +2126,8 @@ main(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-i")) { /* case-sensitive item matching, for compatibility reasons */
 		    fstrncmp = strncasecmp;
 		    fstrstr = cistrstr;
+        } else if (!strcmp(argv[i], "-gc")) { /* generate image cache */
+            generatecache = 1;
 		} else if (!strcmp(argv[i], "-wm")) { /* display as managed wm window */
 				managed = 1;
 		} else if (!strcmp(argv[i], "-na")) { /* disable alpha */
@@ -1923,6 +2207,8 @@ main(int argc, char *argv[])
             colors[SchemeMenu][ColFg] = argv[++i];
             colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-is")) { /* image size */
+            imagesize = atoi(argv[++i]);
 
         /* spmenu colors */
         } else if (!strcmp(argv[i], "-nif")) { /* normal item foreground color */
