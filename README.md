@@ -52,7 +52,7 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
   - Can be disabled if you don't want/need multi-monitor support.
 - tcc compiler (you can swap it out for GCC by passing CC="gcc" to the `make` command if you want)
 - Pango (for drawing fonts)
-  - If you do not want to use pango, consider my [older spmenu build](https://github.com/speedie-de/dmenu)
+  - If you do not want to use pango, consider my [older dmenu build](https://github.com/speedie-de/dmenu)
 
 ### Installation (most GNU/Linux distributions)
 
@@ -73,6 +73,8 @@ If you are on Gentoo GNU/Linux, you can add
 ### Images
 
 To use an image, pipe `IMG:/path/to/image` to spmenu. If you want you can specify arguments.
+
+`printf "IMG:$HOME/Wallpapers/Art/2.png\tThis is a cool image.\n" | spmenu`
 
 ### .Xresources values
 
