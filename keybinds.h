@@ -28,10 +28,24 @@
 
 static Key keys[] = {
 	/* modifier                     key           function         argument  */
+	{ 0,                            XK_Escape,    switchmode,      {0} },
+
 	{ 0,                            XK_Up,        move,            {.i = 1  } },
 	{ 0,                            XK_Down,      move,            {.i = 2  } },
 	{ 0,                            XK_Left,      move,            {.i = 3  } },
 	{ 0,                            XK_Right,     move,            {.i = 4  } },
+    { CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
+    { CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
+    { 0,                            XK_BackSpace, backspace,       {0} },
+    { 0,                            XK_Return,    selectitem,      {.i = +1 } },
+};
+
+static Key cmdkeys[] = {
+	/* modifier                     key           function         argument  */
+	{ 0,                            XK_k,         move,            {.i = 1  } },
+	{ 0,                            XK_j,         move,            {.i = 2  } },
+	{ 0,                            XK_h,         move,            {.i = 3  } },
+	{ 0,                            XK_l,         move,            {.i = 4  } },
     { CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
     { CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
     { CONTROL,                      XK_k,         restoresel,      {0} },
@@ -41,6 +55,8 @@ static Key keys[] = {
     { 0,                            XK_BackSpace, backspace,       {0} },
     { 0,                            XK_Home,      movestart,       {0} },
     { 0,                            XK_End,       moveend,         {0} },
+    { 0,                            XK_g,         movestart,       {0} },
+    { SHIFT,                        XK_g,         moveend,         {0} },
     { 0,                            XK_Next,      movenext,        {0} },
     { 0,                            XK_Prior,     moveprev,        {0} },
     { 0,                            XK_Return,    selectitem,      {.i = +1 } },
@@ -49,4 +65,6 @@ static Key keys[] = {
     { MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
     { MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
+
+	{ 0,                            XK_i,         switchmode,      {0} },
 };

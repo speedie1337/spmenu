@@ -12,6 +12,7 @@ static const unsigned int alphas[][3]      = {
 	[SchemePrompt]         = { fgalpha, bgalpha,  borderalpha },
 	[SchemeNormHighlight]  = { fgalpha, bgalpha,  borderalpha },
 	[SchemeSelHighlight]   = { fgalpha, bgalpha,  borderalpha },
+    [SchemeMode]           = { fgalpha, bgalpha,  borderalpha },
     [SchemeCaret]          = { fgalpha, bgalpha,  borderalpha },
     [SchemeNumber]         = { fgalpha, bgalpha,  borderalpha },
     [SchemeBorder]         = { fgalpha, bgalpha,  borderalpha },
@@ -30,6 +31,7 @@ static const char *colors[SchemeLast][2] = {
     [SchemeNormHighlight] = { col_normhlfgcolor, col_normhlbgcolor   },
     [SchemeSelHighlight]  = { col_selhlfgcolor,  col_selhlbgcolor    },
     [SchemeCaret]         = { col_caretfgcolor,  NULL                },
+    [SchemeMode]          = { col_modefgcolor,   col_modebgcolor     },
     [SchemeNumber]        = { col_numfgcolor,    col_numbgcolor      },
     [SchemeBorder]        = { NULL,              col_bordercolor     },
 };

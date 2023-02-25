@@ -102,6 +102,10 @@ static char col_bordercolor[]          = "#35638A"; /* Border color */
 /* Caret colors */
 static char col_caretfgcolor[]         = "#ffffff"; /* Caret color */
 
+/* Mode colors */
+static char col_modefgcolor[]          = "#ffffff"; /* Mode text color */
+static char col_modebgcolor[]          = "#35638A"; /* Mode background color */
+
 /* SGR colors */
 static char col_sgrcolor0[]            = "#000000"; /* SGR color #0 */
 static char col_sgrcolor1[]            = "#7f0000"; /* SGR color #1 */

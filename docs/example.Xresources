@@ -20,6 +20,8 @@ spmenu.col_selhlfgcolor:   #ffffff
 spmenu.col_selhlbgcolor:   #000000
 spmenu.col_caretfgcolor:   #ffffff
 spmenu.col_bordercolor:    #35638A
+spmenu.col_modefgcolor:    #ffffff
+spmenu.col_modebgcolor:    #35638A
 spmenu.col_sgrcolor0:      #000000
 spmenu.col_sgrcolor1:      #7f0000
 spmenu.col_sgrcolor2:      #007f00

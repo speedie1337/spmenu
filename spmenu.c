@@ -79,8 +79,13 @@ enum { SchemeLArrow,
        SchemeSelHighlight,
        SchemeCaret,
        SchemeNumber,
+       SchemeMode,
        SchemeBorder,
        SchemeLast }; /* color schemes */
+
+enum {
+       ModeCommand,
+       ModeInsert };
 
 static char text[BUFSIZ] = "";
 
@@ -112,6 +117,7 @@ static Imlib_Image image = NULL;
 #endif
 
 static char numbers[NUMBERSBUFSIZE] = "";
+static char modetext[16] = "Insert";
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
@@ -131,6 +137,8 @@ static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
+static int selkeys = 1; /* 0 is command mode */
+static int allowkeys = 1;
 
 static Atom clip, utf8, types, dock;
 static Display *dpy;
@@ -182,6 +190,9 @@ static void backspace(const Arg *arg);
 static void selectitem(const Arg *arg);
 static void quit(const Arg *arg);
 static void complete(const Arg *arg);
+
+static void switchmode(const Arg *arg);
+static void drawmenu(void);
 
 #if USERTL
 static void apply_fribidi(char *str);
@@ -362,6 +373,21 @@ loadimagecache(const char *file, int *width, int *height)
 #endif
 
 void
+switchmode(const Arg *arg)
+{
+    selkeys = !selkeys;
+    allowkeys = !selkeys;
+
+    if (!selkeys) {
+        strcpy(modetext, "Normal");
+    } else {
+        strcpy(modetext, "Insert");
+    }
+
+    drawmenu();
+}
+
+void
 appenditem(struct item *item, struct item **list, struct item **last)
 {
 	if (*last)
@@ -399,9 +425,9 @@ calcoffsets(void)
 	else
         /* hide match count */
         if (hidematchcount) {
-		    n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow));
+		    n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow) + TEXTW(modetext));
         } else {
-            n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow) + TEXTW(numbers));
+            n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow) + TEXTW(numbers) + TEXTW(modetext));
         }
 	/* calculate which items will begin the next page and previous page */
 	for (i = 0, next = curr; next; next = next->right)
@@ -668,26 +694,30 @@ drawmenu(void)
 		x += w;
 		for (item = curr; item != next; item = item->right)
             if (hidematchcount) {
-                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow)));
+                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow) - TEXTW(modetext)));
             } else {
-                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow) - TEXTW(numbers)));
+                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow) - TEXTW(numbers) - TEXTW(modetext)));
             }
 		if (next) {
 			w = TEXTW(rightarrow);
 			drw_setscheme(drw, scheme[SchemeRArrow]);
 
             if (hidematchcount) {
-                drw_text(drw, mw - w, 0, w, bh, lrpad / 2, rightarrow, 0, True);
+                drw_text(drw, mw - w - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, True);
             } else {
-                drw_text(drw, mw - w - TEXTW(numbers), 0, w, bh, lrpad / 2, rightarrow, 0, True);
+                drw_text(drw, mw - w - TEXTW(numbers) - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, True);
             }
 		}
 	}
 
     if (!hidematchcount) {
         drw_setscheme(drw, scheme[SchemeNumber]);
-        drw_text(drw, mw - TEXTW(numbers), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, False);
+        drw_text(drw, mw - TEXTW(numbers) - TEXTW(modetext), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, False);
     }
+
+    drw_setscheme(drw, scheme[SchemeMode]);
+    drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, False);
+
 	drw_map(drw, win, 0, 0, mw, mh);
 }
 
@@ -1298,6 +1328,7 @@ keypress(XEvent *e)
         KeySym keysym;
         XKeyEvent *ev;
         char buf[64];
+        char keyArray;
         KeySym ksym = NoSymbol;
         Status status;
 
@@ -1305,16 +1336,27 @@ keypress(XEvent *e)
         ev = &e->xkey;
         len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
 
-        //keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
-        for (i = 0; i < LENGTH(keys); i++) {
-            if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
-                keys[i].func(&(keys[i].arg));
+        if (selkeys) {
+            for (i = 0; i < LENGTH(keys); i++) {
+                if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
+                    keys[i].func(&(keys[i].arg));
+            }
+        } else {
+            for (i = 0; i < LENGTH(cmdkeys); i++) {
+                if (keysym == cmdkeys[i].keysym && CLEANMASK(cmdkeys[i].mod) == CLEANMASK(ev->state) && cmdkeys[i].func)
+                    cmdkeys[i].func(&(cmdkeys[i].arg));
+            }
         }
 
-        if (!iscntrl(*buf) && type) {
-            insert(buf, len);
+        if (!iscntrl(*buf) && type && selkeys ) {
+
+            if (allowkeys) {
+                insert(buf, len);
+            } else {
+                allowkeys = !allowkeys;
+            }
 
             drawmenu();
         }
