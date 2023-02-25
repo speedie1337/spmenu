@@ -2064,7 +2064,9 @@ usage(void)
 		  "spmenu -t             Position spmenu at the top of the screen\n"
 		  "spmenu -b             Position spmenu at the bottom of the screen\n"
 		  "spmenu -c             Position spmenu at the center of the screen\n"
+          "spmenu -hm            Hide mode indicator\n"
           "spmenu -hmc           Hide match count\n"
+          "spmenu -sm            Show mode indicator\n"
           "spmenu -smc           Show match count\n"
           "spmenu -xrdb          Load .Xresources on runtime\n"
           "spmenu -nxrdb         Don't load .Xresources on runtime\n"
@@ -2221,6 +2223,10 @@ main(int argc, char *argv[])
 				hidematchcount = 1;
 		} else if (!strcmp(argv[i], "-smc")) {  /* don't hide match count */
 				hidematchcount = 0;
+		} else if (!strcmp(argv[i], "-hm")) {   /* hide mode indicator */
+				hidemode = 1;
+		} else if (!strcmp(argv[i], "-sm")) {  /* don't hide mode indicator */
+				hidemode = 0;
         } else if (i + 1 == argc)
 			usage();
 
