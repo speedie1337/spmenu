@@ -2104,6 +2104,8 @@ usage(void)
 		  "spmenu -shb <color>   Set the selected highlight background color\n"
           "spmenu -nfg <color>   Set the foreground color for the match count\n"
           "spmenu -nbg <color>   Set the background color for the match count\n"
+          "spmenu -mfg <color>   Set the foreground color for the mode indicator\n"
+          "spmenu -mbg <color>   Set the background color for the mode indicator\n"
           "spmenu -laf <color>   Set the left arrow foreground color\n"
           "spmenu -raf <color>   Set the left arrow foreground color\n"
           "spmenu -lab <color>   Set the left arrow background color\n"
@@ -2322,6 +2324,12 @@ main(int argc, char *argv[])
 			colors[SchemeNormHighlight][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-nbg")) { /* numbgcolor */
 			colors[SchemeNumber][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nfg")) { /* numfgcolor */
+			colors[SchemeNumber][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-mbg")) { /* mode */
+			colors[SchemeMode][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-mfg")) { /* mode */
+			colors[SchemeMode][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-laf")) { /* left arrow fg */
 			colors[SchemeLArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-raf")) { /* right arrow fg */
