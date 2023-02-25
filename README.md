@@ -17,6 +17,7 @@ Of course if you want, this is free software so you can use it in your own build
 
 - dwm-like keybind array (See keybinds.h)
 - 256 color support through SGR codes.
+- Image support (from [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
 - Border only when centered option
@@ -25,6 +26,7 @@ Of course if you want, this is free software so you can use it in your own build
 ### Other features
 
 Note: This is an incomplete list, it's just here to give you an idea of what this build has to offer.
+
 - Pango markup support
 - Alpha transparency
 - Pywal/.Xresources support
@@ -44,6 +46,8 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 - libX11
 - libXrender
 - freetype
+- imlib2
+  - Used for image support, can be disabled if you don't want this by editing host.mk and toggle.h
 - libXinerama
   - Can be disabled if you don't want/need multi-monitor support.
 - tcc compiler (you can swap it out for GCC by passing CC="gcc" to the `make` command if you want)
