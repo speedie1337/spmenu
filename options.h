@@ -57,6 +57,7 @@ static char *prompt                    = NULL; /* Default prompt, set to NULL (n
 
 /* Hide options */
 static int hidematchcount              = 0; /* Hide match count (0/1) */
+static int hidemode                    = 0; /* Hide mode (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
 
 /* Color options

@@ -384,6 +384,8 @@ switchmode(const Arg *arg)
         strcpy(modetext, "Insert");
     }
 
+    if (hidemode) strcpy(modetext, "");
+
     drawmenu();
 }
 
@@ -631,6 +633,9 @@ drawmenu(void)
 	drw_setscheme(drw, scheme[SchemeMenu]);
 	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
+    if (hidemode)
+        strcpy(modetext, "");
+
 	if (prompt && *prompt) {
         if (colorprompt) {
 		    drw_setscheme(drw, scheme[SchemePrompt]);
@@ -715,8 +720,10 @@ drawmenu(void)
         drw_text(drw, mw - TEXTW(numbers) - TEXTW(modetext), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, False);
     }
 
-    drw_setscheme(drw, scheme[SchemeMode]);
-    drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, False);
+    if (!hidemode) {
+        drw_setscheme(drw, scheme[SchemeMode]);
+        drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, False);
+    }
 
 	drw_map(drw, win, 0, 0, mw, mh);
 }

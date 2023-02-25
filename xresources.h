@@ -110,6 +110,7 @@ ResourcePref resources[] = {
 	{ "maxhist",        INTEGER, &maxhist },
     { "hidematchcount", INTEGER, &hidematchcount },
     { "hidehighlight",  INTEGER, &hidehighlight },
+    { "hidemode",       INTEGER, &hidemode },
 	{ "histnodup",      INTEGER, &histnodup },
     { "casesensitive",  INTEGER, &casesensitive },
     { "imagesize",      INTEGER, &imagesize },
