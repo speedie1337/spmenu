@@ -38,6 +38,7 @@ static Key inskeys[] = {
     { CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
     { 0,                            XK_BackSpace, backspace,       {0} },
     { 0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { 0,                            XK_Tab,       complete,        {0} },
 };
 
 static Key normkeys[] = {
