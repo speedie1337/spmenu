@@ -10,7 +10,7 @@ PATH() {
 
 # Run spmenu and parse it
 PARSE() {
-    DOUT="$(PATH | spmenu -H "${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist" "$@")"
+    DOUT="$(PATH | spmenu -im -H "${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist" "$@")"
 
     [ "$(printf '%c' "$DOUT")" = "#" ] && RUN_ARG="$TERMINAL" || RUN_ARG="$SHELL"
     [ "$RUN_ARG" != "$TERMINAL" ] && printf "%s" "$DOUT" | sed "s/#//g" | ${SHELL:-"/bin/sh"} &

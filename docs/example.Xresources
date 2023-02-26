@@ -64,6 +64,6 @@ spmenu.imagesize:          86
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      0
-spmenu.mode:               1
+spmenu.mode:               0
 spmenu.normtext:           Normal
 spmenu.instext:            Insert

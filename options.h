@@ -22,7 +22,7 @@ static int imageposition               = 0; /* Image position (0: Top, 1: Bottom
 static int generatecache               = 0; /* Generate image cache by default */
 
 /* Mode options */
-static int mode                        = 1; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
+static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
 static char normtext[]                 = "Normal"; /* Text to display for normal mode */
 static char instext[]                  = "Insert"; /* Text to display for insert mode */
 
