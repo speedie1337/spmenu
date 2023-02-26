@@ -34,7 +34,7 @@ static int borderwidth                 = 2; /* Width of the border */
 static int bordercentered              = 1; /* Draw border only when centered */
 
 /* Font options */
-static char font[]                     = "DejaVu Sans Mono 8"; /* Font to draw text and Pango markup with. */
+static char font[]                     = "Noto Regular 8"; /* Font to draw text and Pango markup with. */
 
 /* Symbol options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */
