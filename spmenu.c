@@ -2082,7 +2082,7 @@ main(int argc, char *argv[])
 
     if (mode) {
         selkeys = 1;
-        allowkeys = !selkeys;
+        allowkeys = 1;
 
         strcpy(modetext, instext);
     } else {
