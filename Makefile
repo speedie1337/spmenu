@@ -21,7 +21,7 @@ options:
 	$(CC) -c $(CFLAGS) -g $<
 
 
-$(OBJ): arg.h options.h options.mk draw.h
+$(OBJ): options.h options.mk draw.h
 
 spmenu: spmenu.o draw.o main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
