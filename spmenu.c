@@ -9,14 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "toggle.h"
-
-#if USEIMAGE
-#include <errno.h>
-#include <pwd.h>
-#include <Imlib2.h>
-#include <openssl/md5.h>
-#endif
+#include "toggle.h" /* feature toggle */
 
 #ifdef FRIBIDI
 #define USERTL 1
@@ -26,7 +19,17 @@
 
 #if USERTL
 #include <fribidi.h>
-static char fribidi_text[BUFSIZ] = "";
+#endif
+
+#if USEIMAGE
+#include <errno.h>
+#include <pwd.h>
+#include <Imlib2.h>
+#include <openssl/md5.h>
+#endif
+
+#ifdef XINERAMA
+#include <X11/extensions/Xinerama.h>
 #endif
 
 #include <X11/XKBlib.h>
@@ -34,9 +37,6 @@ static char fribidi_text[BUFSIZ] = "";
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
-#ifdef XINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
 #include <X11/Xft/Xft.h>
 #include <pango/pango.h>
 
@@ -65,45 +65,20 @@ static char fribidi_text[BUFSIZ] = "";
 #define SUPERR Mod5Mask
 
 /* alpha */
-#define opaque                0xffU
+#define opaque 0xffU
 
-/* enums */
-enum { SchemeLArrow,
-       SchemeRArrow,
-       SchemeItemNorm,
-       SchemeItemSel,
-       SchemeMenu,
-       SchemeInput,
-       SchemePrompt,
-       SchemeNormHighlight,
-       SchemeSelHighlight,
-       SchemeCaret,
-       SchemeNumber,
-       SchemeMode,
-       SchemeBorder,
-       SchemeLast }; /* color schemes */
-
-enum {
-       ModeCommand,
-       ModeInsert };
+/* include enums */
+#include "libs/schemes.h"
+#include "libs/arg.h"
 
 static char text[BUFSIZ] = "";
 
 struct item {
 	char *text;
-#if USEIMAGE
     char *image;
-#endif
 	struct item *left, *right;
 	double distance;
 };
-
-typedef union {
-	int i;
-	unsigned int ui;
-	float f;
-	const void *v;
-} Arg;
 
 typedef struct {
 	unsigned int mod;
@@ -112,12 +87,7 @@ typedef struct {
 	const Arg arg;
 } Key;
 
-#if USEIMAGE
-static Imlib_Image image = NULL;
-#endif
-
 static char numbers[NUMBERSBUFSIZE] = "";
-static char modetext[16] = "Insert";
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
@@ -137,8 +107,8 @@ static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
-static int selkeys = 1; /* 0 is command mode */
-static int allowkeys = 1;
+
+#include "libs/mode.h"
 
 static Atom clip, utf8, types, dock;
 static Display *dpy;
@@ -158,22 +128,6 @@ static char *histfile;
 static char **history;
 static size_t histsz, histpos;
 
-/* Xresources preferences */
-enum resource_type {
-	STRING = 0,
-	INTEGER = 1,
-	FLOAT = 2
-};
-typedef struct {
-	char *name;
-	enum resource_type type;
-	void *dst;
-} ResourcePref;
-
-static void load_xresources(void);
-static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
-static void savehistory(char *input);
-
 /* keybind functions */
 static void move(const Arg *arg);
 static void moveend(const Arg *arg);
@@ -190,204 +144,34 @@ static void backspace(const Arg *arg);
 static void selectitem(const Arg *arg);
 static void quit(const Arg *arg);
 static void complete(const Arg *arg);
+static void savehistory(char *input);
 
-static void switchmode(const Arg *arg);
 static void drawmenu(void);
 
-#if USERTL
-static void apply_fribidi(char *str);
-#endif
+#include "libs/xrdb.h"
 
-#include "options.h" /* Include user configuration */
+/* user configuration */
+#include "options.h" /* Include main header */
 #include "keybinds.h" /* Include keybinds */
 #include "colors.h" /* Include colors */
 #include "xresources.h" /* Include .Xresources */
+
 
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
+#include "libs/xrdb.c"
+#include "libs/mode.c"
+
 #if USEIMAGE
-void
-createifnexist(const char *dir)
-{
-	if(access(dir, F_OK) == 0)
-        return;
-
-	if(errno == EACCES)
-        fprintf(stderr, "spmenu: no access to create directory: %s\n", dir);
-
-	if(mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
-		fprintf(stderr, "spmenu: failed to create directory: %s\n", dir);
-}
-
-void
-createifnexist_rec(const char *dir)
-{
-	char *buf, *s = (char*)dir, *bs;
-
-    if(!(buf = malloc(strlen(s)+1)))
-		return;
-
-	memset(buf, 0, strlen(s)+1);
-
-	for(bs = buf; *s; ++s, ++bs) {
-		if(*s == '/' && *buf)
-            createifnexist(buf);
-
-		*bs = *s;
-	}
-
-	free(buf);
-}
-
-void
-loadimage(const char *file, int *width, int *height)
-{
-	image = imlib_load_image(file);
-	if (!image)
-        return;
-
-	imlib_context_set_image(image);
-
-	*width = imlib_image_get_width();
-	*height = imlib_image_get_height();
-}
-
-void
-scaleimage(int width, int height)
-{
-	int nwidth, nheight;
-	float aspect = 1.0f;
-
-	if (width > height)
-        aspect = (float)imagesize/width;
-	else
-        aspect = (float)imagesize/height;
-
-	nwidth = width * aspect;
-	nheight = height * aspect;
-
-	if(nwidth == width && nheight == height)
-        return;
-
-	image = imlib_create_cropped_scaled_image(0,0,width,height,nwidth,nheight);
-	imlib_free_image();
-
-	if (!image)
-        return;
-
-	imlib_context_set_image(image);
-}
-
-void
-loadimagecache(const char *file, int *width, int *height)
-{
-	int slen = 0, i;
-	unsigned char digest[MD5_DIGEST_LENGTH];
-	char md5[MD5_DIGEST_LENGTH*2+1];
-	char *xdg_cache, *home = NULL, *dsize, *buf;
-	struct passwd *pw = NULL;
-
-	/* just load and don't store or try cache */
-	if(imagesize > 256) {
-		loadimage(file, width, height);
-		return;
-	}
-
-	/* try find image from cache first */
-	if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
-		if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
-			home = pw->pw_dir;
-		if(!home) {
-			fprintf(stderr, "spmenu: could not find home directory");
-			return;
-		}
-	}
-
-	/* which cache do we try? */
-	dsize = "normal";
-	if (imagesize > 128)
-        dsize = "large";
-
-	slen = snprintf(NULL, 0, "file://%s", file)+1;
-
-	if(!(buf = malloc(slen))) {
-		fprintf(stderr, "spmenu: out of memory");
-		return;
-	}
-
-	/* calculate md5 from path */
-	sprintf(buf, "file://%s", file);
-	MD5((unsigned char*)buf, slen, digest);
-
-	free(buf);
-
-	for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
-        sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
-
-	/* path for cached thumbnail */
-	if (xdg_cache)
-        slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
-	else
-        slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
-
-	if(!(buf = malloc(slen))) {
-		fprintf(stderr, "out of memory");
-		return;
-	}
-
-	if (xdg_cache)
-        sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
-	else
-        sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
-
-	loadimage(buf, width, height);
-
-	if (image && *width < imagesize && *height < imagesize) {
-		imlib_free_image();
-		image = NULL;
-	} else if(image && (*width > imagesize || *height > imagesize)) {
-		scaleimage(*width, *height);
-	}
-
-	/* we are done */
-    if (image) {
-		free(buf);
-		return;
-	}
-
-    /* we din't find anything from cache, or it was just wrong */
-	loadimage(file, width, height);
-	if (!image) {
-		free(buf);
-		return;
-	}
-
-	scaleimage(*width, *height);
-	imlib_image_set_format("png");
-	createifnexist_rec(buf);
-	imlib_save_image(buf);
-	free(buf);
-}
+#include "libs/img.h"
+#include "libs/img.c"
 #endif
-
-void
-switchmode(const Arg *arg)
-{
-    selkeys = !selkeys;
-    allowkeys = !selkeys;
-
-    if (!selkeys) {
-        strcpy(modetext, "Normal");
-    } else {
-        strcpy(modetext, "Insert");
-    }
-
-    if (hidemode) strcpy(modetext, "");
-
-    drawmenu();
-}
+#if USERTL
+#include "libs/rtl.h"
+#include "libs/rtl.c"
+#endif
 
 void
 appenditem(struct item *item, struct item **list, struct item **last)
@@ -454,12 +238,12 @@ cleanup(void)
 {
 	size_t i;
 
-#if USEIMAGE
+    #if USEIMAGE
     if (image) {
         imlib_free_image();
         image = NULL;
     }
-#endif
+    #endif
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);
@@ -675,10 +459,10 @@ drawmenu(void)
     if (!hidematchcount) recalculatenumbers();
 
 	if (lines > 0) {
-#if USEIMAGE
+        #if USEIMAGE
         if (imagesize)
             x += imagegaps + imagesize;
-#endif
+        #endif
 		/* draw grid */
 		int i = 0;
 		for (item = curr; item != next; item = item->right, i++)
@@ -1524,28 +1308,6 @@ buttonpress(XEvent *e)
 	}
 }
 
-#if USERTL
-void
-apply_fribidi(char *str)
-{
-  FriBidiStrIndex len = strlen(str);
-  FriBidiChar logical[BUFSIZ];
-  FriBidiChar visual[BUFSIZ];
-  FriBidiParType base = FRIBIDI_PAR_ON;
-  FriBidiCharSet charset;
-  fribidi_boolean result;
-
-  fribidi_text[0] = 0;
-  if (len>0)
-  {
-    charset = fribidi_parse_charset("UTF-8");
-    len = fribidi_charset_to_unicode(charset, str, len, logical);
-    result = fribidi_log2vis(logical, len, &base, visual, NULL, NULL, NULL);
-    len = fribidi_unicode_to_charset(charset, visual, len, fribidi_text);
-  }
-}
-#endif
-
 void
 pastesel(void)
 {
@@ -1678,61 +1440,13 @@ readstdin(void)
 }
 
 void
-resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
-{
-	char *sdst = NULL;
-	int *idst = NULL;
-	float *fdst = NULL;
-	sdst = dst;
-	idst = dst;
-	fdst = dst;
-	char fullname[256];
-	char *type;
-	XrmValue ret;
-	snprintf(fullname, sizeof(fullname), "%s.%s", "spmenu", name);
-	fullname[sizeof(fullname) - 1] = '\0';
-	XrmGetResource(db, fullname, "*", &type, &ret);
-	if (!(ret.addr == NULL || strncmp("String", type, 64)))
-	{
-		switch (rtype) {
-		case STRING:
-			strcpy(sdst, ret.addr);
-			break;
-		case INTEGER:
-			*idst = strtoul(ret.addr, NULL, 10);
-			break;
-		case FLOAT:
-			*fdst = strtof(ret.addr, NULL);
-			break;
-		}
-	}
-}
-
-void
-load_xresources(void)
-{
-	Display *display;
-	char *resm;
-	XrmDatabase db;
-	ResourcePref *p;
-	display = XOpenDisplay(NULL);
-	resm = XResourceManagerString(display);
-	if (!resm)
-		return;
-	db = XrmGetStringDatabase(resm);
-	for (p = resources; p < resources + LENGTH(resources); p++)
-		resource_load(db, p->name, p->type, p->dst);
-	XCloseDisplay(display);
-}
-
-void
 run(void)
 {
 	XEvent ev;
-#if USEIMAGE
+    #if USEIMAGE
     int width = 0, height = 0;
 	char *limg = NULL;
-#endif
+    #endif
 
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, win))
@@ -1815,11 +1529,11 @@ setup(void)
 	Window w, dw, *dws;
 	XWindowAttributes wa;
 	XClassHint ch = { class, class };
-#ifdef XINERAMA
+    #ifdef XINERAMA
 	XineramaScreenInfo *info;
 	Window pw;
 	int a, di, n, area = 0;
-#endif
+    #endif
     char cbuf[8];
 	/* init appearance */
 	for (j = 0; j < SchemeLast; j++) {
@@ -1902,7 +1616,7 @@ setup(void)
             }
         }
     }
-#ifdef XINERAMA
+    #ifdef XINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
 		XGetInputFocus(dpy, &w, &di);
@@ -1942,7 +1656,7 @@ setup(void)
 
 		XFree(info);
 	} else
-#endif
+    #endif
 	{
 		if (!XGetWindowAttributes(dpy, parentwin, &wa))
 			die("could not get embedding window attributes: 0x%lx",
@@ -1963,17 +1677,6 @@ setup(void)
     if (!accuratewidth) inputw = MIN(inputw, mw/3);
 
 	match();
-
-    #if USEIMAGE
-    /*
-    for(i = 1; i < selected; ++i) {
-		if(sel && sel->right && (sel = sel->right) == next) {
-			curr = next;
-			calcoffsets();
-		}
-	}
-    */
-    #endif
 
 	/* create menu window */
 	swa.override_redirect = managed ? False : True;
