@@ -6,6 +6,7 @@ CC = tcc
 
 # paths
 PREFIX = /usr
+MANPREFIX 	 = ${PREFIX}/share/man
 
 # library paths
 #

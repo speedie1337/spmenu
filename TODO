@@ -1,5 +1,4 @@
 # TODO for spmenu
 
-- man page, which is dynamically compiled using pandoc similar to speedwm
 - More example scripts
 - toggle.h should probably not be necessary

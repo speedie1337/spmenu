@@ -32,6 +32,7 @@ clean:
 dist: clean
 	mkdir -p spmenu-$(VERSION)
 	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ spmenu-$(VERSION)
+	[ -f spmenu.1 ] && cp spmenu.1 spmenu-$(VERSION) || :
 	tar -cf spmenu-$(VERSION).tar spmenu-$(VERSION)
 	gzip spmenu-$(VERSION).tar
 	rm -rf spmenu-$(VERSION)
@@ -39,6 +40,8 @@ dist: clean
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -rf spmenu scripts/* $(DESTDIR)$(PREFIX)/bin
+	[ -f spmenu.1 ] && mkdir -p ${DESTDIR}${MANPREFIX}/man1 || :
+	[ -f spmenu.1 ] && cp spmenu.1 ${DESTDIR}${MANPREFIX}/man1/spmenu.1 || :
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/spmenu*
 	rm -f *.o
 	rm -f spmenu
@@ -58,7 +61,14 @@ help:
 	@echo uninstall: Uninstalls spmenu. You may need to run this as root.
 	@echo dist: Creates a release for spmenu.
 	@echo clean: Removes objects and tarballs.
+	@echo man: Generate man page for spmenu
 	@echo compat: Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
 	@echo help: Displays this help sheet.
 
-.PHONY: all options clean dist install uninstall help
+man:
+	printf "%% spmenu(1) $(VERSION) | dynamic menu\n" > .man.md
+	grep -v docs/preview.png docs/docs.md >> .man.md
+	pandoc --standalone --to man .man.md -o spmenu.1
+	rm -f .man.md
+
+.PHONY: all options clean dist install uninstall help man
