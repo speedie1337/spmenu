@@ -45,198 +45,198 @@ spmenu.
 See a list below for a list.
 .SS 3. Arguments
 .IP \[bu] 2
-spmenu -l Set line count to stdin
+spmenu -l line - Set line count to stdin
 .IP \[bu] 2
-spmenu -h Set spmenu line height to
+spmenu -h height - Set spmenu line height to height
 .IP \[bu] 2
-spmenu -g Set the number of grids to
+spmenu -g grid - Set the number of grids to grid
 .IP \[bu] 2
-spmenu -gc Generate image cache
+spmenu -gc - Generate image cache
 .IP \[bu] 2
-spmenu -rw Enable relative input width
+spmenu -rw - Enable relative input width
 .IP \[bu] 2
-spmenu -nrw Disable relative input width
+spmenu -nrw - Disable relative input width
 .IP \[bu] 2
-spmenu -f Grabs keyboard before reading stdin
+spmenu -f - Grabs keyboard before reading stdin
 .IP \[bu] 2
-spmenu -F Enable fuzzy matching
+spmenu -F - Enable fuzzy matching
 .IP \[bu] 2
-spmenu -P Hide characters
+spmenu -P - Hide characters
 .IP \[bu] 2
-spmenu -p Set spmenu prompt text to
+spmenu -p text - Set spmenu prompt text to text
 .IP \[bu] 2
-spmenu -a Enable alpha
+spmenu -a - Enable alpha
 .IP \[bu] 2
-spmenu -na Disable alpha
+spmenu -na - Disable alpha
 .IP \[bu] 2
-spmenu -cp Color prompt
+spmenu -cp - Color prompt
 .IP \[bu] 2
-spmenu -ncp Don\[cq]t color prompt
+spmenu -ncp - Don\[cq]t color prompt
 .IP \[bu] 2
-spmenu -tp Allow the user to type
+spmenu -tp - Allow the user to type
 .IP \[bu] 2
-spmenu -nt Don\[cq]t allow typing, the user must select an option
+spmenu -nt - Don\[cq]t allow typing, the user must select an option
 .IP \[bu] 2
-spmenu -x Offset spmenu x position by
+spmenu -x x offset - Offset spmenu x position by x offset
 .IP \[bu] 2
-spmenu -y Offset spmenu y position by
+spmenu -y y offset - Offset spmenu y position by y offset
 .IP \[bu] 2
-spmenu -n Preselect in the list of items
+spmenu -n line - Preselect line in the list of items
 .IP \[bu] 2
-spmenu -z Width of the spmenu window
+spmenu -z width - Width of the spmenu window
 .IP \[bu] 2
-spmenu -nmt Set normal mode text to
+spmenu -nmt text - Set normal mode text to text
 .IP \[bu] 2
-spmenu -imt Set insert mode text to
+spmenu -imt text - Set insert mode text to text
 .IP \[bu] 2
-spmenu -bw Width of the border.
+spmenu -bw - Width of the border.
 0 will disable the border
 .IP \[bu] 2
-spmenu -s Use case-sensitive matching
+spmenu -s - Use case-sensitive matching
 .IP \[bu] 2
-spmenu -i Use case-insensitive matching
+spmenu -i - Use case-insensitive matching
 .IP \[bu] 2
-spmenu -nm Start spmenu in normal mode
+spmenu -nm - Start spmenu in normal mode
 .IP \[bu] 2
-spmenu -im Start spmenu in insert mode
+spmenu -im - Start spmenu in insert mode
 .IP \[bu] 2
-spmenu -t Position spmenu at the top of the screen
+spmenu -t - Position spmenu at the top of the screen
 .IP \[bu] 2
-spmenu -b Position spmenu at the bottom of the screen
+spmenu -b - Position spmenu at the bottom of the screen
 .IP \[bu] 2
-spmenu -c Position spmenu at the center of the screen
+spmenu -c - Position spmenu at the center of the screen
 .IP \[bu] 2
-spmenu -hm Hide mode indicator
+spmenu -hm - Hide mode indicator
 .IP \[bu] 2
-spmenu -hmc Hide match count
+spmenu -hmc - Hide match count
 .IP \[bu] 2
-spmenu -sm Show mode indicator
+spmenu -sm - Show mode indicator
 .IP \[bu] 2
-spmenu -smc Show match count
+spmenu -smc - Show match count
 .IP \[bu] 2
-spmenu -xrdb Load .Xresources on runtime
+spmenu -xrdb - Load .Xresources on runtime
 .IP \[bu] 2
-spmenu -w Embed spmenu inside
+spmenu -w window id - Embed spmenu inside window id
 .IP \[bu] 2
-spmenu -H Specify a path to save the history to
+spmenu -H hist file - Specify a path to save the history to
 .IP \[bu] 2
-spmenu -ig Set image gaps to
+spmenu -ig gaps - Set image gaps to gaps
 .IP \[bu] 2
-spmenu -lp Set the vertical padding
+spmenu -lp padding - Set the vertical padding
 .IP \[bu] 2
-spmenu -hp Set the horizontal padding
+spmenu -hp padding - Set the horizontal padding
 .IP \[bu] 2
-spmenu -la Set the left arrow to
+spmenu -la symbol - Set the left arrow to symbol
 .IP \[bu] 2
-spmenu -ra Set the right arrow to
+spmenu -ra symbol - Set the right arrow to symbol
 .IP \[bu] 2
-spmenu -is Image size
+spmenu -is size - Image size
 .IP \[bu] 2
-spmenu -it Position the image at the top
+spmenu -it - Position the image at the top
 .IP \[bu] 2
-spmenu -ib Position the image at the bottom
+spmenu -ib - Position the image at the bottom
 .IP \[bu] 2
-spmenu -ic Position the image in the center
+spmenu -ic - Position the image in the center
 .IP \[bu] 2
-spmenu -itc Position the image in the top center
+spmenu -itc - Position the image in the top center
 .IP \[bu] 2
-spmenu -wm Spawn spmenu as a window manager controlled client/window.
+spmenu -wm - Spawn spmenu as a window manager controlled client/window.
 Useful for testing
 .IP \[bu] 2
-spmenu -v Print spmenu version to stdout
+spmenu -v - Print spmenu version to stdout
 .IP \[bu] 2
-spmenu -fn Set the spmenu font to
+spmenu -fn font - Set the spmenu font to font
 .IP \[bu] 2
-spmenu -nif Set the normal item foreground color
+spmenu -nif color - Set the normal item foreground color
 .IP \[bu] 2
-spmenu -nib Set the normal item background color
+spmenu -nib color - Set the normal item background color
 .IP \[bu] 2
-spmenu -sif Set the selected item foreground color
+spmenu -sif color - Set the selected item foreground color
 .IP \[bu] 2
-spmenu -sib Set the selected item background color
+spmenu -sib color - Set the selected item background color
 .IP \[bu] 2
-spmenu -pfg Set the prompt foreground color
+spmenu -pfg color - Set the prompt foreground color
 .IP \[bu] 2
-spmenu -pbg Set the prompt background color
+spmenu -pbg color - Set the prompt background color
 .IP \[bu] 2
-spmenu -ifg Set input foreground color
+spmenu -ifg color - Set input foreground color
 .IP \[bu] 2
-spmenu -ibg Set input background color
+spmenu -ibg color - Set input background color
 .IP \[bu] 2
-spmenu -mbg Set the menu background color
+spmenu -mbg color - Set the menu background color
 .IP \[bu] 2
-spmenu -nhf Set the normal highlight foreground color
+spmenu -nhf color - Set the normal highlight foreground color
 .IP \[bu] 2
-spmenu -nhb Set the normal highlight background color
+spmenu -nhb color - Set the normal highlight background color
 .IP \[bu] 2
-spmenu -shf Set the selected highlight foreground color
+spmenu -shf color - Set the selected highlight foreground color
 .IP \[bu] 2
-spmenu -shb Set the selected highlight background color
+spmenu -shb color - Set the selected highlight background color
 .IP \[bu] 2
-spmenu -shb Set the selected highlight background color
+spmenu -shb color - Set the selected highlight background color
 .IP \[bu] 2
-spmenu -nfg Set the foreground color for the match count
+spmenu -nfg color - Set the foreground color for the match count
 .IP \[bu] 2
-spmenu -nbg Set the background color for the match count
+spmenu -nbg color - Set the background color for the match count
 .IP \[bu] 2
-spmenu -mfg Set the foreground color for the mode indicator
+spmenu -mfg color - Set the foreground color for the mode indicator
 .IP \[bu] 2
-spmenu -mbg Set the background color for the mode indicator
+spmenu -mbg color - Set the background color for the mode indicator
 .IP \[bu] 2
-spmenu -laf Set the left arrow foreground color
+spmenu -laf color - Set the left arrow foreground color
 .IP \[bu] 2
-spmenu -raf Set the right arrow foreground color
+spmenu -raf color - Set the right arrow foreground color
 .IP \[bu] 2
-spmenu -lab Set the left arrow background color
+spmenu -lab color - Set the left arrow background color
 .IP \[bu] 2
-spmenu -rab Set the right arrow background color
+spmenu -rab color - Set the right arrow background color
 .IP \[bu] 2
-spmenu -cc Set the caret color
+spmenu -cc color - Set the caret color
 .IP \[bu] 2
-spmenu -bc Set the border color
+spmenu -bc color - Set the border color
 .IP \[bu] 2
-spmenu -sgr0 Set the SGR 0 color
+spmenu -sgr0 - Set the SGR 0 color
 .IP \[bu] 2
-spmenu -sgr1 Set the SGR 1 color
+spmenu -sgr1 - Set the SGR 1 color
 .IP \[bu] 2
-spmenu -sgr2 Set the SGR 2 color
+spmenu -sgr2 - Set the SGR 2 color
 .IP \[bu] 2
-spmenu -sgr3 Set the SGR 3 color
+spmenu -sgr3 - Set the SGR 3 color
 .IP \[bu] 2
-spmenu -sgr4 Set the SGR 4 color
+spmenu -sgr4 - Set the SGR 4 color
 .IP \[bu] 2
-spmenu -sgr5 Set the SGR 5 color
+spmenu -sgr5 - Set the SGR 5 color
 .IP \[bu] 2
-spmenu -sgr6 Set the SGR 6 color
+spmenu -sgr6 - Set the SGR 6 color
 .IP \[bu] 2
-spmenu -sgr7 Set the SGR 7 color
+spmenu -sgr7 - Set the SGR 7 color
 .IP \[bu] 2
-spmenu -sgr8 Set the SGR 8 color
+spmenu -sgr8 - Set the SGR 8 color
 .IP \[bu] 2
-spmenu -sgr9 Set the SGR 9 color
+spmenu -sgr9 - Set the SGR 9 color
 .IP \[bu] 2
-spmenu -sgr10 Set the SGR 10 color
+spmenu -sgr10 - Set the SGR 10 color
 .IP \[bu] 2
-spmenu -sgr11 Set the SGR 11 color
+spmenu -sgr11 - Set the SGR 11 color
 .IP \[bu] 2
-spmenu -sgr12 Set the SGR 12 color
+spmenu -sgr12 - Set the SGR 12 color
 .IP \[bu] 2
-spmenu -sgr13 Set the SGR 13 color
+spmenu -sgr13 - Set the SGR 13 color
 .IP \[bu] 2
-spmenu -sgr14 Set the SGR 14 color
+spmenu -sgr14 - Set the SGR 14 color
 .IP \[bu] 2
-spmenu -sgr15 Set the SGR 15 color
+spmenu -sgr15 - Set the SGR 15 color
 .PP
 There are also extra arguments recognized for dmenu compatibility.
 These are:
 .IP \[bu] 2
-spmenu -nb Set the normal background color
+spmenu -nb color - Set the normal background color
 .IP \[bu] 2
-spmenu -nf Set the normal foreground color
+spmenu -nf color - Set the normal foreground color
 .IP \[bu] 2
-spmenu -sb Set the selected background color
+spmenu -sb color - Set the selected background color
 .IP \[bu] 2
-spmenu -sf Set the selected foreground color
+spmenu -sf color - Set the selected foreground color
 .SS 4. Keybinds
 .PP
 See \f[V]keybinds.h\f[R] for a list.
