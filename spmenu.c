@@ -1841,9 +1841,6 @@ usage(void)
 		  "spmenu -nf <color>    Set the normal foreground color\n"
 		  "spmenu -sb <color>    Set the selected background color\n"
 		  "spmenu -sf <color>    Set the selected foreground color\n"
-          "\n"
-          "- Example usage -\n"
-          "`echo 'Hello\\nWorld' | spmenu -l 2` will allow you to pick either 'Hello' or 'World'. The selected then gets printed to stdout. This means you can pipe it into `sed` or `grep`.\n"
           , stdout);
 	exit(1);
 }
