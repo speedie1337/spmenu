@@ -26,7 +26,7 @@
  */
 #define MODIFIER1              Mod1Mask
 
-static Key keys[] = {
+static Key inskeys[] = {
 	/* modifier                     key           function         argument  */
 	{ 0,                            XK_Escape,    switchmode,      {0} },
 
@@ -40,8 +40,10 @@ static Key keys[] = {
     { 0,                            XK_Return,    selectitem,      {.i = +1 } },
 };
 
-static Key cmdkeys[] = {
+static Key normkeys[] = {
 	/* modifier                     key           function         argument  */
+	{ 0,                            XK_i,         switchmode,      {0} },
+
 	{ 0,                            XK_k,         move,            {.i = 1  } },
 	{ 0,                            XK_j,         move,            {.i = 2  } },
 	{ 0,                            XK_h,         move,            {.i = 3  } },
@@ -65,6 +67,4 @@ static Key cmdkeys[] = {
     { MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
     { MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
-
-	{ 0,                            XK_i,         switchmode,      {0} },
 };

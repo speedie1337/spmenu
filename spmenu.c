@@ -1130,14 +1130,14 @@ keypress(XEvent *e)
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
         if (selkeys) {
-            for (i = 0; i < LENGTH(keys); i++) {
-                if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
-                    keys[i].func(&(keys[i].arg));
+            for (i = 0; i < LENGTH(inskeys); i++) {
+                if (keysym == inskeys[i].keysym && CLEANMASK(inskeys[i].mod) == CLEANMASK(ev->state) && inskeys[i].func)
+                    inskeys[i].func(&(inskeys[i].arg));
             }
         } else {
-            for (i = 0; i < LENGTH(cmdkeys); i++) {
-                if (keysym == cmdkeys[i].keysym && CLEANMASK(cmdkeys[i].mod) == CLEANMASK(ev->state) && cmdkeys[i].func)
-                    cmdkeys[i].func(&(cmdkeys[i].arg));
+            for (i = 0; i < LENGTH(normkeys); i++) {
+                if (keysym == normkeys[i].keysym && CLEANMASK(normkeys[i].mod) == CLEANMASK(ev->state) && normkeys[i].func)
+                    normkeys[i].func(&(normkeys[i].arg));
             }
         }
 
