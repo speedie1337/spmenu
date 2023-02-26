@@ -9,8 +9,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "toggle.h" /* feature toggle */
-
 #ifdef FRIBIDI
 #define USERTL 1
 #else
@@ -19,6 +17,12 @@
 
 #if USERTL
 #include <fribidi.h>
+#endif
+
+#ifdef NOIMAGE
+#define USEIMAGE 0
+#else
+#define USEIMAGE 1
 #endif
 
 #if USEIMAGE

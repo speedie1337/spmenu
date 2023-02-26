@@ -49,7 +49,7 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 - libXrender
 - freetype
 - imlib2
-  - Used for image support, can be disabled if you don't want this by editing host.mk and toggle.h
+  - Used for image support, can be disabled if you don't want this by editing host.mk and defining NOIMAGE
 - libXinerama
   - Can be disabled if you don't want/need multi-monitor support.
 - tcc compiler (you can swap it out for GCC by passing CC="gcc" to the `make` command if you want)
