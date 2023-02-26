@@ -1761,9 +1761,13 @@ usage(void)
 		  "spmenu -y <y offset>  Offset spmenu y position by <y offset>\n"
           "spmenu -n <line>      Preselect <line> in the list of items\n"
 		  "spmenu -z <width>     Width of the spmenu window\n"
+          "spmenu -nmt <text>    Set normal mode text to <text>\n"
+          "spmenu -imt <text>    Set insert mode text to <text>\n"
 		  "spmenu -bw            Width of the border. 0 will disable the border\n"
 		  "spmenu -s             Use case-sensitive matching\n"
 		  "spmenu -i             Use case-insensitive matching\n"
+          "spmenu -nm            Start spmenu in normal mode\n"
+          "spmenu -im            Start spmenu in insert mode\n"
 		  "spmenu -t             Position spmenu at the top of the screen\n"
 		  "spmenu -b             Position spmenu at the bottom of the screen\n"
 		  "spmenu -c             Position spmenu at the center of the screen\n"
@@ -1785,7 +1789,7 @@ usage(void)
           "spmenu -it            Position the image at the top\n"
           "spmenu -ib            Position the image at the bottom\n"
           "spmenu -ic            Position the image in the center\n"
-          "spmenu -itc            Position the image in the top center\n"
+          "spmenu -itc           Position the image in the top center\n"
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -v             Print spmenu version to stdout\n"
           "\n", stdout);
@@ -1886,6 +1890,10 @@ main(int argc, char *argv[])
 			menuposition = 0;
 		} else if (!strcmp(argv[i], "-t")) { /* appears at the top of the screen */
 			menuposition = 1;
+		} else if (!strcmp(argv[i], "-nm")) { /* normal mode */
+			mode = 0;
+		} else if (!strcmp(argv[i], "-im")) { /* insert mode */
+			mode = 1;
         } else if (!strcmp(argv[i], "-c")) {  /* appears at the center of the screen */
 		    centered = 1;
         } else if (!strcmp(argv[i], "-f")) {   /* grabs keyboard before reading stdin */
@@ -1969,8 +1977,12 @@ main(int argc, char *argv[])
 			dmw = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
 			prompt = argv[++i];
-		else if (!strcmp(argv[i], "-fn")) {  /* font or font set */
+		else if (!strcmp(argv[i], "-fn"))  /* font or font set */
 			strcpy(font, argv[++i]); /* font[0] = argv[++i]; */
+		else if (!strcmp(argv[i], "-nmt"))  /* normal mode text */
+			strcpy(normtext, argv[++i]);
+		else if (!strcmp(argv[i], "-imt")) {  /* insert mode text */
+			strcpy(instext, argv[++i]);
 
         /* dmenu compatibility options */
         } else if (!strcmp(argv[i], "-nb")) {  /* normal background color */
@@ -2070,6 +2082,18 @@ main(int argc, char *argv[])
 		    preselected = atoi(argv[++i]);
 		else
 			usage();
+
+    if (mode) {
+        selkeys = 1;
+        allowkeys = !selkeys;
+
+        strcpy(modetext, instext);
+    } else {
+        selkeys = 0;
+        allowkeys = !selkeys;
+
+        strcpy(modetext, normtext);
+    }
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);

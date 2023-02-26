@@ -21,6 +21,11 @@ static int imagegaps                   = 0; /* Image gaps */
 static int imageposition               = 0; /* Image position (0: Top, 1: Bottom, 2: Center, 3: Top center) */
 static int generatecache               = 0; /* Generate image cache by default */
 
+/* Mode options */
+static int mode                        = 1; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
+static char normtext[]                 = "Normal"; /* Text to display for normal mode */
+static char instext[]                  = "Insert"; /* Text to display for insert mode */
+
 /* Color support */
 static int colorsupport                = 1; /* Support 256 colors? Otherwise the default 16 colors will be used. */
 

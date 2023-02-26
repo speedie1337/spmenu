@@ -5,9 +5,9 @@ switchmode(const Arg *arg)
     allowkeys = !selkeys;
 
     if (!selkeys) {
-        strcpy(modetext, "Normal");
+        strcpy(modetext, normtext);
     } else {
-        strcpy(modetext, "Insert");
+        strcpy(modetext, instext);
     }
 
     if (hidemode) strcpy(modetext, "");

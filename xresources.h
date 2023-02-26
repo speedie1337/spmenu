@@ -102,6 +102,8 @@ ResourcePref resources[] = {
 	{ "class",          STRING,  &class },
     { "leftarrow",      STRING,  &leftarrow },
     { "rightarrow",     STRING,  &rightarrow },
+    { "normtext",       STRING,  &normtext },
+    { "instext",        STRING,  &instext },
 	{ "bordercentered", INTEGER, &bordercentered },
 	{ "borderwidth",    INTEGER, &borderwidth },
 	{ "lines",          INTEGER, &lines },
@@ -117,4 +119,5 @@ ResourcePref resources[] = {
     { "imagegaps",      INTEGER, &imagegaps },
     { "imageposition",  INTEGER, &imageposition },
     { "generatecache",  INTEGER, &generatecache },
+    { "mode",           INTEGER, &mode },
 };
