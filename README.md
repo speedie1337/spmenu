@@ -41,6 +41,7 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 - Preselect support
 - Line-height
 - History support
+- Customizable bar height
 
 ### Dependencies
 
@@ -83,7 +84,7 @@ This build allows you to define .Xresources values to load on startup. See docs/
 
 ### Scripts
 
-This build of spmenu should work with all spmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use:
+This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use:
 
 ### Notes for users of Arch
 
