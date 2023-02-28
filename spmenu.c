@@ -9,20 +9,28 @@
 #include <time.h>
 #include <unistd.h>
 
-#ifdef FRIBIDI
-#define USERTL 1
-#else
+/* check if we should enable right to left language support */
+#ifdef NORTL
 #define USERTL 0
+#else
+#define USERTL 1
 #endif
 
-#if USERTL
-#include <fribidi.h>
-#endif
-
+/* check if we should enable image support */
 #ifdef NOIMAGE
 #define USEIMAGE 0
 #else
 #define USEIMAGE 1
+#endif
+
+#ifdef XINERAMA
+#define USEXINERAMA 1
+#else
+#define USEXINERAMA 0
+#endif
+
+#if USERTL
+#include <fribidi.h>
 #endif
 
 #if USEIMAGE
@@ -32,7 +40,7 @@
 #include <openssl/md5.h>
 #endif
 
-#ifdef XINERAMA
+#if USEXINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif
 
@@ -345,9 +353,9 @@ drawitem(struct item *item, int x, int y, int w)
                 rw = TEXTWM(buffer) - lrpad;
                 #if USERTL
                 apply_fribidi(buffer);
-				drw_text(drw, x, y, rw + lp, bh, lp, fribidi_text, 0, True);
+				drw_text(drw, x, y, rw + lp, bh, lp, fribidi_text, 0, pango_item ? True : False);
                 #else
-				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, True);
+				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, pango_item ? True : False);
                 #endif
 
 				x += rw + lp;
@@ -395,9 +403,9 @@ drawitem(struct item *item, int x, int y, int w)
     /* draw any text that doesn't use sgr sequences */
     #if USERTL
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w - rw, bh, lp, fribidi_text, 0, True);
+	int r = drw_text(drw, x, y, w - rw, bh, lp, fribidi_text, 0, pango_item ? True : False);
     #else
-	int r = drw_text(drw, x, y, w - rw, bh, lp, buffer, 0, True);
+	int r = drw_text(drw, x, y, w - rw, bh, lp, buffer, 0, pango_item ? True : False);
     #endif
 
     if (!hidehighlight && !ib) drawhighlights(item, x, y, w - rw);
@@ -429,27 +437,27 @@ drawmenu(void)
 		    drw_setscheme(drw, scheme[SchemePrompt]);
         }
 
-		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, True);
+		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 	}
 	/* draw input field */
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeInput]);
 	if (passwd) {
-	        censort = ecalloc(1, sizeof(text));
+	    censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
         #if USERTL
         apply_fribidi(censort);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, True);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, pango_password ? True : False);
         #else
-		drw_text(drw, x, 0, w, bh, lrpad / 2, censort, 0, True);
+		drw_text(drw, x, 0, w - LENGTH(censort), bh, lrpad / 2, censort, 0, pango_password ? True : False);
         #endif
-		free(censort);
+        free(censort);
 	} else {
         #if USERTL
         apply_fribidi(text);
-        drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, True);
+        drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, pango_input ? True : False);
         #else
-        drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0, True);
+        drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0, pango_input ? True : False);
         #endif
     }
 
@@ -482,7 +490,7 @@ drawmenu(void)
 		w = TEXTW(leftarrow);
 		if (curr->left) {
 			drw_setscheme(drw, scheme[SchemeLArrow]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, True);
+			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 		}
 		x += w;
 		for (item = curr; item != next; item = item->right)
@@ -496,21 +504,21 @@ drawmenu(void)
 			drw_setscheme(drw, scheme[SchemeRArrow]);
 
             if (hidematchcount) {
-                drw_text(drw, mw - w - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, True);
+                drw_text(drw, mw - w - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
             } else {
-                drw_text(drw, mw - w - TEXTW(numbers) - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, True);
+                drw_text(drw, mw - w - TEXTW(numbers) - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
             }
 		}
 	}
 
     if (!hidematchcount) {
         drw_setscheme(drw, scheme[SchemeNumber]);
-        drw_text(drw, mw - TEXTW(numbers) - TEXTW(modetext), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, False);
+        drw_text(drw, mw - TEXTW(numbers) - TEXTW(modetext), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
     }
 
     if (!hidemode) {
         drw_setscheme(drw, scheme[SchemeMode]);
-        drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, False);
+        drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
     }
 
 	drw_map(drw, win, 0, 0, mw, mh);
@@ -1533,7 +1541,7 @@ setup(void)
 	Window w, dw, *dws;
 	XWindowAttributes wa;
 	XClassHint ch = { class, class };
-    #ifdef XINERAMA
+    #if USEXINERAMA
 	XineramaScreenInfo *info;
 	Window pw;
 	int a, di, n, area = 0;
@@ -1620,7 +1628,7 @@ setup(void)
             }
         }
     }
-    #ifdef XINERAMA
+    #if USEXINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
 		XGetInputFocus(dpy, &w, &di);

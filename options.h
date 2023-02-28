@@ -130,6 +130,15 @@ static char col_sgrcolor13[]           = "#ff00ff"; /* SGR color #13 */
 static char col_sgrcolor14[]           = "#00ffff"; /* SGR color #14 */
 static char col_sgrcolor15[]           = "#ffffff"; /* SGR color #15 */
 
+static int pango_item                  = 1; /* Enable support for pango markup for the items */
+static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */
+static int pango_input                 = 1; /* Enable support for pango markup for user input */
+static int pango_leftarrow             = 1; /* Enable support for pango markup for the left arrow */
+static int pango_rightarrow            = 1; /* Enable support for pango markup for the right arrow */
+static int pango_numbers               = 1; /* Enable support for pango markup for the match count */
+static int pango_mode                  = 1; /* Enable support for pango markup for the mode indicator */
+static int pango_password              = 1; /* Enable support for pango markup for the password text */
+
 /* Alpha options */
 #define fgalpha                        opaque /* Foreground alpha */
 #define bgalpha                        200 /* Background alpha */
