@@ -103,6 +103,7 @@ static char numbers[NUMBERSBUFSIZE] = "";
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
+static int reallines = 0;
 static int reqlineheight; /* required menu height */
 static int clineheight; /* menu height added through argument */
 static int dmx = 0; /* put spmenu at this x offset */
@@ -159,6 +160,7 @@ static void complete(const Arg *arg);
 static void savehistory(char *input);
 
 static void drawmenu(void);
+static void calcoffsets(void);
 
 #include "libs/xrdb.h"
 
@@ -1504,6 +1506,10 @@ run(void)
         } if (image && longestedge) {
             int leftmargin = imagegaps;
 
+           	if(mh != bh + height + imagegaps * 2) {
+			    resizetoimageheight(height);
+		    }
+
             if (!imageposition) { /* top mode = 0 */
                 if (height > width)
                     width = height;
@@ -1612,6 +1618,11 @@ setup(void)
 	/* calculate menu geometry */
 	bh = drw->font->h + 2 + reqlineheight;
 	lines = MAX(lines, 0);
+    reallines = lines;
+#if USEIMAGE
+    if (image)
+        resizetoimageheight(imageheight);
+#endif
 	mh = (lines + 1) * bh;
 	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
 
