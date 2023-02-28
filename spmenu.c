@@ -158,9 +158,12 @@ static void selectitem(const Arg *arg);
 static void quit(const Arg *arg);
 static void complete(const Arg *arg);
 static void savehistory(char *input);
+static void setimgsize(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
+static void run(void);
+static void readstdin(void);
 
 #include "libs/xrdb.h"
 
@@ -187,6 +190,27 @@ static int longestedge = 0; /* longest edge */
 #include "libs/rtl.h"
 #include "libs/rtl.c"
 #endif
+
+void
+setimgsize(const Arg *arg)
+{
+#if !USEIMAGE
+    return;
+#endif
+
+    if (image) {
+        imlib_free_image();
+        image = NULL;
+    }
+
+    imageheight += arg->i;
+    imagewidth += arg->i;
+
+    if (!imageheight || !imagewidth)
+        imageheight = imagewidth = 1;
+
+    drawmenu();
+}
 
 void
 appenditem(struct item *item, struct item **list, struct item **last)
@@ -1391,7 +1415,6 @@ readstdin(void)
     	inputw = lines = 0;
     	return;
   	}
-
 
 	/* read each line from stdin and add it to the item list */
 	for (i = 0; fgets(buf, sizeof buf, stdin); i++) {

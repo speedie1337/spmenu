@@ -45,6 +45,8 @@ static Key normkeys[] = {
 	/* modifier                     key           function         argument  */
 	{ 0,                            XK_i,         switchmode,      {0} },
 
+    { 0,                            XK_equal,     setimgsize,      {.i = +10 } },
+    { 0,                            XK_minus,     setimgsize,      {.i = -10 } },
 	{ 0,                            XK_k,         move,            {.i = 1  } },
 	{ 0,                            XK_j,         move,            {.i = 2  } },
 	{ 0,                            XK_h,         move,            {.i = 3  } },
