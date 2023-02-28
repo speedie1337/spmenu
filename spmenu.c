@@ -1446,10 +1446,6 @@ readstdin(void)
 #endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
-#if USEIMAGE
-    if(lines * drw->font->h < imagewidth)
-        longestedge = imagegaps = 0;
-#endif
 }
 
 void
