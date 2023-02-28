@@ -45,29 +45,35 @@ loadimage(const char *file, int *width, int *height)
 }
 
 void
-scaleimage(int width, int height)
+scaleimage(int *width, int *height)
 {
 	int nwidth, nheight;
 	float aspect = 1.0f;
 
-	if (width > height)
-        aspect = (float)imagesize/width;
+	if (imagewidth > *width)
+		aspect = (float)(*width)/imagewidth;
 	else
-        aspect = (float)imagesize/height;
+		aspect = (float)imagewidth/(*width);
 
-	nwidth = width * aspect;
-	nheight = height * aspect;
+	nwidth = *width * aspect;
+	nheight = *height * aspect;
 
-	if(nwidth == width && nheight == height)
+	if(nwidth == *width && nheight == *height)
         return;
 
-	image = imlib_create_cropped_scaled_image(0,0,width,height,nwidth,nheight);
+	image = imlib_create_cropped_scaled_image(0,0,*width,*height,nwidth,nheight);
+
 	imlib_free_image();
 
-	if (!image)
+	if(!image)
         return;
 
 	imlib_context_set_image(image);
+
+	*width = nwidth;
+	*height = nheight;
+
+    return;
 }
 
 void
@@ -80,8 +86,10 @@ loadimagecache(const char *file, int *width, int *height)
 	struct passwd *pw = NULL;
 
 	/* just load and don't store or try cache */
-	if(imagesize > 256) {
+	if (longestedge > 256) {
 		loadimage(file, width, height);
+        if (image)
+            scaleimage(width, height);
 		return;
 	}
 
@@ -97,7 +105,7 @@ loadimagecache(const char *file, int *width, int *height)
 
 	/* which cache do we try? */
 	dsize = "normal";
-	if (imagesize > 128)
+	if (longestedge > 128)
         dsize = "large";
 
 	slen = snprintf(NULL, 0, "file://%s", file)+1;
@@ -134,11 +142,11 @@ loadimagecache(const char *file, int *width, int *height)
 
 	loadimage(buf, width, height);
 
-	if (image && *width < imagesize && *height < imagesize) {
+	if (image && *width < imagewidth && *height < imageheight) {
 		imlib_free_image();
 		image = NULL;
-	} else if(image && (*width > imagesize || *height > imagesize)) {
-		scaleimage(*width, *height);
+	} else if(image && (*width > imagewidth || *height > imageheight)) {
+		scaleimage(width, height);
 	}
 
 	/* we are done */
@@ -154,7 +162,7 @@ loadimagecache(const char *file, int *width, int *height)
 		return;
 	}
 
-	scaleimage(*width, *height);
+	scaleimage(width, height);
 	imlib_image_set_format("png");
 	createifnexist_rec(buf);
 	imlib_save_image(buf);

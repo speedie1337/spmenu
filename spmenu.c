@@ -168,7 +168,6 @@ static void drawmenu(void);
 #include "colors.h" /* Include colors */
 #include "xresources.h" /* Include .Xresources */
 
-
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
@@ -177,6 +176,8 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/mode.c"
 
 #if USEIMAGE
+static int longestedge = 0; /* longest edge */
+
 #include "libs/img.h"
 #include "libs/img.c"
 #endif
@@ -472,8 +473,8 @@ drawmenu(void)
 
 	if (lines > 0) {
         #if USEIMAGE
-        if (imagesize)
-            x += imagegaps + imagesize;
+        if (imagewidth)
+            x += imagegaps + imagewidth;
         #endif
 		/* draw grid */
 		int i = 0;
@@ -1423,7 +1424,7 @@ readstdin(void)
             items[i].image = NULL;
         }
 
-        if (generatecache && imagesize <= 256 && items[i].image && strcmp(items[i].image, limg?limg:"")) {
+        if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg?limg:"")) {
             loadimagecache(items[i].image, &w, &h);
             fprintf(stdout, "-!- Generating thumbnail for: %s\n", items[i].image);
         }
@@ -1441,13 +1442,13 @@ readstdin(void)
     }
 #if USEIMAGE
     if (!limg)
-        imagesize = 0;
+        longestedge = imagegaps = 0;
 #endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
 #if USEIMAGE
-    if(lines * drw->font->h < imagesize)
-        lines = imagesize/drw->font->h+2;
+    if(lines * drw->font->h < imagewidth)
+        lines = imagewidth/drw->font->h+2;
 #endif
 }
 
@@ -1499,23 +1500,27 @@ run(void)
             continue;
 
         if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
-            if (imagesize)
+            if (longestedge)
                 loadimagecache(sel->image, &width, &height);
         } else if ((!sel || !sel->image) && image) {
             imlib_free_image();
             image = NULL;
-        } if (image && imagesize) {
+        } if (image && longestedge) {
             int leftmargin = imagegaps;
 
             if (!imageposition) { /* top mode = 0 */
-                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, bh+imagegaps);
+                if (height > width)
+                    width = height;
+                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, bh+imagegaps);
             } else if (imageposition == 1) { /* bottom mode = 1 */
-                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, mh-height-imagegaps);
+                if (height > width)
+                    width = height;
+                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, mh-height-imagegaps);
             } else if (imageposition == 2) { /* center mode = 2 */
-                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, (mh-bh-height)/2+bh);
+                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-bh-height)/2+bh);
             } else {
-                int minh = MIN(imagesize, mh-bh-imagegaps*2);
-                imlib_render_image_on_drawable(leftmargin+(imagesize-width)/2, (minh-height)/2+bh+imagegaps);
+                int minh = MIN(height, mh-bh-imagegaps*2);
+                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+bh+imagegaps);
             }
 
 
@@ -2015,7 +2020,12 @@ main(int argc, char *argv[])
             colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-is")) { /* image size */
-            imagesize = atoi(argv[++i]);
+            char buf[255];
+            memset(buf, 0, sizeof(buf));
+            memcpy(buf, argv[++i], sizeof(buf)-1);
+
+            if(sscanf(buf, "%dx%d", &imagewidth, &imageheight) == 1)
+                imageheight = imagewidth;
 
         /* spmenu colors */
         } else if (!strcmp(argv[i], "-nif")) { /* normal item foreground color */
@@ -2091,6 +2101,8 @@ main(int argc, char *argv[])
 		    preselected = atoi(argv[++i]);
 		else
 			usage();
+
+    longestedge = MAX(imagewidth, imageheight);
 
     if (mode) {
         selkeys = 1;
