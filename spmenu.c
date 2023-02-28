@@ -1448,7 +1448,7 @@ readstdin(void)
 	lines = MIN(lines, i);
 #if USEIMAGE
     if(lines * drw->font->h < imagewidth)
-        lines = imagewidth/drw->font->h+2;
+        longestedge = imagegaps = 0;
 #endif
 }
 
