@@ -1,3 +1,4 @@
+! spmenu default configuration in .Xresources format
 spmenu.font:               Noto Sans Mono 8
 spmenu.col_itemnormfg:     #bbbbbb
 spmenu.col_itemnormbg:     #222222

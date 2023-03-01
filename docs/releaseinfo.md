@@ -1,21 +1,18 @@
-### **spmenu 0.2**
+### **spmenu 0.2.1**
 
 New release of spmenu.
 
 ### Changelog
 
-- Add image support (using imlib2)
-- Improve (by a lot) colored text
-- Separate colorschemes
-- Add right-to-left language support
-- Add keybind array
-- Add Vim-like modes to keybinds
-- Fix typos
-- Add a lot of arguments
+- Improve image support, images can now be much larger without scaling issues.
+- Add pango markup toggles
+- Change default font
+- If an image is bigger than the width/height of the X11 client, the X11 client will be resized on-the-fly.
+- Fix image gaps and importantly width being added on when there is no image to display
 
 ### Installation
 
 Simply download and unpack the tarball, and `make clean install` as root.
 
-- If you are on Gentoo, you can install `x11-misc/spmenu` by adding my overlay.
-- I plan on writing an Arch AUR package eventually, but please feel free to do my job for me!
+- If you are on Gentoo, you can install `x11-misc/spmenu` by adding my [overlay](https://codeberg.org/speedie/speedie-overlay).
+- If you are on Arch, you can install `spmenu` through my [repository](https://git.speedie.gq/speedie-aur).
