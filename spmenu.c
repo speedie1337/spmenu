@@ -499,8 +499,9 @@ drawmenu(void)
 
 	if (lines > 0) {
         #if USEIMAGE
-        if (imagewidth && image)
+        if (longestedge) {
             x += imagegaps + imagewidth;
+        }
         #endif
 		/* draw grid */
 		int i = 0;
