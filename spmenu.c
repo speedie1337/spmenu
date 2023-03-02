@@ -180,6 +180,8 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 #include "libs/xrdb.c"
 #include "libs/mode.c"
+#include "libs/client.h"
+#include "libs/client.c"
 
 #if USEIMAGE
 static int longestedge = 0; /* longest edge */
@@ -1284,16 +1286,14 @@ setup(void)
     unsigned int tmp, minstrlen = 0, curstrlen = 0;
     int numwidthchecks = 100;
     struct item *item;
-	XSetWindowAttributes swa;
 	XIM xim;
 	Window w, dw, *dws;
-	XWindowAttributes wa;
-	XClassHint ch = { class, class };
     #if USEXINERAMA
 	XineramaScreenInfo *info;
 	Window pw;
 	int a, di, n, area = 0;
     #endif
+    XWindowAttributes wa;
     char cbuf[8];
 
     /* init appearance */
@@ -1314,10 +1314,12 @@ setup(void)
 	bh = drw->font->h + 2 + reqlineheight;
 	lines = MAX(lines, 0);
     reallines = lines;
-#if USEIMAGE
+
+    #if USEIMAGE
     if (image)
         resizetoimageheight(imageheight);
-#endif
+    #endif
+
 	mh = (lines + 1) * bh;
 	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
 
@@ -1364,12 +1366,10 @@ setup(void)
 		if (centered) {
 			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
-			//y = info[i].y_org + 0;
 			y = info[i].y_org + ((info[i].height - mh) / 2);
 		} else {
 		    x = info[i].x_org + dmx;
 			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
-			//y = info[i].y_org + 0;
 			mw = (dmw>0 ? dmw : info[i].width);
 		}
 
@@ -1398,30 +1398,9 @@ setup(void)
 	match();
 
 	/* create menu window */
-	swa.override_redirect = managed ? False : True;
-	swa.background_pixel = 0;
-	swa.colormap = cmap;
-	swa.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask | ButtonPressMask | PointerMotionMask;
-
-	if (!bordercentered) {
-	win = XCreateWindow(dpy, parentwin, x + sp, y + vp, mw - 2 * sp, mh, borderwidth,
-	                    depth, InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-    } else {
-		if (!centered) {
-				win = XCreateWindow(dpy, parentwin, x + sp, y + vp, mw - 2 * sp, mh, 0,
-						depth, InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-		} else {
-				win = XCreateWindow(dpy, parentwin, x + sp, y + vp, mw - 2 * sp, mh, borderwidth,
-	                    depth, InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-				}
-
-    }
-    XSetWindowBorder(dpy, win, scheme[SchemeBorder][ColBg].pixel);
-	XSetClassHint(dpy, win, &ch);
-   	XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1);
+    create_window(x + sp, y + vp, mw - 2 * sp, mh);
+    set_window();
+    set_prop();
 
     #if USEIMAGE
     setimageopts();
