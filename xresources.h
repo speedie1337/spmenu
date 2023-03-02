@@ -98,6 +98,7 @@ ResourcePref resources[] = {
     { "type",                INTEGER, &type },
     { "preselected",         INTEGER, &preselected },
     { "colorprompt",         INTEGER, &colorprompt },
+    { "password",            STRING,  &password },
 	{ "prompt",              STRING,  &prompt },
 	{ "class",               STRING,  &class },
     { "leftarrow",           STRING,  &leftarrow },

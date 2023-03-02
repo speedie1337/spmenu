@@ -58,6 +58,7 @@ spmenu.type:               1
 spmenu.class:              spmenu
 spmenu.leftarrow:          <
 spmenu.rightarrow:         >
+spmenu.password:           .
 spmenu.imagewidth:         86
 spmenu.imageheight:        86
 spmenu.imagegaps:          0

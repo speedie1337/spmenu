@@ -26,6 +26,7 @@ On top of this, you can specify arguments to change the behavior of spmenu. See 
 - spmenu -f             - Grabs keyboard before reading stdin
 - spmenu -F             - Enable fuzzy matching
 - spmenu -P             - Hide characters
+- spmenu -Ps symbol     - Set the password symbol to symbol
 - spmenu -p text        - Set spmenu prompt text to text
 - spmenu -a             - Enable alpha
 - spmenu -na            - Disable alpha

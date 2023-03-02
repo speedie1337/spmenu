@@ -96,6 +96,8 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
 			columns = atoi(argv[++i]);
 			if (lines == 0) lines = 1;
+		} else if (!strcmp(argv[i], "-Ps")) { /* password symbol */
+			password = argv[++i];
 		} else if (!strcmp(argv[i], "-l")) { /* number of lines in grid */
 			lines = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-h")) { /* minimum height of one menu line */
@@ -252,6 +254,7 @@ usage(void)
           "spmenu -f             Grabs keyboard before reading stdin\n"
 		  "spmenu -F             Enable fuzzy matching\n"
 		  "spmenu -P             Hide characters\n"
+          "spmenu -Ps <symbol>   Set the password symbol to <symbol>\n"
 		  "spmenu -p <text>      Set spmenu prompt text to <text>\n"
           "spmenu -a             Enable alpha\n"
           "spmenu -na            Disable alpha\n"
