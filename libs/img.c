@@ -1,4 +1,17 @@
 void
+setimageopts(void)
+{
+    imlib_set_cache_size(8192 * 1024);
+	imlib_context_set_blend(1);
+	imlib_context_set_dither(1);
+	imlib_set_color_usage(128);
+	imlib_context_set_display(dpy);
+	imlib_context_set_visual(visual);
+	imlib_context_set_colormap(cmap);
+	imlib_context_set_drawable(win);
+}
+
+void
 createifnexist(const char *dir)
 {
 	if(access(dir, F_OK) == 0)

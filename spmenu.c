@@ -1518,14 +1518,7 @@ setup(void)
    	XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1);
 
     #if USEIMAGE
-    imlib_set_cache_size(8192 * 1024);
-	imlib_context_set_blend(1);
-	imlib_context_set_dither(1);
-	imlib_set_color_usage(128);
-	imlib_context_set_display(dpy);
-	imlib_context_set_visual(visual);
-	imlib_context_set_colormap(cmap);
-	imlib_context_set_drawable(win);
+    setimageopts();
     #endif
 
 	/* input methods */
