@@ -1272,7 +1272,7 @@ readstdin(void)
             }
 
             if (!strncmp("license", items[i].ex, strlen("license"))) {
-                items[i].text = "spmenu is licensed under the MIT license. See the included LICENSE file for more information.";
+                die("spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
             }
         }
 	}
