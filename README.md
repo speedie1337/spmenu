@@ -69,8 +69,14 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 ### Installation (Gentoo)
 
 If you are on Gentoo GNU/Linux, you can add
-[my overlay](https://codeberg.org/speedie/speedie-overlay) which includes
+[my overlay](https://git.speedie.gq/speedie-overlay) which includes
 `x11-misc/spmenu` as well as other useful packages.
+
+### Installation (Arch)
+
+If you are on Arch GNU/Linux, you can add
+[my repository](https://git.speedie.gq/speedie-repository) which includes
+`spmenu` as well as other useful packages.
 
 ### Images
 
@@ -86,7 +92,7 @@ This build allows you to define .Xresources values to load on startup. See docs/
 
 This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use:
 
-### Notes for users of Arch
+### Notes for users of Arch who manually compile
 
 This fork of spmenu is compiled using tcc for speed however tcc from the Arch repositories seems to be broken. I'm sure there's a better way to fix this but I just fix it by installing [this package](https://aur.archlinux.org/packages/tcc-ziyao) from the AUR.
 
