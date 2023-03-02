@@ -1,3 +1,4 @@
+static void init_appearance(void);
 /* color schemes */
 enum { SchemeLArrow,
        SchemeRArrow,
