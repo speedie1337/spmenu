@@ -58,12 +58,8 @@ drawitem(struct item *item, int x, int y, int w)
 
                 /* draw text */
                 rw = TEXTWM(buffer) - lrpad;
-                #if USERTL
                 apply_fribidi(buffer);
-				drw_text(drw, x, y, rw + lp, bh, lp, fribidi_text, 0, pango_item ? True : False);
-                #else
-				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, pango_item ? True : False);
-                #endif
+				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
                 ib = 1;
@@ -108,12 +104,8 @@ drawitem(struct item *item, int x, int y, int w)
 	buffer[wr] = '\0';
 
     /* draw any text that doesn't use sgr sequences */
-    #if USERTL
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w - rw, bh, lp, fribidi_text, 0, pango_item ? True : False);
-    #else
-	int r = drw_text(drw, x, y, w - rw, bh, lp, buffer, 0, pango_item ? True : False);
-    #endif
+	int r = drw_text(drw, x, y, w - rw, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
     if (!hidehighlight && !ib) drawhighlights(item, x, y, w - rw);
     return r;
@@ -130,8 +122,15 @@ drawmenu(void)
 	drw_setscheme(drw, scheme[SchemeMenu]);
 	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
-    if (hidemode)
-        strcpy(modetext, "");
+    int numberWidth = 0;
+    int modeWidth = 0;
+    int larrowWidth = 0;
+    int rarrowWidth = 0;
+
+    if (!hidematchcount) numberWidth = TEXTW(numbers);
+    if (!hidemode) modeWidth = TEXTW(modetext);
+    if (!hidelarrow) larrowWidth = TEXTW(leftarrow);
+    if (!hiderarrow) rarrowWidth = TEXTW(rightarrow);
 
 	if (prompt && *prompt) {
         if (colorprompt) {
@@ -146,23 +145,18 @@ drawmenu(void)
 	if (passwd) {
 	    censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
-        #if USERTL
+
         apply_fribidi(censort);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, pango_password ? True : False);
-        #else
-		drw_text(drw, x, 0, w - LENGTH(censort), bh, lrpad / 2, censort, 0, pango_password ? True : False);
-        #endif
+		drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False);
+
+	    curpos = TEXTW(censort) - TEXTW(&text[cursor]);
         free(censort);
-	} else {
-        #if USERTL
+	} else if (!passwd) {
         apply_fribidi(text);
-        drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0, pango_input ? True : False);
-        #else
-        drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0, pango_input ? True : False);
-        #endif
+        drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
+	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
-	curpos = TEXTW(text) - TEXTW(&text[cursor]);
 	if ((curpos += lrpad / 2 - 1) < w) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);

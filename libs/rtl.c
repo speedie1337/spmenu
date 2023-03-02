@@ -1,6 +1,9 @@
 void
 apply_fribidi(char *str)
 {
+  #if !USERTL
+  return;
+  #endif
   FriBidiStrIndex len = strlen(str);
   FriBidiChar logical[BUFSIZ];
   FriBidiChar visual[BUFSIZ];

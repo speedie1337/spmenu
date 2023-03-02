@@ -121,6 +121,12 @@ static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
 
+#if USERTL
+static int isrtl = 1;
+#else
+static int isrtl = 0;
+#endif
+
 #include "libs/mode.h"
 
 static Atom clip, utf8, types, dock;
@@ -269,13 +275,19 @@ calcoffsets(void)
 
 	if (lines > 0)
 		n = lines * columns * bh;
-	else
-        /* hide match count */
-        if (hidematchcount) {
-		    n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow) + TEXTW(modetext));
-        } else {
-            n = mw - (promptw + inputw + TEXTW(leftarrow) + TEXTW(rightarrow) + TEXTW(numbers) + TEXTW(modetext));
-        }
+	else {
+        int numberWidth = 0;
+        int modeWidth = 0;
+        int larrowWidth = 0;
+        int rarrowWidth = 0;
+
+        if (!hidematchcount) numberWidth = TEXTW(numbers);
+        if (!hidemode) modeWidth = TEXTW(modetext);
+        if (!hidelarrow) larrowWidth = TEXTW(leftarrow);
+        if (!hiderarrow) rarrowWidth = TEXTW(rightarrow);
+
+		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth);
+    }
 	/* calculate which items will begin the next page and previous page */
 	for (i = 0, next = curr; next; next = next->right)
 		if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text), n)) > n)
