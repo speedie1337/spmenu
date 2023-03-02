@@ -3,3 +3,4 @@
 - More example scripts
 - Mouse bind array
 - Add configuration file using (probably) libconfig
+- Fix highlighting for last character in a match
