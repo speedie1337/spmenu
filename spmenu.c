@@ -159,6 +159,7 @@ static void quit(const Arg *arg);
 static void complete(const Arg *arg);
 static void savehistory(char *input);
 static void setimgsize(const Arg *arg);
+static void toggleimage(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
@@ -202,9 +203,9 @@ static int longestedge = 0; /* longest edge */
 void
 setimgsize(const Arg *arg)
 {
-#if !USEIMAGE
+    #if !USEIMAGE
     return;
-#endif
+    #endif
 
     cleanupimg();
 
@@ -216,6 +217,20 @@ setimgsize(const Arg *arg)
 
     drawmenu();
     drawimage();
+}
+
+void
+toggleimage(const Arg *arg)
+{
+    #if !USEIMAGE
+    return
+    #endif
+
+    hideimage = !hideimage;
+
+    drawmenu();
+
+    if (!hideimage) drawimage();
 }
 
 void
