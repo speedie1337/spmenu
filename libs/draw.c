@@ -126,8 +126,8 @@ drawmenu(void)
     int modeWidth = 0;
     int larrowWidth = 0;
     int rarrowWidth = 0;
+    int itemWidth = 0;
 
-    if (!hidematchcount) numberWidth = TEXTW(numbers);
     if (!hidemode) modeWidth = TEXTW(modetext);
     if (!hidelarrow) larrowWidth = TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = TEXTW(rightarrow);
@@ -142,7 +142,7 @@ drawmenu(void)
 	/* draw input field */
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeInput]);
-	if (passwd) {
+	if (passwd && !hideprompt) {
 	    censort = ecalloc(1, sizeof(text));
 		memset(censort, '.', strlen(text));
 
@@ -151,28 +151,36 @@ drawmenu(void)
 
 	    curpos = TEXTW(censort) - TEXTW(&text[cursor]);
         free(censort);
-	} else if (!passwd) {
+	} else if (!passwd && !hideprompt) {
         apply_fribidi(text);
         drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
-	if ((curpos += lrpad / 2 - 1) < w) {
+	if ((curpos += lrpad / 2 - 1) < w && !hidecursor && !hideprompt) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
 	}
 
     /* get match count */
-    if (!hidematchcount) recalculatenumbers();
+    if (!hidematchcount) {
+        recalculatenumbers();
+        numberWidth = TEXTW(numbers);
+    }
 
+    /* draw stuff */
 	if (lines > 0) {
+
+        /* draw image first */
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
             x += imagegaps + imagewidth;
         }
         #endif
+
 		/* draw grid */
 		int i = 0;
+
 		for (item = curr; item != next; item = item->right, i++)
 			drawitem(
 				item,
@@ -183,38 +191,36 @@ drawmenu(void)
 	} else if (matches) {
 		/* draw horizontal list */
 		x += inputw;
-		w = TEXTW(leftarrow);
+		w = larrowWidth;
+
+        itemWidth = TEXTWM(item->text);
+
 		if (curr->left) {
 			drw_setscheme(drw, scheme[SchemeLArrow]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 		}
+
 		x += w;
+
 		for (item = curr; item != next; item = item->right)
-            if (hidematchcount) {
-                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow) - TEXTW(modetext)));
-            } else {
-                x = drawitem(item, x, 0, MIN(TEXTWM(item->text), mw - x - TEXTW(rightarrow) - TEXTW(numbers) - TEXTW(modetext)));
-            }
+            x = drawitem(item, x, 0, MIN(itemWidth, mw - x - rarrowWidth - numberWidth - modeWidth));
+
 		if (next) {
-			w = TEXTW(rightarrow);
+			w = rarrowWidth;
 			drw_setscheme(drw, scheme[SchemeRArrow]);
 
-            if (hidematchcount) {
-                drw_text(drw, mw - w - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
-            } else {
-                drw_text(drw, mw - w - TEXTW(numbers) - TEXTW(modetext), 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
-            }
+            drw_text(drw, mw - w - numberWidth - modeWidth, 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
 		}
 	}
 
     if (!hidematchcount) {
         drw_setscheme(drw, scheme[SchemeNumber]);
-        drw_text(drw, mw - TEXTW(numbers) - TEXTW(modetext), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
+        drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
     }
 
     if (!hidemode) {
         drw_setscheme(drw, scheme[SchemeMode]);
-        drw_text(drw, mw - TEXTW(modetext), 0, TEXTW(modetext), bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
+        drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
     }
 
 	drw_map(drw, win, 0, 0, mw, mh);

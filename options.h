@@ -67,6 +67,8 @@ static int hidematchcount              = 0; /* Hide match count (0/1) */
 static int hidemode                    = 0; /* Hide mode (0/1) */
 static int hidelarrow                  = 0; /* Hide left arrow (0/1) */
 static int hiderarrow                  = 0; /* Hide right arrow (0/1) */
+static int hideprompt                  = 0; /* Hide prompt (0/1) */
+static int hidecursor                  = 0; /* Hide cursor (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
 static int hideimage                   = 0; /* Hide image (0/1) */
 
