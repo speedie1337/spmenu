@@ -1,4 +1,5 @@
 # TODO for spmenu
 
 - More example scripts
+- Mouse bind array
 - Add configuration file using (probably) libconfig
