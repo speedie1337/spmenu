@@ -129,4 +129,5 @@ ResourcePref resources[] = {
     { "pango_numbers",       INTEGER, &pango_numbers },
     { "pango_mode",          INTEGER, &pango_mode },
     { "pango_password",      INTEGER, &pango_password },
+    { "pango_highlight",     INTEGER, &pango_highlight },
 };
