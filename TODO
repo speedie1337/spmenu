@@ -4,3 +4,5 @@
 - Mouse bind array
 - Add configuration file using (probably) libconfig
 - Fix highlighting for last character in a match
+- Don't allow image scaling too far up/down
+- Add rotate and flip keybinds for the image
