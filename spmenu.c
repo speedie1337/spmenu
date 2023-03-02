@@ -200,10 +200,7 @@ setimgsize(const Arg *arg)
     return;
 #endif
 
-    if (image) {
-        imlib_free_image();
-        image = NULL;
-    }
+    cleanupimg();
 
     imageheight += arg->i;
     imagewidth += arg->i;
@@ -212,6 +209,7 @@ setimgsize(const Arg *arg)
         imageheight = imagewidth = 1;
 
     drawmenu();
+    drawimage();
 }
 
 void
@@ -595,7 +593,7 @@ loadhistory(void)
 }
 
 void
-navighistory(int dir)
+navigatehistfile(int dir)
 {
 	static char def[BUFSIZ];
 	char *p = NULL;
@@ -785,7 +783,7 @@ moveend(const Arg *arg)
 void
 navhistory(const Arg *arg)
 {
-    navighistory(arg->i);
+    navigatehistfile(arg->i);
     drawmenu();
 }
 
@@ -1197,7 +1195,8 @@ readstdin(void)
 			imax = i;
 		}
 
-#if USEIMAGE
+        /* parse image markup */
+        #if USEIMAGE
         if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
             if(!(items[i].image = malloc(strlen(items[i].text)+1)))
                 fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
@@ -1215,24 +1214,24 @@ readstdin(void)
 
         if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg?limg:"")) {
             loadimagecache(items[i].image, &w, &h);
-            fprintf(stdout, "-!- Generating thumbnail for: %s\n", items[i].image);
+            fprintf(stdout, "spmenu: generating thumbnail for: %s\n", items[i].image);
         }
 
         if(items[i].image)
             limg = items[i].image;
-#endif
+        #endif
 	}
 
 	if (items) {
-#if USEIMAGE
+        #if USEIMAGE
         items[i].image = NULL;
-#endif
+        #endif
 		items[i].text = NULL;
     }
-#if USEIMAGE
-    if (!limg)
-        longestedge = imagegaps = 0;
-#endif
+
+    #if USEIMAGE
+    if (!limg) longestedge = imagegaps = 0;
+    #endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
 }
@@ -1241,10 +1240,6 @@ void
 run(void)
 {
 	XEvent ev;
-    #if USEIMAGE
-    int width = 0, height = 0;
-	char *limg = NULL;
-    #endif
 
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, win))
@@ -1280,45 +1275,9 @@ run(void)
 			break;
 		}
 
-#if USEIMAGE
-        if (!lines)
-            continue;
-
-        if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
-            if (longestedge)
-                loadimagecache(sel->image, &width, &height);
-        } else if ((!sel || !sel->image) && image) {
-            imlib_free_image();
-            image = NULL;
-        } if (image && longestedge) {
-            int leftmargin = imagegaps;
-
-           	if(mh != bh + height + imagegaps * 2) {
-			    resizetoimageheight(height);
-		    }
-
-            if (!imageposition) { /* top mode = 0 */
-                if (height > width)
-                    width = height;
-                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, bh+imagegaps);
-            } else if (imageposition == 1) { /* bottom mode = 1 */
-                if (height > width)
-                    width = height;
-                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, mh-height-imagegaps);
-            } else if (imageposition == 2) { /* center mode = 2 */
-                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-bh-height)/2+bh);
-            } else {
-                int minh = MIN(height, mh-bh-imagegaps*2);
-                imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+bh+imagegaps);
-            }
-
-
-        } if (sel) {
-            limg = sel->image;
-        } else {
-            limg = NULL;
-        }
-#endif
+        #if USEIMAGE
+        drawimage();
+        #endif
 	}
 }
 
