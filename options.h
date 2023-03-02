@@ -137,6 +137,7 @@ static char col_sgrcolor13[]           = "#ff00ff"; /* SGR color #13 */
 static char col_sgrcolor14[]           = "#00ffff"; /* SGR color #14 */
 static char col_sgrcolor15[]           = "#ffffff"; /* SGR color #15 */
 
+/* Pango options */
 static int pango_item                  = 1; /* Enable support for pango markup for the items */
 static int pango_highlight             = 1; /* Enable support for pango markup for the highlighting */
 static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */

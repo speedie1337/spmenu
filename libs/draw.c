@@ -128,9 +128,9 @@ drawmenu(void)
     int rarrowWidth = 0;
     int itemWidth = 0;
 
-    if (!hidemode) modeWidth = TEXTW(modetext);
-    if (!hidelarrow) larrowWidth = TEXTW(leftarrow);
-    if (!hiderarrow) rarrowWidth = TEXTW(rightarrow);
+    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 	if (prompt && *prompt) {
         if (colorprompt) {
@@ -154,6 +154,7 @@ drawmenu(void)
 	} else if (!passwd && !hideprompt) {
         apply_fribidi(text);
         drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
+
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
@@ -193,9 +194,9 @@ drawmenu(void)
 		x += inputw;
 		w = larrowWidth;
 
-        itemWidth = TEXTWM(item->text);
+        itemWidth = pango_item ? TEXTWM(item->text) : TEXTW(item->text);
 
-		if (curr->left) {
+		if (curr->left && !hidelarrow) {
 			drw_setscheme(drw, scheme[SchemeLArrow]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 		}
@@ -205,7 +206,7 @@ drawmenu(void)
 		for (item = curr; item != next; item = item->right)
             x = drawitem(item, x, 0, MIN(itemWidth, mw - x - rarrowWidth - numberWidth - modeWidth));
 
-		if (next) {
+		if (next && !hiderarrow) {
 			w = rarrowWidth;
 			drw_setscheme(drw, scheme[SchemeRArrow]);
 

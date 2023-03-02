@@ -286,10 +286,10 @@ calcoffsets(void)
         int larrowWidth = 0;
         int rarrowWidth = 0;
 
-        if (!hidematchcount) numberWidth = TEXTW(numbers);
-        if (!hidemode) modeWidth = TEXTW(modetext);
-        if (!hidelarrow) larrowWidth = TEXTW(leftarrow);
-        if (!hiderarrow) rarrowWidth = TEXTW(rightarrow);
+        if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
+        if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+        if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+        if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth);
     }
