@@ -131,6 +131,7 @@ static int managed = 0;
 static int isrtl = 1;
 #else
 static int isrtl = 0;
+static char fribidi_text[] = "";
 #endif
 
 #include "libs/mode.h"
