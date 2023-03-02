@@ -21,6 +21,11 @@ drawimage(void)
 
     if (!lines) return;
 
+    if (!imagewidth || !imageheight) {
+        imagewidth = imageheight = longestedge = imagegaps = 0;
+        return;
+    }
+
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
         if (longestedge)
             loadimagecache(sel->image, &width, &height);
