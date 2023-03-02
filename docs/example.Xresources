@@ -61,11 +61,14 @@ spmenu.rightarrow:         >
 spmenu.hidematchcount:     0
 spmenu.hidehighlight:      0
 spmenu.hidemode:           0
-spmenu.imagesize:          86
+spmenu.hideimage:          0
+spmenu.imagewidth:         86
+spmenu.imageheight:        86
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      0
 spmenu.mode:               0
+spmenu.fast:               0
 spmenu.normtext:           Normal
 spmenu.instext:            Insert
 spmenu.pango_item:         1

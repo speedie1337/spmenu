@@ -173,9 +173,12 @@ drawmenu(void)
 
 	if (lines > 0) {
         #if USEIMAGE
-        if (longestedge) {
+        if (longestedge && !hideimage) {
             x += imagegaps + imagewidth;
         }
+
+        if (hideimage)
+            longestedge = imageheight = imagewidth = imagegaps = 0;
         #endif
 		/* draw grid */
 		int i = 0;

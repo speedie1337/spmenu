@@ -5,6 +5,7 @@
 
 /* spmenu options */
 static char class[]                    = "spmenu"; /* Class for spmenu */
+static int fast                        = 0; /* Grab keyboard first */
 static int xresources                  = 1; /* Enable .Xresources support */
 
 /* Window options */
@@ -65,6 +66,7 @@ static char *prompt                    = NULL; /* Default prompt, set to NULL (n
 static int hidematchcount              = 0; /* Hide match count (0/1) */
 static int hidemode                    = 0; /* Hide mode (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
+static int hideimage                   = 0; /* Hide image (0/1) */
 
 /* Color options
  *
