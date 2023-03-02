@@ -23,16 +23,20 @@
 #define USEIMAGE 1
 #endif
 
+/* check if we should enable multimonitor support using xinerama */
 #ifdef XINERAMA
 #define USEXINERAMA 1
 #else
 #define USEXINERAMA 0
 #endif
 
+
+/* include right to left language library */
 #if USERTL
 #include <fribidi.h>
 #endif
 
+/* include libraries used for image support */
 #if USEIMAGE
 #include <errno.h>
 #include <pwd.h>
@@ -40,6 +44,7 @@
 #include <openssl/md5.h>
 #endif
 
+/* include xinerama */
 #if USEXINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif
