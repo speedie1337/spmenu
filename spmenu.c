@@ -93,6 +93,7 @@ static char text[BUFSIZ] = "";
 struct item {
 	char *text;
     char *image;
+    char *ex;
 	struct item *left, *right;
 	double distance;
 };
@@ -1255,6 +1256,25 @@ readstdin(void)
         if(items[i].image)
             limg = items[i].image;
         #endif
+
+        /* todo: use this for something
+         * current usage is not very useful, however it's here to be used later.
+         */
+        if(!(items[i].ex = malloc(strlen(items[i].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
+        if (!strncmp("spmenu:", items[i].text, strlen("spmenu:"))) {
+            if (sscanf(items[i].text, "spmenu:%[^\t]", items[i].ex)) {
+                items[i].text += strlen("spmenu:")+strlen(items[i].ex)+1;
+            }
+
+            if (!strncmp("version", items[i].ex, strlen("version"))) {
+                die("spmenu version %s", VERSION);
+            }
+
+            if (!strncmp("license", items[i].ex, strlen("license"))) {
+                items[i].text = "spmenu is licensed under the MIT license. See the included LICENSE file for more information.";
+            }
+        }
 	}
 
 	if (items) {
