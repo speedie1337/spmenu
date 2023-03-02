@@ -126,7 +126,6 @@ drawmenu(void)
     int modeWidth = 0;
     int larrowWidth = 0;
     int rarrowWidth = 0;
-    int itemWidth = 0;
 
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
@@ -195,8 +194,6 @@ drawmenu(void)
 		x += inputw;
 		w = larrowWidth;
 
-        itemWidth = pango_item ? TEXTWM(item->text) : TEXTW(item->text);
-
 		if (curr->left && !hidelarrow) {
 			drw_setscheme(drw, scheme[SchemeLArrow]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
@@ -205,7 +202,7 @@ drawmenu(void)
 		x += w;
 
 		for (item = curr; item != next; item = item->right)
-            x = drawitem(item, x, 0, MIN(itemWidth, mw - x - rarrowWidth - numberWidth - modeWidth));
+            x = drawitem(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
 
 		if (next && !hiderarrow) {
 			w = rarrowWidth;
