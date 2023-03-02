@@ -20,10 +20,7 @@ drawimage(void)
     char *limg = NULL;
 
     if (!lines) return;
-    if (hideimage) {
-        image = NULL;
-        return;
-    }
+    if (hideimage) return;
 
     if (!imagewidth || !imageheight) {
         imagewidth = imageheight = longestedge = imagegaps = 0;

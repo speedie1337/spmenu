@@ -159,7 +159,7 @@ static void quit(const Arg *arg);
 static void complete(const Arg *arg);
 static void savehistory(char *input);
 static void setimgsize(const Arg *arg);
-static void toggleimage(const Arg *arg);
+static void toggleimg(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
@@ -220,17 +220,18 @@ setimgsize(const Arg *arg)
 }
 
 void
-toggleimage(const Arg *arg)
+toggleimg(const Arg *arg)
 {
     #if !USEIMAGE
-    return
+    return;
     #endif
+
+    cleanupimg();
 
     hideimage = !hideimage;
 
     drawmenu();
-
-    if (!hideimage) drawimage();
+    drawimage();
 }
 
 void
