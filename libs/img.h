@@ -4,5 +4,6 @@
 #include <openssl/md5.h>
 
 static void setimageopts(void);
+static void cleanupimg(void);
 
 static Imlib_Image image = NULL;

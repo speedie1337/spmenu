@@ -280,11 +280,9 @@ cleanup(void)
 	size_t i;
 
     #if USEIMAGE
-    if (image) {
-        imlib_free_image();
-        image = NULL;
-    }
+    cleanupimg();
     #endif
+
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
 	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);

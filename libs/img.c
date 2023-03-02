@@ -1,4 +1,15 @@
 void
+cleanupimg(void)
+{
+    if (image) {
+        imlib_free_image();
+        image = NULL;
+    }
+
+    return;
+}
+
+void
 setimageopts(void)
 {
     imlib_set_cache_size(8192 * 1024);
