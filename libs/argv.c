@@ -89,6 +89,30 @@ readargs(int argc, char *argv[])
 				hidemode = 1;
 		} else if (!strcmp(argv[i], "-sm")) {  /* don't hide mode indicator */
 				hidemode = 0;
+		} else if (!strcmp(argv[i], "-hla")) {   /* hide left arrow */
+				hidelarrow = 1;
+		} else if (!strcmp(argv[i], "-sla")) {  /* don't hide left arrow */
+				hidelarrow = 0;
+		} else if (!strcmp(argv[i], "-hra")) {   /* hide right arrow */
+				hiderarrow = 1;
+		} else if (!strcmp(argv[i], "-sra")) {  /* don't hide right arrow */
+				hiderarrow = 0;
+		} else if (!strcmp(argv[i], "-hpr")) {   /* hide prompt */
+				hideprompt = 1;
+		} else if (!strcmp(argv[i], "-spr")) {  /* don't hide prompt */
+				hideprompt = 0;
+		} else if (!strcmp(argv[i], "-hc")) {   /* hide cursor */
+				hidecursor = 1;
+		} else if (!strcmp(argv[i], "-sc")) {  /* don't hide cursor */
+				hidecursor = 0;
+		} else if (!strcmp(argv[i], "-hhl")) {   /* hide highlighting */
+				hidehighlight = 1;
+		} else if (!strcmp(argv[i], "-shl")) {  /* don't hide highlighting */
+				hidehighlight = 0;
+		} else if (!strcmp(argv[i], "-hi")) {   /* hide image */
+				hideimage = 1;
+		} else if (!strcmp(argv[i], "-si")) {  /* don't hide image */
+				hideimage = 0;
         } else if (i + 1 == argc)
 			usage();
 
@@ -278,8 +302,20 @@ usage(void)
 		  "spmenu -c             Position spmenu at the center of the screen\n"
           "spmenu -hm            Hide mode indicator\n"
           "spmenu -hmc           Hide match count\n"
+          "spmenu -hla           Hide left arrow\n"
+          "spmenu -hra           Hide right arrow\n"
+          "spmenu -hpr           Hide prompt\n"
+          "spmenu -hc            Hide cursor\n"
+          "spmenu -hhl           Hide highlight\n"
+          "spmenu -hi            Hide image\n"
           "spmenu -sm            Show mode indicator\n"
           "spmenu -smc           Show match count\n"
+          "spmenu -sla           Show left arrow\n"
+          "spmenu -sra           Show right arrow\n"
+          "spmenu -spr           Show prompt\n"
+          "spmenu -sc            Show cursor\n"
+          "spmenu -shl           Show highlight\n"
+          "spmenu -si            Show image\n"
           "spmenu -xrdb          Load .Xresources on runtime\n"
           "spmenu -nxrdb         Don't load .Xresources on runtime\n"
 		  "spmenu -m <monitor>   Specify a monitor to run spmenu on\n"
