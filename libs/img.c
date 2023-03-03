@@ -1,5 +1,5 @@
 void
-cleanupimg(void)
+cleanupimage(void)
 {
     if (image) {
         imlib_free_image();
@@ -7,6 +7,24 @@ cleanupimg(void)
     }
 
     return;
+}
+
+void
+prepareimage(void)
+{
+    /* values which can be restored later */
+    if (!imagew || !imageh || !imageg) {
+        imagew = imagewidth;
+        imageh = imageheight;
+        imageg = imagegaps;
+    }
+
+    /* restore values if necessary */
+    if (!imageheight || !imagewidth || !longestedge) {
+        imageheight = imageh;
+        imagewidth = imagew;
+        imagegaps = imageg;
+    }
 }
 
 void
@@ -22,11 +40,6 @@ drawimage(void)
     if (!lines) return;
     if (hideimage) return;
 
-    if (!imagewidth || !imageheight) {
-        imagewidth = imageheight = longestedge = imagegaps = 0;
-        return;
-    }
-
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
         if (longestedge)
             loadimagecache(sel->image, &width, &height);
@@ -34,6 +47,9 @@ drawimage(void)
         imlib_free_image();
         image = NULL;
     } if (image && longestedge) {
+
+        prepareimage();
+
         int leftmargin = imagegaps;
 
        	if(mh != bh + height + imagegaps * 2) {

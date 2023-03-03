@@ -127,6 +127,10 @@ static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
 
+static int imagew = 0;
+static int imageh = 0;
+static int imageg = 0;
+
 #if USERTL
 static int isrtl = 1;
 #else
@@ -173,6 +177,7 @@ static void complete(const Arg *arg);
 static void savehistory(char *input);
 static void setimgsize(const Arg *arg);
 static void toggleimg(const Arg *arg);
+static void defaultimg(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
@@ -220,15 +225,13 @@ setimgsize(const Arg *arg)
     return;
     #endif
 
-    cleanupimg();
+    /* this makes sure we cannot scale down the image too much */
+    if (!image && imageheight + arg->i < imageheight || hideimage) return;
+
+    cleanupimage();
 
     imageheight += arg->i;
     imagewidth += arg->i;
-
-    if (!imageheight || !imagewidth || !longestedge) {
-        imageheight = imagewidth = longestedge = 1;
-        return;
-    }
 
     drawmenu();
     drawimage();
@@ -241,9 +244,26 @@ toggleimg(const Arg *arg)
     return;
     #endif
 
-    cleanupimg();
+    cleanupimage();
 
     hideimage = !hideimage;
+
+    drawmenu();
+    drawimage();
+}
+
+void
+defaultimg(const Arg *arg)
+{
+    #if !USEIMAGE
+    return;
+    #endif
+
+    if (hideimage || !image) return;
+
+    /* this will cause values to be reset */
+    imagewidth = 0;
+    prepareimage();
 
     drawmenu();
     drawimage();
@@ -321,7 +341,7 @@ cleanup(void)
 	size_t i;
 
     #if USEIMAGE
-    cleanupimg();
+    cleanupimage();
     #endif
 
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
