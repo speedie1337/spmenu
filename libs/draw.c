@@ -178,7 +178,7 @@ drawmenu(void)
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
             x = ox;
-            x += imagegaps + imagewidth;
+            x += (imagegaps * 2) + imagewidth;
         }
         #endif
 
