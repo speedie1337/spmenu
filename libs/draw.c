@@ -117,6 +117,7 @@ drawmenu(void)
 	unsigned int curpos;
 	struct item *item;
 	int x = 0, y = 0, fh = drw->font->h, w;
+    int ox = 0;
 	char *censort;
 
 	drw_setscheme(drw, scheme[SchemeMenu]);
@@ -136,6 +137,7 @@ drawmenu(void)
 		    drw_setscheme(drw, scheme[SchemePrompt]);
         }
 
+        ox = x;
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 	}
 	/* draw input field */
@@ -175,6 +177,7 @@ drawmenu(void)
         /* draw image first */
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
+            x = ox;
             x += imagegaps + imagewidth;
         }
         #endif
