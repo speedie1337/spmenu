@@ -1,7 +1,7 @@
 # TODO for spmenu
 
-- More example scripts
 - Mouse bind array
+- Remove padding added for background colors
 - Add configuration file using (probably) libconfig
 - Fix highlighting for last character in a match
 - Don't allow image scaling too far up/down

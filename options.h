@@ -28,9 +28,6 @@ static int mode                        = 0; /* Mode to start speedwm in (0: Norm
 static char normtext[]                 = "Normal"; /* Text to display for normal mode */
 static char instext[]                  = "Insert"; /* Text to display for insert mode */
 
-/* Color support */
-static int colorsupport                = 1; /* Support 256 colors? Otherwise the default 16 colors will be used. */
-
 /* Window border options */
 static int borderwidth                 = 2; /* Width of the border */
 static int bordercentered              = 1; /* Draw border only when centered */

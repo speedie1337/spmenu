@@ -38,7 +38,11 @@ dist: clean
 	rm -rf spmenu-$(VERSION)
 
 install: all
+	rm -rf $(DESTDIR)$(PREFIX)/share/spmenu/
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	mkdir -p $(DESTDIR)$(PREFIX)/share/spmenu
+	cp -rf docs/* $(DESTDIR)$(PREFIX)/share/spmenu/
+	echo "${VERSION}" > $(DESTDIR)$(PREFIX)/share/spmenu/version
 	cp -rf spmenu scripts/* $(DESTDIR)$(PREFIX)/bin
 	[ -f spmenu.1 ] && mkdir -p ${DESTDIR}${MANPREFIX}/man1 || :
 	[ -f spmenu.1 ] && cp spmenu.1 ${DESTDIR}${MANPREFIX}/man1/spmenu.1 || :

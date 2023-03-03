@@ -1,0 +1,109 @@
+#!/bin/sh
+# spmenu test script
+
+# reset sequence
+reset='\033[0m'
+
+# fg colors
+v1='\033[0;30m'
+v2='\033[0;31m'
+v3='\033[0;32m'
+v4='\033[0;33m'
+v5='\033[0;34m'
+v6='\033[0;35m'
+v7='\033[0;36m'
+v8='\033[0;37m'
+v9='\033[1;30m'
+v10='\033[1;31m'
+v11='\033[1;32m'
+v12='\033[1;33m'
+v13='\033[1;34m'
+v14='\033[1;35m'
+v15='\033[1;36m'
+v16='\033[1;37m'
+
+# bg colors
+b1='\033[0;40m'
+b2='\033[0;41m'
+b3='\033[0;42m'
+b4='\033[0;43m'
+b5='\033[0;44m'
+b6='\033[0;45m'
+b7='\033[0;46m'
+b8='\033[0;47m'
+b9='\033[1;40m'
+b10='\033[1;41m'
+b11='\033[1;42m'
+b12='\033[1;43m'
+b13='\033[1;44m'
+b14='\033[1;45m'
+b15='\033[1;46m'
+b16='\033[1;47m'
+
+IMAGE="/usr/share/spmenu/preview.png"
+cp $IMAGE /tmp/image.png
+command -v maim > /dev/null && maim -uB > /tmp/image.png
+IMAGE="/tmp/image.png"
+
+main() {
+[ -e "$IMAGE" ] && IMAGEARG="-is 500" && IMAGEPREFIX="IMG:" || IMAGE=""
+
+printf "$IMAGEPREFIX$IMAGE\t\
+${v1}\
+s\
+${v2}\
+p\
+${v3}\
+m\
+${v4}\
+e\
+${v5}\
+n\
+${v6}\
+u \
+${v7}\
+v\
+${v8}\
+e\
+${v9}\
+r\
+${v10}\
+s\
+${v11}\
+i\
+${v12}\
+o\
+${v13}\
+n $reset$(cat /usr/share/spmenu/version)\
+${b1}\n\
+${b2}\n\
+${b3}\n\
+${b4}\n\
+${b5}\n\
+${b6}\n\
+${b7}\n\
+${b8}\n\
+${b9}\n\
+${b10}\n\
+${b11}\n\
+${b12}\n\
+${b13}\n\
+${b14}\n\
+${b15}\n\
+${b16}\n\
+${v1}q${v2}w${v3}e${v4}r${v5}t${v6}y${v7}u${v8}i${v9}o${v10}p${v11}[${v12}]${v13}a${v14}s${v15}d${v16}f\n\
+<b>qwertyuiop[]asdf</b> - b\n\
+<i>qwertyuiop[]asdf</i> - i\n\
+<s>qwertyuiop[]asdf</s> - s\n\
+<u>qwertyuiop[]asdf</u> - u\n\
+<sub>qwertyuiop[]asdf - sub</sub>\n\
+<sup>qwertyuiop[]asdf - sup</sup>\n\
+<tt>qwertyuiop[]asdf</tt> - tt\n\
+<small>qwertyuiop[]asdf</small> - small\n\
+<big>qwertyuiop[]asdf</big> - big\n\n\
+Arguments will be passed to spmenu.\n\
+Report any issues at the Codeberg repo.\n\
+" | spmenu -na -l 40 $IMAGEARG "$@" -g 1 -p "<big>spmenu <i>test</i> <small>script</small></big>"
+}
+
+main "$@"
