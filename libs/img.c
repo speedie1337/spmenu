@@ -1,15 +1,19 @@
 void
 flipimage(void)
 {
-    if (!flip) return;
-    if (flip == 1) { /* horizontal */
-        imlib_image_flip_horizontal();
-    } else if (flip == 2) {
-        imlib_image_flip_vertical();
-    } else if (flip == 3) {
-        imlib_image_flip_diagonal();
-    } else {
-        flip = 1;
+    switch (flip) {
+        case 1: /* horizontal */
+            imlib_image_flip_horizontal();
+            break;
+        case 2: /* vertical */
+            imlib_image_flip_vertical();
+            break;
+        case 3: /* diagonal */
+            imlib_image_flip_diagonal();
+            break;
+        default:
+            flip = flip ? 1 : 0;
+            return;
     }
 }
 
@@ -27,22 +31,15 @@ cleanupimage(void)
         imlib_free_image();
         image = NULL;
     }
-
-    return;
 }
 
 void
 drawimage(void)
 {
-    #if !USEIMAGE
-    return;
-    #endif
-
     int width = 0, height = 0;
     char *limg = NULL;
 
-    if (!lines) return;
-    if (hideimage) return;
+    if (!lines || hideimage) return;
 
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
         if (longestedge)

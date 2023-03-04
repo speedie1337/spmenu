@@ -30,7 +30,6 @@
 #define USEXINERAMA 0
 #endif
 
-
 /* include right to left language library */
 #if USERTL
 #include <fribidi.h>
@@ -735,21 +734,22 @@ navigatehistfile(int dir)
 		strncpy(def, text, sizeof(def));
 	}
 
-	switch(dir) {
-	case 1:
-		if (histpos < histsz - 1) {
-			p = history[++histpos];
-		} else if (histpos == histsz - 1) {
-			p = def;
-			histpos++;
-		}
-		break;
-	case -1:
-		if (histpos > 0) {
-			p = history[--histpos];
-		}
-		break;
+	switch (dir) {
+        case 1:
+            if (histpos < histsz - 1) {
+                p = history[++histpos];
+            } else if (histpos == histsz - 1) {
+                p = def;
+                histpos++;
+            }
+            break;
+        case -1:
+            if (histpos > 0) {
+                p = history[--histpos];
+            }
+            break;
 	}
+
 	if (p == NULL) {
 		return;
 	}

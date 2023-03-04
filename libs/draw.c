@@ -57,8 +57,9 @@ drawitem(struct item *item, int x, int y, int w)
 			if (item->text[rd + alen + 2] == 'm') { /* character is 'm' which is the last character in the sequence */
 				buffer[wr] = '\0'; /* clear out character */
 
-                rw = pango_item ? TEXTWM(buffer) : TEXTW(buffer) - lrpad;
-				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, pango_item ? True : False);
+                apply_fribidi(buffer);
+                rw = TEXTW(buffer) - lrpad;
+				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
                 ib = 1;
