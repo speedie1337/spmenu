@@ -16,9 +16,7 @@ flipimage(void)
 void
 rotateimage(void)
 {
-    if (!rotation) return;
-    if (rotation > 4) rotation = 1;
-
+    rotation %= 4;
     imlib_image_orientate(rotation);
 }
 
