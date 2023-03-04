@@ -1,7 +1,7 @@
 # TODO for spmenu
 
 - Mouse bind array
-- Remove padding added for background colors
+- Remove SGR sequences from width when item text is drawn, currently the width of the item before SGR sequences are used, resulting in some ugly behavior for the selected item
 - Add configuration file using (probably) libconfig
 - Fix highlighting for last character in a match
 - Add rotate and flip keybinds for the image
