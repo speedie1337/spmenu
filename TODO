@@ -1,6 +1,6 @@
 # TODO for spmenu
 
-- Mouse bind array
-- Remove SGR sequences from width when item text is drawn, currently the width of the item before SGR sequences are used, resulting in some ugly behavior for the selected item
+- Mouse bind array (mouse.h)
+- Remove SGR sequences from width when item text is drawn, currently the width of the item before SGR sequences are used, resulting in some ugly behavior for the selected item (drawitem function libs/draw.c)
 - Add configuration file using (probably) libconfig
-- Fix highlighting for last character in a match
+- Fix highlighting for last character in a match, sometimes it will not be highlighted and I am not yet entirely sure (drawhighlight function libs/draw.c)
