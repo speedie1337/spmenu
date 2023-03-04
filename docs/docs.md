@@ -41,6 +41,8 @@ On top of this, you can specify arguments to change the behavior of spmenu. See 
 - spmenu -nmt text      - Set normal mode text to text
 - spmenu -imt text      - Set insert mode text to text
 - spmenu -bw            - Width of the border. 0 will disable the border
+- spmenu -so            - Sort matches
+- spmenu -nso           - Don't sort matches
 - spmenu -s             - Use case-sensitive matching
 - spmenu -i             - Use case-insensitive matching
 - spmenu -nm            - Start spmenu in normal mode
@@ -124,6 +126,7 @@ On top of this, you can specify arguments to change the behavior of spmenu. See 
 
 There are also extra arguments recognized for dmenu compatibility. These are:
 
+- spmenu -S             - Don't sort matches
 - spmenu -nb color      - Set the normal background color
 - spmenu -nf color      - Set the normal foreground color
 - spmenu -sb color      - Set the selected background color

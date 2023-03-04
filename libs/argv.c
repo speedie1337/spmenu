@@ -60,6 +60,12 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-s")) { /* case-sensitive item matching */
 			fstrncmp = strncmp;
 			fstrstr = strstr;
+        } else if (!strcmp(argv[i], "-S")) { /* don't sort */
+            sortmatches = 0;
+        } else if (!strcmp(argv[i], "-nso")) { /* don't sort */
+            sortmatches = 0;
+        } else if (!strcmp(argv[i], "-so")) { /* don't sort */
+            sortmatches = 1;
 		} else if (!strcmp(argv[i], "-i")) { /* case-sensitive item matching, for compatibility reasons */
 		    fstrncmp = strncasecmp;
 		    fstrstr = cistrstr;
@@ -293,6 +299,8 @@ usage(void)
           "spmenu -nmt <text>    Set normal mode text to <text>\n"
           "spmenu -imt <text>    Set insert mode text to <text>\n"
 		  "spmenu -bw            Width of the border. 0 will disable the border\n"
+          "spmenu -so            Sort matches\n"
+          "spmenu -nso           Don't sort matches\n"
 		  "spmenu -s             Use case-sensitive matching\n"
 		  "spmenu -i             Use case-insensitive matching\n"
           "spmenu -nm            Start spmenu in normal mode\n"
@@ -378,6 +386,7 @@ usage(void)
 		  "spmenu -sgr15         Set the SGR 15 color\n"
           "\n", stdout);
           fputs("- dmenu compatibility -\n"
+          "spmenu -S             Don't sort matches\n"
 	      "spmenu -nb <color>    Set the normal background color\n"
 		  "spmenu -nf <color>    Set the normal foreground color\n"
 		  "spmenu -sb <color>    Set the selected background color\n"
