@@ -127,6 +127,8 @@ static struct item *prev, *curr, *next, *sel;
 static int mon = -1, screen;
 static int managed = 0;
 
+static int flip = 0;
+static int rotation = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
@@ -178,6 +180,9 @@ static void savehistory(char *input);
 static void setimgsize(const Arg *arg);
 static void toggleimg(const Arg *arg);
 static void defaultimg(const Arg *arg);
+static void rotateimg(const Arg *arg);
+static void flipimagevert(const Arg *arg);
+static void flipimagehoriz(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
@@ -241,6 +246,60 @@ setimgsize(const Arg *arg)
         return;
     }
 
+    drawmenu();
+}
+
+void
+flipimagevert(const Arg *arg)
+{
+    #if !USEIMAGE
+    return;
+    #endif
+
+    if (!image) return;
+
+    if (flip)
+        flip = 0;
+    else
+        flip = 2;
+
+    cleanupimage();
+    drawimage();
+    drawmenu();
+}
+
+void
+flipimagehoriz(const Arg *arg)
+{
+    #if !USEIMAGE
+    return;
+    #endif
+
+    if (!image) return;
+
+    if (flip)
+        flip = 0;
+    else
+        flip = 1;
+
+    cleanupimage();
+    drawimage();
+    drawmenu();
+}
+
+void
+rotateimg(const Arg *arg)
+{
+    #if !USEIMAGE
+    return;
+    #endif
+
+    if (!image) return;
+
+    rotation++;
+
+    cleanupimage();
+    drawimage();
     drawmenu();
 }
 

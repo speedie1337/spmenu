@@ -1,4 +1,42 @@
 void
+flipimage(void)
+{
+    if (!flip) return;
+    if (flip == 1) { /* horizontal */
+        imlib_image_flip_horizontal();
+    } else if (flip == 2) {
+        imlib_image_flip_vertical();
+    } else if (flip == 3) {
+        imlib_image_flip_diagonal();
+    } else {
+        flip = 1;
+    }
+}
+
+void
+rotateimage(void)
+{
+    if (!rotation) return;
+    if (rotation == 1) {
+        imlib_image_orientate(1);
+    } else if (rotation == 2) {
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+    } else if (rotation == 3) {
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+    } else if (rotation == 4) {
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+        imlib_image_orientate(1);
+    } else {
+        rotation = 1;
+    }
+}
+
+void
 cleanupimage(void)
 {
     if (image) {
@@ -49,6 +87,8 @@ drawimage(void)
     } if (image && longestedge) {
 
         prepareimage();
+        rotateimage();
+        flipimage();
 
         int leftmargin = imagegaps;
 
