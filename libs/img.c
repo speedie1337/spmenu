@@ -17,23 +17,9 @@ void
 rotateimage(void)
 {
     if (!rotation) return;
-    if (rotation == 1) {
-        imlib_image_orientate(1);
-    } else if (rotation == 2) {
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-    } else if (rotation == 3) {
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-    } else if (rotation == 4) {
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-        imlib_image_orientate(1);
-    } else {
-        rotation = 1;
-    }
+    if (rotation > 4) rotation = 1;
+
+    imlib_image_orientate(rotation);
 }
 
 void
@@ -45,24 +31,6 @@ cleanupimage(void)
     }
 
     return;
-}
-
-void
-prepareimage(void)
-{
-    /* values which can be restored later */
-    if (!imagew || !imageh || !imageg) {
-        imagew = imagewidth;
-        imageh = imageheight;
-        imageg = imagegaps;
-    }
-
-    /* restore values if necessary */
-    if (!imageheight || !imagewidth || !longestedge) {
-        imageheight = imageh;
-        imagewidth = imagew;
-        imagegaps = imageg;
-    }
 }
 
 void
@@ -86,7 +54,6 @@ drawimage(void)
         image = NULL;
     } if (image && longestedge) {
 
-        prepareimage();
         rotateimage();
         flipimage();
 

@@ -327,9 +327,11 @@ defaultimg(const Arg *arg)
 
     if (hideimage || !image) return;
 
-    /* this will cause values to be reset */
-    imagewidth = 0;
-    prepareimage();
+    if (imagew) {
+        imagewidth = imagew;
+        imageheight = imageh;
+        imagegaps = imageg;
+    }
 
     drawmenu();
     drawimage();
@@ -1628,6 +1630,14 @@ main(int argc, char *argv[])
 		readstdin();
 		grabkeyboard();
 	}
+
+    /* set values which we can restore later */
+    if (!imagew || !imageh || !imageg) {
+        imagew = imagewidth;
+        imageh = imageheight;
+        imagegaps = imagegaps;
+    }
+
 	setup();
 	run();
 
