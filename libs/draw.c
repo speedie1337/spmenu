@@ -37,6 +37,7 @@ drawitem(struct item *item, int x, int y, int w)
 	int fg = 7;
 	int bg = 0;
     int bgfg = 0;
+    int ignore = 0;
     int ib = 0;
 
     if (item == sel) {
@@ -56,10 +57,8 @@ drawitem(struct item *item, int x, int y, int w)
 			if (item->text[rd + alen + 2] == 'm') { /* character is 'm' which is the last character in the sequence */
 				buffer[wr] = '\0'; /* clear out character */
 
-                /* draw text */
-                rw = TEXTWM(buffer) - lrpad;
-                apply_fribidi(buffer);
-				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+                rw = pango_item ? TEXTWM(buffer) : TEXTW(buffer) - lrpad;
+				drw_text(drw, x, y, rw + lp, bh, lp, buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
                 ib = 1;
@@ -70,6 +69,22 @@ drawitem(struct item *item, int x, int y, int w)
                 /* parse hex colors in scm */
 				while (*ep != 'm') {
 					unsigned v = strtoul(ep + 1, &ep, 10);
+                    if (ignore)
+						continue;
+					if (bgfg) {
+						if (bgfg < 4 && v == 5) {
+							bgfg <<= 1;
+							continue;
+						}
+						if (bgfg == 4)
+							scm[0] = textclrs[fg = v];
+						else if (bgfg == 6)
+							scm[1] = textclrs[bg = v];
+						ignore = 1;
+
+						continue;
+					}
+
 					if (v == 1) {
 						fg |= 8;
 						scm[0] = textclrs[fg];
