@@ -6,7 +6,7 @@ include options.mk
 include host.mk
 include toggle.mk
 
-SRC = libs/sl/draw.c spmenu.c main.c
+SRC = libs/sl/draw.c spmenu.c libs/sl/main.c
 OBJ = $(SRC:.c=.o)
 
 all: options spmenu
@@ -23,7 +23,7 @@ options:
 
 $(OBJ): options.h options.mk libs/sl/draw.h
 
-spmenu: spmenu.o libs/sl/draw.o main.o
+spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:

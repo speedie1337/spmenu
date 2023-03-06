@@ -80,7 +80,7 @@
 #include <pango/pango.h>
 
 #include "libs/sl/draw.h"
-#include "main.h"
+#include "libs/sl/main.h"
 
 /* macros */
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
