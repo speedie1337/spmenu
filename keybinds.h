@@ -34,9 +34,10 @@
 #define MODIFIER1              Mod1Mask
 
 static Key keys[] = {
-	/* mode    modifier                      key           function         argument  */
+	/* insert mode
+     *
+     * mode    modifier                      key           function         argument  */
 	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
-
 	{ 1,       0,                            XK_Up,        move,            {.i = 1  } },
 	{ 1,       0,                            XK_Down,      move,            {.i = 2  } },
 	{ 1,       0,                            XK_Left,      move,            {.i = 3  } },
@@ -47,8 +48,10 @@ static Key keys[] = {
     { 1,       0,                            XK_Return,    selectitem,      {.i = +1 } },
     { 1,       0,                            XK_Tab,       complete,        {0} },
 
+	/* normal mode
+     *
+     * mode    modifier                      key           function         argument  */
 	{ 0,       0,                            XK_i,         switchmode,      {0} },
-
     { 0,       CONTROL,                      XK_equal,     setimgsize,      {.i = +1 } },
     { 0,       CONTROL,                      XK_minus,     setimgsize,      {.i = -1 } },
     { 0,       0,                            XK_equal,     setimgsize,      {.i = +10 } },
