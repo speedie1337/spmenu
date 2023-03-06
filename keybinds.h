@@ -55,7 +55,7 @@ static Key keys[] = {
     { 0,       0,                            XK_minus,     setimgsize,      {.i = -10 } },
     { 0,       SHIFT,                        XK_equal,     setimgsize,      {.i = +100 } },
     { 0,       SHIFT,                        XK_minus,     setimgsize,      {.i = -100 } },
-    { 0,       0,                            XK_d,         defaultimg,      {0} },
+    { 0,       SHIFT,                        XK_0,         defaultimg,      {0} },
     { 0,       0,                            XK_r,         rotateimg,       {0} },
     { 0,       0,                            XK_t,         toggleimg,       {0} },
     { 0,       0,                            XK_h,         flipimg,         {.i = 1  } },
