@@ -189,80 +189,83 @@ loadimagecache(const char *file, int *width, int *height)
 		return;
 	}
 
-	/* try find image from cache first */
-	if(!(xdg_cache = getenv("XDG_CACHE_HOME")) && generatecache) {
-		if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
-			home = pw->pw_dir;
-		if(!home) {
-			fprintf(stderr, "spmenu: could not find home directory");
-			return;
-		}
-	}
+    if (generatecache) {
+        /* try find image from cache first */
+        if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
+            if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
+                home = pw->pw_dir;
+            if(!home) {
+                fprintf(stderr, "spmenu: could not find home directory");
+                return;
+            }
+        }
 
-	/* which cache do we try? */
-	dsize = "normal";
-	if (longestedge > 128)
-        dsize = "large";
+        /* which cache do we try? */
+        dsize = "normal";
+        if (longestedge > 128)
+            dsize = "large";
 
-	slen = snprintf(NULL, 0, "file://%s", file)+1;
+        slen = snprintf(NULL, 0, "file://%s", file)+1;
 
-	if(!(buf = malloc(slen))) {
-		fprintf(stderr, "spmenu: out of memory");
-		return;
-	}
+        if(!(buf = malloc(slen))) {
+            fprintf(stderr, "spmenu: out of memory");
+            return;
+        }
 
-	/* calculate md5 from path */
-	sprintf(buf, "file://%s", file);
-	MD5((unsigned char*)buf, slen, digest);
+        /* calculate md5 from path */
+        sprintf(buf, "file://%s", file);
+        MD5((unsigned char*)buf, slen, digest);
 
-	free(buf);
+        free(buf);
 
-	for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
-        sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
+        for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
+            sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
 
-	/* path for cached thumbnail */
-	if (xdg_cache && generatecache)
-        slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
-	else if (generatecache)
-        slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
+        /* path for cached thumbnail */
+        if (xdg_cache)
+            slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
+        else
+            slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
 
-	if(!(buf = malloc(slen))) {
-		fprintf(stderr, "out of memory");
-		return;
-	}
+        if(!(buf = malloc(slen))) {
+            fprintf(stderr, "out of memory");
+            return;
+        }
 
-	if (xdg_cache && generatecache)
-        sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
-	else if (generatecache)
-        sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
+        if (xdg_cache)
+            sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
+        else
+            sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
 
-    if (generatecache) loadimage(buf, width, height);
+        loadimage(buf, width, height);
 
-	if (image && *width < imagewidth && *height < imageheight) {
-		imlib_free_image();
-		image = NULL;
-	} else if(image && (*width > imagewidth || *height > imageheight)) {
-		scaleimage(width, height);
-	}
+        if (image && *width < imagewidth && *height < imageheight) {
+            imlib_free_image();
+            image = NULL;
+        } else if(image && (*width > imagewidth || *height > imageheight)) {
+            scaleimage(width, height);
+        }
 
-	/* we are done */
-    if (image) {
-		free(buf);
-		return;
-	}
+        /* we are done */
+        if (image) {
+            free(buf);
+            return;
+        }
+    }
 
     /* we din't find anything from cache, or it was just wrong */
 	loadimage(file, width, height);
-	if (!image) {
-		free(buf);
-		return;
-	}
-
 	scaleimage(width, height);
+
+    if (!generatecache) return;
+
 	imlib_image_set_format("png");
-	createifnexist_rec(buf);
-	imlib_save_image(buf);
-	free(buf);
+
+    if (buf && generatecache) {
+        createifnexist_rec(buf);
+        imlib_save_image(buf);
+        free(buf);
+    }
 }
 
 void

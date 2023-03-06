@@ -269,6 +269,8 @@ setimgsize(const Arg *arg)
         imageheight -= arg->i;
         imagewidth -= arg->i;
         return;
+    } else {
+        drawimage();
     }
 
     drawmenu();
