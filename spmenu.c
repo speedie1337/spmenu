@@ -1068,9 +1068,9 @@ keypress(XEvent *e)
                     return;
                 } else if (!keys[i].mode && !curMode) {
                     keys[i].func(&(keys[i].arg));
-                    return;
-                } else
+                } else {
                     continue;
+                }
         }
 
         if (!iscntrl(*buf) && type && curMode ) {
