@@ -208,8 +208,7 @@ static void setimgsize(const Arg *arg);
 static void toggleimg(const Arg *arg);
 static void defaultimg(const Arg *arg);
 static void rotateimg(const Arg *arg);
-static void flipimagevert(const Arg *arg);
-static void flipimagehoriz(const Arg *arg);
+static void flipimg(const Arg *arg);
 
 static void drawmenu(void);
 static void calcoffsets(void);
@@ -276,7 +275,7 @@ setimgsize(const Arg *arg)
 }
 
 void
-flipimagevert(const Arg *arg)
+flipimg(const Arg *arg)
 {
     #if !USEIMAGE
     return;
@@ -284,29 +283,7 @@ flipimagevert(const Arg *arg)
 
     if (!image) return;
 
-    if (flip)
-        flip = 0;
-    else
-        flip = 2;
-
-    cleanupimage();
-    drawimage();
-    drawmenu();
-}
-
-void
-flipimagehoriz(const Arg *arg)
-{
-    #if !USEIMAGE
-    return;
-    #endif
-
-    if (!image) return;
-
-    if (flip)
-        flip = 0;
-    else
-        flip = 1;
+    flip = flip ? 0 : arg->i ? 1 : 2;
 
     cleanupimage();
     drawimage();
