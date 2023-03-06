@@ -8,7 +8,7 @@
 #include <pango/pangoxft.h>
 
 #include "draw.h"
-#include "main.h"
+#include "../../main.h"
 
 Drw *
 drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap)

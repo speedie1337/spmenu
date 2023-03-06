@@ -56,7 +56,7 @@
 #include <X11/Xft/Xft.h>
 #include <pango/pango.h>
 
-#include "draw.h"
+#include "libs/sl/draw.h"
 #include "main.h"
 
 /* macros */
