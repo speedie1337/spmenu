@@ -56,6 +56,7 @@ spmenu.colorprompt:        1
 spmenu.preselected:        0
 spmenu.type:               1
 spmenu.class:              spmenu
+spmenu.mon:                -1
 spmenu.leftarrow:          <
 spmenu.rightarrow:         >
 spmenu.password:           .

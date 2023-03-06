@@ -1,4 +1,20 @@
-/* See LICENSE file for copyright and license details. */
+/* spmenu - speedie's dmenu fork
+ *
+ * If you're looking for functions used to draw text, see 'libs/draw.c'
+ * If you're looking for wrapper functions used inside the draw functions, see 'libs/sl/draw.c'
+ * If you're looking for functions used to draw images, see 'libs/img.c'
+ * If you're looking for the .Xresources array, see 'libs/xresources.h'
+ *
+ * To disable certain features, pass one or more of the following to the compiler:
+ *
+ * NOXINERAMA, NORTL, NOIMAGE
+ *
+ * You don't need to edit spmenu.c if you aren't making big changes to the software.
+ *
+ * After making changes, run 'make clean install' to install and 'make' to attempt a compilation.
+ * `make man` will generate a man page from 'docs/docs.md', which is a Markdown document. Run this before commiting.
+ *
+ * See LICENSE file for copyright and license details. */
 #include <ctype.h>
 #include <locale.h>
 #include <math.h>
@@ -28,6 +44,13 @@
 #define USEXINERAMA 1
 #else
 #define USEXINERAMA 0
+#endif
+
+/* NOXINERAMA overrides XINERAMA */
+#ifdef NOXINERAMA
+#define USEXINERAMA 0
+#else
+#define USEXINERAMA 1
 #endif
 
 /* include right to left language library */
@@ -87,6 +110,7 @@
 #include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/mode.h"
+#include "libs/xrdb.h"
 
 static char text[BUFSIZ] = "";
 
@@ -125,15 +149,19 @@ static unsigned int selected = 0;
 static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
-static int mon = -1, screen;
+static int screen;
 static int managed = 0;
 
+/* image globals */
 static int flip = 0;
 static int rotation = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
 
+/* set an integer if to 1 if we have right to left language support enabled
+ * doing it this way, because we can reduce the amount of #if and #else lines used.
+ */
 #if USERTL
 static int isrtl = 1;
 #else
@@ -190,13 +218,12 @@ static void readstdin(void);
 static void recalculatenumbers(void);
 static void usage(void);
 
-#include "libs/xrdb.h"
-
 /* user configuration */
 #include "options.h" /* Include main header */
 #include "keybinds.h" /* Include keybinds */
-#include "colors.h" /* Include colors */
-#include "xresources.h" /* Include .Xresources */
+
+#include "libs/xresources.h"
+#include "libs/colors.h"
 
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;

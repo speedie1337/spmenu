@@ -128,6 +128,7 @@ ResourcePref resources[] = {
     { "generatecache",       INTEGER, &generatecache },
     { "mode",                INTEGER, &mode },
     { "fast",                INTEGER, &fast },
+    { "mon",                 INTEGER, &mon },
     { "pango_item",          INTEGER, &pango_item },
     { "pango_prompt",        INTEGER, &pango_prompt },
     { "pango_input",         INTEGER, &pango_input },

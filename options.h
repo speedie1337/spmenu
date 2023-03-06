@@ -7,6 +7,7 @@
 static char class[]                    = "spmenu"; /* Class for spmenu */
 static int fast                        = 0; /* Grab keyboard first */
 static int xresources                  = 1; /* Enable .Xresources support */
+static int mon                         = -1; /* Monitor to run spmenu on */
 
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
