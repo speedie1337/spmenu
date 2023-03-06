@@ -7,7 +7,7 @@ sixd_to_8bit(int x)
 void
 init_appearance(void)
 {
-    int x, y, i, j;
+    int i, j;
 
     char cbuf[8];
 

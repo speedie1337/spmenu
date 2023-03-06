@@ -145,7 +145,6 @@ static int lrpad; /* sum of left and right padding */
 static int vp;    /* vertical padding for bar */
 static int sp;    /* side padding for bar */
 static size_t cursor;
-static unsigned int selected = 0;
 static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
@@ -651,7 +650,7 @@ navigatehistfile(int dir)
 	}
 
 	len = MIN(strlen(p), BUFSIZ - 1);
-	strncpy(text, p, len);
+	strcpy(text, p);
 	text[len] = '\0';
 	cursor = len;
 	match();
@@ -682,7 +681,6 @@ keypress(XEvent *e)
         KeySym keysym;
         XKeyEvent *ev;
         char buf[64];
-        char keyArray;
         KeySym ksym = NoSymbol;
         Status status;
 
@@ -692,11 +690,9 @@ keypress(XEvent *e)
 
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
-        int iscont = 0;
-
         for (i = 0; i < LENGTH(keys); i++) {
-            if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
-                if (keys[i].mode && curMode || keys[i].mode == -1) {
+            if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func) {
+                if ((keys[i].mode && curMode) || keys[i].mode == -1) {
                     keys[i].func(&(keys[i].arg));
                     return;
                 } else if (!keys[i].mode && !curMode) {
@@ -704,6 +700,7 @@ keypress(XEvent *e)
                 } else {
                     continue;
                 }
+            }
         }
 
         if (!iscntrl(*buf) && type && curMode ) {
@@ -927,8 +924,6 @@ readstdin(void)
             if(!(items[i].image = malloc(strlen(items[i].text)+1)))
                 fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
             if(sscanf(items[i].text, "IMG:%[^\t]", items[i].image)) {
-                if(!(items[i].image = realloc(items[i].image, strlen(items[i].image)+1)))
-                    fprintf(stderr, "spmenu: cannot realloc %lu bytes\n", strlen(items[i].image)+1);
                 items[i].text += strlen("IMG:")+strlen(items[i].image)+1;
             } else {
                 free(items[i].image);
@@ -1042,7 +1037,6 @@ setup(void)
 	int a, di, n, area = 0;
     #endif
     XWindowAttributes wa;
-    char cbuf[8];
 
     /* init appearance */
     init_appearance();

@@ -306,7 +306,7 @@ setimgsize(const Arg *arg)
     #endif
 
     /* this makes sure we cannot scale down the image too much */
-    if (!image && imageheight + arg->i < imageheight || hideimage) return;
+    if ((!image && imageheight + arg->i < imageheight) || hideimage) return;
 
     cleanupimage();
 

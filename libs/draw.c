@@ -33,7 +33,7 @@ drawitem(struct item *item, int x, int y, int w)
     Clr scm[3];
     int lp = lrpad / 2; /* padding */
     int wr, rd;
-	int rw; /* width of text */
+	int rw = 0; /* width of text */
 	int fg = 7;
 	int bg = 0;
     int bgfg = 0;
@@ -130,7 +130,7 @@ drawitem(struct item *item, int x, int y, int w)
 void
 drawmenu(void)
 {
-	unsigned int curpos;
+	unsigned int curpos = 0;
 	struct item *item;
 	int x = 0, y = 0, fh = drw->font->h, w;
     int ox = 0;

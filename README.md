@@ -90,15 +90,4 @@ This build allows you to define .Xresources values to load on startup. See docs/
 
 ### Scripts
 
-This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use:
-
-### Notes for users of Arch who manually compile
-
-This fork of spmenu is compiled using tcc for speed however tcc from the Arch repositories seems to be broken. I'm sure there's a better way to fix this but I just fix it by installing [this package](https://aur.archlinux.org/packages/tcc-ziyao) from the AUR.
-
-### Notes for GCC users
-
-If you're compiling with GCC, chances are you're seeing a lot of warnings.
-This is because we're compiling with -Ofast. I can't seem to find any issues
-with using -Ofast but if it bothers you, you can compile
-with -Os or -O2 which don't spit out these warnings.
+This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use.

@@ -49,7 +49,6 @@ install: all
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/spmenu*
 	rm -f *.o
 	rm -f spmenu
-	rm -f a.out
 
 compat:
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu

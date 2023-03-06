@@ -178,7 +178,7 @@ loadimagecache(const char *file, int *width, int *height)
 	int slen = 0, i;
 	unsigned char digest[MD5_DIGEST_LENGTH];
 	char md5[MD5_DIGEST_LENGTH*2+1];
-	char *xdg_cache, *home = NULL, *dsize, *buf;
+	char *xdg_cache, *home = NULL, *dsize, *buf = NULL;
 	struct passwd *pw = NULL;
 
 	/* just load and don't store or try cache */
