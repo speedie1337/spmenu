@@ -27,6 +27,8 @@ readargs(int argc, char *argv[])
         if (!strcmp(argv[i], "-v")) {      /* prints version information */
 			puts("spmenu-"VERSION);
 			exit(0);
+        } else if (!strcmp(argv[i], "-h")) { /* help */
+            usage();
 		} else if (!strcmp(argv[i], "-it")) { /* image: top */
 			imageposition = 0;
 		} else if (!strcmp(argv[i], "-ib")) { /* image: bottom */
@@ -120,7 +122,7 @@ readargs(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-si")) {  /* don't hide image */
 				hideimage = 0;
         } else if (i + 1 == argc)
-			usage();
+            fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
 		/* these options take one argument */
 		else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
@@ -267,7 +269,7 @@ readargs(int argc, char *argv[])
     	else if (!strcmp(argv[i], "-n"))   /* preselected item */
 		    preselected = atoi(argv[++i]);
 		else
-			usage();
+            fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 }
 
 void

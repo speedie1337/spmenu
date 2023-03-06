@@ -19,8 +19,9 @@
  */
 
 /* Modes
- * 0: Normal mode
- * 1: Insert mode
+ * -1: Any mode
+ * 0:  Normal mode
+ * 1:  Insert mode
  *
  * Switch mode by calling switchmode
  */
@@ -42,11 +43,7 @@ static Key keys[] = {
 	{ 1,       0,                            XK_Down,      move,            {.i = 2  } },
 	{ 1,       0,                            XK_Left,      move,            {.i = 3  } },
 	{ 1,       0,                            XK_Right,     move,            {.i = 4  } },
-    { 1,       CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
-    { 1,       CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
     { 1,       0,                            XK_BackSpace, backspace,       {0} },
-    { 1,       0,                            XK_Return,    selectitem,      {.i = +1 } },
-    { 1,       0,                            XK_Tab,       complete,        {0} },
 
 	/* normal mode
      *
@@ -67,8 +64,6 @@ static Key keys[] = {
 	{ 0,       0,                            XK_j,         move,            {.i = 2  } },
 	{ 0,       0,                            XK_h,         move,            {.i = 3  } },
 	{ 0,       0,                            XK_l,         move,            {.i = 4  } },
-    { 0,       CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
-    { 0,       CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
     { 0,       CONTROL,                      XK_r,         viewhist,        {0} },
     { 0,       CONTROL,                      XK_u,         clear,           {0} },
@@ -79,10 +74,16 @@ static Key keys[] = {
     { 0,       SHIFT,                        XK_g,         moveend,         {0} },
     { 0,       0,                            XK_Next,      movenext,        {0} },
     { 0,       0,                            XK_Prior,     moveprev,        {0} },
-    { 0,       0,                            XK_Return,    selectitem,      {.i = +1 } },
-    { 0,       0,                            XK_Tab,       complete,        {0} },
     { 0,       MODIFIER1,                    XK_b,         moveword,        {.i = -1 } },
     { 0,       MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
     { 0,       MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { 0,       MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
+
+    /* any mode
+     *
+     * mode    modifier                      key           function         argument  */
+    { -1,      0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { -1,      0,                            XK_Tab,       complete,        {0} },
+    { -1,      CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
+    { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
 };

@@ -1090,7 +1090,7 @@ keypress(XEvent *e)
 
         for (i = 0; i < LENGTH(keys); i++) {
             if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
-                if (keys[i].mode && curMode) {
+                if (keys[i].mode && curMode || keys[i].mode == -1) {
                     keys[i].func(&(keys[i].arg));
                     return;
                 } else if (!keys[i].mode && !curMode) {
