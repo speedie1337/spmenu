@@ -190,7 +190,7 @@ loadimagecache(const char *file, int *width, int *height)
 	}
 
 	/* try find image from cache first */
-	if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
+	if(!(xdg_cache = getenv("XDG_CACHE_HOME")) && generatecache) {
 		if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
 			home = pw->pw_dir;
 		if(!home) {
@@ -221,9 +221,9 @@ loadimagecache(const char *file, int *width, int *height)
         sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
 
 	/* path for cached thumbnail */
-	if (xdg_cache)
+	if (xdg_cache && generatecache)
         slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
-	else
+	else if (generatecache)
         slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
 
 	if(!(buf = malloc(slen))) {
@@ -231,12 +231,12 @@ loadimagecache(const char *file, int *width, int *height)
 		return;
 	}
 
-	if (xdg_cache)
+	if (xdg_cache && generatecache)
         sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
-	else
+	else if (generatecache)
         sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
 
-	loadimage(buf, width, height);
+    if (generatecache) loadimage(buf, width, height);
 
 	if (image && *width < imagewidth && *height < imageheight) {
 		imlib_free_image();

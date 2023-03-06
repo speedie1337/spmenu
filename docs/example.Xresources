@@ -64,7 +64,7 @@ spmenu.imagewidth:         86
 spmenu.imageheight:        86
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
-spmenu.generatecache:      0
+spmenu.generatecache:      1
 spmenu.mode:               0
 spmenu.fast:               0
 spmenu.hidematchcount:     0
