@@ -23,7 +23,7 @@ options:
 
 $(OBJ): options.h options.mk libs/sl/draw.h
 
-spmenu: spmenu.o draw.o main.o
+spmenu: spmenu.o libs/sl/draw.o main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:
