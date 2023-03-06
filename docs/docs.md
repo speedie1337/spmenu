@@ -21,6 +21,7 @@ On top of this, you can specify arguments to change the behavior of spmenu. See 
 - spmenu -h height      - Set spmenu line height to height
 - spmenu -g grid        - Set the number of grids to grid
 - spmenu -gc            - Generate image cache
+- spmenu -ngc           - Don't generate image cache
 - spmenu -rw            - Enable relative input width
 - spmenu -nrw           - Disable relative input width
 - spmenu -f             - Grabs keyboard before reading stdin

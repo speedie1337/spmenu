@@ -73,6 +73,8 @@ readargs(int argc, char *argv[])
 		    fstrstr = cistrstr;
         } else if (!strcmp(argv[i], "-gc")) { /* generate image cache */
             generatecache = 1;
+        } else if (!strcmp(argv[i], "-ngc")) { /* don't generate image cache */
+            generatecache = 0;
 		} else if (!strcmp(argv[i], "-wm")) { /* display as managed wm window */
 				managed = 1;
 		} else if (!strcmp(argv[i], "-na")) { /* disable alpha */
@@ -281,6 +283,7 @@ usage(void)
 		  "spmenu -h <height>    Set spmenu line height to <height>\n"
 		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
           "spmenu -gc            Generate image cache\n"
+          "spmenu -ngc           Don't generate image cache\n"
           "spmenu -rw            Enable relative input width\n"
           "spmenu -nrw           Disable relative input width\n"
           "spmenu -f             Grabs keyboard before reading stdin\n"
