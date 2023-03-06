@@ -86,6 +86,7 @@
 /* include enums */
 #include "libs/schemes.h"
 #include "libs/arg.h"
+#include "libs/mode.h"
 
 static char text[BUFSIZ] = "";
 
@@ -98,6 +99,7 @@ struct item {
 };
 
 typedef struct {
+    unsigned int mode;
 	unsigned int mod;
 	KeySym keysym;
 	void (*func)(const Arg *);
@@ -138,8 +140,6 @@ static int isrtl = 1;
 static int isrtl = 0;
 static char fribidi_text[] = "";
 #endif
-
-#include "libs/mode.h"
 
 static Atom clip, utf8, types, dock;
 static Display *dpy;
@@ -1059,20 +1059,21 @@ keypress(XEvent *e)
 
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
-        if (selkeys) {
-            for (i = 0; i < LENGTH(inskeys); i++) {
-                if (keysym == inskeys[i].keysym && CLEANMASK(inskeys[i].mod) == CLEANMASK(ev->state) && inskeys[i].func)
-                    inskeys[i].func(&(inskeys[i].arg));
-            }
-        } else {
-            for (i = 0; i < LENGTH(normkeys); i++) {
-                if (keysym == normkeys[i].keysym && CLEANMASK(normkeys[i].mod) == CLEANMASK(ev->state) && normkeys[i].func)
-                    normkeys[i].func(&(normkeys[i].arg));
-            }
+        int iscont = 0;
+
+        for (i = 0; i < LENGTH(keys); i++) {
+            if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func)
+                if (keys[i].mode && curMode) {
+                    keys[i].func(&(keys[i].arg));
+                    return;
+                } else if (!keys[i].mode && !curMode) {
+                    keys[i].func(&(keys[i].arg));
+                    return;
+                } else
+                    continue;
         }
 
-        if (!iscntrl(*buf) && type && selkeys ) {
-
+        if (!iscntrl(*buf) && type && curMode ) {
             if (allowkeys) {
                 insert(buf, len);
             } else {
@@ -1588,13 +1589,13 @@ main(int argc, char *argv[])
     longestedge = MAX(imagewidth, imageheight);
 
     if (mode) {
-        selkeys = 1;
+        curMode = 1;
         allowkeys = 1;
 
         strcpy(modetext, instext);
     } else {
-        selkeys = 0;
-        allowkeys = !selkeys;
+        curMode = 0;
+        allowkeys = !curMode;
 
         strcpy(modetext, normtext);
     }

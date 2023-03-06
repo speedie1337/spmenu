@@ -1,10 +1,10 @@
 void
 switchmode(const Arg *arg)
 {
-    selkeys = !selkeys;
-    allowkeys = !selkeys;
+    curMode = !curMode;
+    allowkeys = !curMode;
 
-    if (!selkeys) {
+    if (!curMode) {
         strcpy(modetext, normtext);
     } else {
         strcpy(modetext, instext);

@@ -18,6 +18,13 @@
  * Once you're done with your edits, run 'make clean install'.
  */
 
+/* Modes
+ * 0: Normal mode
+ * 1: Insert mode
+ *
+ * Switch mode by calling switchmode
+ */
+
 /* Modifier keys
  * Mod4Mask | Super (Windows/command) key
  * Mod1Mask | Alt key
@@ -26,57 +33,53 @@
  */
 #define MODIFIER1              Mod1Mask
 
-static Key inskeys[] = {
-	/* modifier                     key           function         argument  */
-	{ 0,                            XK_Escape,    switchmode,      {0} },
+static Key keys[] = {
+	/* mode    modifier                      key           function         argument  */
+	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
 
-	{ 0,                            XK_Up,        move,            {.i = 1  } },
-	{ 0,                            XK_Down,      move,            {.i = 2  } },
-	{ 0,                            XK_Left,      move,            {.i = 3  } },
-	{ 0,                            XK_Right,     move,            {.i = 4  } },
-    { CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
-    { CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
-    { 0,                            XK_BackSpace, backspace,       {0} },
-    { 0,                            XK_Return,    selectitem,      {.i = +1 } },
-    { 0,                            XK_Tab,       complete,        {0} },
-};
+	{ 1,       0,                            XK_Up,        move,            {.i = 1  } },
+	{ 1,       0,                            XK_Down,      move,            {.i = 2  } },
+	{ 1,       0,                            XK_Left,      move,            {.i = 3  } },
+	{ 1,       0,                            XK_Right,     move,            {.i = 4  } },
+    { 1,       CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
+    { 1,       CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
+    { 1,       0,                            XK_BackSpace, backspace,       {0} },
+    { 1,       0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { 1,       0,                            XK_Tab,       complete,        {0} },
 
-static Key normkeys[] = {
-	/* modifier                     key           function         argument  */
-	{ 0,                            XK_i,         switchmode,      {0} },
+	{ 0,       0,                            XK_i,         switchmode,      {0} },
 
-    { CONTROL,                      XK_equal,     setimgsize,      {.i = +1 } },
-    { CONTROL,                      XK_minus,     setimgsize,      {.i = -1 } },
-    { 0,                            XK_equal,     setimgsize,      {.i = +10 } },
-    { 0,                            XK_minus,     setimgsize,      {.i = -10 } },
-    { SHIFT,                        XK_equal,     setimgsize,      {.i = +100 } },
-    { SHIFT,                        XK_minus,     setimgsize,      {.i = -100 } },
-    { 0,                            XK_d,         defaultimg,      {0} },
-    { 0,                            XK_r,         rotateimg,       {0} },
-    { 0,                            XK_t,         toggleimg,       {0} },
-    { 0,                            XK_h,         flipimagehoriz,  {0} },
-    { 0,                            XK_v,         flipimagevert,   {0} },
-	{ 0,                            XK_k,         move,            {.i = 1  } },
-	{ 0,                            XK_j,         move,            {.i = 2  } },
-	{ 0,                            XK_h,         move,            {.i = 3  } },
-	{ 0,                            XK_l,         move,            {.i = 4  } },
-    { CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
-    { CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
-    { CONTROL,                      XK_k,         restoresel,      {0} },
-    { CONTROL,                      XK_r,         viewhist,        {0} },
-    { CONTROL,                      XK_u,         clear,           {0} },
-    { 0,                            XK_Escape,    quit,            {0} },
-    { 0,                            XK_BackSpace, backspace,       {0} },
-    { 0,                            XK_Home,      movestart,       {0} },
-    { 0,                            XK_End,       moveend,         {0} },
-    { 0,                            XK_g,         movestart,       {0} },
-    { SHIFT,                        XK_g,         moveend,         {0} },
-    { 0,                            XK_Next,      movenext,        {0} },
-    { 0,                            XK_Prior,     moveprev,        {0} },
-    { 0,                            XK_Return,    selectitem,      {.i = +1 } },
-    { 0,                            XK_Tab,       complete,        {0} },
-    { MODIFIER1,                    XK_b,         moveword,        {.i = -1 } },
-    { MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
-    { MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
-    { MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
+    { 0,       CONTROL,                      XK_equal,     setimgsize,      {.i = +1 } },
+    { 0,       CONTROL,                      XK_minus,     setimgsize,      {.i = -1 } },
+    { 0,       0,                            XK_equal,     setimgsize,      {.i = +10 } },
+    { 0,       0,                            XK_minus,     setimgsize,      {.i = -10 } },
+    { 0,       SHIFT,                        XK_equal,     setimgsize,      {.i = +100 } },
+    { 0,       SHIFT,                        XK_minus,     setimgsize,      {.i = -100 } },
+    { 0,       0,                            XK_d,         defaultimg,      {0} },
+    { 0,       0,                            XK_r,         rotateimg,       {0} },
+    { 0,       0,                            XK_t,         toggleimg,       {0} },
+    { 0,       0,                            XK_h,         flipimagehoriz,  {0} },
+    { 0,       0,                            XK_v,         flipimagevert,   {0} },
+	{ 0,       0,                            XK_k,         move,            {.i = 1  } },
+	{ 0,       0,                            XK_j,         move,            {.i = 2  } },
+	{ 0,       0,                            XK_h,         move,            {.i = 3  } },
+	{ 0,       0,                            XK_l,         move,            {.i = 4  } },
+    { 0,       CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
+    { 0,       CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
+    { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
+    { 0,       CONTROL,                      XK_r,         viewhist,        {0} },
+    { 0,       CONTROL,                      XK_u,         clear,           {0} },
+    { 0,       0,                            XK_Escape,    quit,            {0} },
+    { 0,       0,                            XK_Home,      movestart,       {0} },
+    { 0,       0,                            XK_End,       moveend,         {0} },
+    { 0,       0,                            XK_g,         movestart,       {0} },
+    { 0,       SHIFT,                        XK_g,         moveend,         {0} },
+    { 0,       0,                            XK_Next,      movenext,        {0} },
+    { 0,       0,                            XK_Prior,     moveprev,        {0} },
+    { 0,       0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { 0,       0,                            XK_Tab,       complete,        {0} },
+    { 0,       MODIFIER1,                    XK_b,         moveword,        {.i = -1 } },
+    { 0,       MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
+    { 0,       MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
+    { 0,       MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
 };
