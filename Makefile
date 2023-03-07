@@ -27,7 +27,10 @@ spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:
-	rm -f spmenu $(OBJ) spmenu-$(VERSION).tar.gz
+	rm -f spmenu \
+		$(OBJ) \
+		spmenu-$(VERSION).tar.gz \
+		*zst*
 
 dist: clean
 	mkdir -p spmenu-$(VERSION)
@@ -77,12 +80,11 @@ man:
 
 pkg_arch: dist
 	command -v makepkg > /dev/null || exit 1
-	[ -f PKGBUILD ] && mkdir -p source && cp PKGBUILD *.tar.gz source/ || exit 1
-	cd source/
-	@SUM=$$(md5sum *.tar.gz | awk '{ print $1 }')
-	sed -i "s/VERSION/$(VERSION)/g; s/MD5SUM/$${SUM}/g" PKGBUILD
-	makepkg -sfr --sign && cp *zst* ../
-	cd ..
-	rm -rf source/
+	[ -f PKGBUILD ] || exit 1
+	cp -f PKGBUILD PKGBUILD.orig
+	sed -i "s/VERSION/$(VERSION)/g; s/MD5SUM/$$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
+	makepkg -sfr --sign || exit 1
+	rm -rf src/ pkg/ *.tar.gz
+	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
 
 .PHONY: all options clean dist install uninstall pkg_arch help man

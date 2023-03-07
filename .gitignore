@@ -1,5 +1,6 @@
 *.out
 *.o
-spmenu
 *zst*
+*sig*
 a.out
+spmenu
