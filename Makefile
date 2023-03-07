@@ -66,6 +66,7 @@ help:
 	@echo clean: Removes objects and tarballs.
 	@echo man: Generate man page for spmenu
 	@echo compat: Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
+	@echo pkg_arch: Creates an Arch package based on the PKGBUILD
 	@echo help: Displays this help sheet.
 
 man:
@@ -74,4 +75,14 @@ man:
 	pandoc --standalone --to man .man.md -o spmenu.1
 	rm -f .man.md
 
-.PHONY: all options clean dist install uninstall help man
+pkg_arch: dist
+	command -v makepkg > /dev/null || exit 1
+	[ -f PKGBUILD ] && mkdir -p source && cp PKGBUILD *.tar.gz source/ || exit 1
+	cd source/
+	@SUM=$$(md5sum *.tar.gz | awk '{ print $1 }')
+	sed -i "s/VERSION/$(VERSION)/g; s/MD5SUM/$${SUM}/g" PKGBUILD
+	makepkg -sfr --sign && cp *zst* ../
+	cd ..
+	rm -rf source/
+
+.PHONY: all options clean dist install uninstall pkg_arch help man

@@ -1,7 +1,7 @@
 # Maintainer: speedie <speedie.alt@gmail.com>
 
 pkgname=spmenu
-pkgver=0.2.1
+pkgver=VERSION
 pkgrel=1
 pkgdesc="speedie's fork of suckless dmenu with color support and more"
 url="https://git.speedie/gq/spmenu"
@@ -13,10 +13,9 @@ provides=($pkgname)
 conflicts=($pkgname)
 source=(
     "$pkgname-$pkgver.tar.gz"
-    #"https://ls.speedie.gq/releases/$pkgname/$pkgname-$pkgver.tar.gz"
 )
 
-md5sums=(98fa925eaa64a2096ab892a8216f5334)
+md5sums=(MD5SUM)
 
 build(){
   cd $pkgname-$pkgver
