@@ -1,3 +1,9 @@
+void
+prepare_window_size(void)
+{
+    sp = menupaddingh;
+	vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
+}
 
 void
 create_window(int x, int y, int w, int h)

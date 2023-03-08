@@ -106,11 +106,13 @@
 /* alpha */
 #define opaque 0xffU
 
-/* include enums */
+/* include headers */
 #include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/mode.h"
 #include "libs/xrdb.h"
+#include "libs/key.h"
+#include "libs/mouse.h"
 
 static char text[BUFSIZ] = "";
 
@@ -198,6 +200,7 @@ static void movewordedge(int dir);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
+static int max_textw(void);
 
 /* user configuration */
 #include "options.h" /* Include main header */
@@ -210,11 +213,6 @@ static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
-#include "libs/xrdb.c"
-#include "libs/mode.c"
-#include "libs/client.h"
-#include "libs/client.c"
-
 #if USEIMAGE
 static int longestedge = 0; /* longest edge */
 
@@ -225,11 +223,17 @@ static int longestedge = 0; /* longest edge */
 #include "libs/rtl.h"
 #include "libs/rtl.c"
 #endif
+#include "libs/key.c"
+#include "libs/mouse.c"
 #include "libs/draw.c"
 #include "libs/schemes.c"
 #include "libs/arg.c"
 #include "libs/argv.h"
 #include "libs/argv.c"
+#include "libs/xrdb.c"
+#include "libs/mode.c"
+#include "libs/client.h"
+#include "libs/client.c"
 
 void
 appenditem(struct item *item, struct item **list, struct item **last)
@@ -657,182 +661,6 @@ navigatehistfile(int dir)
 }
 
 void
-updatenumlockmask(void)
-{
-	unsigned int i, j;
-	XModifierKeymap *modmap;
-
-	numlockmask = 0;
-	modmap = XGetModifierMapping(dpy);
-	for (i = 0; i < 8; i++)
-		for (j = 0; j < modmap->max_keypermod; j++)
-			if (modmap->modifiermap[i * modmap->max_keypermod + j]
-				== XKeysymToKeycode(dpy, XK_Num_Lock))
-				numlockmask = (1 << i);
-	XFreeModifiermap(modmap);
-}
-
-void
-keypress(XEvent *e)
-{
-   	updatenumlockmask();
-    {
-        unsigned int i;
-        KeySym keysym;
-        XKeyEvent *ev;
-        char buf[64];
-        KeySym ksym = NoSymbol;
-        Status status;
-
-        int len = 0;
-        ev = &e->xkey;
-        len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
-
-        keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
-
-        for (i = 0; i < LENGTH(keys); i++) {
-            if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func) {
-                if ((keys[i].mode && curMode) || keys[i].mode == -1) {
-                    keys[i].func(&(keys[i].arg));
-                    return;
-                } else if (!keys[i].mode && !curMode) {
-                    keys[i].func(&(keys[i].arg));
-                } else {
-                    continue;
-                }
-            }
-        }
-
-        if (!iscntrl(*buf) && type && curMode ) {
-            if (allowkeys) {
-                insert(buf, len);
-            } else {
-                allowkeys = !allowkeys;
-            }
-
-            drawmenu();
-        }
-    }
-}
-
-void
-buttonpress(XEvent *e)
-{
-	struct item *item;
-	XButtonPressedEvent *ev = &e->xbutton;
-	int x = 0, y = 0, h = bh, w, item_num = 0;
-
-	if (ev->window != win)
-		return;
-
-	/* right-click: exit */
-	if (ev->button == Button3)
-		exit(1);
-
-	if (prompt && *prompt)
-		x += promptw;
-
-	/* input field */
-	w = (lines > 0 || !matches) ? mw - x : inputw;
-
-	/* left-click on input: clear input,
-	 * NOTE: if there is no left-arrow the space for < is reserved so
-	 *       add that to the input width */
-	if (ev->button == Button1 &&
-	   ((lines <= 0 && ev->x >= 0 && ev->x <= x + w +
-	   ((!prev || !curr->left) ? TEXTW(leftarrow) : 0)) ||
-	   (lines > 0 && ev->y >= y && ev->y <= y + h))) {
-		insert(NULL, -cursor);
-		drawmenu();
-		return;
-	}
-	/* middle-mouse click: paste selection */
-	if (ev->button == Button2) {
-		XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
-		                  utf8, utf8, win, CurrentTime);
-		drawmenu();
-		return;
-	}
-	/* scroll up */
-	if (ev->button == Button4 && prev) {
-		sel = curr = prev;
-		calcoffsets();
-		drawmenu();
-		return;
-	}
-	/* scroll down */
-	if (ev->button == Button5 && next) {
-		sel = curr = next;
-		calcoffsets();
-		drawmenu();
-		return;
-	}
-	if (ev->button != Button1)
-		return;
-	if (ev->state & ~ControlMask)
-		return;
-	if (lines > 0) {
-		/* vertical list: (ctrl)left-click on item */
-		w = mw - x;
-		for (item = curr; item != next; item = item->right) {
-			if (item_num++ == lines){
-				item_num = 1;
-				x += w / columns;
-				y = 0;
-			}
-			y += h;
-			if (ev->y >= y && ev->y <= (y + h) &&
-			    ev->x >= x && ev->x <= (x + w / columns)) {
-				puts(item->text);
-				if (!(ev->state & ControlMask))
-					exit(0);
-				sel = item;
-				if (sel) {
-					drawmenu();
-				}
-				return;
-			}
-		}
-	} else if (matches) {
-		/* left-click on left arrow */
-		x += inputw;
-		w = TEXTW(leftarrow);
-		if (prev && curr->left) {
-			if (ev->x >= x && ev->x <= x + w) {
-				sel = curr = prev;
-				calcoffsets();
-				drawmenu();
-				return;
-			}
-		}
-		/* horizontal list: (ctrl)left-click on item */
-		for (item = curr; item != next; item = item->right) {
-			x += w;
-			w = MIN(TEXTW(item->text), mw - x - TEXTW(rightarrow));
-			if (ev->x >= x && ev->x <= x + w) {
-				puts(item->text);
-				if (!(ev->state & ControlMask))
-					exit(0);
-				sel = item;
-				if (sel) {
-					drawmenu();
-				}
-				return;
-			}
-		}
-		/* left-click on right arrow */
-		w = TEXTW(rightarrow);
-		x = mw - w;
-		if (next && ev->x >= x && ev->x <= x + w) {
-			sel = curr = next;
-			calcoffsets();
-			drawmenu();
-			return;
-		}
-	}
-}
-
-void
 pastesel(void)
 {
 	char *p, *q;
@@ -1024,19 +852,19 @@ run(void)
 void
 setup(void)
 {
-	int x, y, i, j;
+	int x, y, i, j, di;
 	unsigned int du;
     unsigned int tmp, minstrlen = 0, curstrlen = 0;
     int numwidthchecks = 100;
     struct item *item;
 	XIM xim;
 	Window w, dw, *dws;
+    XWindowAttributes wa;
     #if USEXINERAMA
 	XineramaScreenInfo *info;
 	Window pw;
-	int a, di, n, area = 0;
+	int a, n, area = 0;
     #endif
-    XWindowAttributes wa;
 
     /* init appearance */
     init_appearance();
@@ -1079,6 +907,7 @@ setup(void)
             }
         }
     }
+
     #if USEXINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
@@ -1108,10 +937,12 @@ setup(void)
 		if (centered) {
 			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
+			//y = info[i].y_org + 0;
 			y = info[i].y_org + ((info[i].height - mh) / 2);
 		} else {
 		    x = info[i].x_org + dmx;
 			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
+			//y = info[i].y_org + 0;
 			mw = (dmw>0 ? dmw : info[i].width);
 		}
 
@@ -1192,15 +1023,19 @@ main(int argc, char *argv[])
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
-	if (!(dpy = XOpenDisplay(NULL)))
-		die("cannot open display");
-	screen = DefaultScreen(dpy);
+
+        if (!(dpy = XOpenDisplay(NULL)))
+		die("spmenu: cannot open display");
+
+    screen = DefaultScreen(dpy);
 	root = RootWindow(dpy, screen);
-	if (!embed || !(parentwin = strtol(embed, NULL, 0)))
+
+    if (!embed || !(parentwin = strtol(embed, NULL, 0)))
 		parentwin = root;
-	if (!XGetWindowAttributes(dpy, parentwin, &wa))
-		die("could not get embedding window attributes: 0x%lx",
-		    parentwin);
+
+    if (!XGetWindowAttributes(dpy, parentwin, &wa))
+		die("spmenu: could not get embedding window attributes: 0x%lx", parentwin);
+
 	xinitvisual();
 	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
 
@@ -1208,13 +1043,12 @@ main(int argc, char *argv[])
 	    die("no fonts could be loaded.");
 	lrpad = drw->font->h;
 
-	sp = menupaddingh;
-	vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
+    prepare_window_size();
 
-#ifdef __OpenBSD__
+    #ifdef __OpenBSD__
 	if (pledge("stdio rpath", NULL) == -1)
 		die("pledge");
-#endif
+    #endif
 
 	loadhistory();
 
