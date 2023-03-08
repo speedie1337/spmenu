@@ -39,11 +39,6 @@ static Key keys[] = {
      *
      * mode    modifier                      key           function         argument  */
 	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
-	{ 1,       0,                            XK_Up,        move,            {.i = 1  } },
-	{ 1,       0,                            XK_Down,      move,            {.i = 2  } },
-	{ 1,       0,                            XK_Left,      move,            {.i = 3  } },
-	{ 1,       0,                            XK_Right,     move,            {.i = 4  } },
-    { 1,       0,                            XK_BackSpace, backspace,       {0} },
 
 	/* normal mode
      *
@@ -86,4 +81,9 @@ static Key keys[] = {
     { -1,      0,                            XK_Tab,       complete,        {0} },
     { -1,      CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
     { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
+	{ -1,      0,                            XK_Up,        move,            {.i = 1  } },
+	{ -1,      0,                            XK_Down,      move,            {.i = 2  } },
+	{ -1,      0,                            XK_Left,      move,            {.i = 3  } },
+	{ -1,      0,                            XK_Right,     move,            {.i = 4  } },
+    { -1,      0,                            XK_BackSpace, backspace,       {0} },
 };
