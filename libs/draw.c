@@ -41,6 +41,7 @@ drawitem(struct item *item, int x, int y, int w)
     int lp = lrpad / 2; /* padding */
     int wr, rd;
 	int rw = 0; /* width of text */
+    int orw = 0;
 	int fg = 7;
 	int bg = 0;
     int bgfg = 0;
@@ -69,6 +70,7 @@ drawitem(struct item *item, int x, int y, int w)
 				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
+                orw += rw;
                 ib = 1;
                 lp = 0; /* no padding */
 
@@ -126,9 +128,11 @@ drawitem(struct item *item, int x, int y, int w)
 
 	buffer[wr] = '\0';
 
+    w -= orw;
+
     /* draw any text that doesn't use sgr sequences */
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w - rw, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+	int r = drw_text(drw, x, y, w, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
     if (!hidehighlight && !ib) drawhighlights(item, x, y, w - rw);
     return r;
