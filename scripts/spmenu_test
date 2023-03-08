@@ -100,7 +100,11 @@ ${v1}q${v2}w${v3}e${v4}r${v5}t${v6}y${v7}u${v8}i${v9}o${v10}p${v11}[${v12}]${v13
 <sup>qwertyuiop[]asdf - sup</sup>\n\
 <tt>qwertyuiop[]asdf</tt> - tt\n\
 <small>qwertyuiop[]asdf</small> - small\n\
-<big>qwertyuiop[]asdf</big> - big\n\n\
+<big>qwertyuiop[]asdf</big> - big\n\
+🏴‍☠️\
+🏴‍☠️\
+🏴‍☠️\
+\n\
 Arguments will be passed to spmenu.\n\
 Report any issues at the Codeberg repo.\n\
 " | spmenu -na -l 40 $IMAGEARG "$@" -g 1 -p "<big>spmenu <i>test</i> <small>script</small></big>"
