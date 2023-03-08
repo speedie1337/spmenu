@@ -301,30 +301,29 @@ out:
 void
 setimgsize(const Arg *arg)
 {
-    #if !USEIMAGE
-    return;
-    #endif
-
+    #if USEIMAGE
     setimagesize(imagewidth + arg->i, imageheight + arg->i);
+    #endif
 }
 
 void
 flipimg(const Arg *arg)
 {
-    #if !USEIMAGE
-    return;
-    #endif
+    #if USEIMAGE
 
     if (!image) return;
 
     flip = flip ? 0 : arg->i ? 1 : 2;
 
     drawmenu();
+
+    #endif
 }
 
 void
 setimgpos(const Arg *arg)
 {
+    #if USEIMAGE
     if (!image || hideimage) return;
 
     if (imageposition < 3) {
@@ -334,11 +333,13 @@ setimgpos(const Arg *arg)
     }
 
     drawmenu();
+    #endif
 }
 
 void
 setimggaps(const Arg *arg)
 {
+    #if USEIMAGE
     imagegaps += arg->i;
 
     if (!image || hideimage) return;
@@ -351,40 +352,38 @@ setimggaps(const Arg *arg)
         imagegaps -= arg->i;
 
     drawmenu();
+    #endif
 }
 
 void
 rotateimg(const Arg *arg)
 {
-    #if !USEIMAGE
-    return;
-    #endif
+    #if USEIMAGE
 
     if (!image || hideimage) return;
 
     rotation += arg->i ? arg->i : 1;
 
     drawmenu();
+    #endif
 }
 
 void
 toggleimg(const Arg *arg)
 {
-    #if !USEIMAGE
-    return;
-    #endif
+    #if USEIMAGE
 
     hideimage = !hideimage;
 
     drawmenu();
+
+    #endif
 }
 
 void
 defaultimg(const Arg *arg)
 {
-    #if !USEIMAGE
-    return;
-    #endif
+    #if USEIMAGE
 
     if (hideimage || !image) return;
 
@@ -395,4 +394,5 @@ defaultimg(const Arg *arg)
     }
 
     drawmenu();
+    #endif
 }

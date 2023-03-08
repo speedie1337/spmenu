@@ -11,6 +11,8 @@ a good more minimal alternative to spmenu.
 Unlike dmenu and the many builds out there, spmenu has features like color
 support, Vim-like modes, image support, proper keybind configuration, and more.
 
+Most of these features can be disabled during compile time by editing `toggle.mk`.
+
 ## 2. Usage
 
 On runtime, spmenu reads from standard input (stdin). spmenu items are

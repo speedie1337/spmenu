@@ -49,12 +49,12 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 - libXrender
 - freetype
 - imlib2
-  - Used for image support, can be disabled if you don't want this by editing host.mk and defining NOIMAGE
+  - Used for image support, can be disabled if you don't want this by editing `toggle.mk`.
 - libXinerama
-  - Can be disabled if you don't want/need multi-monitor support.
+  - Can be disabled if you don't want/need multi-monitor support, edit `toggle.mk`
 - tcc compiler (you can swap it out for GCC by passing CC="gcc" to the `make` command if you want)
 - Pango (for drawing fonts)
-  - If you do not want to use pango, consider my [older dmenu build](https://github.com/speedie-de/dmenu)
+  - If you do not want to use pango, edit `toggle.mk`
 
 ### Installation (most GNU/Linux distributions)
 

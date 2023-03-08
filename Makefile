@@ -27,8 +27,7 @@ spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:
-	rm -f spmenu \
-		$(OBJ) \
+	rm -f spmenu *.o \
 		spmenu-$(VERSION).tar.gz \
 		*zst* spmenu-$(VERSION).PKGBUILD
 

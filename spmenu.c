@@ -26,14 +26,21 @@
 #include <unistd.h>
 
 /* check if we should enable right to left language support */
-#ifdef NORTL
+#ifndef RTL
 #define USERTL 0
 #else
 #define USERTL 1
 #endif
 
+/* check if we should enable pango support */
+#ifndef PANGO
+#define USEPANGO 0
+#else
+#define USEPANGO 1
+#endif
+
 /* check if we should enable image support */
-#ifdef NOIMAGE
+#ifndef IMAGE
 #define USEIMAGE 0
 #else
 #define USEIMAGE 1
@@ -44,13 +51,6 @@
 #define USEXINERAMA 1
 #else
 #define USEXINERAMA 0
-#endif
-
-/* NOXINERAMA overrides XINERAMA */
-#ifdef NOXINERAMA
-#define USEXINERAMA 0
-#else
-#define USEXINERAMA 1
 #endif
 
 /* include right to left language library */
@@ -77,7 +77,10 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 #include <X11/Xft/Xft.h>
+
+#if USEPANGO
 #include <pango/pango.h>
+#endif
 
 #include "libs/sl/draw.h"
 #include "libs/sl/main.h"
@@ -159,6 +162,7 @@ static int rotation = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
+static int longestedge = 0;
 static int needredraw = 1;
 
 /* set an integer if to 1 if we have right to left language support enabled
@@ -216,14 +220,15 @@ static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 #if USEIMAGE
-static int longestedge = 0; /* longest edge */
-
 #include "libs/img.h"
 #include "libs/img.c"
 #endif
 #if USERTL
 #include "libs/rtl.h"
 #include "libs/rtl.c"
+#else
+#include "libs/rtl-none.h"
+#include "libs/rtl-none.c"
 #endif
 #include "libs/event.h"
 #include "libs/event.c"
@@ -998,7 +1003,7 @@ main(int argc, char *argv[])
 	xinitvisual();
 	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
 
-	if (!drw_font_create(drw, font))
+	if (!drw_font_create(drw, font, LENGTH(font)))
 	    die("no fonts could be loaded.");
 	lrpad = drw->font->h;
 
