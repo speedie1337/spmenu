@@ -3,6 +3,7 @@
 #include <Imlib2.h>
 #include <openssl/md5.h>
 
+static void setimagesize(int width, int height);
 static void setimageopts(void);
 static void cleanupimage(void);
 static void drawimage(void);

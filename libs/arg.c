@@ -305,25 +305,7 @@ setimgsize(const Arg *arg)
     return;
     #endif
 
-    /* this makes sure we cannot scale down the image too much */
-    if ((!image && imageheight + arg->i < imageheight) || hideimage) return;
-
-    cleanupimage();
-
-    imageheight += arg->i;
-    imagewidth += arg->i;
-
-    drawimage();
-
-    if (!image) {
-        imageheight -= arg->i;
-        imagewidth -= arg->i;
-        return;
-    } else {
-        drawimage();
-    }
-
-    drawmenu();
+    setimagesize(imagewidth + arg->i, imageheight + arg->i);
 }
 
 void

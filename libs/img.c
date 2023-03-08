@@ -1,4 +1,36 @@
 void
+setimagesize(int width, int height)
+{
+    #if !USEIMAGE
+    return;
+    #endif
+
+    int oih = 0;
+    int oiw = 0;
+
+    /* this makes sure we cannot scale down the image too much */
+    if ((!image && height < imageheight) || (!image && width < imagewidth) || hideimage) return;
+
+    cleanupimage();
+
+    oih = imageheight;
+    oiw = imagewidth;
+
+    imageheight = height;
+    imagewidth = width;
+
+    drawimage();
+
+    if (!image) {
+        imageheight = oih;
+        imagewidth = oiw;
+        return;
+    }
+
+    drawmenu();
+}
+
+void
 flipimage(void)
 {
     switch (flip) {
