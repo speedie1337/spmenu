@@ -30,11 +30,11 @@ clean:
 	rm -f spmenu \
 		$(OBJ) \
 		spmenu-$(VERSION).tar.gz \
-		*zst*
+		*zst* spmenu-$(VERSION).PKGBUILD
 
 dist: clean
 	mkdir -p spmenu-$(VERSION)
-	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ spmenu-$(VERSION)
+	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ PKGBUILD/ spmenu-$(VERSION)
 	[ -f spmenu.1 ] && cp spmenu.1 spmenu-$(VERSION) || :
 	tar -cf spmenu-$(VERSION).tar spmenu-$(VERSION)
 	gzip spmenu-$(VERSION).tar
