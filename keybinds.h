@@ -59,7 +59,7 @@ static Key keys[] = {
     { 0,       0,                            XK_2,         setimggaps,      {.i = +10 } },
     { 0,       SHIFT,                        XK_1,         setimggaps,      {.i = -100 } },
     { 0,       SHIFT,                        XK_2,         setimggaps,      {.i = +100 } },
-    { 0,       SHIFT,                        XK_t,         toggleimg,       {0} },
+    { 0,       0,                            XK_t,         toggleimg,       {0} },
     { 0,       0,                            XK_h,         flipimg,         {.i = 1  } },
     { 0,       0,                            XK_v,         flipimg,         {.i = 0  } },
 	{ 0,       0,                            XK_k,         move,            {.i = 1  } },
