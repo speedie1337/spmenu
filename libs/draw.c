@@ -66,7 +66,7 @@ drawitem(struct item *item, int x, int y, int w)
 				buffer[wr] = '\0'; /* clear out character */
 
                 apply_fribidi(buffer);
-                rw = TEXTW(buffer) - lrpad;
+                rw = MIN(w, TEXTW(buffer) - lrpad);
 				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
