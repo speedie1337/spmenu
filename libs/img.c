@@ -17,8 +17,6 @@ setimagesize(int width, int height)
     imageheight = height;
     imagewidth = width;
 
-    drawimage();
-
     if (!image) {
         imageheight = oih;
         imagewidth = oiw;
