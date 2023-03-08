@@ -5,10 +5,6 @@
  * If you're looking for functions used to draw images, see 'libs/img.c'
  * If you're looking for the .Xresources array, see 'libs/xresources.h'
  *
- * To disable certain features, pass one or more of the following to the compiler:
- *
- * NOXINERAMA, NORTL, NOIMAGE
- *
  * You don't need to edit spmenu.c if you aren't making big changes to the software.
  *
  * After making changes, run 'make clean install' to install and 'make' to attempt a compilation.

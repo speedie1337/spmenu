@@ -163,7 +163,11 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
 			prompt = argv[++i];
 		else if (!strcmp(argv[i], "-fn"))  /* font or font set */
-			strcpy(font, argv[++i]); /* font[0] = argv[++i]; */
+            #if USEPANGO
+			strcpy(font, argv[++i]);
+            #else
+			strcpy(font[0], argv[++i]);
+            #endif
 		else if (!strcmp(argv[i], "-nmt"))  /* normal mode text */
 			strcpy(normtext, argv[++i]);
 		else if (!strcmp(argv[i], "-imt")) {  /* insert mode text */

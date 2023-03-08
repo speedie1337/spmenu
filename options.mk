@@ -2,7 +2,7 @@
 # See LICENSE file for copyright details.
 
 # spmenu version
-VERSION = 0.2.1
+VERSION = 0.2.2
 
 # includes and libs
 INCS = -I$(X11INC) -I$(FREETYPEINC) $(BDINC) `pkg-config --cflags xft $(PANGO_CONF) $(PANGO_XFT_CONF)`
