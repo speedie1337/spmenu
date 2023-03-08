@@ -323,6 +323,18 @@ flipimg(const Arg *arg)
 }
 
 void
+setimgpos(const Arg *arg)
+{
+    if (imageposition++ > 3) {
+        imageposition = 0;
+    } else {
+        imageposition++;
+    }
+
+    drawmenu();
+}
+
+void
 rotateimg(const Arg *arg)
 {
     #if !USEIMAGE
