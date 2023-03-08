@@ -80,9 +80,9 @@ spmenu.instext:            Insert
 spmenu.pango_item:         1
 spmenu.pango_prompt:       1
 spmenu.pango_input:        1
-spmenu.pango_leftarrow:    1
-spmenu.pango_rightarrow:   1
-spmenu.pango_numbers:      1
-spmenu.pango_mode:         1
-spmenu.pango_password:     1
+spmenu.pango_leftarrow:    0
+spmenu.pango_rightarrow:   0
+spmenu.pango_numbers:      0
+spmenu.pango_mode:         0
+spmenu.pango_password:     0
 spmenu.pango_highlight:    1

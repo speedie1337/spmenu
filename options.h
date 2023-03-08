@@ -142,11 +142,11 @@ static int pango_item                  = 1; /* Enable support for pango markup f
 static int pango_highlight             = 1; /* Enable support for pango markup for the highlighting */
 static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */
 static int pango_input                 = 1; /* Enable support for pango markup for user input */
-static int pango_leftarrow             = 1; /* Enable support for pango markup for the left arrow */
-static int pango_rightarrow            = 1; /* Enable support for pango markup for the right arrow */
-static int pango_numbers               = 1; /* Enable support for pango markup for the match count */
-static int pango_mode                  = 1; /* Enable support for pango markup for the mode indicator */
-static int pango_password              = 1; /* Enable support for pango markup for the password text */
+static int pango_leftarrow             = 0; /* Enable support for pango markup for the left arrow */
+static int pango_rightarrow            = 0; /* Enable support for pango markup for the right arrow */
+static int pango_numbers               = 0; /* Enable support for pango markup for the match count */
+static int pango_mode                  = 0; /* Enable support for pango markup for the mode indicator */
+static int pango_password              = 0; /* Enable support for pango markup for the password text */
 
 /* Alpha options */
 #define fgalpha                        opaque /* Foreground alpha */
