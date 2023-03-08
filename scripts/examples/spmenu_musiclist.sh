@@ -46,7 +46,7 @@ main() {
     [ -n "$maxcount" ] && c="$maxcount"
     [ -n "$startline" ] && c="$startline"
 
-    sel_file="$(create_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"
+    sel_file="$(create_list | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_ARGS | sed "s/\&amp;/\&/g")"
     play
     rm -f "$prefix"/cover*.jpg # cleanup
 }
