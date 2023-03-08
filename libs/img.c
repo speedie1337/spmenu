@@ -17,6 +17,10 @@ setimagesize(int width, int height)
     imageheight = height;
     imagewidth = width;
 
+    drawimage();
+
+    needredraw = 0;
+
     if (!image) {
         imageheight = oih;
         imagewidth = oiw;
@@ -68,6 +72,12 @@ drawimage(void)
     char *limg = NULL;
 
     if (!lines || hideimage) return;
+
+    /* to prevent the image from being drawn multiple times */
+    if (!needredraw) {
+        needredraw = 1;
+        return;
+    }
 
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
         if (longestedge)

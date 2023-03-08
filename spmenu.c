@@ -159,6 +159,7 @@ static int rotation = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
+static int needredraw = 1;
 
 /* set an integer if to 1 if we have right to left language support enabled
  * doing it this way, because we can reduce the amount of #if and #else lines used.
