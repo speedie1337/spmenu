@@ -325,11 +325,26 @@ flipimg(const Arg *arg)
 void
 setimgpos(const Arg *arg)
 {
-    if (imageposition++ > 3) {
-        imageposition = 0;
+    if (imageposition < 3) {
+        imageposition += arg->i;
     } else {
-        imageposition++;
+        imageposition = 0;
     }
+
+    drawmenu();
+}
+
+void
+setimggaps(const Arg *arg)
+{
+    imagegaps += arg->i;
+
+    if (imagegaps < 0)
+        imagegaps = 0;
+
+    /* limitation to make sure we have a reasonable gap size */
+    if (imagegaps > imagewidth / 2)
+        imagegaps -= arg->i;
 
     drawmenu();
 }
