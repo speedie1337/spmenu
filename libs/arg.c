@@ -319,8 +319,6 @@ flipimg(const Arg *arg)
 
     flip = flip ? 0 : arg->i ? 1 : 2;
 
-    cleanupimage();
-    drawimage();
     drawmenu();
 }
 
@@ -335,8 +333,6 @@ rotateimg(const Arg *arg)
 
     rotation++;
 
-    cleanupimage();
-    drawimage();
     drawmenu();
 }
 
@@ -347,12 +343,9 @@ toggleimg(const Arg *arg)
     return;
     #endif
 
-    cleanupimage();
-
     hideimage = !hideimage;
 
     drawmenu();
-    drawimage();
 }
 
 void
@@ -371,5 +364,4 @@ defaultimg(const Arg *arg)
     }
 
     drawmenu();
-    drawimage();
 }

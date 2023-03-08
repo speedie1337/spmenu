@@ -37,6 +37,7 @@ eventloop(void)
 			break;
 		}
 
+        /* redraw image on X11 event */
         #if USEIMAGE
         drawimage();
         #endif

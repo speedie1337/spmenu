@@ -11,8 +11,6 @@ setimagesize(int width, int height)
     /* this makes sure we cannot scale the image up or down too much */
     if ((!image && height < imageheight) || (!image && width < imagewidth) || width > mw || hideimage) return;
 
-    cleanupimage();
-
     oih = imageheight;
     oiw = imagewidth;
 
