@@ -172,8 +172,7 @@ spmenu -ic - Position the image in the center
 .IP \[bu] 2
 spmenu -itc - Position the image in the top center
 .IP \[bu] 2
-spmenu -wm - Spawn spmenu as a window manager controlled client/window.
-Useful for testing
+spmenu -wm - Spawn spmenu as a window manager controlled client
 .IP \[bu] 2
 spmenu -v - Print spmenu version to stdout
 .IP \[bu] 2
@@ -315,12 +314,12 @@ the image will not be drawn.
 Any text after the Tab character will be interpreted as a regular item.
 In practice, drawing an image might look like this:
 .PP
-\f[V]printf \[dq]IMG:/path/to/image\[rs]tThis is text, look at that image, isn\[aq]t it awesome?\[rs]n\[dq] | spmenu\f[R]
+\f[V]printf \[dq]IMG:/path/to/image\[rs]tLook at that image, isn\[aq]t it awesome?\[rs]n\[dq] | spmenu\f[R]
 .PP
-There are also a few image related arguments, such as \f[V]-is\f[R],
-\f[V]-ig\f[R], \f[V]-it\f[R], \f[V]-ib\f[R], \f[V]-ic\f[R],
-\f[V]-itc\f[R] and \f[V]-gc\f[R].
-Be careful with the image size (-is) argument though.
+There are also a few image related arguments, such as:
+.PP
+\f[V]-is\f[R], \f[V]-ig\f[R], \f[V]-it\f[R], \f[V]-ib\f[R],
+\f[V]-ic\f[R], \f[V]-itc\f[R] and \f[V]-gc\f[R].
 .SS 8. Colored text
 .PP
 spmenu supports colored text through SGR sequences.

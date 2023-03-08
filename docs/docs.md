@@ -1,19 +1,28 @@
-# spmenu
+spmenu
+======
 ![image](/docs/preview.png)
 
 ## 1. What is spmenu?
 
-spmenu is a program for X11 that reads standard input and allows the user to select items separated by a newline. It is a fork of suckless's dmenu which is a good more minimal alternative to spmenu.
+spmenu is a program for X11 that reads standard input and allows the user to
+select items separated by a newline. It is a fork of suckless's dmenu which is
+a good more minimal alternative to spmenu.
 
-Unlike dmenu and the many builds out there, spmenu has features like color support, Vim-like modes, image support, proper keybind configuration, and more.
+Unlike dmenu and the many builds out there, spmenu has features like color
+support, Vim-like modes, image support, proper keybind configuration, and more.
 
 ## 2. Usage
 
-On runtime, spmenu reads from standard input (stdin). spmenu items are separated by a newline (`\n`). When (by default) Enter is pressed, the selected item will be piped to stdout.
+On runtime, spmenu reads from standard input (stdin). spmenu items are
+separated by a newline (`\n`). When (by default) Enter is pressed, the selected
+item will be piped to stdout.
 
-This allows things like `printf "Apple\nOrange\nPear\n" | spmenu`. This command will spawn an spmenu window with three items, 'Apple', 'Orange' and 'Pear'. This can be used in shell scripts to create interactive menus.
+This allows things like `printf "Apple\nOrange\nPear\n" | spmenu`. This command
+will spawn an spmenu window with three items, 'Apple', 'Orange' and 'Pear'.
+This can be used in shell scripts to create interactive menus.
 
-On top of this, you can specify arguments to change the behavior of spmenu. See a list below for a list.
+On top of this, you can specify arguments to change the behavior of spmenu.
+See a list below for a list.
 
 ## 3. Arguments
 
@@ -80,7 +89,7 @@ On top of this, you can specify arguments to change the behavior of spmenu. See 
 - spmenu -ib            - Position the image at the bottom
 - spmenu -ic            - Position the image in the center
 - spmenu -itc           - Position the image in the top center
-- spmenu -wm            - Spawn spmenu as a window manager controlled client/window. Useful for testing
+- spmenu -wm            - Spawn spmenu as a window manager controlled client
 - spmenu -v             - Print spmenu version to stdout
 
 - spmenu -fn  font      - Set the spmenu font to font
@@ -139,28 +148,50 @@ See `keybinds.h` for a list.
 
 ## 5. Modes
 
-One of the features that separate spmenu from dmenu is spmenu's different modes. As of version 0.2, there are two modes. Normal mode and Insert mode. These modes are of course similar to Vim.
+One of the features that separate spmenu from dmenu is spmenu's different
+modes. As of version 0.2, there are two modes. Normal mode and Insert mode.
+These modes are of course similar to Vim.
 
-Normal mode is the mode spmenu starts in unless a mode argument is specified. In normal mode, all keys perform some action, but you cannot type any actual text to filter items. This mode is used for navigation, as well as quickly selecting an item.
+Normal mode is the mode spmenu starts in unless a mode argument is specified.
+In normal mode, all keys perform some action, but you cannot type any actual
+text to filter items. This mode is used for navigation, as well
+as quickly selecting an item.
 
-Insert mode is entered through (by default) pressing `i` in normal mode. In this mode, most keybinds do nothing. When you are in insert mode, you filter items by typing text into the field. Once you're done with insert mode, you can press Escape to enter normal mode again.
+Insert mode is entered through (by default) pressing `i` in normal mode. In
+this mode, most keybinds do nothing. When you are in insert mode, you
+filter items by typing text into the field. Once you're done
+with insert mode, you can press Escape to enter normal mode again.
 
 ## 6. -p option
 
-spmenu has a -p option, which stands for prompt. It allows you to specify text to display next to the item list. It is displayed on the left side of the spmenu window. It should be noted that the prompt is purely visual though.
+spmenu has a -p option, which stands for prompt. It allows you to specify
+text to display next to the item list. It is displayed on the left side of the
+spmenu window. It should be noted that the prompt is purely visual though.
 
 ## 7. Images
 
-spmenu supports drawing images. This image is placed on the left side of the menu window. To use an image, pipe `IMG:/path/to/image` to spmenu. If you want you can specify arguments like usual. Note that you should add a Tab (`\t`) character after the path to the image file. Otherwise the text after will be interpreted as part of the filename and the image will not be drawn.
+spmenu supports drawing images. This image is placed on the left side of
+the menu window. To use an image, pipe `IMG:/path/to/image` to spmenu.
+If you want you can specify arguments like usual. Note that you should add
+a Tab (`\t`) character after the path to the image file. Otherwise the text
+after will be interpreted as part of the filename and the image will not be drawn.
 
-Any text after the Tab character will be interpreted as a regular item. In practice, drawing an image might look like this:
+Any text after the Tab character will be interpreted as a regular item.
+In practice, drawing an image might look like this:
 
-`printf "IMG:/path/to/image\tThis is text, look at that image, isn't it awesome?\n" | spmenu`
+`printf "IMG:/path/to/image\tLook at that image, isn't it awesome?\n" | spmenu`
 
-There are also a few image related arguments, such as `-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`. Be careful with the image size (-is) argument though.
+There are also a few image related arguments, such as:
+
+`-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`.
 
 ## 8. Colored text
 
-spmenu supports colored text through SGR sequences. This is the same colors that you might already be using in your shell scripts. This means you can pipe practically any colored shell script straight into spmenu, no need to filter the output or anything.
+spmenu supports colored text through SGR sequences. This is the same colors
+that you might already be using in your shell scripts. This means you can
+pipe practically any colored shell script straight into spmenu,
+no need to filter the output or anything.
 
-A list of SGR sequences will not be provided here, but spmenu supports most color sequences. There are also a few arguments, you can override SGR colors on-the-fly using the `-sgr` arguments.
+A list of SGR sequences will not be provided here, but spmenu supports most
+color sequences. There are also a few arguments, you can override SGR
+colors on-the-fly using the `-sgr` arguments.
