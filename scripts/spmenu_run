@@ -1,8 +1,10 @@
 #!/bin/sh
 [ ! -f "$HOME/.config/spmenu/spmenu_run.conf" ] && \
-    mkdir -p "$HOME/.config/spmenu/spmenu_run.conf" && \
-    touch "$HOME/.config/spmenu/spmenu_run.conf" || \
-    . "$HOME/.config/spmenu/spmenu_run.conf"
+    mkdir -p "$HOME/.config/spmenu"; \
+    touch "$HOME/.config/spmenu/spmenu_run.conf"
+
+[ -f "$HOME/.config/spmenu/spmenu_run.conf" ] && \
+    "$HOME/.config/spmenu/spmenu_run.conf"
 
 [ -z "$TERMINAL" ] && TERMINAL="st -e"
 [ -z "$BROWSER"  ] && BROWSER="xdg-open"

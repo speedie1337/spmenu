@@ -343,7 +343,7 @@ rotateimg(const Arg *arg)
 
     if (!image) return;
 
-    rotation++;
+    rotation += arg->i ? arg->i : 1;
 
     drawmenu();
 }
