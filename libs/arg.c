@@ -325,6 +325,8 @@ flipimg(const Arg *arg)
 void
 setimgpos(const Arg *arg)
 {
+    if (!image || hideimage) return;
+
     if (imageposition < 3) {
         imageposition += arg->i;
     } else {
@@ -338,6 +340,8 @@ void
 setimggaps(const Arg *arg)
 {
     imagegaps += arg->i;
+
+    if (!image || hideimage) return;
 
     if (imagegaps < 0)
         imagegaps = 0;
@@ -356,7 +360,7 @@ rotateimg(const Arg *arg)
     return;
     #endif
 
-    if (!image) return;
+    if (!image || hideimage) return;
 
     rotation += arg->i ? arg->i : 1;
 
