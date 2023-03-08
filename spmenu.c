@@ -191,7 +191,6 @@ static size_t nextrune(int inc);
 
 static void drawmenu(void);
 static void calcoffsets(void);
-static void run(void);
 static void readstdin(void);
 static void recalculatenumbers(void);
 static void usage(void);
@@ -200,6 +199,8 @@ static void movewordedge(int dir);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
+static void grabfocus(void);
+static void pastesel(void);
 static int max_textw(void);
 
 /* user configuration */
@@ -223,6 +224,8 @@ static int longestedge = 0; /* longest edge */
 #include "libs/rtl.h"
 #include "libs/rtl.c"
 #endif
+#include "libs/event.h"
+#include "libs/event.c"
 #include "libs/key.c"
 #include "libs/mouse.c"
 #include "libs/draw.c"
@@ -805,51 +808,6 @@ readstdin(void)
 }
 
 void
-run(void)
-{
-	XEvent ev;
-
-	while (!XNextEvent(dpy, &ev)) {
-		if (XFilterEvent(&ev, win))
-			continue;
-		switch(ev.type) {
-		case DestroyNotify:
-			if (ev.xdestroywindow.window != win)
-				break;
-			cleanup();
-			exit(1);
-		case ButtonPress:
-			buttonpress(&ev);
-			break;
-		case Expose:
-			if (ev.xexpose.count == 0)
-				drw_map(drw, win, 0, 0, mw, mh);
-			break;
-		case FocusIn:
-			/* regrab focus from parent window */
-			if (ev.xfocus.window != win)
-				grabfocus();
-			break;
-		case KeyPress:
-			keypress(&ev);
-			break;
-		case SelectionNotify:
-			if (ev.xselection.property == utf8)
-				pastesel();
-			break;
-		case VisibilityNotify:
-			if (ev.xvisibility.state != VisibilityUnobscured)
-				XRaiseWindow(dpy, win);
-			break;
-		}
-
-        #if USEIMAGE
-        drawimage();
-        #endif
-	}
-}
-
-void
 setup(void)
 {
 	int x, y, i, j, di;
@@ -1068,7 +1026,7 @@ main(int argc, char *argv[])
     }
 
 	setup();
-	run();
+	eventloop();
 
 	return 1; /* unreachable */
 }
