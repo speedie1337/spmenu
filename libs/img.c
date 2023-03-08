@@ -311,7 +311,7 @@ jumptoindex(unsigned int index) {
 	unsigned int i;
 	sel = curr = matches;
 	calcoffsets();
-	for(i = 1; i < index; ++i) {
+	for (i = 1; i < index; ++i) {
 		if(sel && sel->right && (sel = sel->right) == next) {
 			curr = next;
 			calcoffsets();
@@ -325,15 +325,15 @@ resizetoimageheight(int imageheight)
 	int omh = mh, olines = lines;
 	lines = reallines;
 
-	if(lines * bh < imageheight + imagegaps * 2)
-        lines = (imageheight+imagegaps*2)/bh;
+	if (lines * bh < imageheight + imagegaps * 2)
+        lines = (imageheight + imagegaps * 2) / bh;
 
 	mh = (lines + 1) * bh;
 
-	if(mh - bh < imageheight + imagegaps * 2)
-        mh = imageheight+imagegaps*2+bh;
+	if (mh - bh < imageheight + imagegaps * 2)
+        mh = imageheight + imagegaps * 2 + bh;
 
-	if(!win || omh == mh)
+	if (!win || omh == mh)
         return;
 
 	XResizeWindow(dpy, win, mw, mh);
@@ -342,6 +342,7 @@ resizetoimageheight(int imageheight)
 	if (olines != lines) {
        	struct item *item;
 		unsigned int i = 1;
+
 		for (item = matches; item && item != sel; item = item->right)
             ++i;
 

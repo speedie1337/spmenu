@@ -1,28 +1,35 @@
 void
 drawhighlights(struct item *item, int x, int y, int maxw)
 {
-	int i, indent;
-	char *highlight;
-	char c;
-
-	if (!(strlen(item->text) && strlen(text)))
-		return;
+	char restorechar, tokens[sizeof text], *highlight,  *token;
+	int indentx, highlightlen;
+	char *itemtext = item->text;
 
 	drw_setscheme(drw, scheme[item == sel ? SchemeSelHighlight : SchemeNormHighlight]);
-	for (i = 0, highlight = item->text; *highlight && text[i];) {
-		if (!fstrncmp(&text[i], highlight, 1)) {
-			c = highlight[1];
-			highlight[1] = '\0';
+	strcpy(tokens, text);
 
-			/* get indentation */
-			indent = TEXTW(item->text);
+	for (token = strtok(tokens, " "); token; token = strtok(NULL, " ")) {
+		highlight = fstrstr(itemtext, token);
+		while (highlight) {
+			highlightlen = highlight - itemtext;
+			restorechar = *highlight;
+			itemtext[highlightlen] = '\0';
+			indentx = TEXTW(itemtext);
+			itemtext[highlightlen] = restorechar;
 
-			/* highlight character */
-			drw_text(drw, x + indent - lrpad, y, MIN(maxw - indent, TEXTW(highlight) - lrpad), bh, 0, highlight, 0, pango_highlight ? True : False);
-			highlight[1] = c;
-			i++;
+			restorechar = highlight[strlen(token)];
+			highlight[strlen(token)] = '\0';
+
+			if (indentx - (lrpad / 2) - 1 < maxw)
+				drw_text(drw, x + indentx - (lrpad / 2) - 1, y, MIN(maxw - indentx, TEXTW(highlight) - lrpad), bh, 0, highlight, 0, pango_highlight ? True : False);
+
+			highlight[strlen(token)] = restorechar;
+
+			if (strlen(highlight) - strlen(token) < strlen(token))
+				break;
+
+			highlight = fstrstr(highlight + strlen(token), token);
 		}
-		highlight++;
 	}
 }
 
