@@ -55,6 +55,7 @@ See a list below for a list.
 - spmenu -bw            - Width of the border. 0 will disable the border
 - spmenu -so            - Sort matches
 - spmenu -nso           - Don't sort matches
+- spmenu -pri priority  - Specify a list of items that take priority
 - spmenu -s             - Use case-sensitive matching
 - spmenu -i             - Use case-insensitive matching
 - spmenu -nm            - Start spmenu in normal mode
@@ -99,6 +100,10 @@ See a list below for a list.
 - spmenu -nib color     - Set the normal item background color
 - spmenu -sif color     - Set the selected item foreground color
 - spmenu -sib color     - Set the selected item background color
+- spmenu -npf color     - Set the normal item (high priority) foreground color
+- spmenu -npb color     - Set the normal item (high priority) background color
+- spmenu -spf color     - Set the selected item (high priority) foreground color
+- spmenu -spb color     - Set the selected item (high priority) background color
 - spmenu -pfg color     - Set the prompt foreground color
 - spmenu -pbg color     - Set the prompt background color
 - spmenu -ifg color     - Set input foreground color

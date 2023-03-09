@@ -48,6 +48,7 @@ static int casesensitive               = 0; /* Case-sensitive by default? (0/1) 
 static int preselected                 = 0; /* Which line should spmenu preselect? */
 static int accuratewidth               = 1; /* Enable accurate width. May have a performance hit if you are matching a lot of items at once */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
+static char **hpitems                  = NULL; /* High priority items */
 
 /* Line options */
 static int lineheight                  = 5; /* Line height (0: Calculate automatically) */
@@ -79,6 +80,10 @@ static char col_itemnormfg[]           = "#bbbbbb"; /* Normal foreground item co
 static char col_itemnormbg[]           = "#222222"; /* Normal background item color */
 static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
 static char col_itemselbg[]            = "#35638A"; /* Selected background item color */
+static char col_itemnormprifg[]        = "#bbbbbb"; /* Normal foreground item (high priority) color */
+static char col_itemnormpribg[]        = "#222222"; /* Normal background item (high priority) color */
+static char col_itemselprifg[]         = "#eeeeee"; /* Selected foreground item (high priority) color */
+static char col_itemselpribg[]         = "#35638A"; /* Selected background item (high priority) color */
 
 /* Input colors */
 static char col_inputbg[]              = "#222222"; /* Input field background color */

@@ -141,6 +141,8 @@ readargs(int argc, char *argv[])
 		    menupaddingv = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-hp")) {
 		    menupaddingh = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-pri")) {
+            parse_hpitems(argv[++i]);
 		} else if (!strcmp(argv[i], "-ig")) {
 		    imagegaps = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-la")) {
@@ -208,6 +210,14 @@ readargs(int argc, char *argv[])
 			colors[SchemeItemSel][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-sib")) { /* selected item background color */
 			colors[SchemeItemSel][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-npf")) { /* normal item priority foreground color */
+			colors[SchemeItemNormPri][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-npb")) { /* normal item priority background color */
+			colors[SchemeItemNormPri][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-spf")) { /* selected item priority foreground color */
+			colors[SchemeItemSelPri][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-spb")) { /* selected item priority background color */
+			colors[SchemeItemSelPri][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-mbg")) { /* menu color */
 			colors[SchemeMenu][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-pfg")) { /* prompt fg color */
@@ -307,6 +317,7 @@ usage(void)
 		  "spmenu -bw            Width of the border. 0 will disable the border\n"
           "spmenu -so            Sort matches\n"
           "spmenu -nso           Don't sort matches\n"
+          "spmenu -pri <pri>     Specify a list of items that take priority\n"
 		  "spmenu -s             Use case-sensitive matching\n"
 		  "spmenu -i             Use case-insensitive matching\n"
           "spmenu -nm            Start spmenu in normal mode\n"
@@ -354,6 +365,10 @@ usage(void)
           "spmenu -nib <color>   Set the normal item background color\n"
           "spmenu -sif <color>   Set the selected item foreground color\n"
           "spmenu -sib <color>   Set the selected item background color\n"
+          "spmenu -npf <color>   Set the normal item (high priority) foreground color\n"
+          "spmenu -npb <color>   Set the normal item (high priority) background color\n"
+          "spmenu -spf <color>   Set the selected item (high priority) foreground color\n"
+          "spmenu -spb <color>   Set the selected item (high priority) background color\n"
           "spmenu -pfg <color>   Set the prompt foreground color\n"
           "spmenu -pbg <color>   Set the prompt background color\n"
           "spmenu -ifg <color>   Set input foreground color\n"

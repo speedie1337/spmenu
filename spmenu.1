@@ -14,7 +14,7 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "spmenu" "1" "" "0.2.1" "dynamic menu"
+.TH "spmenu" "1" "" "0.2.2" "dynamic menu"
 .hy
 .SH spmenu
 .SS 1. What is spmenu?
@@ -103,6 +103,8 @@ spmenu -so - Sort matches
 .IP \[bu] 2
 spmenu -nso - Don\[cq]t sort matches
 .IP \[bu] 2
+spmenu -pri priority - Specify a list of items that take priority
+.IP \[bu] 2
 spmenu -s - Use case-sensitive matching
 .IP \[bu] 2
 spmenu -i - Use case-insensitive matching
@@ -188,6 +190,16 @@ spmenu -nib color - Set the normal item background color
 spmenu -sif color - Set the selected item foreground color
 .IP \[bu] 2
 spmenu -sib color - Set the selected item background color
+.IP \[bu] 2
+spmenu -npf color - Set the normal item (high priority) foreground color
+.IP \[bu] 2
+spmenu -npb color - Set the normal item (high priority) background color
+.IP \[bu] 2
+spmenu -spf color - Set the selected item (high priority) foreground
+color
+.IP \[bu] 2
+spmenu -spb color - Set the selected item (high priority) background
+color
 .IP \[bu] 2
 spmenu -pfg color - Set the prompt foreground color
 .IP \[bu] 2

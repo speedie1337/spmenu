@@ -50,8 +50,14 @@ drawitem(struct item *item, int x, int y, int w)
 
     if (item == sel) {
         memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
+
+        if (item->hp)
+            memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
     } else {
         memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+
+        if (item->hp)
+            memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
     }
 
     /* set scheme */

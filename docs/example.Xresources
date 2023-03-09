@@ -4,6 +4,10 @@ spmenu.col_itemnormfg:     #bbbbbb
 spmenu.col_itemnormbg:     #222222
 spmenu.col_itemselfg:      #eeeeee
 spmenu.col_itemselbg:      #35638A
+spmenu.col_itemnormprifg:  #bbbbbb
+spmenu.col_itemnormpribg:  #222222
+spmenu.col_itemselprifg:   #eeeeee
+spmenu.col_itemselpribg:   #35638A
 spmenu.col_menubgcolor:    #222222
 spmenu.col_promptfg:       #eeeeee
 spmenu.col_promptbg:       #35526b
