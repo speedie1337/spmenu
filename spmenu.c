@@ -157,13 +157,15 @@ static int screen;
 static int managed = 0;
 
 /* image globals */
+#if USEIMAGE
 static int flip = 0;
 static int rotation = 0;
+static int needredraw = 1;
+#endif
+static int longestedge = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
-static int longestedge = 0;
-static int needredraw = 1;
 
 /* set an integer if to 1 if we have right to left language support enabled
  * doing it this way, because we can reduce the amount of #if and #else lines used.
@@ -759,8 +761,10 @@ readstdin(void)
 	char buf[sizeof text], *p;
 	size_t i, imax = 0, itemsiz = 0;
 	unsigned int tmpmax = 0;
+    #if USEIMAGE
     int w, h;
     char *limg = NULL;
+    #endif
 
 	if (passwd){
     	inputw = lines = 0;
@@ -846,7 +850,10 @@ readstdin(void)
 void
 setup(void)
 {
-	int x, y, i, j, di;
+	int x, y, i;
+    #if USEXINERAMA
+    int j, di;
+    #endif
 	unsigned int du;
     unsigned int tmp, minstrlen = 0, curstrlen = 0;
     int numwidthchecks = 100;

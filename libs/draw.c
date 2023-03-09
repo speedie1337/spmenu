@@ -150,7 +150,9 @@ drawmenu(void)
 	unsigned int curpos = 0;
 	struct item *item;
 	int x = 0, y = 0, fh = drw->font->h, w;
+    #if USEIMAGE
     int ox = 0;
+    #endif
 	char *censort;
 
 	drw_setscheme(drw, scheme[SchemeMenu]);
@@ -170,7 +172,9 @@ drawmenu(void)
 		    drw_setscheme(drw, scheme[SchemePrompt]);
         }
 
+        #if USEIMAGE
         ox = x;
+        #endif
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 	}
 	/* draw input field */
