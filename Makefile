@@ -33,7 +33,7 @@ clean:
 
 dist: clean
 	mkdir -p spmenu-$(VERSION)
-	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ PKGBUILD/ spmenu-$(VERSION)
+	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ PKGBUILD spmenu-$(VERSION)
 	[ -f spmenu.1 ] && cp spmenu.1 spmenu-$(VERSION) || :
 	tar -cf spmenu-$(VERSION).tar spmenu-$(VERSION)
 	gzip spmenu-$(VERSION).tar
