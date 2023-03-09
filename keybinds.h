@@ -67,7 +67,7 @@ static Key keys[] = {
 	{ 0,       0,                            XK_h,         move,            {.i = 3  } },
 	{ 0,       0,                            XK_l,         move,            {.i = 4  } },
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
-    { 0,       CONTROL,                      XK_r,         viewhist,        {0} },
+    { 0,       CONTROL,                      XK_h,         viewhist,        {0} },
     { 0,       CONTROL,                      XK_u,         clear,           {0} },
     { 0,       0,                            XK_Escape,    quit,            {0} },
     { 0,       0,                            XK_Home,      movestart,       {0} },
