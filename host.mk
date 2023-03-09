@@ -4,6 +4,9 @@
 # compiler
 CC           = tcc
 
+# optimization
+OPT          = -O2
+
 # paths
 PREFIX       = /usr
 MANPREFIX 	 = ${PREFIX}/share/man
@@ -40,7 +43,7 @@ OPENSSLCONF  = openssl
 #X11LIB      = /opt/X11/lib
 
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XINERAMATOGGLE) $(BDTOGGLE) $(PANGOTOGGLE) $(IMLIB2TOGGLE)
-CFLAGS   = -std=c99 -pedantic -Wall -O2 $(INCS) $(CPPFLAGS)
+CFLAGS   = -std=c99 -pedantic -Wall $(OPT) $(INCS) $(CPPFLAGS)
 LDFLAGS  = $(LIBS)
 INCS = -I$(X11INC) -I$(FREETYPEINC) -I$(BDINC) `pkg-config --cflags $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF)`
 LIBS = -L$(X11LIB) $(X11LIBS) $(XINERAMALIBS) $(FREETYPELIBS) $(XRENDERLIBS) -lm `pkg-config --libs $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF)` $(BDLIBS) $(IMLIB2LIBS)
