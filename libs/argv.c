@@ -142,7 +142,7 @@ readargs(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-hp")) {
 		    menupaddingh = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-pri")) {
-            parse_hpitems(argv[++i]);
+            hpitems = tokenize(argv[++i], ",", &hplength);
 		} else if (!strcmp(argv[i], "-ig")) {
 		    imagegaps = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-la")) {

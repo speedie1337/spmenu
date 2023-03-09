@@ -1,2 +1,2 @@
-static int str_compar(const void *s0_in, const void *s1_in);
-static void parse_hpitems(char *src);
+static char **tokenize(char *source, const char *delim, int *llen);
+static int arrayhas(char **list, int length, char *item);

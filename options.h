@@ -48,7 +48,6 @@ static int casesensitive               = 0; /* Case-sensitive by default? (0/1) 
 static int preselected                 = 0; /* Which line should spmenu preselect? */
 static int accuratewidth               = 1; /* Enable accurate width. May have a performance hit if you are matching a lot of items at once */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
-static char **hpitems                  = NULL; /* High priority items */
 
 /* Line options */
 static int lineheight                  = 5; /* Line height (0: Calculate automatically) */

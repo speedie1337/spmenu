@@ -1,22 +1,35 @@
-int
-str_compar(const void *s0_in, const void *s1_in)
+char **
+tokenize(char *source, const char *delim, int *llen)
 {
-	const char *s0 = *(const char **)s0_in;
-	const char *s1 = *(const char **)s1_in;
-	return fstrncmp == strncasecmp ? strcasecmp(s0, s1) : strcmp(s0, s1);
+	int listlength = 0, list_size = 0;
+	char **list = NULL, *token;
+
+	token = strtok(source, delim);
+	while (token) {
+		if (listlength + 1 >= list_size) {
+			if (!(list = realloc(list, (list_size += 8) * sizeof(*list))))
+				die("Unable to realloc %zu bytes\n", list_size * sizeof(*list));
+		}
+		if (!(list[listlength] = strdup(token)))
+			die("Unable to strdup %zu bytes\n", strlen(token) + 1);
+		token = strtok(NULL, delim);
+		listlength++;
+	}
+
+	*llen = listlength;
+	return list;
 }
 
-void
-parse_hpitems(char *src)
+int
+arrayhas(char **list, int length, char *item)
 {
-	int n = 0;
-	char *t;
+	int i;
 
-	for (t = strtok(src, ","); t; t = strtok(NULL, ",")) {
-		if (hplength + 1 >= n) {
-			if (!(hpitems = realloc(hpitems, (n += 8) * sizeof *hpitems)))
-				die("Unable to realloc %zu bytes\n", n * sizeof *hpitems);
-		}
-		hpitems[hplength++] = t;
+	for (i = 0; i < length; i++) {
+		size_t len1 = strlen(list[i]);
+		size_t len2 = strlen(item);
+		if (!fstrncmp(list[i], item, len1 > len2 ? len2 : len1))
+			return 1;
 	}
+	return 0;
 }

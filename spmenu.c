@@ -135,6 +135,7 @@ typedef struct {
 
 static char numbers[NUMBERSBUFSIZE] = "";
 static int hplength = 0;
+static char **hpitems = NULL;
 static char *embed;
 static int numlockmask = 0;
 static int bh, mw, mh;
@@ -320,8 +321,13 @@ cleanup(void)
     #endif
 
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
+
 	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);
+
+    for (i = 0; i < hplength; ++i)
+		free(hpitems[i]);
+
 	drw_free(drw);
 	XSync(dpy, False);
 	XCloseDisplay(dpy);
@@ -410,6 +416,8 @@ fuzzymatch(void)
 	/* bang - we have so much memory */
 	struct item *it;
 	struct item **fuzzymatches = NULL;
+    struct item *lhpprefix, *hpprefixend;
+	lhpprefix = hpprefixend = NULL;
 	char c;
 	int number_of_matches = 0, i, pidx, sidx, eidx;
 	int text_len = strlen(text), itext_len;
@@ -458,14 +466,24 @@ fuzzymatch(void)
 			fuzzymatches[i] = it;
 		}
 		/* sort matches according to distance */
-		qsort(fuzzymatches, number_of_matches, sizeof(struct item*), compare_distance);
+        if (sortmatches) qsort(fuzzymatches, number_of_matches, sizeof(struct item*), compare_distance);
+
 		/* rebuild list of matches */
 		matches = matchend = NULL;
 		for (i = 0, it = fuzzymatches[i];  i < number_of_matches && it && \
 				it->text; i++, it = fuzzymatches[i]) {
-			appenditem(it, &matches, &matchend);
+
+            if (sortmatches && it->hp)
+                appenditem(it, &lhpprefix, &hpprefixend);
+
+            appenditem(it, &matches, &matchend);
 		}
 		free(fuzzymatches);
+	}
+
+    if (lhpprefix) {
+		hpprefixend->right = matches;
+		matches = lhpprefix;
 	}
 
 	curr = sel = matches;
@@ -515,10 +533,10 @@ match(void)
 			appenditem(item, &matches, &matchend);
         else {
             /* exact matches go first, then prefixes with high priority, then prefixes, then substrings */
-			if (!tokc || !fstrncmp(text, item->text, textsize))
-				appenditem(item, &matches, &matchend);
-            else if (item->hp && !fstrncmp(tokv[0], item->text, len))
+            if (item->hp && !fstrncmp(tokv[0], item->text, len))
 			    appenditem(item, &lhpprefix, &hpprefixend);
+            else if (!tokc || !fstrncmp(text, item->text, textsize))
+				appenditem(item, &matches, &matchend);
 			else if (!fstrncmp(tokv[0], item->text, len))
 				appenditem(item, &lprefix, &prefixend);
 			else
@@ -749,9 +767,6 @@ readstdin(void)
     	return;
   	}
 
-    if (hpitems && hplength > 0)
-	    qsort(hpitems, hplength, sizeof *hpitems, str_compar);
-
 	/* read each line from stdin and add it to the item list */
 	for (i = 0; fgets(buf, sizeof buf, stdin); i++) {
       	if (i + 1 >= itemsiz) {
@@ -763,11 +778,7 @@ readstdin(void)
 			*p = '\0';
 		if (!(items[i].text = strdup(buf)))
 			die("cannot strdup %u bytes:", strlen(buf) + 1);
-        p = hpitems == NULL ? NULL : bsearch(
-			&items[i].text, hpitems, hplength, sizeof *hpitems,
-			str_compar
-		);
-		items[i].hp = p != NULL;
+        items[i].hp = arrayhas(hpitems, hplength, items[i].text);
 		drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
 		if (tmpmax > inputw) {
 			inputw = tmpmax;
