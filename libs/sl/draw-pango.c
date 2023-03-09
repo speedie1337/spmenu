@@ -96,7 +96,7 @@ xfont_free(Fnt *font)
 }
 
 Fnt*
-drw_font_create(Drw* drw, const char *font[], size_t fontcount)
+drw_font_create(Drw* drw, char *font[], size_t fontcount)
 {
 	Fnt *fnt = NULL;
 
