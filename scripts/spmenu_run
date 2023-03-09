@@ -9,13 +9,13 @@
 [ -z "$TERMINAL" ] && TERMINAL="st -e"
 [ -z "$BROWSER"  ] && BROWSER="xdg-open"
 [ -z "$TORRENT"  ] && TORRENT="qbittorrent"
-[ -z "$HISTFILE" ] && HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
+[ -z "$HISTORY" ] && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
 
 path() { echo "$PATH" | tr ':' '\n' | uniq | sed 's#$#/#' | xargs ls -lu --time-style=+%s 2>&1 | awk '/^(-|l)/ { print $6, $7 }' | sort -rn | cut -d' ' -f 2 2>&1; }
 
 # run spmenu and parse it
 parse() {
-    dout="$(path | sed "s/\&/\&amp;/g" | spmenu -im -H "$HISTFILE" "$@")"
+    dout="$(path | sed "s/\&/\&amp;/g" | spmenu -im -H "$HISTORY" "$@")"
 
     [ "$(printf '%c' "$dout")" = "#" ] && RUN_ARG="$TERMINAL"
     [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && "$TORRENT" "$(printf "$dout" | sed "s/magnet //")" && return
