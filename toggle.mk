@@ -1,4 +1,4 @@
-# spmenu
+# spmenu - dynamic menu
 # See LICENSE file for copyright details.
 
 # Multi-monitor support.
@@ -11,7 +11,7 @@ XINERAMATOGGLE = -DXINERAMA
 # Comment these lines if you don't need it.
 BDLIBS         = -lfribidi
 BDINC          = /usr/include/fribidi
-BDTOGGLE 	   = -DFRIBIDI
+BDTOGGLE 	   = -DRTL
 
 # Pango
 # Comment these lines if you don't need it.

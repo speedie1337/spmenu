@@ -59,7 +59,8 @@ compat:
 	ln -s $(DESTDIR)$(PREFIX)/bin/spmenu_run $(DESTDIR)$(PREFIX)/bin/dmenu_run
 
 uninstall:
-		  $(DESTDIR)$(PREFIX)/bin/spmenu*\
+		rm -f \
+		  $(DESTDIR)$(PREFIX)/bin/spmenu*
 
 help:
 	@echo install: Installs spmenu. You may need to run this as root.
