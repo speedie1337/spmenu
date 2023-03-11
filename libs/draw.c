@@ -168,9 +168,7 @@ drawmenu(void)
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 	if (prompt && *prompt) {
-        if (colorprompt) {
-		    drw_setscheme(drw, scheme[SchemePrompt]);
-        }
+		drw_setscheme(drw, scheme[SchemePrompt]);
 
         #if USEIMAGE
         ox = x;
@@ -208,24 +206,31 @@ drawmenu(void)
         numberWidth = TEXTW(numbers);
     }
 
-    /* draw stuff */
+    // draw items and image
 	if (lines > 0) {
+		int i = 0;
+        int xpad = 0;
 
-        /* draw image first */
+        // indent items to prompt width?
+        if (indentitems) {
+            xpad = 0; // x -= 0
+        } else {
+            xpad = promptw; // x -= prompt width so no indentation to prompt width
+        }
+
+        // draw image first
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
             x = ox;
             x += (imagegaps * 2) + imagewidth;
+            x += xpad;
         }
         #endif
-
-		/* draw grid */
-		int i = 0;
 
 		for (item = curr; item != next; item = item->right, i++)
 			drawitem(
 				item,
-				x + ((i / lines) *  ((mw - x) / columns)),
+				x + ((i / lines) *  ((mw - x) / columns)) - xpad,
 				y + (((i % lines) + 1) * bh),
 				(mw - x) / columns
 			);

@@ -100,12 +100,11 @@ ResourcePref resources[] = {
 	{ "menuposition",        INTEGER, &menuposition },
 	{ "menupaddingv",        INTEGER, &menupaddingv },
 	{ "menupaddingh",        INTEGER, &menupaddingh },
-
+    { "indentitems",         INTEGER, &indentitems },
     { "accuratewidth",       INTEGER, &accuratewidth },
     { "alpha",               INTEGER, &alpha },
     { "type",                INTEGER, &type },
     { "preselected",         INTEGER, &preselected },
-    { "colorprompt",         INTEGER, &colorprompt },
     { "password",            STRING,  &password },
 	{ "prompt",              STRING,  &prompt },
 	{ "class",               STRING,  &class },

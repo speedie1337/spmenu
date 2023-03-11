@@ -40,10 +40,10 @@ See a list below for a list.
 - spmenu -P             - Hide characters
 - spmenu -Ps symbol     - Set the password symbol to symbol
 - spmenu -p text        - Set spmenu prompt text to text
+- spmenu -ip            - Indent items to prompt width
+- spmenu -nip           - Don't indent items to prompt width
 - spmenu -a             - Enable alpha
 - spmenu -na            - Disable alpha
-- spmenu -cp            - Color prompt
-- spmenu -ncp           - Don't color prompt
 - spmenu -tp            - Allow the user to type
 - spmenu -nt            - Don't allow typing, the user must select an option
 - spmenu -x x offset    - Offset spmenu x position by x offset

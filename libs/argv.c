@@ -81,10 +81,6 @@ readargs(int argc, char *argv[])
 				alpha = 0;
 		} else if (!strcmp(argv[i], "-a")) { /* alpha */
 				alpha = 1;
-        } else if (!strcmp(argv[i], "-cp")) { /* color prompt */
-                colorprompt = 1;
-        } else if (!strcmp(argv[i], "-ncp")) { /* no color prompt */
-                colorprompt = 0;
         } else if (!strcmp(argv[i], "-tp")) { /*  allow the user to type */
                 type = 1;
         } else if (!strcmp(argv[i], "-nt")) { /*  don't allow the user to type */
@@ -123,6 +119,10 @@ readargs(int argc, char *argv[])
 				hideimage = 1;
 		} else if (!strcmp(argv[i], "-si")) {  /* don't hide image */
 				hideimage = 0;
+		} else if (!strcmp(argv[i], "-ip")) {  /* indent to prompt width */
+				indentitems = 1;
+		} else if (!strcmp(argv[i], "-nip")) {  /* don't indent to prompt width */
+				indentitems = 0;
         } else if (i + 1 == argc)
             fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
@@ -201,6 +201,11 @@ readargs(int argc, char *argv[])
             if(sscanf(buf, "%dx%d", &imagewidth, &imageheight) == 1)
                 imageheight = imagewidth;
 
+        } else if (!strcmp(argv[i], "-w")) { /* embedding window id */
+			embed = argv[++i];
+        } else if (!strcmp(argv[i], "-n")) { /* preselected item */
+		    preselected = atoi(argv[++i]);
+
         /* spmenu colors */
         } else if (!strcmp(argv[i], "-nif")) { /* normal item foreground color */
 			colors[SchemeItemNorm][ColFg] = argv[++i];
@@ -256,7 +261,8 @@ readargs(int argc, char *argv[])
 			colors[SchemeRArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-bc")) { /* border */
 			colors[SchemeBorder][ColBg] = argv[++i];
-        }
+        } else if (!strcmp(argv[i], "-cc"))   /* caret color */
+			colors[SchemeCaret][ColFg] = argv[++i];
 
         /* sgr colors */
 		else if (!strcmp(argv[i], "-sgr0")) textcolors[0] = argv[++i]; /* sgr color 0 */
@@ -275,12 +281,6 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-sgr13")) textcolors[13] = argv[++i]; /* sgr color 13 */
 		else if (!strcmp(argv[i], "-sgr14")) textcolors[14] = argv[++i]; /* sgr color 14 */
 		else if (!strcmp(argv[i], "-sgr15")) textcolors[15] = argv[++i]; /* sgr color 15 */
-		else if (!strcmp(argv[i], "-cc"))  /* caret color */
-			colors[SchemeCaret][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-w"))   /* embedding window id */
-			embed = argv[++i];
-    	else if (!strcmp(argv[i], "-n"))   /* preselected item */
-		    preselected = atoi(argv[++i]);
 		else
             fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 }
@@ -302,10 +302,10 @@ usage(void)
 		  "spmenu -P             Hide characters\n"
           "spmenu -Ps <symbol>   Set the password symbol to <symbol>\n"
 		  "spmenu -p <text>      Set spmenu prompt text to <text>\n"
+          "spmenu -ip            Indent items to prompt width\n"
+          "spmenu -nip           Don't indent items to prompt width\n"
           "spmenu -a             Enable alpha\n"
           "spmenu -na            Disable alpha\n"
-          "spmenu -cp            Color prompt\n"
-          "spmenu -ncp           Don't color prompt\n"
           "spmenu -tp            Allow the user to type\n"
           "spmenu -nt            Don't allow typing, the user must select an option\n"
 		  "spmenu -x <x offset>  Offset spmenu x position by <x offset>\n"

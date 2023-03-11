@@ -1,4 +1,5 @@
 ! spmenu default configuration in .Xresources format
+
 spmenu.font:               Noto Sans Mono 8
 spmenu.col_itemnormfg:     #bbbbbb
 spmenu.col_itemnormbg:     #222222
@@ -56,7 +57,6 @@ spmenu.casesensitive:      0
 spmenu.menuposition:       1
 spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
-spmenu.colorprompt:        1
 spmenu.preselected:        0
 spmenu.type:               1
 spmenu.class:              spmenu
@@ -71,6 +71,7 @@ spmenu.imageposition:      0
 spmenu.generatecache:      1
 spmenu.mode:               0
 spmenu.fast:               0
+spmenu.indentitems:        0
 spmenu.hidematchcount:     0
 spmenu.hidemode:           0
 spmenu.hidelarrow:         0
