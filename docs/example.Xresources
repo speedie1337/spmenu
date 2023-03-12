@@ -71,7 +71,7 @@ spmenu.imageposition:      0
 spmenu.generatecache:      1
 spmenu.mode:               0
 spmenu.fast:               0
-spmenu.indentitems:        0
+spmenu.indentitems:        1
 spmenu.hidematchcount:     0
 spmenu.hidemode:           0
 spmenu.hidelarrow:         0
