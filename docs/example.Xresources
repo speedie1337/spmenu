@@ -46,8 +46,7 @@ spmenu.col_sgrcolor14:     #00ffff
 spmenu.col_sgrcolor15:     #ffffff
 spmenu.alpha:              1
 spmenu.accuratewidth:      1
-spmenu.bordercentered:     1
-spmenu.borderwidth:        2
+spmenu.borderwidth:        0
 spmenu.lineheight:         5
 spmenu.lines:              0
 spmenu.columns:            10

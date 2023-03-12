@@ -15,22 +15,11 @@ create_window(int x, int y, int w, int h)
 	swa.colormap = cmap;
 	swa.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask | ButtonPressMask | PointerMotionMask;
 
-    if (!bordercentered) {
-        win = XCreateWindow(dpy, parentwin, x, y, w, h, borderwidth,
-                            depth, InputOutput, visual,
-                            CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-    } else {
-		if (!centered) {
-				win = XCreateWindow(dpy, parentwin, x, y, w, h, 0,
-						depth, InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-		} else {
-				win = XCreateWindow(dpy, parentwin, x, y, w, h, borderwidth,
-	                    depth, InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
-				}
+    // create client
+    win = XCreateWindow(dpy, parentwin, x, y, w, h, borderwidth,
+                        depth, InputOutput, visual,
+                        CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
 
-    }
 
     return;
 }

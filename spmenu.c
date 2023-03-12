@@ -972,7 +972,7 @@ setup(void)
 	match();
 
 	/* create menu window */
-    create_window(x + sp, y + vp, mw - 2 * sp, mh);
+    create_window(x + sp, y + vp - (menuposition ? 0 : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
     set_window();
     set_prop();
 

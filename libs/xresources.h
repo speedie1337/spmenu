@@ -112,7 +112,6 @@ ResourcePref resources[] = {
     { "rightarrow",          STRING,  &rightarrow },
     { "normtext",            STRING,  &normtext },
     { "instext",             STRING,  &instext },
-	{ "bordercentered",      INTEGER, &bordercentered },
 	{ "borderwidth",         INTEGER, &borderwidth },
 	{ "lines",               INTEGER, &lines },
     { "lineheight",          INTEGER, &lineheight },

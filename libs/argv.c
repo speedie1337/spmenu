@@ -152,7 +152,6 @@ readargs(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-m")) /* monitor */
 			mon = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-bw")) { /* border width */
-            bordercentered = 0;
 		    borderwidth = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-H")) /* hist file location */
 			histfile = argv[++i];
