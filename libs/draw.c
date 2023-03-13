@@ -244,11 +244,6 @@ drawmenu(void)
 			);
         }
 
-        if (lines > i) {
-            lines = i;
-            resizeclient();
-        }
-
 	} else if (matches) {
 		/* draw horizontal list */
 		x += inputw;
