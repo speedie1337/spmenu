@@ -14,6 +14,11 @@ readargs(int argc, char *argv[])
     }
 
     if (xresources) {
+        if (loadconfig) {
+            int cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
+            int hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
+        }
+
         load_xresources();
     }
 
@@ -77,6 +82,12 @@ readargs(int argc, char *argv[])
             generatecache = 0;
 		} else if (!strcmp(argv[i], "-wm")) { /* display as managed wm window */
 				managed = 1;
+		} else if (!strcmp(argv[i], "-nwm")) { /* don't display as managed wm window */
+				managed = 0;
+		} else if (!strcmp(argv[i], "-lcfg")) { /* load config */
+				loadconfig = 1;
+		} else if (!strcmp(argv[i], "-ncfg")) { /* don't load config */
+				loadconfig = 0;
 		} else if (!strcmp(argv[i], "-na")) { /* disable alpha */
 				alpha = 0;
 		} else if (!strcmp(argv[i], "-a")) { /* alpha */
@@ -355,6 +366,9 @@ usage(void)
           "spmenu -ic            Position the image in the center\n"
           "spmenu -itc           Position the image in the top center\n"
           "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
+          "spmenu -nwm           Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
+          "spmenu -lcfg          Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -ncfg          Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
           "spmenu -v             Print spmenu version to stdout\n"
           "\n", stdout);
           fputs("- Appearance arguments -\n"

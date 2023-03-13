@@ -154,7 +154,6 @@ static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int screen;
-static int managed = 0;
 
 /* image globals */
 #if USEIMAGE

@@ -60,6 +60,8 @@ spmenu.preselected:        0
 spmenu.type:               1
 spmenu.class:              spmenu
 spmenu.mon:                -1
+spmenu.managed:            0
+spmenu.loadconfig:         0
 spmenu.leftarrow:          <
 spmenu.rightarrow:         >
 spmenu.password:           .

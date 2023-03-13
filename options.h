@@ -7,6 +7,7 @@
 static char class[]                    = "spmenu"; /* Class for spmenu */
 static int fast                        = 0; /* Grab keyboard first */
 static int xresources                  = 1; /* Enable .Xresources support */
+static int loadconfig                  = 1; /* Load configuration (~/.spmenurc or ~/.config/spmenu/spmenurc) on runtime */
 static int mon                         = -1; /* Monitor to run spmenu on */
 
 /* Window options */
@@ -16,6 +17,7 @@ static int menupaddingv				   = 0; /* Vertical padding of bar (in pixels) */
 static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
 static int minwidth                    = 500; /* Minimum width */
 static int centered                    = 0; /* Whether or not to center spmenu by default */
+static int managed                     = 0; /* Let your window manager manage spmenu? */
 
 /* Image options */
 static int imagewidth                  = 86; /* Default image width */

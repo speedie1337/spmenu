@@ -95,6 +95,9 @@ See a list below for a list.
 - spmenu -ic            - Position the image in the center
 - spmenu -itc           - Position the image in the top center
 - spmenu -wm            - Spawn spmenu as a window manager controlled client
+- spmenu -nwm           - Don't spawn spmenu as a window manager controlled client
+- spmenu -lcfg          - Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
+- spmenu -ncfg          - Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
 - spmenu -v             - Print spmenu version to stdout
 
 - spmenu -fn  font      - Set the spmenu font to font
