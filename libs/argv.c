@@ -137,7 +137,12 @@ readargs(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-nip")) {  /* don't indent to prompt width */
 				indentitems = 0;
         } else if (i + 1 == argc) {
-                fprintf(stderr, "spmenu: The '%s' option requires an argument.\n", argv[i-1]);
+                int arg = i;
+
+                if (arg != 1)
+                    fprintf(stderr, "spmenu: The '%s' option requires an argument.\n", argv[i-1]);
+                else
+                    fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
 		/* these options take one argument */
         } else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
