@@ -56,3 +56,21 @@ keypress(XEvent *e)
         }
     }
 }
+
+void
+grabkeyboard(void)
+{
+	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
+	int i;
+
+	if (embed || managed)
+		return;
+	/* try to grab keyboard, we may have to wait for another process to ungrab */
+	for (i = 0; i < 1000; i++) {
+		if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
+		                  GrabModeAsync, CurrentTime) == GrabSuccess)
+			return;
+		nanosleep(&ts, NULL);
+	}
+	die("cannot grab keyboard");
+}

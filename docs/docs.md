@@ -80,6 +80,8 @@ See a list below for a list.
 - spmenu -shl           - Show highlight
 - spmenu -si            - Show image
 - spmenu -xrdb          - Load .Xresources on runtime
+- spmenu -nxrdb         - Don't load .Xresources on runtime
+- spmenu -m monitor     - Specify a monitor to run spmenu on
 - spmenu -w window id   - Embed spmenu inside window id
 - spmenu -H hist file   - Specify a path to save the history to
 - spmenu -ig gaps       - Set image gaps to gaps

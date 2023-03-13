@@ -123,11 +123,11 @@ readargs(int argc, char *argv[])
 				indentitems = 1;
 		} else if (!strcmp(argv[i], "-nip")) {  /* don't indent to prompt width */
 				indentitems = 0;
-        } else if (i + 1 == argc)
-            fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
+        } else if (i + 1 == argc) {
+                fprintf(stderr, "spmenu: The '%s' option requires an argument.\n", argv[i]);
 
 		/* these options take one argument */
-		else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
+        } else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
 			columns = atoi(argv[++i]);
 			if (lines == 0) lines = 1;
 		} else if (!strcmp(argv[i], "-Ps")) { /* password symbol */
@@ -164,7 +164,6 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
 			prompt = argv[++i];
 		else if (!strcmp(argv[i], "-fn"))  /* font or font set */
-			//strcpy(font[0], argv[++i]);
             font[0] = argv[++i];
 		else if (!strcmp(argv[i], "-nmt"))  /* normal mode text */
 			strcpy(normtext, argv[++i]);

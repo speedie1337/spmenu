@@ -30,12 +30,10 @@ static char normtext[]                 = "Normal"; /* Text to display for normal
 static char instext[]                  = "Insert"; /* Text to display for insert mode */
 
 /* Window border options */
-static int borderwidth                 = 0; /* Width of the border */
+static int borderwidth                 = 2; /* Width of the border */
 
 /* Font options */
-static char *font[]                    = {
-    "Noto Sans Mono 8", /* Font to draw text and Pango markup with. */
-};
+static char *font[]                    = { "Noto Sans Mono 8" }; /* Font to draw text and Pango markup with. */
 
 /* Symbol options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */
