@@ -11,10 +11,16 @@ readargs(int argc, char *argv[])
 			xresources = 1;
 		else if (!strcmp(argv[i], "-nxrdb"))   /* no xresources */
 			xresources = 0;
+		else if (!strcmp(argv[i], "-lcfg")) /* load config */
+				loadconfig = 1;
+		else if (!strcmp(argv[i], "-ncfg")) /* don't load config */
+				loadconfig = 0;
     }
 
     if (xresources) {
         if (loadconfig) {
+            load_xresources();
+
             int cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
             int hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
         }
@@ -84,10 +90,6 @@ readargs(int argc, char *argv[])
 				managed = 1;
 		} else if (!strcmp(argv[i], "-nwm")) { /* don't display as managed wm window */
 				managed = 0;
-		} else if (!strcmp(argv[i], "-lcfg")) { /* load config */
-				loadconfig = 1;
-		} else if (!strcmp(argv[i], "-ncfg")) { /* don't load config */
-				loadconfig = 0;
 		} else if (!strcmp(argv[i], "-na")) { /* disable alpha */
 				alpha = 0;
 		} else if (!strcmp(argv[i], "-a")) { /* alpha */
