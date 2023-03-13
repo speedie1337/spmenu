@@ -29,3 +29,5 @@ static void rotateimg(const Arg *arg);
 static void flipimg(const Arg *arg);
 static void setimgpos(const Arg *arg);
 static void setimggaps(const Arg *arg);
+static void setlines(const Arg *arg);
+static void setcolumns(const Arg *arg);

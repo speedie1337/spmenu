@@ -130,6 +130,7 @@ match(void)
 				appenditem(item, &lsubstr, &substrend);
 		}
 	}
+
     if (lhpprefix) {
 		if (matches) {
 			matchend->right = lhpprefix;

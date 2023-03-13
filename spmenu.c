@@ -199,7 +199,6 @@ static void calcoffsets(void);
 static void readstdin(void);
 static void recalculatenumbers(void);
 static void usage(void);
-static void match(void);
 static void movewordedge(int dir);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
@@ -225,8 +224,6 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/img.c"
 #include "libs/rtl.h"
 #include "libs/rtl.c"
-#include "libs/match.h"
-#include "libs/match.c"
 #include "libs/event.h"
 #include "libs/event.c"
 #include "libs/key.c"
@@ -234,13 +231,15 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/sort.c"
 #include "libs/draw.c"
 #include "libs/schemes.c"
-#include "libs/arg.c"
 #include "libs/argv.h"
 #include "libs/argv.c"
 #include "libs/xrdb.c"
 #include "libs/mode.c"
 #include "libs/client.h"
 #include "libs/client.c"
+#include "libs/match.h"
+#include "libs/match.c"
+#include "libs/arg.c"
 
 void
 appenditem(struct item *item, struct item **list, struct item **last)
@@ -683,8 +682,8 @@ setup(void)
         reqlineheight = clineheight;
     }
 
-	/* calculate menu geometry */
-	bh = drw->font->h + 2 + reqlineheight;
+    // resize client
+    bh = drw->font->h + 2 + reqlineheight;
 	lines = MAX(lines, 0);
     reallines = lines;
 
@@ -693,7 +692,7 @@ setup(void)
         resizetoimageheight(imageheight);
     #endif
 
-	mh = (lines + 1) * bh;
+    mh = (lines + 1) * bh;
 	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
 
     if (accuratewidth) {

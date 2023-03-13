@@ -42,3 +42,24 @@ set_prop(void)
 
     return;
 }
+
+void
+resizeclient(void)
+{
+    int omh = mh;
+
+	bh = drw->font->h + 2 + reqlineheight;
+	lines = MAX(lines, 0);
+
+    #if USEIMAGE
+    if (image)
+        resizetoimageheight(imageheight);
+    #endif
+
+    mh = (lines + 1) * bh;
+
+    if (!win || omh == mh) return;
+
+    XResizeWindow(dpy, win, mw, mh);
+    drw_resize(drw, mw, mh);
+}

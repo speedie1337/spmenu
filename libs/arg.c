@@ -396,3 +396,25 @@ defaultimg(const Arg *arg)
     drawmenu();
     #endif
 }
+
+void
+setlines(const Arg *arg)
+{
+    lines += arg->i;
+    if (lines < 0) lines = 0;
+
+    match();
+    resizeclient();
+    drawmenu();
+}
+
+void
+setcolumns(const Arg *arg)
+{
+    columns += arg->i;
+    if (columns < 0) columns = 0;
+
+    match();
+    resizeclient();
+    drawmenu();
+}
