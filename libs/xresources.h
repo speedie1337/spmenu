@@ -134,7 +134,6 @@ ResourcePref resources[] = {
     { "generatecache",       INTEGER, &generatecache },
     { "mode",                INTEGER, &mode },
     { "fast",                INTEGER, &fast },
-    { "loadconfig",          INTEGER, &loadconfig },
     { "managed",             INTEGER, &managed },
     { "mon",                 INTEGER, &mon },
     { "pango_item",          INTEGER, &pango_item },

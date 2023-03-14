@@ -1,6 +1,12 @@
-! spmenu default configuration in .Xresources format
+! spmenu 0.2.2 default configuration
+!
+! You may copy this configuration file to ~/.config/spmenu/spmenurc OR ~/.spmenurc, it will be loaded on runtime.
+! It is .Xresources syntax. As such you may also append it to your existing .Xresources configuration, use programs like Pywal to have universal colorschemes.
 
+!! Fonts
 spmenu.font:               Noto Sans Mono 8
+
+!! Colors
 spmenu.col_itemnormfg:     #bbbbbb
 spmenu.col_itemnormbg:     #222222
 spmenu.col_itemselfg:      #eeeeee
@@ -44,35 +50,50 @@ spmenu.col_sgrcolor12:     #0000ff
 spmenu.col_sgrcolor13:     #ff00ff
 spmenu.col_sgrcolor14:     #00ffff
 spmenu.col_sgrcolor15:     #ffffff
+
+!! Misc color
 spmenu.alpha:              1
+
+!! Width
 spmenu.accuratewidth:      1
 spmenu.borderwidth:        0
+
+!! Lines and columns
 spmenu.lineheight:         5
 spmenu.lines:              0
 spmenu.columns:            10
+spmenu.preselected:        0
+spmenu.indentitems:        1
+
+!! History
 spmenu.maxhist:            64
 spmenu.histnodup:          1
+
+!! Input
+spmenu.type:               1
 spmenu.casesensitive:      0
+
+!! Menu
 spmenu.menuposition:       1
 spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
-spmenu.preselected:        0
-spmenu.type:               1
+
+!! General
 spmenu.class:              spmenu
+spmenu.fast:               0
 spmenu.mon:                -1
-spmenu.managed:            0
-spmenu.loadconfig:         0
-spmenu.leftarrow:          <
-spmenu.rightarrow:         >
-spmenu.password:           .
+
+!! Image
 spmenu.imagewidth:         86
 spmenu.imageheight:        86
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      1
+
+!! Mode options
 spmenu.mode:               0
-spmenu.fast:               0
-spmenu.indentitems:        1
+
+!! Hide options
 spmenu.hidematchcount:     0
 spmenu.hidemode:           0
 spmenu.hidelarrow:         0
@@ -81,8 +102,13 @@ spmenu.hideprompt:         0
 spmenu.hidecursor:         0
 spmenu.hidehighlight:      0
 spmenu.hideimage:          0
+
+!! Text
 spmenu.normtext:           Normal
 spmenu.instext:            Insert
+spmenu.password:           .
+
+!! Pango markup toggles
 spmenu.pango_item:         1
 spmenu.pango_prompt:       1
 spmenu.pango_input:        1

@@ -3,8 +3,6 @@ readargs(int argc, char *argv[])
 {
     int i = 0;
 
-    XrmInitialize();
-
     for (i = 1; i < argc; i++) {
         /* xrdb first as it overrides other options */
 		if (!strcmp(argv[i], "-xrdb"))   /* xresources */
@@ -18,9 +16,9 @@ readargs(int argc, char *argv[])
     }
 
     if (xresources) {
-        if (loadconfig) {
-            load_xresources();
+        XrmInitialize();
 
+        if (loadconfig) {
             int cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
             int hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
         }
@@ -182,7 +180,7 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
 			prompt = argv[++i];
 		else if (!strcmp(argv[i], "-fn"))  /* font or font set */
-            font[0] = argv[++i];
+            fonts[0] = argv[++i];
 		else if (!strcmp(argv[i], "-nmt"))  /* normal mode text */
 			strcpy(normtext, argv[++i]);
 		else if (!strcmp(argv[i], "-imt")) {  /* insert mode text */

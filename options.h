@@ -35,7 +35,7 @@ static char instext[]                  = "Insert"; /* Text to display for insert
 static int borderwidth                 = 2; /* Width of the border */
 
 /* Font options */
-static char *font[]                    = { "Noto Sans Mono 8" }; /* Font to draw text and Pango markup with. */
+static char font[]                     = "Noto Sans Mono 8"; /* Font to draw text and Pango markup with. */
 
 /* Symbol options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */

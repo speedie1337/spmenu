@@ -215,6 +215,8 @@ static int max_textw(void);
 #include "libs/xresources.h"
 #include "libs/colors.h"
 
+static char *fonts[] = { font };
+
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
@@ -841,7 +843,7 @@ main(int argc, char *argv[])
 	xinitvisual();
 	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
 
-	if (!drw_font_create(drw, font, LENGTH(font)))
+	if (!drw_font_create(drw, fonts, LENGTH(fonts)))
 	    die("no fonts could be loaded.");
 	lrpad = drw->font->h;
 
