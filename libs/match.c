@@ -156,6 +156,14 @@ match(void)
 		matchend = substrend;
 	}
 	curr = sel = matches;
+
+    for (i = 0; i < preselected; i++) {
+		if (sel && sel->right && (sel = sel->right) == next) {
+			curr = next;
+			calcoffsets();
+		}
+	}
+
 	calcoffsets();
 }
 

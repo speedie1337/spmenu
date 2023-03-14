@@ -2,7 +2,7 @@ spmenu
 ======
 ![image](/docs/preview.png)
 
-## 1. What is spmenu?
+## What is spmenu?
 
 spmenu is a program for X11 that reads standard input and allows the user to
 select items separated by a newline. It is a fork of suckless's dmenu which is
@@ -13,7 +13,7 @@ support, Vim-like modes, image support, proper keybind configuration, and more.
 
 Most of these features can be disabled during compile time by editing `toggle.mk`.
 
-## 2. Usage
+## Usage
 
 On runtime, spmenu reads from standard input (stdin). spmenu items are
 separated by a newline (`\n`). When (by default) Enter is pressed, the selected
@@ -26,7 +26,7 @@ This can be used in shell scripts to create interactive menus.
 On top of this, you can specify arguments to change the behavior of spmenu.
 See a list below for a list.
 
-## 3. Arguments
+## Arguments
 
 - spmenu -l line        - Set line count to stdin
 - spmenu -h height      - Set spmenu line height to height
@@ -154,11 +154,11 @@ There are also extra arguments recognized for dmenu compatibility. These are:
 - spmenu -sb color      - Set the selected background color
 - spmenu -sf color      - Set the selected foreground color
 
-## 4. Keybinds
+## Keybinds
 
 See `keybinds.h` for a list.
 
-## 5. Modes
+## Modes
 
 One of the features that separate spmenu from dmenu is spmenu's different
 modes. As of version 0.2, there are two modes. Normal mode and Insert mode.
@@ -174,13 +174,13 @@ this mode, most keybinds do nothing. When you are in insert mode, you
 filter items by typing text into the field. Once you're done
 with insert mode, you can press Escape to enter normal mode again.
 
-## 6. -p option
+## -p option
 
 spmenu has a -p option, which stands for prompt. It allows you to specify
 text to display next to the item list. It is displayed on the left side of the
 spmenu window. It should be noted that the prompt is purely visual though.
 
-## 7. Images
+## Images
 
 spmenu supports drawing images. This image is placed on the left side of
 the menu window. To use an image, pipe `IMG:/path/to/image` to spmenu.
@@ -197,13 +197,46 @@ There are also a few image related arguments, such as:
 
 `-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`.
 
-## 8. Colored text
+## Colored text
 
 spmenu supports colored text through SGR sequences. This is the same colors
 that you might already be using in your shell scripts. This means you can
 pipe practically any colored shell script straight into spmenu,
 no need to filter the output or anything.
 
-A list of SGR sequences will not be provided here, but spmenu supports most
-color sequences. There are also a few arguments, you can override SGR
-colors on-the-fly using the `-sgr` arguments.
+For 256 color support to work, you must add to the array. See `libs/color.h`
+if you want this.
+
+See 'SGR sequences' for more information.
+
+## SGR sequences
+
+A basic supported SGR sequence looks like this: `\033[X;YZm`
+
+Here, X specifies if you want normal or bright colors. Y specifies if you
+want background or foreground. Z specifies the color number.
+
+Foreground colors: `30` through `37`
+Background colors: `40` through `47`
+Reset: `0`
+
+NOTE: `;` is a separator, and in this example it separates the
+color number and normal/bright. \033 may also be written as `^]` or simply `ESC`.
+
+spmenu supports most color sequences, although not true color by default
+(unless -sgr arguments are used).
+
+There are a few arguments, you can override SGR colors on-the-fly
+using the `-sgrX` arguments. See 'Arguments' for more information.
+
+## Configuration
+
+spmenu has .Xresources (xrdb) support built in. It reads the xrdb (.Xresources database)
+on runtime. You may disable it by passing -nxrdb, or enable it by padding -xrdb.
+
+spmenu loads `~/.config/spmenu/spmenurc` or alternatively if you're
+old fashioned, `~/.spmenurc`. This requires that `xrdb` is available on your
+operating system.
+
+You can also use wildcards (such as `*`) to achieve a global colorscheme. Programs like
+`pywal` do this.

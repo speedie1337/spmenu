@@ -2,17 +2,19 @@ void
 readargs(int argc, char *argv[])
 {
     int i = 0;
+    int j = 0;
 
-    for (i = 1; i < argc; i++) {
+    for (j = 1; j < argc; j++) {
         /* xrdb first as it overrides other options */
-		if (!strcmp(argv[i], "-xrdb"))   /* xresources */
+		if (!strcmp(argv[j], "-xrdb")) {   /* xresources */
 			xresources = 1;
-		else if (!strcmp(argv[i], "-nxrdb"))   /* no xresources */
+        } else if (!strcmp(argv[j], "-nxrdb")) {   /* no xresources */
 			xresources = 0;
-		else if (!strcmp(argv[i], "-lcfg")) /* load config */
-				loadconfig = 1;
-		else if (!strcmp(argv[i], "-ncfg")) /* don't load config */
-				loadconfig = 0;
+        } else if (!strcmp(argv[j], "-lcfg")) { /* load config */
+			loadconfig = 1;
+        } else if (!strcmp(argv[j], "-ncfg")) { /* don't load config */
+			loadconfig = 0;
+        }
     }
 
     if (xresources) {
@@ -136,10 +138,18 @@ readargs(int argc, char *argv[])
 				indentitems = 0;
         } else if (i + 1 == argc) {
                 int arg = i;
+                int pr = 1;
 
-                if (arg != 1)
+                if (strcmp(argv[i-1], "-xrdb")
+                || strcmp(argv[i-1], "-nxrdb")
+                || strcmp(argv[i-1], "-lcfg")
+                || strcmp(argv[i-1], "-ncfg")
+                )
+                    pr = 0;
+
+                if (arg != 1 && pr)
                     fprintf(stderr, "spmenu: The '%s' option requires an argument.\n", argv[i-1]);
-                else
+                else if (pr)
                     fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
 		/* these options take one argument */
