@@ -108,8 +108,6 @@ ResourcePref resources[] = {
     { "password",            STRING,  &password },
 	{ "prompt",              STRING,  &prompt },
 	{ "class",               STRING,  &class },
-    { "leftarrow",           STRING,  &leftarrow },
-    { "rightarrow",          STRING,  &rightarrow },
     { "normtext",            STRING,  &normtext },
     { "instext",             STRING,  &instext },
 	{ "borderwidth",         INTEGER, &borderwidth },
