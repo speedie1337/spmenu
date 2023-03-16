@@ -1,4 +1,4 @@
 static char fribidi_text[BUFSIZ] = "";
 
-/* functions */
+// declare functions
 static void apply_fribidi(char *str);

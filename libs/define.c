@@ -11,7 +11,7 @@
 #define NUMBERSMAXDIGITS      100
 #define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
 
-/* user friendly names for all the modifiers */
+// user friendly names for all the modifiers
 #define CONTROL ControlMask
 #define SHIFT ShiftMask
 #define ALT Mod1Mask
@@ -19,5 +19,5 @@
 #define SUPER Mod4Mask
 #define SUPERR Mod5Mask
 
-/* alpha */
+// alpha
 #define opaque 0xffU

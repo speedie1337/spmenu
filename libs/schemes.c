@@ -11,7 +11,7 @@ init_appearance(void)
 
     char cbuf[8];
 
-	/* init appearance */
+    // create color schemes from array
 	for (j = 0; j < SchemeLast; j++) {
 		scheme[j] = drw_scm_create(drw, colors[j], alphas[j], 2);
     }

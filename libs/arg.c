@@ -4,7 +4,7 @@ move(const Arg *arg)
     struct item *tmpsel;
     int i, offscreen = 0;
 
-    if (arg->i == 3) { /* left */
+    if (arg->i == 3) { // left
     	if (columns > 1) {
 			if (!sel)
 				return;
@@ -33,7 +33,7 @@ move(const Arg *arg)
 		}
 		if (lines > 0)
 			return;
-    } else if (arg->i == 4) {
+    } else if (arg->i == 4) { // right
         	if (columns > 1) {
 			if (!sel)
 				return;
@@ -63,13 +63,13 @@ move(const Arg *arg)
 
 		if (lines > 0)
 			return;
-    } else if (arg->i == 2) {
+    } else if (arg->i == 2) { // down
        	if (sel && sel->right && (sel = sel->right) == next) {
 			curr = next;
 			calcoffsets();
 		}
 		drawmenu();
-    } else if (arg->i == 1) {
+    } else if (arg->i == 1) { // up
         if (sel && sel->left && (sel = sel->left)->right == curr) {
 			curr = prev;
 			calcoffsets();
@@ -81,8 +81,7 @@ move(const Arg *arg)
 void
 complete(const Arg *arg)
 {
- 	if (!sel)
-		return;
+ 	if (!sel) return;
 
 	strncpy(text, sel->text, sizeof text - 1);
 	text[sizeof text - 1] = '\0';
@@ -282,7 +281,7 @@ savehistory(char *input)
 			die("failed to write to %s", histfile);
 		}
 	}
-	if (histsz == 0 || !histnodup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) { /* TODO */
+	if (histsz == 0 || !histnodup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
 		if (0 >= fputs(input, fp)) {
 			die("failed to write to %s", histfile);
 		}
@@ -347,7 +346,7 @@ setimggaps(const Arg *arg)
     if (imagegaps < 0)
         imagegaps = 0;
 
-    /* limitation to make sure we have a reasonable gap size */
+    // limitation to make sure we have a reasonable gap size
     if (imagegaps > imagewidth / 2)
         imagegaps -= arg->i;
 

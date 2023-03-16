@@ -1,8 +1,6 @@
-/* Color options */
-
-/* Alpha */
+// color scheme arrays
 static const unsigned int alphas[][3]      = {
-	/*                         fg       bg        border     */
+	//                         fg       bg        border
 	[SchemeLArrow]         = { fgalpha, bgalpha,  borderalpha },
 	[SchemeRArrow]         = { fgalpha, bgalpha,  borderalpha },
 	[SchemeItemNorm]       = { fgalpha, bgalpha,  borderalpha },
@@ -20,9 +18,8 @@ static const unsigned int alphas[][3]      = {
     [SchemeBorder]         = { fgalpha, bgalpha,  borderalpha },
 };
 
-/* Colors */
 static const char *colors[SchemeLast][2] = {
-	/*                        fg                 bg                  */
+	//                        fg                 bg
 	[SchemeLArrow]        = { col_larrowfg,      col_larrowbg        },
 	[SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg        },
 	[SchemeItemNorm]      = { col_itemnormfg,    col_itemnormbg      },
@@ -40,7 +37,8 @@ static const char *colors[SchemeLast][2] = {
     [SchemeBorder]        = { NULL,              col_bordercolor     },
 };
 
-/* sgr colors */
+// sgr colors
+// to enable 256 color support, append to this.
 static char *textcolors[] = {
 	col_sgrcolor0,
 	col_sgrcolor1,

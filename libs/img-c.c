@@ -8,7 +8,7 @@ setimagesize(int width, int height)
     int oih = 0;
     int oiw = 0;
 
-    /* this makes sure we cannot scale the image up or down too much */
+    // this makes sure we cannot scale the image up or down too much
     if ((!image && height < imageheight) || (!image && width < imagewidth) || width > mw || hideimage) return;
 
     oih = imageheight;
@@ -34,13 +34,13 @@ void
 flipimage(void)
 {
     switch (flip) {
-        case 1: /* horizontal */
+        case 1: // horizontal
             imlib_image_flip_horizontal();
             break;
-        case 2: /* vertical */
+        case 2: // vertical
             imlib_image_flip_vertical();
             break;
-        case 3: /* diagonal */
+        case 3: // diagonal
             imlib_image_flip_diagonal();
             break;
         default:
@@ -73,7 +73,7 @@ drawimage(void)
 
     if (!lines || hideimage) return;
 
-    /* to prevent the image from being drawn multiple times */
+    // to prevent the image from being drawn multiple times
     if (!needredraw) {
         needredraw = 1;
         return;
@@ -96,15 +96,15 @@ drawimage(void)
 		    resizetoimageheight(height);
 	    }
 
-        if (!imageposition) { /* top mode = 0 */
+        if (!imageposition) { // top mode = 0
             if (height > width)
                 width = height;
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, bh+imagegaps);
-        } else if (imageposition == 1) { /* bottom mode = 1 */
+        } else if (imageposition == 1) { // bottom mode = 1
             if (height > width)
                 width = height;
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, mh-height-imagegaps);
-        } else if (imageposition == 2) { /* center mode = 2 */
+        } else if (imageposition == 2) { // center mode = 2
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-bh-height)/2+bh);
         } else {
             int minh = MIN(height, mh-bh-imagegaps*2);
@@ -219,7 +219,7 @@ loadimagecache(const char *file, int *width, int *height)
 	char *xdg_cache, *home = NULL, *dsize, *buf = NULL;
 	struct passwd *pw = NULL;
 
-	/* just load and don't store or try cache */
+	// just load and don't store or try cache
 	if (longestedge > 256) {
 		loadimage(file, width, height);
         if (image)
@@ -228,7 +228,7 @@ loadimagecache(const char *file, int *width, int *height)
 	}
 
     if (generatecache) {
-        /* try find image from cache first */
+        // try find image from cache first
         if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
             if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
                 home = pw->pw_dir;
@@ -238,7 +238,7 @@ loadimagecache(const char *file, int *width, int *height)
             }
         }
 
-        /* which cache do we try? */
+        // which cache do we try?
         dsize = "normal";
         if (longestedge > 128)
             dsize = "large";
@@ -250,7 +250,7 @@ loadimagecache(const char *file, int *width, int *height)
             return;
         }
 
-        /* calculate md5 from path */
+        // calculate md5 from path
         sprintf(buf, "file://%s", file);
         MD5((unsigned char*)buf, slen, digest);
 
@@ -259,7 +259,7 @@ loadimagecache(const char *file, int *width, int *height)
         for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
             sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
 
-        /* path for cached thumbnail */
+        // path for cached thumbnail
         if (xdg_cache)
             slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
         else
@@ -284,14 +284,14 @@ loadimagecache(const char *file, int *width, int *height)
             scaleimage(width, height);
         }
 
-        /* we are done */
+        // we are done
         if (image) {
             free(buf);
             return;
         }
     }
 
-    /* we din't find anything from cache, or it was just wrong */
+    // we din't find anything from cache, or it was just wrong
 	loadimage(file, width, height);
 	scaleimage(width, height);
 

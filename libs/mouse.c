@@ -5,22 +5,21 @@ buttonpress(XEvent *e)
 	XButtonPressedEvent *ev = &e->xbutton;
 	int x = 0, y = 0, h = bh, w, item_num = 0;
 
+    // if incorrect or wrong window, return
 	if (ev->window != win)
 		return;
 
-	/* right-click: exit */
+	// right-click: exit
 	if (ev->button == Button3)
 		exit(1);
 
 	if (prompt && *prompt)
 		x += promptw;
 
-	/* input field */
+	// input field
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 
-	/* left-click on input: clear input,
-	 * NOTE: if there is no left-arrow the space for < is reserved so
-	 *       add that to the input width */
+	// left-click on input: clear input
 	if (ev->button == Button1 &&
 	   ((lines <= 0 && ev->x >= 0 && ev->x <= x + w +
 	   ((!prev || !curr->left) ? TEXTW(leftarrow) : 0)) ||
@@ -29,21 +28,21 @@ buttonpress(XEvent *e)
 		drawmenu();
 		return;
 	}
-	/* middle-mouse click: paste selection */
+	// middle-mouse click: paste selection
 	if (ev->button == Button2) {
 		XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
 		                  utf8, utf8, win, CurrentTime);
 		drawmenu();
 		return;
 	}
-	/* scroll up */
+	// scroll up
 	if (ev->button == Button4 && prev) {
 		sel = curr = prev;
 		calcoffsets();
 		drawmenu();
 		return;
 	}
-	/* scroll down */
+	// scroll down
 	if (ev->button == Button5 && next) {
 		sel = curr = next;
 		calcoffsets();
@@ -55,7 +54,7 @@ buttonpress(XEvent *e)
 	if (ev->state & ~ControlMask)
 		return;
 	if (lines > 0) {
-		/* vertical list: (ctrl)left-click on item */
+		// vertical list: (ctrl)left-click on item
 		w = mw - x;
 		for (item = curr; item != next; item = item->right) {
 			if (item_num++ == lines){
@@ -77,7 +76,7 @@ buttonpress(XEvent *e)
 			}
 		}
 	} else if (matches) {
-		/* left-click on left arrow */
+		// left-click on left arrow
 		x += inputw;
 		w = TEXTW(leftarrow);
 		if (prev && curr->left) {
@@ -88,7 +87,7 @@ buttonpress(XEvent *e)
 				return;
 			}
 		}
-		/* horizontal list: (ctrl)left-click on item */
+		// horizontal list: (ctrl)left-click on item
 		for (item = curr; item != next; item = item->right) {
 			x += w;
 			w = MIN(TEXTW(item->text), mw - x - TEXTW(rightarrow));
@@ -103,7 +102,7 @@ buttonpress(XEvent *e)
 				return;
 			}
 		}
-		/* left-click on right arrow */
+		// left-click on right arrow
 		w = TEXTW(rightarrow);
 		x = mw - w;
 		if (next && ev->x >= x && ev->x <= x + w) {

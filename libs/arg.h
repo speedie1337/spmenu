@@ -5,7 +5,7 @@ typedef union {
 	const void *v;
 } Arg;
 
-/* keybind functions */
+// declare keybind functions
 static void move(const Arg *arg);
 static void moveend(const Arg *arg);
 static void movestart(const Arg *arg);

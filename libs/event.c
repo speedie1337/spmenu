@@ -20,7 +20,7 @@ eventloop(void)
 				drw_map(drw, win, 0, 0, mw, mh);
 			break;
 		case FocusIn:
-			/* regrab focus from parent window */
+			// regrab focus from parent window
 			if (ev.xfocus.window != win)
 				grabfocus();
 			break;
@@ -37,7 +37,7 @@ eventloop(void)
 			break;
 		}
 
-        /* redraw image on X11 event */
+        // redraw image on X11 event
         #if USEIMAGE
         drawimage();
         #endif

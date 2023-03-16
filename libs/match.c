@@ -11,15 +11,15 @@ fuzzymatch(void)
 
 	matches = matchend = NULL;
 
-	/* walk through all items */
+	// walk through all items
 	for (it = items; it && it->text; it++) {
 		if (text_len) {
 			itext_len = strlen(it->text);
-			pidx = 0; /* pointer */
-			sidx = eidx = -1; /* start of match, end of match */
-			/* walk through item text */
+			pidx = 0; // pointer
+			sidx = eidx = -1; // start of match, end of match
+			// walk through item text
 			for (i = 0; i < itext_len && (c = it->text[i]); i++) {
-				/* fuzzy match pattern */
+				// fuzzy match pattern
 				if (!fstrncmp(&text[pidx], &c, 1)) {
 					if(sidx == -1)
 						sidx = i;
@@ -30,13 +30,13 @@ fuzzymatch(void)
 					}
 				}
 			}
-			/* build list of matches */
+			// build list of matches
 			if (eidx != -1) {
-				/* compute distance */
-				/* add penalty if match starts late (log(sidx+2))
-				 * add penalty for long a match without many matching characters */
+				// compute distance
+				// add penalty if match starts late (log(sidx+2))
+				//add penalty for long a match without many matching characters
 				it->distance = log(sidx + 2) + (double)(eidx - sidx - text_len);
-				/* fprintf(stderr, "distance %s %f\n", it->text, it->distance); */
+				// fprintf(stderr, "distance %s %f\n", it->text, it->distance);
 				appenditem(it, &matches, &matchend);
 				number_of_matches++;
 			}
@@ -46,16 +46,16 @@ fuzzymatch(void)
 	}
 
 	if (number_of_matches) {
-		/* initialize array with matches */
+		// initialize array with matches
 		if (!(fuzzymatches = realloc(fuzzymatches, number_of_matches * sizeof(struct item*))))
 			die("cannot realloc %u bytes:", number_of_matches * sizeof(struct item*));
 		for (i = 0, it = matches; it && i < number_of_matches; i++, it = it->right) {
 			fuzzymatches[i] = it;
 		}
-		/* sort matches according to distance */
+		// sort matches according to distance
         if (sortmatches) qsort(fuzzymatches, number_of_matches, sizeof(struct item*), compare_distance);
 
-		/* rebuild list of matches */
+		// rebuild list of matches
 		matches = matchend = NULL;
 		for (i = 0, it = fuzzymatches[i];  i < number_of_matches && it && \
 				it->text; i++, it = fuzzymatches[i]) {
@@ -102,7 +102,7 @@ match(void)
 
 
 	strcpy(buf, text);
-	/* separate input text into tokens to be matched individually */
+	// separate input text into tokens to be matched individually
 	for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
 		if (++tokc > tokn && !(tokv = realloc(tokv, ++tokn * sizeof *tokv)))
 			die("cannot realloc %u bytes:", tokn * sizeof *tokv);
@@ -114,12 +114,12 @@ match(void)
 		for (i = 0; i < tokc; i++)
 			if (!fstrstr(item->text, tokv[i]))
 				break;
-		if (i != tokc) /* not all tokens match */
+		if (i != tokc) // not all tokens match
 			continue;
         if (!sortmatches)
 			appenditem(item, &matches, &matchend);
         else {
-            /* exact matches go first, then prefixes with high priority, then prefixes, then substrings */
+            // exact matches go first, then prefixes with high priority, then prefixes, then substrings
             if (item->hp && !fstrncmp(tokv[0], item->text, len))
 			    appenditem(item, &lhpprefix, &hpprefixend);
             else if (!tokc || !fstrncmp(text, item->text, textsize))

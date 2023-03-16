@@ -20,7 +20,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 			indent = TEXTW(itemtext) - lrpad;
 			*highlight = c;
 
-			/* highlight character */
+			// highlight character
 			c = highlight[1];
 			highlight[1] = '\0';
 			drw_text(
@@ -41,9 +41,9 @@ drawitem(struct item *item, int x, int y, int w)
 {
     char buffer[sizeof(item->text) + lrpad / 2];
     Clr scm[3];
-    int lp = lrpad / 2; /* padding */
+    int lp = lrpad / 2; // padding
     int wr, rd;
-	int rw = 0; /* width of text */
+	int rw = 0; // width of text
     int orw = 0;
 	int fg = 7;
 	int bg = 0;
@@ -65,7 +65,7 @@ drawitem(struct item *item, int x, int y, int w)
 
     drw_setscheme(drw, scm); // set scheme
 
-    /* parse item text */
+    // parse item text
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
 			size_t alen = strspn(item->text + rd + 2,
@@ -84,7 +84,7 @@ drawitem(struct item *item, int x, int y, int w)
 
 				char *ep = item->text + rd + 1;
 
-                /* parse hex colors in scm */
+                // parse hex colors in scm
 				while (*ep != 'm') {
 					unsigned v = strtoul(ep + 1, &ep, 10);
                     if (ignore)

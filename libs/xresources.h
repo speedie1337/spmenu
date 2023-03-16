@@ -1,7 +1,4 @@
-/* This header is for the .Xresources options.
- * These will be set on startup by xrdb.
- */
-
+// This .Xresources array is read and compared to the xrdb. Simply add to the array if you need to.
 ResourcePref resources[] = {
 	{ "font",			             STRING,  &font },
     { "col_caretfgcolor",            STRING,  &col_caretfgcolor },
@@ -32,7 +29,7 @@ ResourcePref resources[] = {
     { "col_promptfg",                STRING,  &col_promptfg },
     { "col_promptbg",                STRING,  &col_promptbg },
 
-	/* Pywal support    */
+    // Universal colors
 	{ "color10",             STRING,  &col_caretfgcolor },
 	{ "color4",              STRING,  &col_larrowfg },
 	{ "color4",              STRING,  &col_rarrowfg },
@@ -61,7 +58,7 @@ ResourcePref resources[] = {
 	{ "color0",              STRING,  &col_normhlfgcolor },
 	{ "color0",              STRING,  &col_selhlfgcolor },
 
-    /* sgr colors */
+    // SGR sequence colors
    	{ "col_sgrcolor0",           STRING,  &col_sgrcolor0 },
 	{ "col_sgrcolor1",           STRING,  &col_sgrcolor1 },
 	{ "col_sgrcolor2",           STRING,  &col_sgrcolor2 },
@@ -79,7 +76,7 @@ ResourcePref resources[] = {
 	{ "col_sgrcolor14",          STRING,  &col_sgrcolor14 },
 	{ "col_sgrcolor15",          STRING,  &col_sgrcolor15 },
 
-    /* sgr colors */
+    // SGR sequence colors (universal)
    	{ "color0",              STRING,  &col_sgrcolor0 },
 	{ "color1",              STRING,  &col_sgrcolor1 },
 	{ "color2",              STRING,  &col_sgrcolor2 },

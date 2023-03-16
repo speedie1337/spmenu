@@ -285,7 +285,8 @@ calcoffsets(void)
 
 		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth);
     }
-	/* calculate which items will begin the next page and previous page */
+
+	// calculate which items will begin the next page and previous page
 	for (i = 0, next = curr; next; next = next->right)
 		if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text), n)) > n)
 			break;
@@ -638,6 +639,7 @@ readstdin(void)
             // spmenu:test
             if (!strncmp("test", items[i].ex, strlen("test"))) {
                 system("command -v spmenu_test > /dev/null && spmenu_test");
+                exit(0);
             }
         }
 	}
@@ -690,14 +692,15 @@ setup(void)
 	lines = MAX(lines, 0);
     reallines = lines;
 
+    // resize client to image height if deemed necessary
     #if USEIMAGE
-    if (image)
-        resizetoimageheight(imageheight);
+    if (image) resizetoimageheight(imageheight);
     #endif
 
-    mh = (lines + 1) * bh;
-	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0;
+    mh = (lines + 1) * bh; // lines + 1 * bh is the menu height
+	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0; // prompt width
 
+    // get accurate width
     if (accuratewidth) {
         for (item = items; !lines && item && item->text; ++item) {
             curstrlen = strlen(item->text);
@@ -713,6 +716,7 @@ setup(void)
         }
     }
 
+    // init xinerama screens
     #if USEXINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
@@ -720,12 +724,12 @@ setup(void)
 		if (mon >= 0 && mon < n)
 			i = mon;
 		else if (w != root && w != PointerRoot && w != None) {
-			/* find top-level window containing current input focus */
+			// find top-level window containing current input focus
 			do {
 				if (XQueryTree(dpy, (pw = w), &dw, &w, &dws, &du) && dws)
 					XFree(dws);
 			} while (w != root && w != pw);
-			/* find xinerama screen with which the window intersects most */
+			// find xinerama screen with which the window intersects most
 			if (XGetWindowAttributes(dpy, pw, &wa))
 				for (j = 0; j < n; j++)
 					if ((a = INTERSECT(wa.x, wa.y, wa.width, wa.height, info[j])) > area) {
@@ -733,21 +737,20 @@ setup(void)
 						i = j;
 					}
 		}
-		/* no focused window is on screen, so use pointer location instead */
+		// no focused window is on screen, so use pointer location instead
 		if (mon < 0 && !area && XQueryPointer(dpy, root, &dw, &dw, &x, &y, &di, &di, &du))
 			for (i = 0; i < n; i++)
 				if (INTERSECT(x, y, 1, 1, info[i]))
 					break;
 
+        // calculate x/y position
 		if (centered) {
-			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
-			//y = info[i].y_org + 0;
 			y = info[i].y_org + ((info[i].height - mh) / 2);
+			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 		} else {
 		    x = info[i].x_org + dmx;
 			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
-			//y = info[i].y_org + 0;
 			mw = (dmw>0 ? dmw : info[i].width);
 		}
 
@@ -801,6 +804,8 @@ setup(void)
 		}
 		grabfocus();
 	}
+
+    // resize and draw
 	drw_resize(drw, mw, mh);
 	drawmenu();
 }
@@ -879,5 +884,5 @@ main(int argc, char *argv[])
 	setup();
 	eventloop();
 
-	return 1; /* unreachable */
+	return 1;
 }
