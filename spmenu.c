@@ -185,7 +185,10 @@ static char **history;
 static size_t histsz, histpos;
 static size_t nextrune(int inc);
 
+// draw functions
 static void drawmenu(void);
+static void drawhighlights(struct item *item, int x, int y, int w);
+
 static void calcoffsets(void);
 static void readstdin(void);
 static void recalculatenumbers(void);

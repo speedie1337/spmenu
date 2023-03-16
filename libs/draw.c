@@ -1,36 +1,38 @@
 void
 drawhighlights(struct item *item, int x, int y, int w)
 {
-	char restorechar, tokens[sizeof text], *highlight,  *token;
-	int indentx, highlightlen;
+	int i, indent;
+	char *highlight;
+	char c;
+
 	char *itemtext = item->text;
 
-	drw_setscheme(drw, scheme[item == sel ? SchemeSelHighlight : SchemeNormHighlight]);
-	strcpy(tokens, text);
+	if (!(strlen(itemtext) && strlen(text)))
+		return;
 
-	for (token = strtok(tokens, " "); token; token = strtok(NULL, " ")) {
-		highlight = fstrstr(itemtext, token);
+	drw_setscheme(drw, scheme[item == sel
+	                   ? SchemeSelHighlight
+	                   : SchemeNormHighlight]);
+	for (i = 0, highlight = itemtext; *highlight && text[i];) {
+        if ((fuzzy && !fstrncmp(&(*highlight), &text[i], 1) || (!fuzzy && *highlight == text[i]))) {
+			c = *highlight;
+			*highlight = '\0';
+			indent = TEXTW(itemtext) - lrpad;
+			*highlight = c;
 
-		while (highlight) {
-			highlightlen = highlight - itemtext;
-			restorechar = *highlight;
-			itemtext[highlightlen] = '\0';
-			indentx = TEXTW(itemtext);
-			itemtext[highlightlen] = restorechar;
-
-			restorechar = highlight[strlen(token)];
-			highlight[strlen(token)] = '\0';
-
-			if (indentx - (lrpad / 2) - 1 < w)
-				drw_text(drw, x + indentx - (lrpad / 2) - 1, y, MIN(w - indentx, TEXTW(highlight) - lrpad), bh, 0, highlight, 0, pango_highlight ? True : False);
-
-			highlight[strlen(token)] = restorechar;
-
-			if (strlen(highlight) - strlen(token) < strlen(token))
-				break;
-
-			highlight = fstrstr(highlight + strlen(token), token);
+			/* highlight character */
+			c = highlight[1];
+			highlight[1] = '\0';
+			drw_text(
+				drw,
+				x + indent + (lrpad / 2),
+				y,
+				MIN(w - indent - lrpad, TEXTW(highlight) - lrpad),
+				bh, 0, highlight, 0, pango_highlight ? True : False);
+			highlight[1] = c;
+			i++;
 		}
+		highlight++;
 	}
 }
 
@@ -175,7 +177,8 @@ drawmenu(void)
         #endif
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 	}
-	/* draw input field */
+
+    // draw input
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeInput]);
 	if (passwd && !hideprompt) {
