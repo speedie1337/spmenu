@@ -57,7 +57,7 @@ See a list below for a list.
 - spmenu -nso           - Don't sort matches
 - spmenu -pri priority  - Specify a list of items that take priority
 - spmenu -s             - Use case-sensitive matching
-- spmenu -i             - Use case-insensitive matching
+- spmenu -ns            - Use case-insensitive matching
 - spmenu -nm            - Start spmenu in normal mode
 - spmenu -im            - Start spmenu in insert mode
 - spmenu -t             - Position spmenu at the top of the screen
@@ -148,6 +148,7 @@ See a list below for a list.
 
 There are also extra arguments recognized for dmenu compatibility. These are:
 
+- spmenu -i             - Use case-insensitive matching
 - spmenu -S             - Don't sort matches
 - spmenu -nb color      - Set the normal background color
 - spmenu -nf color      - Set the normal foreground color
