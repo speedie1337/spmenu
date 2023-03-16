@@ -1,5 +1,5 @@
 void
-drawhighlights(struct item *item, int x, int y, int maxw)
+drawhighlights(struct item *item, int x, int y, int w)
 {
 	char restorechar, tokens[sizeof text], *highlight,  *token;
 	int indentx, highlightlen;
@@ -10,6 +10,7 @@ drawhighlights(struct item *item, int x, int y, int maxw)
 
 	for (token = strtok(tokens, " "); token; token = strtok(NULL, " ")) {
 		highlight = fstrstr(itemtext, token);
+
 		while (highlight) {
 			highlightlen = highlight - itemtext;
 			restorechar = *highlight;
@@ -20,8 +21,8 @@ drawhighlights(struct item *item, int x, int y, int maxw)
 			restorechar = highlight[strlen(token)];
 			highlight[strlen(token)] = '\0';
 
-			if (indentx - (lrpad / 2) - 1 < maxw)
-				drw_text(drw, x + indentx - (lrpad / 2) - 1, y, MIN(maxw - indentx, TEXTW(highlight) - lrpad), bh, 0, highlight, 0, pango_highlight ? True : False);
+			if (indentx - (lrpad / 2) - 1 < w)
+				drw_text(drw, x + indentx - (lrpad / 2) - 1, y, MIN(w - indentx, TEXTW(highlight) - lrpad), bh, 0, highlight, 0, pango_highlight ? True : False);
 
 			highlight[strlen(token)] = restorechar;
 
@@ -60,25 +61,24 @@ drawitem(struct item *item, int x, int y, int w)
             memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
     }
 
-    /* set scheme */
-    drw_setscheme(drw, scm);
+    drw_setscheme(drw, scm); // set scheme
 
     /* parse item text */
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
 			size_t alen = strspn(item->text + rd + 2,
 					     "0123456789;");
-			if (item->text[rd + alen + 2] == 'm') { /* character is 'm' which is the last character in the sequence */
-				buffer[wr] = '\0'; /* clear out character */
+			if (item->text[rd + alen + 2] == 'm') { // last character in sequence is always 'm'
+				buffer[wr] = '\0';
 
                 apply_fribidi(buffer);
                 rw = MIN(w, TEXTW(buffer) - lrpad);
 				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
-                orw += rw;
+                orw += rw; // width of all colored text, we add this to the full width later
                 ib = 1;
-                lp = 0; /* no padding */
+                lp = 0;
 
 				char *ep = item->text + rd + 1;
 
@@ -123,7 +123,7 @@ drawitem(struct item *item, int x, int y, int w)
 				rd += alen + 2;
 				wr = 0;
 
-				drw_setscheme(drw, scm);
+				drw_setscheme(drw, scm); // set scheme
 
 				continue;
 			}
@@ -136,11 +136,11 @@ drawitem(struct item *item, int x, int y, int w)
 
     w -= orw;
 
-    /* draw any text that doesn't use sgr sequences */
+    // now draw any non-colored text
     apply_fribidi(buffer);
 	int r = drw_text(drw, x, y, w, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+    if (!hidehighlight && !ib) drawhighlights(item, x, y, w);
 
-    if (!hidehighlight && !ib) drawhighlights(item, x, y, w - rw);
     return r;
 }
 
@@ -200,7 +200,6 @@ drawmenu(void)
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
 	}
 
-    /* get match count */
     if (!hidematchcount) {
         recalculatenumbers();
         numberWidth = TEXTW(numbers);
@@ -244,22 +243,22 @@ drawmenu(void)
 			);
         }
 
+    // horizontal list
 	} else if (matches) {
-		/* draw horizontal list */
 		x += inputw;
 		w = larrowWidth;
 
-		if (curr->left && !hidelarrow) {
+		if (curr->left && !hidelarrow) { // draw left arrow
 			drw_setscheme(drw, scheme[SchemeLArrow]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 		}
 
 		x += w;
 
-		for (item = curr; item != next; item = item->right)
+		for (item = curr; item != next; item = item->right) // draw items
             x = drawitem(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
 
-		if (next && !hiderarrow) {
+		if (next && !hiderarrow) { // draw right arrow
 			w = rarrowWidth;
 			drw_setscheme(drw, scheme[SchemeRArrow]);
 
@@ -267,15 +266,16 @@ drawmenu(void)
 		}
 	}
 
-    if (!hidematchcount) {
+    if (!hidematchcount) { // draw match count
         drw_setscheme(drw, scheme[SchemeNumber]);
         drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
     }
 
-    if (!hidemode) {
+    if (!hidemode) { // draw mode indicator
         drw_setscheme(drw, scheme[SchemeMode]);
         drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
     }
 
+    // map the drawing
 	drw_map(drw, win, 0, 0, mw, mh);
 }

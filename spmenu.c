@@ -10,7 +10,8 @@
  * After making changes, run 'make clean install' to install and 'make' to attempt a compilation.
  * `make man` will generate a man page from 'docs/docs.md', which is a Markdown document. Run this before commiting.
  *
- * See LICENSE file for copyright and license details. */
+ * See LICENSE file for copyright and license details.
+ */
 #include <ctype.h>
 #include <locale.h>
 #include <math.h>
@@ -21,52 +22,55 @@
 #include <time.h>
 #include <unistd.h>
 
-/* check if we should enable right to left language support */
+// check if we should enable right to left language support
 #ifndef RTL
 #define USERTL 0
 #else
 #define USERTL 1
 #endif
 
-/* check if we should enable pango support */
+// check if we should enable pango or use xft
 #ifndef PANGO
 #define USEPANGO 0
 #else
 #define USEPANGO 1
 #endif
 
-/* check if we should enable image support */
+// check if we should enable image support
 #ifndef IMAGE
 #define USEIMAGE 0
 #else
 #define USEIMAGE 1
 #endif
 
-/* check if we should enable multimonitor support using xinerama */
+// check if we should enable multimonitor support using libXinerama
 #ifdef XINERAMA
 #define USEXINERAMA 1
 #else
 #define USEXINERAMA 0
 #endif
 
-/* include right to left language library */
+// include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
 #endif
 
-/* include libraries used for image support */
+// include libraries used for image support
 #if USEIMAGE
 #include <errno.h>
 #include <pwd.h>
 #include <Imlib2.h>
 #include <openssl/md5.h>
+// openssl is used to generate a checksum, used for caching
+// TODO: remove this dependency by doing it some other way
 #endif
 
-/* include xinerama */
+// include xinerama used for multi monitor support
 #if USEXINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif
 
+// include X11 headers
 #include <X11/XKBlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -74,38 +78,17 @@
 #include <X11/Xresource.h>
 #include <X11/Xft/Xft.h>
 
+// include pango used for markup
 #if USEPANGO
 #include <pango/pango.h>
 #endif
 
+// include macros and other defines
+#include "libs/define.c"
+
+// various headers
 #include "libs/sl/draw.h"
 #include "libs/sl/main.h"
-
-/* macros */
-#define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
-#define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
-#define INTERSECT(x,y,w,h,r)  (MAX(0, MIN((x)+(w),(r).x_org+(r).width)  - MAX((x),(r).x_org)) \
-                             && MAX(0, MIN((y)+(h),(r).y_org+(r).height) - MAX((y),(r).y_org)))
-#define LENGTH(X)             (sizeof X / sizeof X[0])
-#define TEXTW(X)              (drw_font_getwidth(drw, (X), False) + lrpad)
-#define TEXTWM(X)             (drw_font_getwidth(drw, (X), True) + lrpad)
-
-/* number */
-#define NUMBERSMAXDIGITS      100
-#define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
-
-/* user friendly names for all the modifiers */
-#define CONTROL ControlMask
-#define SHIFT ShiftMask
-#define ALT Mod1Mask
-#define ALTR Mod3Mask
-#define SUPER Mod4Mask
-#define SUPERR Mod5Mask
-
-/* alpha */
-#define opaque 0xffU
-
-/* include headers */
 #include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/mode.h"
@@ -114,30 +97,24 @@
 #include "libs/mouse.h"
 #include "libs/sort.h"
 
+// misc
+#include "libs/key_struct.c"
+
+// text
 static char text[BUFSIZ] = "";
-
-struct item {
-	char *text;
-    char *image;
-    char *ex;
-	struct item *left, *right;
-    int hp;
-	double distance;
-};
-
-typedef struct {
-    unsigned int mode;
-	unsigned int mod;
-	KeySym keysym;
-	void (*func)(const Arg *);
-	const Arg arg;
-} Key;
-
 static char numbers[NUMBERSBUFSIZE] = "";
+
+// high priority
 static int hplength = 0;
 static char **hpitems = NULL;
+
+// embed
 static char *embed;
+
+// keybinds
 static int numlockmask = 0;
+
+// height of each item, menu width, menu height
 static int bh, mw, mh;
 static int reallines = 0;
 static int reqlineheight; /* required menu height */
@@ -155,16 +132,28 @@ static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int screen;
 
-/* image globals */
+// item struct
+struct item {
+	char *text;
+    #if USEIMAGE
+    char *image;
+    #endif
+    char *ex;
+	struct item *left, *right;
+    int hp;
+	double distance;
+};
+
+// image globals
 #if USEIMAGE
 static int flip = 0;
 static int rotation = 0;
 static int needredraw = 1;
-#endif
 static int longestedge = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
+#endif
 
 /* set an integer if to 1 if we have right to left language support enabled
  * doing it this way, because we can reduce the amount of #if and #else lines used.
@@ -175,16 +164,18 @@ static int isrtl = 1;
 static int isrtl = 0;
 #endif
 
+// X11 properties
 static Atom clip, utf8, types, dock;
 static Display *dpy;
 static Window root, parentwin, win;
 static XIC xic;
 
 static int useargb = 0;
+
+// colors
 static Visual *visual;
 static int depth;
 static Colormap cmap;
-
 static Drw *drw;
 static Clr *scheme[SchemeLast];
 static Clr textclrs[256];
@@ -811,7 +802,9 @@ main(int argc, char *argv[])
 
     readargs(argc, argv);
 
+    #if USEIMAGE
     longestedge = MAX(imagewidth, imageheight);
+    #endif
 
     if (mode) {
         curMode = 1;
@@ -864,12 +857,14 @@ main(int argc, char *argv[])
 		grabkeyboard();
 	}
 
-    /* set values which we can restore later */
+    // set default values
+    #if USEIMAGE
     if (!imagew || !imageh || !imageg) {
         imagew = imagewidth;
         imageh = imageheight;
         imagegaps = imagegaps;
     }
+    #endif
 
 	setup();
 	eventloop();
