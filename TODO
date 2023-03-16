@@ -1,4 +1,6 @@
 # TODO for spmenu
 
+- Don't allow resizing too far using keybinds
+- Tab currently broken
 - Mouse bind array (mouse.h)
 - Add configuration file using (probably) libconfig
