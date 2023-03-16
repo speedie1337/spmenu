@@ -14,7 +14,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 	                   ? SchemeSelHighlight
 	                   : SchemeNormHighlight]);
 	for (i = 0, highlight = itemtext; *highlight && text[i];) {
-        if ((fuzzy && !fstrncmp(&(*highlight), &text[i], 1) || (!fuzzy && *highlight == text[i]))) {
+        if (((fuzzy && !fstrncmp(&(*highlight), &text[i], 1)) || (!fuzzy && *highlight == text[i]))) {
 			c = *highlight;
 			*highlight = '\0';
 			indent = TEXTW(itemtext) - lrpad;

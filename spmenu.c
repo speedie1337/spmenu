@@ -638,8 +638,8 @@ readstdin(void)
 
             // spmenu:test
             if (!strncmp("test", items[i].ex, strlen("test"))) {
-                system("command -v spmenu_test > /dev/null && spmenu_test");
-                exit(0);
+                int i = system("command -v spmenu_test > /dev/null && spmenu_test");
+                if (i||!i) exit(0);
             }
         }
 	}
@@ -698,7 +698,8 @@ setup(void)
     #endif
 
     mh = (lines + 1) * bh; // lines + 1 * bh is the menu height
-	promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0; // prompt width
+
+    if (menuposition == 2) promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0; // prompt width
 
     // get accurate width
     if (accuratewidth) {
@@ -744,10 +745,10 @@ setup(void)
 					break;
 
         // calculate x/y position
-		if (centered) {
+		if (menuposition == 2) {
+			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
 			y = info[i].y_org + ((info[i].height - mh) / 2);
-			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 		} else {
 		    x = info[i].x_org + dmx;
 			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
@@ -762,7 +763,7 @@ setup(void)
 			die("could not get embedding window attributes: 0x%lx",
 			    parentwin);
 
-		if (centered) {
+		if (menuposition == 2) {
 			mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
 			x = (wa.width  - mw) / 2;
 			y = (wa.height - mh) / 2;
@@ -773,13 +774,13 @@ setup(void)
 		}
 	}
 
-	/* might be faster in some instances, most of the time unnecessary */
+	// might be faster in some instances, most of the time unnecessary
     if (!accuratewidth) inputw = MIN(inputw, mw/3);
 
 	match();
 
-	/* create menu window */
-    create_window(x + sp, y + vp - (menuposition ? 0 : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
+	// create menu window
+    create_window(x + sp, y + vp - (menuposition == 2 ? 0 : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
     set_window();
     set_prop();
 

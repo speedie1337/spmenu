@@ -4,6 +4,9 @@ readargs(int argc, char *argv[])
     int i = 0;
     int j = 0;
 
+    int cxrdb = 0;
+    int hxrdb = 0;
+
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked (internal -> xresources -> arguments)
     for (j = 1; j < argc; j++) {
 		if (!strcmp(argv[j], "-xrdb")) {
@@ -22,11 +25,12 @@ readargs(int argc, char *argv[])
         XrmInitialize();
 
         if (loadconfig) {
-            int cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
-            int hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
+            cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
+            hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
         }
 
-        load_xresources();
+        // avoid an annoying warning gcc will spit out when you don't care about the result
+        if (!cxrdb || !hxrdb || cxrdb || hxrdb || xresources) load_xresources();
     }
 
     // no arguments
@@ -48,12 +52,12 @@ readargs(int argc, char *argv[])
 			menuposition = 0;
 		} else if (!strcmp(argv[i], "-t")) { // appears at the top of the screen
 			menuposition = 1;
+        } else if (!strcmp(argv[i], "-c")) {  // appears at the center of the screen
+		    menuposition = 2;
 		} else if (!strcmp(argv[i], "-nm")) { // normal mode
 			mode = 0;
 		} else if (!strcmp(argv[i], "-im")) { // insert mode
 			mode = 1;
-        } else if (!strcmp(argv[i], "-c")) {  // appears at the center of the screen
-		    centered = 1;
         } else if (!strcmp(argv[i], "-f")) {   // grabs keyboard before reading stdin
 			fast = 1;
         } else if (!strcmp(argv[i], "-rw")) {  // relative width

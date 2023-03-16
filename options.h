@@ -12,11 +12,10 @@ static int mon                         = -1; /* Monitor to run spmenu on */
 
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
-static int menuposition                = 1; /* Position of the menu */
+static int menuposition                = 1; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
 static int menupaddingv				   = 0; /* Vertical padding of bar (in pixels) */
 static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
 static int minwidth                    = 500; /* Minimum width */
-static int centered                    = 0; /* Whether or not to center spmenu by default */
 static int managed                     = 0; /* Let your window manager manage spmenu? */
 
 /* Image options */
