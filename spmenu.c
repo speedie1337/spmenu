@@ -118,7 +118,6 @@ static int numlockmask = 0;
 static int bh, mw, mh;
 static int reallines = 0;
 static int reqlineheight; /* required menu height */
-static int clineheight; /* menu height added through argument */
 static int dmx = 0; /* put spmenu at this x offset */
 static int dmy = 0; /* put spmenu at this y offset (measured from the bottom if menuposition is 0) */
 static unsigned int dmw = 0; /* make spmenu this wide */
@@ -155,9 +154,7 @@ static int imageh = 0;
 static int imageg = 0;
 #endif
 
-/* set an integer if to 1 if we have right to left language support enabled
- * doing it this way, because we can reduce the amount of #if and #else lines used.
- */
+// set an integer to 1 if we have rtl enabled, this saves a lot of lines and duplicate code
 #if USERTL
 static int isrtl = 1;
 #else
@@ -180,10 +177,10 @@ static Drw *drw;
 static Clr *scheme[SchemeLast];
 static Clr textclrs[256];
 
+// history
 static char *histfile;
 static char **history;
 static size_t histsz, histpos;
-static size_t nextrune(int inc);
 
 // draw functions
 static void drawmenu(void);
@@ -201,16 +198,19 @@ static void grabfocus(void);
 static void pastesel(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
 static int max_textw(void);
+static size_t nextrune(int inc);
 
-/* user configuration */
-#include "options.h" /* Include main header */
-#include "keybinds.h" /* Include keybinds */
+// user configuration
+#include "options.h"
+#include "keybinds.h"
 
+// xresources/color arrays
 #include "libs/xresources.h"
 #include "libs/colors.h"
 
 static char *fonts[] = { font };
 
+// matching
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
@@ -375,7 +375,7 @@ insert(const char *str, ssize_t n)
 {
 	if (strlen(text) + n > sizeof text - 1)
 		return;
-	/* move existing text out of the way, insert new text, and update cursor */
+	// move existing text out of the way, insert new text, and update cursor
 	memmove(&text[cursor + n], &text[cursor], sizeof text - cursor - MAX(n, 0));
 	if (n > 0)
 		memcpy(&text[cursor], str, n);
@@ -388,7 +388,7 @@ nextrune(int inc)
 {
 	ssize_t n;
 
-	/* return location of next utf8 rune in the given direction (+1 or -1) */
+	// return location of next utf8 rune in the given direction (+1 or -1)
 	for (n = cursor + inc; n + inc >= 0 && (text[n] & 0xc0) == 0x80; n += inc)
 		;
 	return n;
@@ -397,12 +397,12 @@ nextrune(int inc)
 void
 movewordedge(int dir)
 {
-	if (dir < 0) { /* move cursor to the start of the word*/
+	if (dir < 0) { // move cursor to the start of the word
 		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
 			cursor = nextrune(-1);
 		while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
 			cursor = nextrune(-1);
-	} else { /* move cursor to the end of the word */
+	} else { // move cursor to the end of the word
 		while (text[cursor] && strchr(worddelimiters, text[cursor]))
 			cursor = nextrune(+1);
 		while (text[cursor] && !strchr(worddelimiters, text[cursor]))
@@ -505,7 +505,7 @@ pastesel(void)
 	unsigned long dl;
 	Atom da;
 
-	/* we have been given the current selection, now insert it into input */
+	// we have been given the current selection, now insert it into input
 	if (XGetWindowProperty(dpy, win, utf8, 0, (sizeof text / 4) + 1, False,
 	                   utf8, &da, &di, &dl, &dl, (unsigned char **)&p)
 	    == Success && p) {
@@ -523,11 +523,13 @@ xinitvisual()
 	int nitems;
 	int i;
 
+    // properties
 	XVisualInfo tpl = {
 		.screen = screen,
 		.depth = 32,
 		.class = TrueColor
 	};
+
 	long masks = VisualScreenMask | VisualDepthMask | VisualClassMask;
 
 	infos = XGetVisualInfo(dpy, masks, &tpl, &nitems);
@@ -545,6 +547,7 @@ xinitvisual()
 
 	XFree(infos);
 
+    // no alpha, reset to default
 	if (!visual || !alpha) {
 		visual = DefaultVisual(dpy, screen);
 		depth = DefaultDepth(dpy, screen);
@@ -568,7 +571,7 @@ readstdin(void)
     	return;
   	}
 
-	/* read each line from stdin and add it to the item list */
+	// read each line from stdin and add it to the item list
 	for (i = 0; fgets(buf, sizeof buf, stdin); i++) {
       	if (i + 1 >= itemsiz) {
 			itemsiz += 256;
@@ -586,7 +589,7 @@ readstdin(void)
 			imax = i;
 		}
 
-        /* parse image markup */
+        // parse image markup
         #if USEIMAGE
         if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
             if(!(items[i].image = malloc(strlen(items[i].text)+1)))
@@ -601,16 +604,18 @@ readstdin(void)
             items[i].image = NULL;
         }
 
-        if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg?limg:"")) {
+        // load image cache (or generate)
+        if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg ? limg : "")) {
             loadimagecache(items[i].image, &w, &h);
             fprintf(stdout, "spmenu: generating thumbnail for: %s\n", items[i].image);
         }
 
-        if(items[i].image)
+        if(items[i].image) {
             limg = items[i].image;
+        }
         #endif
 
-        /* todo: use this for something
+        /* TODO: use this for something
          * current usage is not very useful, however it's here to be used later.
          */
         if(!(items[i].ex = malloc(strlen(items[i].text)+1)))
@@ -620,16 +625,24 @@ readstdin(void)
                 items[i].text += strlen("spmenu:")+strlen(items[i].ex)+1;
             }
 
+            // spmenu:version
             if (!strncmp("version", items[i].ex, strlen("version"))) {
                 die("spmenu version %s", VERSION);
             }
 
+            // spmenu:license
             if (!strncmp("license", items[i].ex, strlen("license"))) {
                 die("spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
+            }
+
+            // spmenu:test
+            if (!strncmp("test", items[i].ex, strlen("test"))) {
+                system("command -v spmenu_test > /dev/null && spmenu_test");
             }
         }
 	}
 
+    // clean
 	if (items) {
         #if USEIMAGE
         items[i].image = NULL;
@@ -664,22 +677,16 @@ setup(void)
 	int a, n, area = 0;
     #endif
 
-    /* init appearance */
-    init_appearance();
+    init_appearance(); // init colorschemes by reading arrays
 
+    // properties
 	clip = XInternAtom(dpy, "CLIPBOARD",   False);
 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
    	types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
 
-    if (!clineheight) {
-        reqlineheight += lineheight;
-    } else {
-        reqlineheight = clineheight;
-    }
-
     // resize client
-    bh = drw->font->h + 2 + reqlineheight;
+    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
 	lines = MAX(lines, 0);
     reallines = lines;
 

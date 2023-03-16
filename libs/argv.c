@@ -152,16 +152,16 @@ readargs(int argc, char *argv[])
                 else if (pr)
                     fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
-		/* these options take one argument */
-        } else if (!strcmp(argv[i], "-g")) {   /* number of columns in grid */
+		// these options take one argument
+        } else if (!strcmp(argv[i], "-g")) {   // number of columns in grid
 			columns = atoi(argv[++i]);
 			if (lines == 0) lines = 1;
-		} else if (!strcmp(argv[i], "-Ps")) { /* password symbol */
+		} else if (!strcmp(argv[i], "-Ps")) { // password symbol
 			password = argv[++i];
-		} else if (!strcmp(argv[i], "-l")) { /* number of lines in grid */
+		} else if (!strcmp(argv[i], "-l")) { // number of lines in grid
 			lines = atoi(argv[++i]);
-		} else if (!strcmp(argv[i], "-h")) { /* minimum height of one menu line */
-	        clineheight += atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-mh")) { // minimum height of one menu line
+	        lineheight += atoi(argv[++i]);
 			if (columns == 0) columns = 1;
 		} else if (!strcmp(argv[i], "-lp")) {
 		    menupaddingv = atoi(argv[++i]);
@@ -315,7 +315,7 @@ usage(void)
 	fputs("spmenu: dynamic menu\n\n"
 		  "- Arguments -\n"
 		  "spmenu -l <line>      Set line count to stdin\n"
-		  "spmenu -h <height>    Set spmenu line height to <height>\n"
+		  "spmenu -mh <height>   Set spmenu line height to <height>\n"
 		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
           "spmenu -gc            Generate image cache\n"
           "spmenu -ngc           Don't generate image cache\n"
