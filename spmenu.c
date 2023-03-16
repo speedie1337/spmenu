@@ -117,14 +117,16 @@ static int numlockmask = 0;
 // height of each item, menu width, menu height
 static int bh, mw, mh;
 static int reallines = 0;
-static int reqlineheight; /* required menu height */
-static int dmx = 0; /* put spmenu at this x offset */
-static int dmy = 0; /* put spmenu at this y offset (measured from the bottom if menuposition is 0) */
-static unsigned int dmw = 0; /* make spmenu this wide */
-static int inputw = 0, promptw, passwd = 0;
-static int lrpad; /* sum of left and right padding */
-static int vp;    /* vertical padding for bar */
-static int sp;    /* side padding for bar */
+static int reqlineheight; // required menu height
+static int dmx = 0; // put spmenu at this x offset
+static int dmy = 0; // put spmenu at this y offset (measured from the bottom if menuposition is 0)
+static unsigned int dmw = 0; // make spmenu this wide
+static int inputw = 0;
+static int promptw;
+static int passwd = 0;
+static int lrpad; // sum of left and right padding
+static int vp;    // vertical padding for bar
+static int sp;    // side padding for bar
 static size_t cursor;
 static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
@@ -167,9 +169,8 @@ static Display *dpy;
 static Window root, parentwin, win;
 static XIC xic;
 
-static int useargb = 0;
-
 // colors
+static int useargb = 0;
 static Visual *visual;
 static int depth;
 static Colormap cmap;
@@ -182,10 +183,9 @@ static char *histfile;
 static char **history;
 static size_t histsz, histpos;
 
-// draw functions
+// declare functions
 static void drawmenu(void);
 static void drawhighlights(struct item *item, int x, int y, int w);
-
 static void calcoffsets(void);
 static void readstdin(void);
 static void recalculatenumbers(void);
@@ -788,7 +788,7 @@ setup(void)
     setimageopts();
     #endif
 
-	/* input methods */
+	// input methods
 	if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL)
 		die("XOpenIM failed: could not open input device");
 
