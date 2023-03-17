@@ -9,13 +9,13 @@ readargs(int argc, char *argv[])
 
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked (internal -> xresources -> arguments)
     for (j = 1; j < argc; j++) {
-		if (!strcmp(argv[j], "-xrdb")) {
+		if (!strcmp(argv[j], "-xrdb") || (!strcmp(argv[j], "--xrdb"))) {
 			xresources = 1;
-        } else if (!strcmp(argv[j], "-nxrdb")) {
+        } else if (!strcmp(argv[j], "-nxrdb") || (!strcmp(argv[j], "--no-xrdb"))) {
 			xresources = 0;
-        } else if (!strcmp(argv[j], "-lcfg")) {
+        } else if (!strcmp(argv[j], "-lcfg") || (!strcmp(argv[j], "--load-config"))) {
 			loadconfig = 1;
-        } else if (!strcmp(argv[j], "-ncfg")) {
+        } else if (!strcmp(argv[j], "-ncfg") || (!strcmp(argv[j], "--no-load-config"))) {
 			loadconfig = 0;
         }
     }
@@ -40,13 +40,13 @@ readargs(int argc, char *argv[])
 			exit(0);
         } else if (!strcmp(argv[i], "-h") || (!strcmp(argv[i], "--help"))) { // help
             usage();
-		} else if (!strcmp(argv[i], "-it") || (!strcmp(argv[i], "--image_top"))) { // image: top
+		} else if (!strcmp(argv[i], "-it") || (!strcmp(argv[i], "--image-top"))) { // image: top
 			imageposition = 0;
-		} else if (!strcmp(argv[i], "-ib") || (!strcmp(argv[i], "--image_bottom"))) { // image: bottom
+		} else if (!strcmp(argv[i], "-ib") || (!strcmp(argv[i], "--image-bottom"))) { // image: bottom
 			imageposition = 1;
-		} else if (!strcmp(argv[i], "-ic") || (!strcmp(argv[i], "--image_center"))) { // image: center
+		} else if (!strcmp(argv[i], "-ic") || (!strcmp(argv[i], "--image-center"))) { // image: center
 			imageposition = 2;
-		} else if (!strcmp(argv[i], "-itc") || (!strcmp(argv[i], "--image_topcenter"))) { // image: top center
+		} else if (!strcmp(argv[i], "-itc") || (!strcmp(argv[i], "--image-topcenter"))) { // image: top center
 			imageposition = 3;
 		} else if (!strcmp(argv[i], "-b") || (!strcmp(argv[i], "--bottom"))) { // appears at the bottom of the screen
 			menuposition = 0;
@@ -64,10 +64,6 @@ readargs(int argc, char *argv[])
 			accuratewidth = 1;
         } else if (!strcmp(argv[i], "-nrw") || (!strcmp(argv[i], "--no-relative-width"))) {   // no relative width
 			accuratewidth = 0;
-        } else if (!strcmp(argv[i], "-xrdb") || (!strcmp(argv[i], "--xrdb"))) {   // xresources
-			xresources = 1;
-        } else if (!strcmp(argv[i], "-nxrdb") || (!strcmp(argv[i], "--no-xrdb"))) {   // no xresources
-			xresources = 0;
         } else if (!strcmp(argv[i], "-F") || (!strcmp(argv[i], "--fuzzy"))) {   // fuzzy matching
 		     fuzzy = 1;
         } else if (!strcmp(argv[i], "-NF") || (!strcmp(argv[i], "--no-fuzzy"))) {   // no fuzzy matching
@@ -140,9 +136,13 @@ readargs(int argc, char *argv[])
 
                 // any of the arguments we checked first
                 if (strcmp(argv[i-1], "-xrdb")
-                || strcmp(argv[i-1], "-nxrdb")
-                || strcmp(argv[i-1], "-lcfg")
-                || strcmp(argv[i-1], "-ncfg")
+                    || strcmp(argv[i-1], "-nxrdb")
+                    || strcmp(argv[i-1], "--xrdb")
+                    || strcmp(argv[i-1], "--no-xrdb")
+                    || strcmp(argv[i-1], "-lcfg")
+                    || strcmp(argv[i-1], "-ncfg")
+                    || strcmp(argv[i-1], "--load-config")
+                    || strcmp(argv[i-1], "--no-load-config")
                 )
                     pr = 0;
 
@@ -254,7 +254,7 @@ readargs(int argc, char *argv[])
 			colors[SchemeItemSelPri][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-spb") || (!strcmp(argv[i], "--selected-item-priority-background"))) { // selected item priority background color
 			colors[SchemeItemSelPri][ColBg] = argv[++i];
-        } else if (!strcmp(argv[i], "-mbg") || (!strcmp(argv[i], "--menu-background"))) { // menu color
+        } else if (!strcmp(argv[i], "-mnbg") || (!strcmp(argv[i], "--menu-background"))) { // menu color
 			colors[SchemeMenu][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-pfg") || (!strcmp(argv[i], "--prompt-foreground"))) { // prompt fg color
 			colors[SchemePrompt][ColFg] = argv[++i];
@@ -328,133 +328,132 @@ usage(void)
 {
 	fputs("spmenu: dynamic menu\n\n"
 		  "- Arguments -\n"
-		  "spmenu -l <line>      Set line count to stdin\n"
-		  "spmenu -mh <height>   Set spmenu line height to <height>\n"
-		  "spmenu -g <grid>      Set the number of grids to <grid>\n"
-          "spmenu -gc            Generate image cache\n"
-          "spmenu -ngc           Don't generate image cache\n"
-          "spmenu -rw            Enable relative input width\n"
-          "spmenu -nrw           Disable relative input width\n"
-          "spmenu -f             Grabs keyboard before reading stdin\n"
-		  "spmenu -F             Enable fuzzy matching\n"
-		  "spmenu -NF            Disable fuzzy matching\n"
-		  "spmenu -P             Hide characters\n"
-          "spmenu -Ps <symbol>   Set the password symbol to <symbol>\n"
-		  "spmenu -p <text>      Set spmenu prompt text to <text>\n"
-          "spmenu -ip            Indent items to prompt width\n"
-          "spmenu -nip           Don't indent items to prompt width\n"
-          "spmenu -a             Enable alpha\n"
-          "spmenu -na            Disable alpha\n"
-          "spmenu -tp            Allow the user to type\n"
-          "spmenu -nt            Don't allow typing, the user must select an option\n"
-		  "spmenu -x <x offset>  Offset spmenu x position by <x offset>\n"
-		  "spmenu -y <y offset>  Offset spmenu y position by <y offset>\n"
-          "spmenu -n <line>      Preselect <line> in the list of items\n"
-		  "spmenu -z <width>     Width of the spmenu window\n"
-          "spmenu -nmt <text>    Set normal mode text to <text>\n"
-          "spmenu -imt <text>    Set insert mode text to <text>\n"
-		  "spmenu -bw            Width of the border. 0 will disable the border\n"
-          "spmenu -so            Sort matches\n"
-          "spmenu -nso           Don't sort matches\n"
-          "spmenu -pri <pri>     Specify a list of items that take priority\n"
-		  "spmenu -s             Use case-sensitive matching\n"
-		  "spmenu -ns            Use case-insensitive matching\n"
-          "spmenu -nm            Start spmenu in normal mode\n"
-          "spmenu -im            Start spmenu in insert mode\n"
-		  "spmenu -t             Position spmenu at the top of the screen\n"
-		  "spmenu -b             Position spmenu at the bottom of the screen\n"
-		  "spmenu -c             Position spmenu at the center of the screen\n"
-          "spmenu -hm            Hide mode indicator\n"
-          "spmenu -hmc           Hide match count\n"
-          "spmenu -hla           Hide left arrow\n"
-          "spmenu -hra           Hide right arrow\n"
-          "spmenu -hpr           Hide prompt\n"
-          "spmenu -hc            Hide cursor\n"
-          "spmenu -hhl           Hide highlight\n"
-          "spmenu -hi            Hide image\n"
-          "spmenu -sm            Show mode indicator\n"
-          "spmenu -smc           Show match count\n"
-          "spmenu -sla           Show left arrow\n"
-          "spmenu -sra           Show right arrow\n"
-          "spmenu -spr           Show prompt\n"
-          "spmenu -sc            Show cursor\n"
-          "spmenu -shl           Show highlight\n"
-          "spmenu -si            Show image\n"
-          "spmenu -xrdb          Load .Xresources on runtime\n"
-          "spmenu -nxrdb         Don't load .Xresources on runtime\n"
-		  "spmenu -m <monitor>   Specify a monitor to run spmenu on\n"
-		  "spmenu -w <window id> Embed spmenu inside <window id>\n"
-		  "spmenu -H <hist file> Specify a path to save the history to\n"
-          "spmenu -ig <gaps>     Set image gaps to <gaps>\n"
-		  "spmenu -lp <padding>  Set the vertical padding\n"
-		  "spmenu -hp <padding>  Set the horizontal padding\n"
-          "spmenu -la <symbol>   Set the left arrow to <symbol>\n"
-          "spmenu -ra <symbol>   Set the right arrow to <symbol>\n"
-          "spmenu -is <size>     Image size\n"
-          "spmenu -it            Position the image at the top\n"
-          "spmenu -ib            Position the image at the bottom\n"
-          "spmenu -ic            Position the image in the center\n"
-          "spmenu -itc           Position the image in the top center\n"
-          "spmenu -wm            Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
-          "spmenu -nwm           Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
-          "spmenu -lcfg          Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
-          "spmenu -ncfg          Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
-          "spmenu -v             Print spmenu version to stdout\n"
+		  "spmenu -l,       --lines <line>                              Set line count to stdin\n"
+		  "spmenu -mh,      --lineheight <height>                       Set spmenu line height to <height>\n"
+		  "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
+          "spmenu -gc,      --generate-cache                            Generate image cache\n"
+          "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"
+          "spmenu -rw,      --relative-width                            Enable relative input width\n"
+          "spmenu -nrw,     --no-relative-width                         Disable relative input width\n"
+          "spmenu -f,       --fast                                      Grabs keyboard before reading stdin\n"
+		  "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
+		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
+		  "spmenu -P,       --password                                  Hide characters\n"
+          "spmenu -Ps,      --password-symbol <symbol>                  Set the password symbol to <symbol>\n"
+		  "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
+          "spmenu -ip,      --indent                                    Indent items to prompt width\n"
+          "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
+          "spmenu -a,       --alpha                                     Enable alpha\n"
+          "spmenu -na,      --no-alpha                                  Disable alpha\n"
+          "spmenu -tp,      --allow-typing                              Allow the user to type\n"
+          "spmenu -nt,      --no-allow-typing                           Don't allow typing, the user must select an option\n"
+		  "spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset>\n"
+		  "spmenu -y,       --y-position <y offset>                     Offset spmenu y position by <y offset>\n"
+          "spmenu -n,       --preselect <line>                          Preselect <line> in the list of items\n"
+		  "spmenu -z,       --width <width>                             Width of the spmenu window\n"
+          "spmenu -nmt,     --normal-mode-text <text>                   Set normal mode text to <text>\n"
+          "spmenu -imt,     --insert-mode-text <text>                   Set insert mode text to <text>\n"
+		  "spmenu -bw,      --border-width <width>                      Set width of the border to <width>. 0 will disable the border\n"
+          "spmenu -so,      --sort                                      Sort matches\n"
+          "spmenu -nso,     --no-sort                                   Don't sort matches\n"
+          "spmenu -pri,     --priority <pri1,pri2,pri3>                 Specify a list of items that take priority\n"
+		  "spmenu -s,       --case-sensitive                            Use case-sensitive matching\n"
+		  "spmenu -ns,      --case-insensitive                          Use case-insensitive matching\n"
+          "spmenu -nm,      --normal                                    Start spmenu in normal mode\n"
+          "spmenu -im,      --insert                                    Start spmenu in insert mode\n"
+		  "spmenu -t,       --top                                       Position spmenu at the top of the screen\n"
+		  "spmenu -b,       --bottom                                    Position spmenu at the bottom of the screen\n"
+		  "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
+          "spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
+          "spmenu -hmc,     --hide-match-count                          Hide match count\n"
+          "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
+          "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
+          "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
+          "spmenu -hc,      --hide-cursor                               Hide cursor\n"
+          "spmenu -hhl,     --hide-highlighting                         Hide highlight\n"
+          "spmenu -hi,      --hide-image                                Hide image\n"
+          "spmenu -sm,      --show-mode                                 Show mode indicator\n"
+          "spmenu -smc,     --show-match-count                          Show match count\n"
+          "spmenu -sla,     --show-left-arrow                           Show left arrow\n"
+          "spmenu -sra,     --show-right-arrow                          Show right arrow\n"
+          "spmenu -spr,     --show-prompt                               Show prompt\n"
+          "spmenu -sc,      --show-cursor                               Show cursor\n"
+          "spmenu -shl,     --show-highlighting                         Show highlight\n"
+          "spmenu -si,      --show-image                                Show image\n"
+          "spmenu -xrdb,    --xrdb                                      Load .Xresources on runtime\n"
+          "spmenu -nxrdb,   --no-xrdb                                   Don't load .Xresources on runtime\n"
+		  "spmenu -m,       --monitor <monitor>                         Specify a monitor to run spmenu on\n"
+		  "spmenu -w,       --embed <window id>                         Embed spmenu inside <window id>\n"
+		  "spmenu -H,       --hist-file <hist file>                     Specify a path to save the history to\n"
+          "spmenu -ig,      --image-gaps <gaps>                         Set image gaps to <gaps>\n"
+		  "spmenu -lp,      --vertical-padding <padding>                Set the vertical padding\n"
+		  "spmenu -hp,      --horizontal-padding <padding>              Set the horizontal padding\n"
+          "spmenu -la,      --left-arrow-symbol <symbol>                Set the left arrow to <symbol>\n"
+          "spmenu -ra,      --right-arrow-symbol <symbol>               Set the right arrow to <symbol>\n"
+          "spmenu -is,      --image-size <size>                         Image size\n"
+          "spmenu -it,      --image-top                                 Position the image at the top\n"
+          "spmenu -ib,      --image-bottom                              Position the image at the bottom\n"
+          "spmenu -ic,      --image-center                              Position the image in the center\n"
+          "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
+          "spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
+          "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
+          "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -v,       --version                                   Print spmenu version to stdout\n"
           "\n", stdout);
           fputs("- Appearance arguments -\n"
-		  "spmenu -fn  <font>    Set the spmenu font to <font>\n"
-          "spmenu -nif <color>   Set the normal item foreground color\n"
-          "spmenu -nib <color>   Set the normal item background color\n"
-          "spmenu -sif <color>   Set the selected item foreground color\n"
-          "spmenu -sib <color>   Set the selected item background color\n"
-          "spmenu -npf <color>   Set the normal item (high priority) foreground color\n"
-          "spmenu -npb <color>   Set the normal item (high priority) background color\n"
-          "spmenu -spf <color>   Set the selected item (high priority) foreground color\n"
-          "spmenu -spb <color>   Set the selected item (high priority) background color\n"
-          "spmenu -pfg <color>   Set the prompt foreground color\n"
-          "spmenu -pbg <color>   Set the prompt background color\n"
-          "spmenu -ifg <color>   Set input foreground color\n"
-          "spmenu -ibg <color>   Set input background color\n"
-          "spmenu -mbg <color>   Set the menu background color\n"
-		  "spmenu -nhf <color>   Set the normal highlight foreground color\n"
-		  "spmenu -nhb <color>   Set the normal highlight background color\n"
-		  "spmenu -shf <color>   Set the selected highlight foreground color\n"
-		  "spmenu -shb <color>   Set the selected highlight background color\n"
-		  "spmenu -shb <color>   Set the selected highlight background color\n"
-          "spmenu -nfg <color>   Set the foreground color for the match count\n"
-          "spmenu -nbg <color>   Set the background color for the match count\n"
-          "spmenu -mfg <color>   Set the foreground color for the mode indicator\n"
-          "spmenu -mbg <color>   Set the background color for the mode indicator\n"
-          "spmenu -laf <color>   Set the left arrow foreground color\n"
-          "spmenu -raf <color>   Set the right arrow foreground color\n"
-          "spmenu -lab <color>   Set the left arrow background color\n"
-          "spmenu -rab <color>   Set the right arrow background color\n"
-          "spmenu -cc  <color>   Set the caret color\n"
-          "spmenu -bc  <color>   Set the border color\n"
-		  "spmenu -sgr0          Set the SGR 0 color\n"
-		  "spmenu -sgr1          Set the SGR 1 color\n"
-		  "spmenu -sgr2          Set the SGR 2 color\n"
-		  "spmenu -sgr3          Set the SGR 3 color\n"
-		  "spmenu -sgr4          Set the SGR 4 color\n"
-		  "spmenu -sgr5          Set the SGR 5 color\n"
-		  "spmenu -sgr6          Set the SGR 6 color\n"
-		  "spmenu -sgr7          Set the SGR 7 color\n"
-		  "spmenu -sgr8          Set the SGR 8 color\n"
-		  "spmenu -sgr9          Set the SGR 9 color\n"
-		  "spmenu -sgr10         Set the SGR 10 color\n"
-		  "spmenu -sgr11         Set the SGR 11 color\n"
-		  "spmenu -sgr12         Set the SGR 12 color\n"
-          "spmenu -sgr13         Set the SGR 13 color\n"
-		  "spmenu -sgr14         Set the SGR 14 color\n"
-		  "spmenu -sgr15         Set the SGR 15 color\n"
+		  "spmenu -fn,      --font  <font>                              Set the spmenu font to <font>\n"
+          "spmenu -nif,     --normal-item-foreground <color>            Set the normal item foreground color\n"
+          "spmenu -nib,     --normal-item-background <color>            Set the normal item background color\n"
+          "spmenu -sif,     --selected-item-foreground <color>          Set the selected item foreground color\n"
+          "spmenu -sib,     --selected-item-background <color>          Set the selected item background color\n"
+          "spmenu -npf,     --normal-item-priority-foreground <color>   Set the normal item (high priority) foreground color\n"
+          "spmenu -npb,     --normal-item-priority-background <color>   Set the normal item (high priority) background color\n"
+          "spmenu -spf,     --selected-item-priority-foreground <color> Set the selected item (high priority) foreground color\n"
+          "spmenu -spb,     --selected-item-priority-background <color> Set the selected item (high priority) background color\n"
+          "spmenu -pfg,     --prompt-foreground <color>                 Set the prompt foreground color\n"
+          "spmenu -pbg,     --prompt-background <color>                 Set the prompt background color\n"
+          "spmenu -ifg,     --input-foreground <color>                  Set input foreground color\n"
+          "spmenu -ibg,     --input-background <color>                  Set input background color\n"
+          "spmenu -mnbg,    --menu-background <color>                   Set the menu background color\n"
+		  "spmenu -nhf,     --normal-highlight-foreground <color>       Set the normal highlight foreground color\n"
+		  "spmenu -nhb,     --normal-highlight-background <color>       Set the normal highlight background color\n"
+		  "spmenu -shf,     --selected-highlight-foreground <color>     Set the selected highlight foreground color\n"
+		  "spmenu -shb,     --selected-highlight-background <color>     Set the selected highlight background color\n"
+          "spmenu -nfg,     --number-foreground <color>                 Set the foreground color for the match count\n"
+          "spmenu -nbg,     --number-background <color>                 Set the background color for the match count\n"
+          "spmenu -mfg,     --mode-foreground <color>                   Set the foreground color for the mode indicator\n"
+          "spmenu -mbg,     --mode-background <color>                   Set the background color for the mode indicator\n"
+          "spmenu -laf,     --left-arrow-foreground <color>             Set the left arrow foreground color\n"
+          "spmenu -raf,     --right-arrow-foreground <color>            Set the right arrow foreground color\n"
+          "spmenu -lab,     --left-arrow-background <color>             Set the left arrow background color\n"
+          "spmenu -rab,     --right-arrow-background <color>            Set the right arrow background color\n"
+          "spmenu -cc,      --caret-foreground <color>                  Set the caret color\n"
+          "spmenu -bc,      --border-background <color>                 Set the border color\n"
+		  "spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
+		  "spmenu -sgr1,    --sgr1 <color>                              Set the SGR 1 color\n"
+		  "spmenu -sgr2,    --sgr2 <color>                              Set the SGR 2 color\n"
+		  "spmenu -sgr3,    --sgr3 <color>                              Set the SGR 3 color\n"
+		  "spmenu -sgr4,    --sgr4 <color>                              Set the SGR 4 color\n"
+		  "spmenu -sgr5,    --sgr5 <color>                              Set the SGR 5 color\n"
+		  "spmenu -sgr6,    --sgr6 <color>                              Set the SGR 6 color\n"
+		  "spmenu -sgr7,    --sgr7 <color>                              Set the SGR 7 color\n"
+		  "spmenu -sgr8,    --sgr8 <color>                              Set the SGR 8 color\n"
+		  "spmenu -sgr9,    --sgr9 <color>                              Set the SGR 9 color\n"
+		  "spmenu -sgr10,   --sgr10 <color>                             Set the SGR 10 color\n"
+		  "spmenu -sgr11,   --sgr11 <color>                             Set the SGR 11 color\n"
+		  "spmenu -sgr12,   --sgr12 <color>                             Set the SGR 12 color\n"
+          "spmenu -sgr13,   --sgr13 <color>                             Set the SGR 13 color\n"
+		  "spmenu -sgr14,   --sgr14 <color>                             Set the SGR 14 color\n"
+		  "spmenu -sgr15,   --sgr15 <color>                             Set the SGR 15 color\n"
           "\n", stdout);
           fputs("- dmenu compatibility -\n"
-          "spmenu -S             Don't sort matches\n"
-		  "spmenu -i             Use case-insensitive matching\n"
-	      "spmenu -nb <color>    Set the normal background color\n"
-		  "spmenu -nf <color>    Set the normal foreground color\n"
-		  "spmenu -sb <color>    Set the selected background color\n"
-		  "spmenu -sf <color>    Set the selected foreground color\n"
+          "spmenu -S                                                    Don't sort matches\n"
+		  "spmenu -i                                                    Use case-insensitive matching\n"
+	      "spmenu -nb <color>                                           Set the normal background color\n"
+		  "spmenu -nf <color>                                           Set the normal foreground color\n"
+		  "spmenu -sb <color>                                           Set the selected background color\n"
+		  "spmenu -sf <color>                                           Set the selected foreground color\n"
           , stdout);
 	exit(1);
 }

@@ -28,133 +28,136 @@ See a list below for a list.
 
 ## Arguments
 
-- spmenu -l line        - Set line count to stdin
-- spmenu -mh height     - Set spmenu line height to height
-- spmenu -g grid        - Set the number of grids to grid
-- spmenu -gc            - Generate image cache
-- spmenu -ngc           - Don't generate image cache
-- spmenu -rw            - Enable relative input width
-- spmenu -nrw           - Disable relative input width
-- spmenu -f             - Grabs keyboard before reading stdin
-- spmenu -F             - Enable fuzzy matching
-- spmenu -NF            - Disable fuzzy matching
-- spmenu -P             - Hide characters
-- spmenu -Ps symbol     - Set the password symbol to symbol
-- spmenu -p text        - Set spmenu prompt text to text
-- spmenu -ip            - Indent items to prompt width
-- spmenu -nip           - Don't indent items to prompt width
-- spmenu -a             - Enable alpha
-- spmenu -na            - Disable alpha
-- spmenu -tp            - Allow the user to type
-- spmenu -nt            - Don't allow typing, the user must select an option
-- spmenu -x x offset    - Offset spmenu x position by x offset
-- spmenu -y y offset    - Offset spmenu y position by y offset
-- spmenu -n line        - Preselect line in the list of items
-- spmenu -z width       - Width of the spmenu window
-- spmenu -nmt text      - Set normal mode text to text
-- spmenu -imt text      - Set insert mode text to text
-- spmenu -bw            - Width of the border. 0 will disable the border
-- spmenu -so            - Sort matches
-- spmenu -nso           - Don't sort matches
-- spmenu -pri priority  - Specify a list of items that take priority
-- spmenu -s             - Use case-sensitive matching
-- spmenu -ns            - Use case-insensitive matching
-- spmenu -nm            - Start spmenu in normal mode
-- spmenu -im            - Start spmenu in insert mode
-- spmenu -t             - Position spmenu at the top of the screen
-- spmenu -b             - Position spmenu at the bottom of the screen
-- spmenu -c             - Position spmenu at the center of the screen
-- spmenu -hm            - Hide mode indicator
-- spmenu -hmc           - Hide match count
-- spmenu -hla           - Hide left arrow
-- spmenu -hra           - Hide right arrow
-- spmenu -hpr           - Hide prompt
-- spmenu -hc            - Hide cursor
-- spmenu -hhl           - Hide highlight
-- spmenu -hi            - Hide image
-- spmenu -sm            - Show mode indicator
-- spmenu -smc           - Show match count
-- spmenu -sla           - Show left arrow
-- spmenu -sra           - Show right arrow
-- spmenu -spr           - Show prompt
-- spmenu -sc            - Show cursor
-- spmenu -shl           - Show highlight
-- spmenu -si            - Show image
-- spmenu -xrdb          - Load .Xresources on runtime
-- spmenu -nxrdb         - Don't load .Xresources on runtime
-- spmenu -m monitor     - Specify a monitor to run spmenu on
-- spmenu -w window id   - Embed spmenu inside window id
-- spmenu -H hist file   - Specify a path to save the history to
-- spmenu -ig gaps       - Set image gaps to gaps
-- spmenu -lp padding    - Set the vertical padding
-- spmenu -hp padding    - Set the horizontal padding
-- spmenu -la symbol     - Set the left arrow to symbol
-- spmenu -ra symbol     - Set the right arrow to symbol
-- spmenu -is size       - Image size
-- spmenu -it            - Position the image at the top
-- spmenu -ib            - Position the image at the bottom
-- spmenu -ic            - Position the image in the center
-- spmenu -itc           - Position the image in the top center
-- spmenu -wm            - Spawn spmenu as a window manager controlled client
-- spmenu -nwm           - Don't spawn spmenu as a window manager controlled client
-- spmenu -lcfg          - Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
-- spmenu -ncfg          - Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
-- spmenu -v             - Print spmenu version to stdout
+Miscellanious:
 
-- spmenu -fn  font      - Set the spmenu font to font
-- spmenu -nif color     - Set the normal item foreground color
-- spmenu -nib color     - Set the normal item background color
-- spmenu -sif color     - Set the selected item foreground color
-- spmenu -sib color     - Set the selected item background color
-- spmenu -npf color     - Set the normal item (high priority) foreground color
-- spmenu -npb color     - Set the normal item (high priority) background color
-- spmenu -spf color     - Set the selected item (high priority) foreground color
-- spmenu -spb color     - Set the selected item (high priority) background color
-- spmenu -pfg color     - Set the prompt foreground color
-- spmenu -pbg color     - Set the prompt background color
-- spmenu -ifg color     - Set input foreground color
-- spmenu -ibg color     - Set input background color
-- spmenu -mbg color     - Set the menu background color
-- spmenu -nhf color     - Set the normal highlight foreground color
-- spmenu -nhb color     - Set the normal highlight background color
-- spmenu -shf color     - Set the selected highlight foreground color
-- spmenu -shb color     - Set the selected highlight background color
-- spmenu -shb color     - Set the selected highlight background color
-- spmenu -nfg color     - Set the foreground color for the match count
-- spmenu -nbg color     - Set the background color for the match count
-- spmenu -mfg color     - Set the foreground color for the mode indicator
-- spmenu -mbg color     - Set the background color for the mode indicator
-- spmenu -laf color     - Set the left arrow foreground color
-- spmenu -raf color     - Set the right arrow foreground color
-- spmenu -lab color     - Set the left arrow background color
-- spmenu -rab color     - Set the right arrow background color
-- spmenu -cc  color     - Set the caret color
-- spmenu -bc  color     - Set the border color
-- spmenu -sgr0          - Set the SGR 0 color
-- spmenu -sgr1          - Set the SGR 1 color
-- spmenu -sgr2          - Set the SGR 2 color
-- spmenu -sgr3          - Set the SGR 3 color
-- spmenu -sgr4          - Set the SGR 4 color
-- spmenu -sgr5          - Set the SGR 5 color
-- spmenu -sgr6          - Set the SGR 6 color
-- spmenu -sgr7          - Set the SGR 7 color
-- spmenu -sgr8          - Set the SGR 8 color
-- spmenu -sgr9          - Set the SGR 9 color
-- spmenu -sgr10         - Set the SGR 10 color
-- spmenu -sgr11         - Set the SGR 11 color
-- spmenu -sgr12         - Set the SGR 12 color
-- spmenu -sgr13         - Set the SGR 13 color
-- spmenu -sgr14         - Set the SGR 14 color
-- spmenu -sgr15         - Set the SGR 15 color
+- spmenu -l,       --lines line                              - Set line count to stdin
+- spmenu -mh,      --lineheight height                       - Set spmenu line height to height
+- spmenu -g,       --columns grid                            - Set the number of grids to grid
+- spmenu -gc,      --generate-cache                          - Generate image cache
+- spmenu -ngc,     --no-generate-cache                       - Don't generate image cache
+- spmenu -rw,      --relative-width                          - Enable relative input width
+- spmenu -nrw,     --no-relative-width                       - Disable relative input width
+- spmenu -f,       --fast                                    - Grabs keyboard before reading stdin
+- spmenu -F,       --fuzzy                                   - Enable fuzzy matching
+- spmenu -NF,      --no-fuzzy                                - Disable fuzzy matching
+- spmenu -P,       --password                                - Hide characters
+- spmenu -Ps,      --password-symbol symbol                  - Set the password symbol to symbol
+- spmenu -p,       --prompt text                             - Set spmenu prompt text to text
+- spmenu -ip,      --indent                                  - Indent items to prompt width
+- spmenu -nip,     --no-indent                               - Don't indent items to prompt width
+- spmenu -a,       --alpha                                   - Enable alpha
+- spmenu -na,      --no-alpha                                - Disable alpha
+- spmenu -tp,      --allow-typing                            - Allow the user to type
+- spmenu -nt,      --no-allow-typing                         - Don't allow typing, the user must select an option
+- spmenu -x,       --x-position x offset                     - Offset spmenu x position by x offset
+- spmenu -y,       --y-position y offset                     - Offset spmenu y position by y offset
+- spmenu -n,       --preselect line                          - Preselect line   in the list of items
+- spmenu -z,       --width width                             - Width of the spmenu window
+- spmenu -nmt,     --normal-mode-text text                   - Set normal mode text to text
+- spmenu -imt,     --insert-mode-text text                   - Set insert mode text to text
+- spmenu -bw,      --border-width width                      - Set width of the border to width  . 0 will disable the border
+- spmenu -so,      --sort                                    - Sort matches
+- spmenu -nso,     --no-sort                                 - Don't sort matches
+- spmenu -pri,     --priority pri1,pri2,pri3                 - Specify a list of items that take priority
+- spmenu -s,       --case-sensitive                          - Use case-sensitive matching
+- spmenu -ns,      --case-insensitive                        - Use case-insensitive matching
+- spmenu -nm,      --normal                                  - Start spmenu in normal mode
+- spmenu -im,      --insert                                  - Start spmenu in insert mode
+- spmenu -t,       --top                                     - Position spmenu at the top of the screen
+- spmenu -b,       --bottom                                  - Position spmenu at the bottom of the screen
+- spmenu -c,       --center                                  - Position spmenu at the center of the screen
+- spmenu -hm,      --hide-mode                               - Hide mode indicator
+- spmenu -hmc,     --hide-match-count                        - Hide match count
+- spmenu -hla,     --hide-left-arrow                         - Hide left arrow
+- spmenu -hra,     --hide-right-arrow                        - Hide right arrow
+- spmenu -hpr,     --hide-prompt                             - Hide prompt
+- spmenu -hc,      --hide-cursor                             - Hide cursor
+- spmenu -hhl,     --hide-highlighting                       - Hide highlight
+- spmenu -hi,      --hide-image                              - Hide image
+- spmenu -sm,      --show-mode                               - Show mode indicator
+- spmenu -smc,     --show-match-count                        - Show match count
+- spmenu -sla,     --show-left-arrow                         - Show left arrow
+- spmenu -sra,     --show-right-arrow                        - Show right arrow
+- spmenu -spr,     --show-prompt                             - Show prompt
+- spmenu -sc,      --show-cursor                             - Show cursor
+- spmenu -shl,     --show-highlighting                       - Show highlight
+- spmenu -si,      --show-image                              - Show image
+- spmenu -xrdb,    --xrdb                                    - Load .Xresources on runtime
+- spmenu -nxrdb,   --no-xrdb                                 - Don't load .Xresources on runtime
+- spmenu -m,       --monitor monitor                         - Specify a monitor to run spmenu on
+- spmenu -w,       --embed window id                         - Embed spmenu inside window id
+- spmenu -H,       --hist-file hist file                     - Specify a path to save the history to
+- spmenu -ig,      --image-gaps gaps                         - Set image gaps to gaps
+- spmenu -lp,      --vertical-padding padding                - Set the vertical padding
+- spmenu -hp,      --horizontal-padding padding              - Set the horizontal padding
+- spmenu -la,      --left-arrow-symbol symbol                - Set the left arrow to symbol
+- spmenu -ra,      --right-arrow-symbol symbol               - Set the right arrow to symbol
+- spmenu -is,      --image-size size                         - Image size
+- spmenu -it,      --image-top                               - Position the image at the top
+- spmenu -ib,      --image-bottom                            - Position the image at the bottom
+- spmenu -ic,      --image-center                            - Position the image in the center
+- spmenu -itc,     --image-topcenter                         - Position the image in the top center
+- spmenu -wm,      --managed, --x11-client                   - Spawn spmenu as a window manager controlled client/window. Useful for testing
+- spmenu -nwm,     --unmanaged                               - Don't spawn spmenu as a window manager controlled client/window. Useful for testing
+- spmenu -lcfg,    --load-config                             - Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
+- spmenu -ncfg,    --no-load-config                          - Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
+- spmenu -v,       --version                                 - Print spmenu version to stdout
+
+Appearance:
+
+- spmenu -fn,      --font  font                              - Set the spmenu font to font
+- spmenu -nif,     --normal-item-foreground color            - Set the normal item foreground color
+- spmenu -nib,     --normal-item-background color            - Set the normal item background color
+- spmenu -sif,     --selected-item-foreground color          - Set the selected item foreground color
+- spmenu -sib,     --selected-item-background color          - Set the selected item background color
+- spmenu -npf,     --normal-item-priority-foreground color   - Set the normal item (high priority) foreground color
+- spmenu -npb,     --normal-item-priority-background color   - Set the normal item (high priority) background color
+- spmenu -spf,     --selected-item-priority-foreground color - Set the selected item (high priority) foreground color
+- spmenu -spb,     --selected-item-priority-background color - Set the selected item (high priority) background color
+- spmenu -pfg,     --prompt-foreground color                 - Set the prompt foreground color
+- spmenu -pbg,     --prompt-background color                 - Set the prompt background color
+- spmenu -ifg,     --input-foreground color                  - Set input foreground color
+- spmenu -ibg,     --input-background color                  - Set input background color
+- spmenu -mnbg,    --menu-background color                   - Set the menu background color
+- spmenu -nhf,     --normal-highlight-foreground color       - Set the normal highlight foreground color
+- spmenu -nhb,     --normal-highlight-background color       - Set the normal highlight background color
+- spmenu -shf,     --selected-highlight-foreground color     - Set the selected highlight foreground color
+- spmenu -shb,     --selected-highlight-background color     - Set the selected highlight background color
+- spmenu -nfg,     --number-foreground color                 - Set the foreground color for the match count
+- spmenu -nbg,     --number-background color                 - Set the background color for the match count
+- spmenu -mfg,     --mode-foreground color                   - Set the foreground color for the mode indicator
+- spmenu -mbg,     --mode-background color                   - Set the background color for the mode indicator
+- spmenu -laf,     --left-arrow-foreground color             - Set the left arrow foreground color
+- spmenu -raf,     --right-arrow-foreground color            - Set the right arrow foreground color
+- spmenu -lab,     --left-arrow-background color             - Set the left arrow background color
+- spmenu -rab,     --right-arrow-background color            - Set the right arrow background color
+- spmenu -cc,      --caret-foreground color                  - Set the caret color
+- spmenu -bc,      --border-background color                 - Set the border color
+- spmenu -sgr0,    --sgr0 color                              - Set the SGR 0 color
+- spmenu -sgr1,    --sgr1 color                              - Set the SGR 1 color
+- spmenu -sgr2,    --sgr2 color                              - Set the SGR 2 color
+- spmenu -sgr3,    --sgr3 color                              - Set the SGR 3 color
+- spmenu -sgr4,    --sgr4 color                              - Set the SGR 4 color
+- spmenu -sgr5,    --sgr5 color                              - Set the SGR 5 color
+- spmenu -sgr6,    --sgr6 color                              - Set the SGR 6 color
+- spmenu -sgr7,    --sgr7 color                              - Set the SGR 7 color
+- spmenu -sgr8,    --sgr8 color                              - Set the SGR 8 color
+- spmenu -sgr9,    --sgr9 color                              - Set the SGR 9 color
+- spmenu -sgr10,   --sgr10 color                             - Set the SGR 10 color
+- spmenu -sgr11,   --sgr11 color                             - Set the SGR 11 color
+- spmenu -sgr12,   --sgr12 color                             - Set the SGR 12 color
+- spmenu -sgr13,   --sgr13 color                             - Set the SGR 13 color
+- spmenu -sgr14,   --sgr14 color                             - Set the SGR 14 color
+- spmenu -sgr15,   --sgr15 color                             - Set the SGR 15 color
 
 There are also extra arguments recognized for dmenu compatibility. These are:
 
-- spmenu -i             - Use case-insensitive matching
-- spmenu -S             - Don't sort matches
-- spmenu -nb color      - Set the normal background color
-- spmenu -nf color      - Set the normal foreground color
-- spmenu -sb color      - Set the selected background color
-- spmenu -sf color      - Set the selected foreground color
+- spmenu -S                                                  - Don't sort matches
+- spmenu -i                                                  - Use case-insensitive matching
+- spmenu -nb color                                           - Set the normal background color
+- spmenu -nf color                                           - Set the normal foreground color
+- spmenu -sb color                                           - Set the selected background color
+- spmenu -sf color                                           - Set the selected foreground color
 
 ## Keybinds
 
