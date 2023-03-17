@@ -1,6 +1,6 @@
 # TODO for spmenu
 
 - Don't allow resizing too far using keybinds
-- Tab currently broken
+- Tab currently broken for SGR sequences
 - Mouse bind array (mouse.h)
 - Add configuration file using (probably) libconfig
