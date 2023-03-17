@@ -364,7 +364,9 @@ usage(void)
 		  "spmenu -t,       --top                                       Position spmenu at the top of the screen\n"
 		  "spmenu -b,       --bottom                                    Position spmenu at the bottom of the screen\n"
 		  "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
-          "spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
+          "\n", stdout);
+
+    fputs("spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
           "spmenu -hmc,     --hide-match-count                          Hide match count\n"
           "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
           "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
@@ -401,7 +403,8 @@ usage(void)
           "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
           "spmenu -v,       --version                                   Print spmenu version to stdout\n"
           "\n", stdout);
-          fputs("- Appearance arguments -\n"
+
+    fputs("- Appearance arguments -\n"
 		  "spmenu -fn,      --font  <font>                              Set the spmenu font to <font>\n"
           "spmenu -nif,     --normal-item-foreground <color>            Set the normal item foreground color\n"
           "spmenu -nib,     --normal-item-background <color>            Set the normal item background color\n"
@@ -430,7 +433,8 @@ usage(void)
           "spmenu -rab,     --right-arrow-background <color>            Set the right arrow background color\n"
           "spmenu -cc,      --caret-foreground <color>                  Set the caret color\n"
           "spmenu -bc,      --border-background <color>                 Set the border color\n"
-		  "spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
+          "\n", stdout);
+    fputs("spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
 		  "spmenu -sgr1,    --sgr1 <color>                              Set the SGR 1 color\n"
 		  "spmenu -sgr2,    --sgr2 <color>                              Set the SGR 2 color\n"
 		  "spmenu -sgr3,    --sgr3 <color>                              Set the SGR 3 color\n"
@@ -447,7 +451,7 @@ usage(void)
 		  "spmenu -sgr14,   --sgr14 <color>                             Set the SGR 14 color\n"
 		  "spmenu -sgr15,   --sgr15 <color>                             Set the SGR 15 color\n"
           "\n", stdout);
-          fputs("- dmenu compatibility -\n"
+    fputs("- dmenu compatibility -\n"
           "spmenu -S                                                    Don't sort matches\n"
 		  "spmenu -i                                                    Use case-insensitive matching\n"
 	      "spmenu -nb <color>                                           Set the normal background color\n"
