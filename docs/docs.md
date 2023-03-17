@@ -29,7 +29,7 @@ See a list below for a list.
 ## Arguments
 
 - spmenu -l line        - Set line count to stdin
-- spmenu -mh height      - Set spmenu line height to height
+- spmenu -mh height     - Set spmenu line height to height
 - spmenu -g grid        - Set the number of grids to grid
 - spmenu -gc            - Generate image cache
 - spmenu -ngc           - Don't generate image cache
@@ -37,6 +37,7 @@ See a list below for a list.
 - spmenu -nrw           - Disable relative input width
 - spmenu -f             - Grabs keyboard before reading stdin
 - spmenu -F             - Enable fuzzy matching
+- spmenu -NF            - Disable fuzzy matching
 - spmenu -P             - Hide characters
 - spmenu -Ps symbol     - Set the password symbol to symbol
 - spmenu -p text        - Set spmenu prompt text to text
