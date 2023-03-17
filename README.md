@@ -21,7 +21,6 @@ Of course if you want, this is free software so you can use it in your own build
 - Image support (from [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
-- Border only when centered option
 - Hiding each part of the menu
 
 ### Other features
@@ -53,6 +52,8 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 - libXinerama
   - Can be disabled if you don't want/need multi-monitor support, edit `toggle.mk`
 - tcc compiler (you can swap it out for GCC by passing CC="gcc" to the `make` command if you want)
+- OpenSSL
+  - To calculate MD5
 - Pango (for drawing fonts)
   - If you do not want to use pango, edit `toggle.mk`
 
@@ -77,6 +78,8 @@ If you are on Gentoo GNU/Linux, you can add
 If you are on Arch GNU/Linux, you can add
 [my repository](https://git.speedie.gq/speedie-repository) which includes
 `spmenu` as well as other useful packages.
+
+There's also a PKGBUILD. To use it, simply `makepkg -Si`.
 
 ### Images
 
