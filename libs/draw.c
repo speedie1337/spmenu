@@ -39,7 +39,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 int
 drawitem(struct item *item, int x, int y, int w)
 {
-    char buffer[sizeof(item->text) + lrpad / 2];
+    char buffer[MAXITEMLENGTH];
     Clr scm[3];
     int lp = lrpad / 2; // padding
     int wr, rd;

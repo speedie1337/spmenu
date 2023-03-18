@@ -11,6 +11,9 @@
 #define NUMBERSMAXDIGITS      100
 #define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
 
+// item
+#define MAXITEMLENGTH         1024
+
 // user friendly names for all the modifiers
 #define CONTROL ControlMask
 #define SHIFT ShiftMask
