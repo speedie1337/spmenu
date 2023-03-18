@@ -131,24 +131,18 @@ readargs(int argc, char *argv[])
 		} else if (!strcmp(argv[i], "-nip") || (!strcmp(argv[i], "--no-indent"))) {  // don't indent to prompt width
 				indentitems = 0;
         } else if (i + 1 == argc) {
-                int arg = i;
-                int pr = 1;
-
                 // any of the arguments we checked first
-                if (strcmp(argv[i-1], "-xrdb")
-                    || strcmp(argv[i-1], "-nxrdb")
-                    || strcmp(argv[i-1], "--xrdb")
-                    || strcmp(argv[i-1], "--no-xrdb")
-                    || strcmp(argv[i-1], "-lcfg")
-                    || strcmp(argv[i-1], "-ncfg")
-                    || strcmp(argv[i-1], "--load-config")
-                    || strcmp(argv[i-1], "--no-load-config")
-                )
-                    pr = 0;
-
-                if (arg != 1 && pr)
-                    fprintf(stderr, "spmenu: The '%s' option requires an argument.\n", argv[i-1]);
-                else if (pr)
+                if ((!strcmp(argv[i], "-xrdb")
+                    || !strcmp(argv[i], "-nxrdb")
+                    || !strcmp(argv[i], "--xrdb")
+                    || !strcmp(argv[i], "--no-xrdb")
+                    || !strcmp(argv[i], "-lcfg")
+                    || !strcmp(argv[i], "-ncfg")
+                    || !strcmp(argv[i], "--load-config")
+                    || !strcmp(argv[i], "--no-load-config")
+                ))
+                    continue;
+                else
                     fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
         // dmenu compatibility arguments
@@ -312,7 +306,18 @@ readargs(int argc, char *argv[])
 		else if (!strcmp(argv[i], "-sgr14") || (!strcmp(argv[i], "--sgr14"))) textcolors[14] = argv[++i]; // sgr color 14
 		else if (!strcmp(argv[i], "-sgr15") || (!strcmp(argv[i], "--sgr15"))) textcolors[15] = argv[++i]; // sgr color 15
 		else
-            fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
+            if ((!strcmp(argv[i], "-xrdb")
+                || !strcmp(argv[i], "-nxrdb")
+                || !strcmp(argv[i], "--xrdb")
+                || !strcmp(argv[i], "--no-xrdb")
+                || !strcmp(argv[i], "-lcfg")
+                || !strcmp(argv[i], "-ncfg")
+                || !strcmp(argv[i], "--load-config")
+                || !strcmp(argv[i], "--no-load-config")
+            ))
+                continue;
+            else
+                fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
     if (casesensitive) {
         fstrncmp = strncmp;
