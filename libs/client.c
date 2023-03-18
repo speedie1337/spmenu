@@ -48,8 +48,9 @@ resizeclient(void)
 {
     int omh = mh;
 
-	bh = drw->font->h + 2 + reqlineheight;
+    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
 	lines = MAX(lines, 0);
+    reallines = lines;
 
     #if USEIMAGE
     if (image)
