@@ -69,18 +69,22 @@ spmenu.indentitems:        1
 spmenu.maxhist:            64
 spmenu.histnodup:          1
 
-!! Input
+!! Matches
 spmenu.type:               1
+spmenu.fuzzy:              1
+spmenu.sortmatches:        1
 spmenu.casesensitive:      0
 
 !! Menu
 spmenu.menuposition:       1
 spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
+spmenu.minwidth:           500
 
 !! General
 spmenu.class:              spmenu
 spmenu.fast:               0
+spmenu.managed:            0
 spmenu.mon:                -1
 
 !! Image
@@ -104,6 +108,7 @@ spmenu.hidehighlight:      0
 spmenu.hideimage:          0
 
 !! Text
+spmenu.prompt:
 spmenu.normtext:           Normal
 spmenu.instext:            Insert
 spmenu.password:           .
