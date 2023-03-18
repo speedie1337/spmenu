@@ -699,7 +699,8 @@ setup(void)
 
     mh = (lines + 1) * bh; // lines + 1 * bh is the menu height
 
-    if (menuposition == 2) promptw = (prompt && *prompt) ? TEXTWM(prompt) - lrpad / 4 : 0; // prompt width
+    promptw = (prompt && *prompt)
+        ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - lrpad / 4 : 0; // prompt width
 
     // get accurate width
     if (accuratewidth) {
