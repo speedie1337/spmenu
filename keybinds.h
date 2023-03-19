@@ -71,7 +71,7 @@ static Key keys[] = {
 	{ 0,       CONTROL,                      XK_h,         setcolumns,      {.i = +1 } },
 	{ 0,       CONTROL,                      XK_l,         setcolumns,      {.i = -1 } },
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
-    { 0,       CONTROL,                      XK_h,         viewhist,        {0} },
+    { 0,       CONTROL|SHIFT,                XK_h,         viewhist,        {0} },
     { 0,       CONTROL,                      XK_u,         clear,           {0} },
     { 0,       0,                            XK_Escape,    quit,            {0} },
     { 0,       0,                            XK_Home,      movestart,       {0} },
