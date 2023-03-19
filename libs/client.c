@@ -47,9 +47,15 @@ void
 resizeclient(void)
 {
     int omh = mh;
+    struct item *item;
+    int itemCount = 0;
+
+    // walk through all items
+    for (item = items; item && item->text; item++)
+        itemCount++;
 
     bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
-	lines = MAX(lines, 0);
+	lines = MIN(itemCount, MAX(lines, 0));
     reallines = lines;
 
     #if USEIMAGE
