@@ -20,6 +20,7 @@ create_list() {
         [ -e "$(dirname "$file")/cover.jpg" ] && \
             cp "$(dirname "$file")"/cover.jpg "$prefix/cover-$i.jpg" || ffmpeg -i "$file" -map 0:1 "$prefix/cover-$i.jpg" -loglevel quiet
         [ -e "$prefix/cover-$i.jpg" ] && imageprefix="IMG:" && image="$prefix/cover-$i.jpg"
+        [ "$(basename "$file")" = "cover.jpg" ] && i=$(expr $i + 1) && continue
         printf "%s%s\t%s\n" "$imageprefix" "$image" "$(basename "$file")"
 
         i=$(expr $i + 1)
