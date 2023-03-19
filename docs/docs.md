@@ -32,6 +32,7 @@ Miscellanious:
 
 - spmenu -l,       --lines line                              - Set line count to stdin
 - spmenu -mh,      --lineheight height                       - Set spmenu line height to height
+- spmenu -mw,      --min-width width                         - Set minimum width to width
 - spmenu -g,       --columns grid                            - Set the number of grids to grid
 - spmenu -gc,      --generate-cache                          - Generate image cache
 - spmenu -ngc,     --no-generate-cache                       - Don't generate image cache

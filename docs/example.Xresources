@@ -79,7 +79,7 @@ spmenu.casesensitive:      0
 spmenu.menuposition:       1
 spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
-spmenu.minwidth:           500
+spmenu.minwidth:           1000
 
 !! General
 spmenu.class:              spmenu
