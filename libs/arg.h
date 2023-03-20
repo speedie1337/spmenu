@@ -16,6 +16,7 @@ static void restoresel(const Arg *arg);
 static void clear(const Arg *arg);
 static void viewhist(const Arg *arg);
 static void moveword(const Arg *arg);
+static void deleteword(const Arg *arg);
 static void movecursor(const Arg *arg);
 static void navhistory(const Arg *arg);
 static void backspace(const Arg *arg);

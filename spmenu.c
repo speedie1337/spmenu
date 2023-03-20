@@ -190,7 +190,6 @@ static void calcoffsets(void);
 static void readstdin(void);
 static void recalculatenumbers(void);
 static void usage(void);
-static void movewordedge(int dir);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
@@ -393,22 +392,6 @@ nextrune(int inc)
 	for (n = cursor + inc; n + inc >= 0 && (text[n] & 0xc0) == 0x80; n += inc)
 		;
 	return n;
-}
-
-void
-movewordedge(int dir)
-{
-	if (dir < 0) { // move cursor to the start of the word
-		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
-			cursor = nextrune(-1);
-		while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
-			cursor = nextrune(-1);
-	} else { // move cursor to the end of the word
-		while (text[cursor] && strchr(worddelimiters, text[cursor]))
-			cursor = nextrune(+1);
-		while (text[cursor] && !strchr(worddelimiters, text[cursor]))
-			cursor = nextrune(+1);
-	}
 }
 
 void

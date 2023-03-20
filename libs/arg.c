@@ -194,16 +194,41 @@ viewhist(const Arg *arg)
 }
 
 void
+deleteword(const Arg *arg)
+{
+    if (cursor == 0)
+        return;
+
+	while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
+        insert(NULL, nextrune(-1) - cursor);
+	while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
+        insert(NULL, nextrune(-1) - cursor);
+
+    drawmenu();
+}
+
+void
 moveword(const Arg *arg)
 {
-    movewordedge(arg->i);
+    if (arg->i < 0) { // move cursor to the start of the word
+		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
+			cursor = nextrune(-1);
+		while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
+			cursor = nextrune(-1);
+	} else { // move cursor to the end of the word
+		while (text[cursor] && strchr(worddelimiters, text[cursor]))
+			cursor = nextrune(+1);
+		while (text[cursor] && !strchr(worddelimiters, text[cursor]))
+			cursor = nextrune(+1);
+	}
+
     drawmenu();
 }
 
 void
 movecursor(const Arg *arg)
 {
-    cursor = arg->i ? nextrune(+1) : nextrune(-1);
+    cursor = nextrune(arg->i);
     drawmenu();
 }
 
