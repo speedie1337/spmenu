@@ -61,7 +61,7 @@ Note: This is an incomplete list, it's just here to give you an idea of what thi
 
 `emerge dev-vcs/git # Install dev-vcs/git using your favorite package manager`
 
-`git clone https://codeberg.org/speedie/spmenu`
+`git clone https://git.speedie.gq/spmenu`
 
 `cd spmenu/`
 
