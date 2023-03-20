@@ -1,106 +1,112 @@
 void
-move(const Arg *arg)
+moveleft(const Arg *arg)
+{
+    struct item *tmpsel;
+    int i, offscreen = 0;
+    int argu = arg->i ? arg->i : 1;
+
+    if (columns > 1) {
+		if (!sel)
+			return;
+		tmpsel = sel;
+		for (i = 0; i < lines; i++) {
+			if (!tmpsel->left || tmpsel->left->right != tmpsel) {
+				if (offscreen)
+					drawmenu();
+				return;
+			}
+			if (tmpsel == curr)
+				offscreen = 1;
+			tmpsel = tmpsel->left;
+		}
+		sel = tmpsel;
+		if (offscreen) {
+            for (int j = 0; j < argu; j++) {
+                curr = prev;
+            }
+		}
+
+		drawmenu();
+        calcoffsets();
+	}
+
+	if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
+		cursor = nextrune(-1);
+		drawmenu();
+	}
+}
+
+void
+moveright(const Arg *arg)
+{
+    struct item *tmpsel;
+    int i, offscreen = 0;
+    int argu = arg->i ? arg->i : 1;
+
+    if (columns > 1) {
+		if (!sel)
+			return;
+		tmpsel = sel;
+		for (i = 0; i < lines; i++) {
+			if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
+				if (offscreen)
+					drawmenu();
+				return;
+			}
+			tmpsel = tmpsel->right;
+			if (tmpsel == next)
+				offscreen = 1;
+		}
+		sel = tmpsel;
+		if (offscreen) {
+            for (int j = 0; j < argu; j++)
+                curr = next;
+            }
+			calcoffsets();
+		}
+
+	drawmenu();
+
+	if (text[cursor] != '\0') {
+		cursor = nextrune(+1);
+		drawmenu();
+	}
+}
+
+void
+movedown(const Arg *arg)
+{
+
+    struct item *tmpsel;
+    int i, offscreen = 0;
+
+    int argu = arg->i ? arg->i : 1;
+
+    for (int j = 0; j < argu; j++) {
+       	if (sel && sel->right && (sel = sel->right) == next) {
+			curr = next;
+		}
+    }
+
+    calcoffsets();
+	drawmenu();
+}
+
+void
+moveup(const Arg *arg)
 {
     struct item *tmpsel;
     int i, offscreen = 0;
 
-    if (arg->i == 3) { // left
-    	if (columns > 1) {
-			if (!sel)
-				return;
-			tmpsel = sel;
-			for (i = 0; i < lines; i++) {
-				if (!tmpsel->left || tmpsel->left->right != tmpsel) {
-					if (offscreen)
-						drawmenu();
-					return;
-				}
-				if (tmpsel == curr)
-					offscreen = 1;
-				tmpsel = tmpsel->left;
-			}
-			sel = tmpsel;
-			if (offscreen) {
-				curr = prev;
-				calcoffsets();
-			}
-			drawmenu();
-		}
+    int argu = arg->i ? arg->i : 1;
 
-		if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
-			cursor = nextrune(-1);
-			drawmenu();
-		}
-		if (lines > 0)
-			return;
-    } else if (arg->i == 4) { // right
-        	if (columns > 1) {
-			if (!sel)
-				return;
-			tmpsel = sel;
-			for (i = 0; i < lines; i++) {
-				if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
-					if (offscreen)
-						drawmenu();
-					return;
-				}
-				tmpsel = tmpsel->right;
-				if (tmpsel == next)
-					offscreen = 1;
-			}
-			sel = tmpsel;
-			if (offscreen) {
-				curr = next;
-				calcoffsets();
-			}
-			drawmenu();
-		}
-
-		if (text[cursor] != '\0') {
-			cursor = nextrune(+1);
-			drawmenu();
-		}
-
-		if (lines > 0)
-			return;
-    } else if (arg->i == 2) { // down
-       	if (sel && sel->right && (sel = sel->right) == next) {
-			curr = next;
-			calcoffsets();
-		}
-		drawmenu();
-    } else if (arg->i == 1) { // up
+    for (int j = 0; j < argu; j++) {
         if (sel && sel->left && (sel = sel->left)->right == curr) {
 			curr = prev;
-			calcoffsets();
 		}
-        drawmenu();
-    }
-}
-
-void
-fastmoveup(const Arg *arg)
-{
-    for (int i = 0; i < arg->i; i++) {
-        if (sel && sel->left && (sel = sel->left)->right == curr) {
-			curr = prev;
-        }
     }
 
-    calcoffsets();
-    drawmenu();
-}
-
-void
-fastmovedown(const Arg *arg)
-{
-    for (int i = 0; i < arg->i; i++) {
-        if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
-        }
-    }
-
-    calcoffsets();
+	calcoffsets();
     drawmenu();
 }
 

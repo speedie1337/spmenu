@@ -6,7 +6,10 @@ typedef union {
 } Arg;
 
 // declare keybind functions
-static void move(const Arg *arg);
+static void moveup(const Arg *arg);
+static void movedown(const Arg *arg);
+static void moveleft(const Arg *arg);
+static void moveright(const Arg *arg);
 static void moveend(const Arg *arg);
 static void movestart(const Arg *arg);
 static void movenext(const Arg *arg);
@@ -33,5 +36,3 @@ static void setimgpos(const Arg *arg);
 static void setimggaps(const Arg *arg);
 static void setlines(const Arg *arg);
 static void setcolumns(const Arg *arg);
-static void fastmoveup(const Arg *arg);
-static void fastmovedown(const Arg *arg);
