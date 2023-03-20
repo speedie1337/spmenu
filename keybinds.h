@@ -39,6 +39,10 @@ static Key keys[] = {
      *
      * mode    modifier                      key           function         argument  */
 	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
+	{ 1,       0,                            XK_Up,        move,            {.i = 1  } },
+	{ 1,       0,                            XK_Down,      move,            {.i = 2  } },
+	{ 1,       0,                            XK_Left,      move,            {.i = 3  } },
+	{ 1,       0,                            XK_Right,     move,            {.i = 4  } },
 
 	/* normal mode
      *
@@ -80,8 +84,10 @@ static Key keys[] = {
     { 0,       SHIFT,                        XK_g,         moveend,         {0} },
     { 0,       0,                            XK_Next,      movenext,        {0} },
     { 0,       0,                            XK_Prior,     moveprev,        {0} },
-    { 0,       MODIFIER1,                    XK_b,         moveword,        {.i = -1 } },
-    { 0,       MODIFIER1,                    XK_f,         moveword,        {.i = +1 } },
+    { 0,       SHIFT,                        XK_Left,      moveword,        {.i = -1 } },
+    { 0,       SHIFT,                        XK_Right,     moveword,        {.i = +1 } },
+    { 0,       0,                            XK_Left,      movecursor,      {.i = -1 } },
+    { 0,       0,                            XK_Right,     movecursor,      {.i = +1 } },
     { 0,       MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { 0,       MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
 
@@ -92,9 +98,5 @@ static Key keys[] = {
     { -1,      0,                            XK_Tab,       complete,        {0} },
     { -1,      CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
     { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
-	{ -1,      0,                            XK_Up,        move,            {.i = 1  } },
-	{ -1,      0,                            XK_Down,      move,            {.i = 2  } },
-	{ -1,      0,                            XK_Left,      move,            {.i = 3  } },
-	{ -1,      0,                            XK_Right,     move,            {.i = 4  } },
     { -1,      0,                            XK_BackSpace, backspace,       {0} },
 };

@@ -201,6 +201,13 @@ moveword(const Arg *arg)
 }
 
 void
+movecursor(const Arg *arg)
+{
+    cursor = arg->i ? nextrune(+1) : nextrune(-1);
+    drawmenu();
+}
+
+void
 backspace(const Arg *arg)
 {
     if (cursor == 0)
