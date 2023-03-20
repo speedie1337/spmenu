@@ -13,7 +13,7 @@
  *
  * Example keybind:
  *
- * { MODIFIER1, XK_1, myfunction, ${0} },
+ * { -1, MODIFIER1, XK_1, myfunction, ${0} },
  *
  * Once you're done with your edits, run 'make clean install'.
  */
@@ -66,13 +66,15 @@ static Key keys[] = {
 	{ 0,       0,                            XK_j,         move,            {.i = 2  } },
 	{ 0,       0,                            XK_h,         move,            {.i = 3  } },
 	{ 0,       0,                            XK_l,         move,            {.i = 4  } },
+	{ 0,       CONTROL,                      XK_u,         fastmoveup,      {.i = 5  } },
+	{ 0,       CONTROL,                      XK_d,         fastmovedown,    {.i = 5  } },
 	{ 0,       CONTROL,                      XK_k,         setlines,        {.i = +1 } },
 	{ 0,       CONTROL,                      XK_j,         setlines,        {.i = -1 } },
 	{ 0,       CONTROL,                      XK_h,         setcolumns,      {.i = +1 } },
 	{ 0,       CONTROL,                      XK_l,         setcolumns,      {.i = -1 } },
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
     { 0,       CONTROL|SHIFT,                XK_h,         viewhist,        {0} },
-    { 0,       CONTROL,                      XK_u,         clear,           {0} },
+    { 0,       0,                            XK_d,         clear,           {0} },
     { 0,       0,                            XK_Escape,    quit,            {0} },
     { 0,       0,                            XK_Home,      movestart,       {0} },
     { 0,       0,                            XK_End,       moveend,         {0} },

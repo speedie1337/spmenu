@@ -16,12 +16,17 @@ This build of spmenu has some features written for this build.
 Of course if you want, this is free software so you can use it in your own build.
 
 - dwm-like keybind array (See keybinds.h)
-- Vim-like modes, including indicator
+- Vim-like modes, including indicator.
+- The ability to move around items with keybinds.
+- Customizable line/column size.
+- Web browser like keybindings.
 - 256 color support through SGR codes.
 - Image support (from [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
-- Hiding each part of the menu
+- Hiding each part of the menu.
+
+..and more!
 
 ### Other features
 

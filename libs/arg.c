@@ -79,6 +79,32 @@ move(const Arg *arg)
 }
 
 void
+fastmoveup(const Arg *arg)
+{
+    for (int i = 0; i < arg->i; i++) {
+        if (sel && sel->left && (sel = sel->left)->right == curr) {
+			curr = prev;
+        }
+    }
+
+    calcoffsets();
+    drawmenu();
+}
+
+void
+fastmovedown(const Arg *arg)
+{
+    for (int i = 0; i < arg->i; i++) {
+        if (sel && sel->right && (sel = sel->right) == next) {
+            curr = next;
+        }
+    }
+
+    calcoffsets();
+    drawmenu();
+}
+
+void
 complete(const Arg *arg)
 {
  	if (!sel) return;
