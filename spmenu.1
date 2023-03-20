@@ -17,7 +17,7 @@
 .TH "spmenu" "1" "" "0.3.1" "dynamic menu"
 .hy
 .SH spmenu
-.SS What is spmenu?
+.SH What is spmenu?
 .PP
 spmenu is a program for X11 that reads standard input and allows the
 user to select items separated by a newline.
@@ -30,7 +30,7 @@ configuration, and more.
 .PP
 Most of these features can be disabled during compile time by editing
 \f[V]toggle.mk\f[R].
-.SS Usage
+.SH Usage
 .PP
 On runtime, spmenu reads from standard input (stdin).
 spmenu items are separated by a newline (\f[V]\[rs]n\f[R]).
@@ -46,7 +46,7 @@ This can be used in shell scripts to create interactive menus.
 On top of this, you can specify arguments to change the behavior of
 spmenu.
 See a list below for a list.
-.SS Arguments
+.SH Arguments
 .PP
 You may use long, descriptive arguments or the shorter arguments.
 .TP
@@ -420,10 +420,10 @@ Set the normal foreground color
 \f[V]-sb color\f[R]
 Set the selected background color \f[V]-sf color\f[R]
 Set the selected foreground color
-.SS Keybinds
+.SH Keybinds
 .PP
 See \f[V]keybinds.h\f[R] for a list.
-.SS Modes
+.SH Modes
 .PP
 One of the features that separate spmenu from dmenu is spmenu\[cq]s
 different modes.
@@ -444,13 +444,13 @@ When you are in insert mode, you filter items by typing text into the
 field.
 Once you\[cq]re done with insert mode, you can press Escape to enter
 normal mode again.
-.SS -p option
+.SH -p option
 .PP
 spmenu has a -p option, which stands for prompt.
 It allows you to specify text to display next to the item list.
 It is displayed on the left side of the spmenu window.
 It should be noted that the prompt is purely visual though.
-.SS Images
+.SH Images
 .PP
 spmenu supports drawing images.
 This image is placed on the left side of the menu window.
@@ -470,7 +470,7 @@ There are also a few image related arguments, such as:
 .PP
 \f[V]-is\f[R], \f[V]-ig\f[R], \f[V]-it\f[R], \f[V]-ib\f[R],
 \f[V]-ic\f[R], \f[V]-itc\f[R] and \f[V]-gc\f[R].
-.SS Colored text
+.SH Colored text
 .PP
 spmenu supports colored text through SGR sequences.
 This is the same colors that you might already be using in your shell
@@ -482,7 +482,7 @@ For 256 color support to work, you must add to the array.
 See \f[V]libs/color.h\f[R] if you want this.
 .PP
 See `SGR sequences' for more information.
-.SS SGR sequences
+.SH SGR sequences
 .PP
 A basic supported SGR sequence looks like this: \f[V]\[rs]033[X;YZm\f[R]
 .PP
@@ -504,7 +504,7 @@ spmenu supports most color sequences, although not true color by default
 There are a few arguments, you can override SGR colors on-the-fly using
 the \f[V]-sgrX\f[R] arguments.
 See `Arguments' for more information.
-.SS Configuration
+.SH Configuration
 .PP
 spmenu has .Xresources (xrdb) support built in.
 It reads the xrdb (.Xresources database) on runtime.
