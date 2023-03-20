@@ -836,10 +836,11 @@ main(int argc, char *argv[])
 	xinitvisual();
 	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
 
+    // load fonts
 	if (!drw_font_create(drw, fonts, LENGTH(fonts)))
 	    die("no fonts could be loaded.");
-	lrpad = drw->font->h;
 
+    lrpad = drw->font->h;
     prepare_window_size();
 
     #ifdef __OpenBSD__
@@ -849,6 +850,7 @@ main(int argc, char *argv[])
 
 	loadhistory();
 
+    // fast (-f) means we grab keyboard before reading standard input
 	if (fast && !isatty(0)) {
 		grabkeyboard();
 		readstdin();

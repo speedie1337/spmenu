@@ -1,5 +1,6 @@
 spmenu
 ======
+
 ![image](/docs/preview.png)
 
 What is spmenu?
@@ -493,3 +494,8 @@ operating system.
 
 You can also use wildcards (such as `*`) to achieve a global colorscheme. Programs like
 `pywal` do this.
+
+License
+=======
+
+spmenu is licensed under the MIT license. See the included LICENSE file for more information.
