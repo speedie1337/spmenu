@@ -5,6 +5,9 @@ drawhighlights(struct item *item, int x, int y, int w)
 	char *highlight;
 	char c;
 
+    if (columns > 5)
+        return;
+
 	char *itemtext = item->text;
 
 	if (!(strlen(itemtext) && strlen(text)))
