@@ -280,13 +280,33 @@ drawmenu(void)
 	}
 
     if (!hidematchcount) { // draw match count
+        prevscheme = scheme[SchemeNumber];
         drw_setscheme(drw, scheme[SchemeNumber]);
+
         drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
+
+        // draw powerline for match count
+        if (!hidepowerline) {
+            drw_settrans(drw, scheme[SchemeNumber], scheme[SchemeMenu]);
+            drw_arrow(drw, mw - numberWidth - modeWidth, 0, plw, bh, 0, 0);
+
+            x += plw;
+        }
     }
 
     if (!hidemode) { // draw mode indicator
+        prevscheme = scheme[SchemeMode];
         drw_setscheme(drw, scheme[SchemeMode]);
+
         drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
+
+        // draw powerline for match count
+        if (!hidepowerline) {
+            drw_settrans(drw, scheme[SchemeMode], hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber]);
+            drw_arrow(drw, mw - modeWidth, 0, plw, bh, 0, 0);
+
+            x += plw;
+        }
     }
 
     // map the drawing
