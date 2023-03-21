@@ -463,3 +463,11 @@ drw_cur_free(Drw *drw, Cur *cursor)
 	free(cursor);
 }
 
+unsigned int
+drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup)
+{
+	unsigned int tmp = 0;
+	if (drw && drw->font && text && n)
+		tmp = drw_text(drw, 0, 0, 0, 0, 0, text, n, markup);
+	return MIN(n, tmp);
+}

@@ -1,3 +1,55 @@
+unsigned int
+textw_clamp(const char *str, unsigned int n)
+{
+	unsigned int w;
+    w = drw_fontset_getwidth_clamp(drw, str, n, True) + lrpad;
+
+	return MIN(w, n);
+}
+
+void
+motionevent(XButtonEvent *ev)
+{
+	struct item *item;
+	int xy, ev_xy;
+
+	if (ev->window != win || matches == 0)
+		return;
+
+    #if USEIMAGE
+        if (image) return;
+    #endif
+
+    int itemCount = 0;
+
+    // walk through all items
+    for (item = items; item && item->text; item++)
+        itemCount++;
+
+    // to prevent slowdown, arbritary limit of 50 items
+    if (itemCount > 50)
+        return;
+
+    int larrowWidth = 0;
+    int rarrowWidth = 0;
+
+    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+
+	xy = lines > 0 ? bh : inputw + promptw + larrowWidth;
+	ev_xy = lines > 0 ? ev->y : ev->x;
+	for (item = curr; item && item != next; item = item->right) {
+		int wh = lines > 0 ? bh : textw_clamp(item->text, mw - xy - rarrowWidth);
+		if (ev_xy >= xy && ev_xy < (xy + wh)) {
+			sel = item;
+			calcoffsets();
+			drawmenu();
+			break;
+		}
+		xy += wh;
+	}
+}
+
 void
 buttonpress(XEvent *e)
 {

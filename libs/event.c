@@ -2,6 +2,7 @@ void
 eventloop(void)
 {
 	XEvent ev;
+    int noimg = 0;
 
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, win))
@@ -14,7 +15,12 @@ eventloop(void)
 			exit(1);
 		case ButtonPress:
 			buttonpress(&ev);
+            noimg = 0;
 			break;
+        case MotionNotify:
+            motionevent(&ev.xbutton);
+            noimg = 1;
+            break;
 		case Expose:
 			if (ev.xexpose.count == 0)
 				drw_map(drw, win, 0, 0, mw, mh);
@@ -39,7 +45,11 @@ eventloop(void)
 
         // redraw image on X11 event
         #if USEIMAGE
-        drawimage();
+        if (!noimg) {
+            drawimage();
+        } else {
+            noimg = 0; // draw it next time
+        }
         #endif
 	}
 }
