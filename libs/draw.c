@@ -283,7 +283,7 @@ drawmenu(void)
         prevscheme = scheme[SchemeNumber];
         drw_setscheme(drw, scheme[SchemeNumber]);
 
-        drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2, numbers, 0, pango_numbers ? True : False);
+        drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2 + plw / 2, numbers, 0, pango_numbers ? True : False);
 
         // draw powerline for match count
         if (!hidepowerline) {
@@ -298,7 +298,7 @@ drawmenu(void)
         prevscheme = scheme[SchemeMode];
         drw_setscheme(drw, scheme[SchemeMode]);
 
-        drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2, modetext, 0, pango_mode ? True : False);
+        drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2 + plw / 2, modetext, 0, pango_mode ? True : False);
 
         // draw powerline for match count
         if (!hidepowerline) {
