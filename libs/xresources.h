@@ -129,6 +129,7 @@ ResourcePref resources[] = {
     { "imagegaps",           INTEGER, &imagegaps },
     { "imageposition",       INTEGER, &imageposition },
     { "generatecache",       INTEGER, &generatecache },
+    { "maxcache",            INTEGER, &maxcache },
     { "mode",                INTEGER, &mode },
     { "fast",                INTEGER, &fast },
     { "managed",             INTEGER, &managed },

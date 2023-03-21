@@ -93,6 +93,8 @@ spmenu.imageheight:        86
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      1
+spmenu.maxcache:           512
+
 
 !! Mode options
 spmenu.mode:               0

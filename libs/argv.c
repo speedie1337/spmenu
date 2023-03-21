@@ -159,7 +159,9 @@ readargs(int argc, char *argv[])
         } else if (!strcmp(argv[i], "-g") || (!strcmp(argv[i], "--columns"))) { // number of columns in grid
 			columns = atoi(argv[++i]);
 			if (lines == 0) lines = 1;
-		} else if (!strcmp(argv[i], "-Ps") || (!strcmp(argv[i], "--password-symbol"))) { // password symbol
+		} else if (!strcmp(argv[i], "-mc") || (!strcmp(argv[i], "--max-cache"))) { // max cache
+			maxcache = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-") || (!strcmp(argv[i], "--password-symbol"))) { // password symbol
 			password = argv[++i];
 		} else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
 			lines = atoi(argv[++i]);
@@ -345,6 +347,7 @@ usage(void)
 		  "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
           "spmenu -gc,      --generate-cache                            Generate image cache\n"
           "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"
+          "spmenu -mc       --max-cache <size>                          Set max image cache size to <size>\n"
           "spmenu -rw,      --relative-width                            Enable relative input width\n"
           "spmenu -nrw,     --no-relative-width                         Disable relative input width\n"
           "spmenu -f,       --fast                                      Grabs keyboard before reading stdin\n"

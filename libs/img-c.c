@@ -220,7 +220,7 @@ loadimagecache(const char *file, int *width, int *height)
 	struct passwd *pw = NULL;
 
 	// just load and don't store or try cache
-	if (longestedge > 256) {
+	if (longestedge > maxcache) {
 		loadimage(file, width, height);
         if (image)
             scaleimage(width, height);

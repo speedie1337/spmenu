@@ -49,6 +49,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-ngc,     --no-generate-cache                       `
 :   Don't generate image cache
 
+`-mc,      --max-cache size                          `
+:   Set max image cache size to size
+
 `-rw,      --relative-width                          `
 :   Enable relative input width
 
