@@ -1,4 +1,6 @@
 #!/bin/sh
+# proof of concept script allowing you to view images in spmenu
+# usage: spmenu_imageviewer.sh image1 image2 ...
 [ ! -f "$1" ] && printf "You must specify an image to view.\n" && exit 1
 
 genlist() {
@@ -12,7 +14,18 @@ genlist() {
 }
 
 main() {
-    genlist "$@" | spmenu --hide-mode --hide-match-count --hide-left-arrow --hide-right-arrow --hide-prompt --hide-cursor --hide-highlighting --image-size 200 --generate-cache
+    genlist "$@" | spmenu \
+	    --hide-mode \
+	    --hide-match-count \
+	    --hide-left-arrow \
+	    --hide-right-arrow \
+	    --hide-prompt \
+	    --hide-cursor \
+	    --hide-highlighting \
+	    --image-size 200 \
+	    --generate-cache \
+	    --lines 20 \
+	    --columns 1
 }
 
 main "$@"
