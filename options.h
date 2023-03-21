@@ -50,7 +50,7 @@ static int accuratewidth               = 1; /* Enable accurate width. May have a
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
 
 /* Line options */
-static int lineheight                  = 5; /* Line height (0: Calculate automatically) */
+static int lineheight                  = 1; /* Line height (0: Calculate automatically) */
 static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */
 
@@ -59,6 +59,7 @@ static unsigned int maxhist            = 64; /* Max number of history entries */
 static int histnodup                   = 1;	/* If 0, record repeated histories */
 
 /* Prompt options */
+static int promptheight                = 10; /* Extra prompt height */
 static int indentitems                 = 1; /* Indent items to prompt width? (0/1) */
 static char *prompt                    = NULL; /* Default prompt, set to NULL (nothing) */
 
@@ -68,6 +69,7 @@ static int hidemode                    = 0; /* Hide mode (0/1) */
 static int hidelarrow                  = 0; /* Hide left arrow (0/1) */
 static int hiderarrow                  = 0; /* Hide right arrow (0/1) */
 static int hideprompt                  = 0; /* Hide prompt (0/1) */
+static int hidepowerline               = 0; /* Hide powerline (0/1) */
 static int hidecursor                  = 0; /* Hide cursor (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
 static int hideimage                   = 0; /* Hide image (0/1) */

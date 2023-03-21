@@ -123,6 +123,7 @@ static int dmy = 0; // put spmenu at this y offset (measured from the bottom if 
 static unsigned int dmw = 0; // make spmenu this wide
 static int inputw = 0;
 static int promptw;
+static int plw = 0;
 static int passwd = 0;
 static int lrpad; // sum of left and right padding
 static int vp;    // vertical padding for bar

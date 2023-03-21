@@ -157,6 +157,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-hpr,     --hide-prompt                             `
 :   Hide prompt
 
+`-hpl,     --hide-powerline                          `
+:   Hide powerline
+
 `-hc,      --hide-cursor                             `
 :   Hide cursor
 
@@ -180,6 +183,9 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-spr,     --show-prompt                             `
 :   Show prompt
+
+`-spl,     --show-powerline                          `
+:   Show powerline
 
 `-sc,      --show-cursor                             `
 :   Show cursor

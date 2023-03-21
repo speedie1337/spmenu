@@ -59,7 +59,7 @@ spmenu.accuratewidth:      1
 spmenu.borderwidth:        0
 
 !! Lines and columns
-spmenu.lineheight:         5
+spmenu.lineheight:         1
 spmenu.lines:              0
 spmenu.columns:            10
 spmenu.preselected:        0
@@ -103,6 +103,7 @@ spmenu.hidemode:           0
 spmenu.hidelarrow:         0
 spmenu.hiderarrow:         0
 spmenu.hideprompt:         0
+spmenu.hidepowerline:      0
 spmenu.hidecursor:         0
 spmenu.hidehighlight:      0
 spmenu.hideimage:          0

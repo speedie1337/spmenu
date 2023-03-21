@@ -16,6 +16,8 @@ static const unsigned char utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8}
 static const long utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
 
+Clr transcheme[3];
+
 static long
 utf8decodebyte(const char c, size_t *i)
 {
@@ -228,6 +230,44 @@ drw_setscheme(Drw *drw, Clr *scm)
 }
 
 void
+drw_settrans(Drw *drw, Clr *psc, Clr *nsc)
+{
+	if (drw) {
+		transcheme[0] = psc[ColBg]; transcheme[1] = nsc[ColBg]; transcheme[2] = psc[ColPwl];
+		drw->scheme = transcheme;
+	}
+}
+
+void
+drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash)
+{
+	if (!drw || !drw->scheme)
+		return;
+
+	x = direction ? x : x + w;
+	w = direction ? w : -w;
+	unsigned int hh = slash ? (direction ? 0 : h) : h/2;
+
+	XPoint points[] = {
+		{x    , y      },
+		{x + w, y + hh },
+		{x    , y + h  },
+	};
+
+	XPoint bg[] = {
+		{x    , y    },
+		{x + w, y    },
+		{x + w, y + h},
+		{x    , y + h},
+	};
+
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColBg].pixel);
+	XFillPolygon(drw->dpy, drw->drawable, drw->gc, bg, 4, Convex, CoordModeOrigin);
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColFg].pixel);
+	XFillPolygon(drw->dpy, drw->drawable, drw->gc, points, 3, Nonconvex, CoordModeOrigin);
+}
+
+void
 drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert)
 {
 	if (!drw || !drw->scheme)
@@ -422,3 +462,4 @@ drw_cur_free(Drw *drw, Cur *cursor)
 	XFreeCursor(drw->dpy, cursor->cursor);
 	free(cursor);
 }
+

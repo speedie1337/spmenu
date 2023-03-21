@@ -4,6 +4,11 @@ buttonpress(XEvent *e)
 	struct item *item;
 	XButtonPressedEvent *ev = &e->xbutton;
 	int x = 0, y = 0, h = bh, w, item_num = 0;
+    int xpad = 0;
+
+    if (!hidepowerline) {
+        x = xpad = plw;
+    }
 
     // if incorrect or wrong window, return
 	if (ev->window != win)
@@ -14,7 +19,7 @@ buttonpress(XEvent *e)
 		exit(1);
 
 	if (prompt && *prompt)
-		x += promptw;
+		x += promptw + plw;
 
 	// input field
 	w = (lines > 0 || !matches) ? mw - x : inputw;

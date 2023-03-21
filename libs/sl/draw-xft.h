@@ -12,7 +12,7 @@ typedef struct Fnt {
 	struct Fnt *next;
 } Fnt;
 
-enum { ColFg, ColBg }; /* Clr scheme index */
+enum { ColFg, ColBg, ColPwl }; /* Clr scheme index */
 typedef XftColor Clr;
 
 typedef struct {
@@ -58,3 +58,7 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
 
 /* Map functions */
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);
+
+/* Powerline functions */
+void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
+void drw_arrow(Drw* drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);

@@ -153,10 +153,13 @@ drawmenu(void)
 	struct item *item;
 	int x = 0, y = 0, fh = drw->font->h, w;
     #if USEIMAGE
-    int ox = 0;
+    int ox = 0; // original x position
     #endif
-	char *censort;
+	char *censort; // censor text (password)
+    plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
+    Clr *prevscheme, *nextscheme;
 
+    // draw menu first using menu scheme
 	drw_setscheme(drw, scheme[SchemeMenu]);
 	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
@@ -165,17 +168,24 @@ drawmenu(void)
     int larrowWidth = 0;
     int rarrowWidth = 0;
 
+    // add width
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 	if (prompt && *prompt) {
+        prevscheme = scheme[SchemePrompt];
 		drw_setscheme(drw, scheme[SchemePrompt]);
 
         #if USEIMAGE
         ox = x;
         #endif
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
+
+        drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
+        drw_arrow(drw, x, 0, plw, bh, 1, 0);
+
+        x += plw;
 	}
 
     // draw input

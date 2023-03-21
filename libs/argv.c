@@ -112,8 +112,12 @@ readargs(int argc, char *argv[])
 				hiderarrow = 0;
 		} else if (!strcmp(argv[i], "-hpr") || (!strcmp(argv[i], "--hide-prompt"))) {   // hide prompt
 				hideprompt = 1;
+		} else if (!strcmp(argv[i], "-hpl") || (!strcmp(argv[i], "--hide-powerline"))) {   // hide powerline
+				hidepowerline = 1;
 		} else if (!strcmp(argv[i], "-spr") || (!strcmp(argv[i], "--show-prompt"))) {  // show prompt
 				hideprompt = 0;
+		} else if (!strcmp(argv[i], "-spl") || (!strcmp(argv[i], "--show-powerline"))) {  // show prompt
+				hidepowerline = 0;
 		} else if (!strcmp(argv[i], "-hc") || (!strcmp(argv[i], "--hide-cursor"))) {   // hide cursor
 				hidecursor = 1;
 		} else if (!strcmp(argv[i], "-sc") || (!strcmp(argv[i], "--show-cursor"))) {  // show cursor
@@ -379,6 +383,7 @@ usage(void)
           "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
           "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
           "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
+          "spmenu -hpl,     --hide-powerline                            Hide powerline\n"
           "spmenu -hc,      --hide-cursor                               Hide cursor\n"
           "spmenu -hhl,     --hide-highlighting                         Hide highlight\n"
           "spmenu -hi,      --hide-image                                Hide image\n"
