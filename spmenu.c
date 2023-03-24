@@ -393,7 +393,7 @@ nextrune(int inc)
 	// return location of next utf8 rune in the given direction (+1 or -1)
 	for (n = cursor + inc; n + inc >= 0 && (text[n] & 0xc0) == 0x80; n += inc)
 		;
-	return n ? n : NULL;
+	return n;
 }
 
 void
