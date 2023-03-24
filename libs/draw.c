@@ -231,30 +231,27 @@ drawmenu(void)
     // draw items and image
 	if (lines > 0) {
 		int i = 0;
-        int xpad = 0;
-
-        // indent items to prompt width?
-        if (indentitems) {
-            xpad = 0; // x -= 0
-        } else {
-            xpad = promptw; // x -= prompt width so no indentation to prompt width
-        }
+        int rx = 0;
 
         // draw image first
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
-            x = ox;
-            x += (imagegaps * 2) + imagewidth;
-            x += xpad;
-        }
+            rx = ox;
+            rx += (imagegaps * 2) + imagewidth;
+        } else
         #endif
+            if (!indentitems) {
+                rx = 0;
+            } else {
+                rx = x;
+            }
 
 		for (item = curr; item != next; item = item->right, i++) {
 			drawitem(
 				item,
-				x + ((i / lines) *  ((mw - x) / columns)) - xpad,
+				rx + ((i / lines) *  ((mw - rx) / columns)),
 				y + (((i % lines) + 1) * bh),
-				(mw - x) / columns
+				(mw - rx) / columns
 			);
         }
 
