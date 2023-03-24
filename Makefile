@@ -45,6 +45,9 @@ install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/share/spmenu
 	cp -r docs/* $(DESTDIR)$(PREFIX)/share/spmenu/
 	echo "${VERSION}" > $(DESTDIR)$(PREFIX)/share/spmenu/version
+	echo "${CC}" > $(DESTDIR)$(PREFIX)/share/spmenu/cc
+	echo "${CFLAGS}" > $(DESTDIR)$(PREFIX)/share/spmenu/cflags
+	echo "$$(date "+%D %T")" > $(DESTDIR)$(PREFIX)/share/spmenu/compile-date
 	cp -r spmenu scripts/spmenu* $(DESTDIR)$(PREFIX)/bin
 	[ -f spmenu.1 ] && mkdir -p ${DESTDIR}${MANPREFIX}/man1 || :
 	[ -f spmenu.1 ] && cp spmenu.1 ${DESTDIR}${MANPREFIX}/man1/spmenu.1 || :

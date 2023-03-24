@@ -60,7 +60,6 @@ static unsigned int maxhist            = 64; /* Max number of history entries */
 static int histnodup                   = 1;	/* If 0, record repeated histories */
 
 /* Prompt options */
-static int promptheight                = 10; /* Extra prompt height */
 static int indentitems                 = 1; /* Indent items to prompt width? (0/1) */
 static char *prompt                    = NULL; /* Default prompt, set to NULL (nothing) */
 

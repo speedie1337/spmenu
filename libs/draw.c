@@ -5,13 +5,11 @@ drawhighlights(struct item *item, int x, int y, int w)
 	char *highlight;
 	char c;
 
-    if (columns > 5)
-        return;
+    if (columns > 5 && lines > 1) return;
 
 	char *itemtext = item->text;
 
-	if (!(strlen(itemtext) && strlen(text)))
-		return;
+	if (!(strlen(itemtext) && strlen(text))) return;
 
 	drw_setscheme(drw, scheme[item == sel
 	                   ? SchemeSelHighlight
@@ -160,7 +158,6 @@ drawmenu(void)
     #endif
 	char *censort; // censor text (password)
     plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
-    Clr *prevscheme, *nextscheme;
 
     // draw menu first using menu scheme
 	drw_setscheme(drw, scheme[SchemeMenu]);
@@ -177,7 +174,6 @@ drawmenu(void)
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 	if (prompt && *prompt) {
-        prevscheme = scheme[SchemePrompt];
 		drw_setscheme(drw, scheme[SchemePrompt]);
 
         #if USEIMAGE
@@ -283,7 +279,6 @@ drawmenu(void)
 	}
 
     if (!hidematchcount) { // draw match count
-        prevscheme = scheme[SchemeNumber];
         drw_setscheme(drw, scheme[SchemeNumber]);
 
         drw_text(drw, mw - numberWidth - modeWidth, 0, numberWidth, bh, lrpad / 2 + plw / 2, numbers, 0, pango_numbers ? True : False);
@@ -298,7 +293,6 @@ drawmenu(void)
     }
 
     if (!hidemode) { // draw mode indicator
-        prevscheme = scheme[SchemeMode];
         drw_setscheme(drw, scheme[SchemeMode]);
 
         drw_text(drw, mw - modeWidth, 0, modeWidth, bh, lrpad / 2 + plw / 2, modetext, 0, pango_mode ? True : False);
