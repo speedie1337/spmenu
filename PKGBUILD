@@ -26,6 +26,6 @@ build(){
 
 package() {
   cd "$pkgname-$pkgver"
-  make PREFIX=/usr DESTDIR="$pkgdir" CC=tcc install
+  make PREFIX=/usr DESTDIR="$pkgdir" CC=gcc install
   install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
