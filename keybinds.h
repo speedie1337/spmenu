@@ -35,14 +35,22 @@
 #define MODIFIER1              Mod1Mask
 
 static Key keys[] = {
-	/* insert mode
+    /* mode    modifier                      key           function         argument
      *
-     * mode    modifier                      key           function         argument  */
-	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
+     * any mode
+     */
+    { -1,      0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { -1,      0,                            XK_Tab,       complete,        {0} },
+    { -1,      CONTROL,                      XK_v,         paste,           {.i = 2  } },
+    { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 1  } },
+    { -1,      0,                            XK_BackSpace, backspace,       {0} },
+    { -1,      CONTROL,                      XK_BackSpace, deleteword,      {0} },
+    { -1,      CONTROL,                      XK_Left,      moveword,        {.i = -1 } },
+    { -1,      CONTROL,                      XK_Right,     moveword,        {.i = +1 } },
+    { -1,      0,                            XK_Left,      movecursor,      {.i = -1 } },
+    { -1,      0,                            XK_Right,     movecursor,      {.i = +1 } },
 
-	/* normal mode
-     *
-     * mode    modifier                      key           function         argument  */
+	/* normal mode */
 	{ 0,       0,                            XK_i,         switchmode,      {0} },
     { 0,       CONTROL,                      XK_equal,     setimgsize,      {.i = +1 } },
     { 0,       CONTROL,                      XK_minus,     setimgsize,      {.i = -1 } },
@@ -85,17 +93,6 @@ static Key keys[] = {
     { 0,       MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { 0,       MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
 
-    /* any mode
-     *
-     * mode    modifier                      key           function         argument  */
-    { -1,      0,                            XK_Return,    selectitem,      {.i = +1 } },
-    { -1,      0,                            XK_Tab,       complete,        {0} },
-    { -1,      CONTROL,                      XK_v,         paste,           {.i = 1  } }, /* primary buffer */
-    { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 2  } },
-    { -1,      0,                            XK_BackSpace, backspace,       {0} },
-    { -1,      CONTROL,                      XK_BackSpace, deleteword,      {0} },
-    { -1,      CONTROL,                      XK_Left,      moveword,        {.i = -1 } },
-    { -1,      CONTROL,                      XK_Right,     moveword,        {.i = +1 } },
-    { -1,      0,                            XK_Left,      movecursor,      {.i = -1 } },
-    { -1,      0,                            XK_Right,     movecursor,      {.i = +1 } },
+	/* insert mode */
+	{ 1,       0,                            XK_Escape,    switchmode,      {0} },
 };
