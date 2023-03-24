@@ -256,7 +256,16 @@ moveword(const Arg *arg)
 void
 movecursor(const Arg *arg)
 {
-    cursor = nextrune(arg->i);
+    if (arg->i < 0) {
+		if (cursor > 0) {
+			cursor = nextrune(-1);
+        }
+	} else {
+		if (text[cursor]) {
+			cursor = nextrune(+1);
+        }
+	}
+
     drawmenu();
 }
 
