@@ -10,6 +10,7 @@ OPT          = -O2
 # paths
 PREFIX       = /usr
 MANPREFIX 	 = ${PREFIX}/share/man
+INCDIR       = /usr/include
 
 # library paths
 #
@@ -20,7 +21,7 @@ X11LIB       = /usr/X11R6/lib
 
 # freetype
 FREETYPELIBS = -lfontconfig -lXft
-FREETYPEINC  = /usr/include/freetype2
+FREETYPEINC  = $(INCDIR)/freetype2
 
 # xft
 XFTCONF      = xft
@@ -35,10 +36,12 @@ IMLIB2LIBS   = -lImlib2
 OPENSSLCONF  = openssl
 
 # OpenBSD (uncomment)
-#FREETYPEINC = $(X11INC)/freetype2
+#INCDIR      = $(X11INC)
+#FREETYPEINC = $(INCDIR)/freetype2
 
 # macOS with XQuartz (uncomment)
-#FREETYPEINC = /usr/local/include/freetype2
+#INCDIR      = /usr/local/include
+#FREETYPEINC = $(INCDIR)/freetype2
 #X11INC      = /opt/X11/include
 #X11LIB      = /opt/X11/lib
 

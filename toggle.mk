@@ -10,7 +10,7 @@ XINERAMATOGGLE = -DXINERAMA
 # Right to left language support
 # Comment these lines if you don't need it.
 BDLIBS         = -lfribidi
-BDINC          = /usr/include/fribidi
+BDINC          = $(INCDIR)/fribidi
 BDTOGGLE 	   = -DRTL
 
 # Pango
