@@ -137,6 +137,7 @@ static int screen;
 // item struct
 struct item {
 	char *text;
+    char *clntext;
     #if USEIMAGE
     char *image;
     #endif

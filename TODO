@@ -1,5 +1,4 @@
 # TODO for spmenu
 
-- Tab currently broken for SGR sequences
 - Mouse bind array (mouse.h)
 - Add configuration file using (probably) libconfig

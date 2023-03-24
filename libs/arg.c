@@ -109,7 +109,7 @@ complete(const Arg *arg)
 {
  	if (!sel) return;
 
-	strncpy(text, sel->text, sizeof text - 1);
+	strncpy(text, sel->clntext, sizeof text - 1);
 	text[sizeof text - 1] = '\0';
 	cursor = strlen(text);
 	match();

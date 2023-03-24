@@ -69,8 +69,7 @@ drawitem(struct item *item, int x, int y, int w)
     // parse item text
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
-			size_t alen = strspn(item->text + rd + 2,
-					     "0123456789;");
+			size_t alen = strspn(item->text + rd + 2, "0123456789;");
 			if (item->text[rd + alen + 2] == 'm') { // last character in sequence is always 'm'
 				buffer[wr] = '\0';
 
@@ -143,6 +142,10 @@ drawitem(struct item *item, int x, int y, int w)
     apply_fribidi(buffer);
 	int r = drw_text(drw, x, y, w, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
     if (!hidehighlight && !ib) drawhighlights(item, x, y, w);
+
+    // this should allow us to use it for tab completion
+    item->clntext = malloc(sizeof(buffer));
+    memcpy(item->clntext, buffer, sizeof(buffer));
 
     return r;
 }
