@@ -1,11 +1,4 @@
 #!/bin/sh
-[ ! -f "$HOME/.config/spmenu/spmenu_run.conf" ] && \
-    mkdir -p "$HOME/.config/spmenu"; \
-    touch "$HOME/.config/spmenu/spmenu_run.conf"
-
-[ -f "$HOME/.config/spmenu/spmenu_run.conf" ] && \
-    "$HOME/.config/spmenu/spmenu_run.conf"
-
 [ -z "$TERMINAL" ] && TERMINAL="st -e"
 [ -z "$BROWSER"  ] && BROWSER="xdg-open"
 [ -z "$TORRENT"  ] && TORRENT="qbittorrent"
@@ -17,12 +10,15 @@ path() { echo "$PATH" | tr ':' '\n' | uniq | sed 's#$#/#' | xargs ls -lu --time-
 parse() {
     dout="$(path | sed "s/\&/\&amp;/g" | spmenu -im -H "$HISTORY" "$@")"
 
+    # parse
     [ "$(printf '%c' "$dout")" = "#" ] && RUN_ARG="$TERMINAL"
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && "$TORRENT" "$(printf "$dout" | sed "s/magnet //")" && return
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "www" ] && "$BROWSER" "$(printf "$dout" | sed "s/www //")" && return
+    [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && "$TORRENT" "$(printf "$dout" | sed "s/magnet //")"
+    [ "$(printf "$dout" | awk '{ print $1 }')" = "www" ] && "$BROWSER" "$(printf "$dout" | sed "s/www //")"
 
     # terminal
-    [ "$RUN_ARG" != "$TERMINAL" ] && printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & return
+    [ -z "$RUN_ARG" ] && \
+        printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} &
+
     [ "$RUN_ARG" = "$TERMINAL" ] && $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")"; return
 }
 

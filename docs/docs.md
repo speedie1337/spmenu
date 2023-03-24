@@ -407,6 +407,7 @@ dmenu compatibility can be achieved using these arguments:
 
 `-sb color`
 :    Set the selected background color
+
 `-sf color`
 :    Set the selected foreground color
 
@@ -457,6 +458,8 @@ There are also a few image related arguments, such as:
 
 `-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`.
 
+NOTE: Vector images (such as .svg) can be displayed too.
+
 Colored text
 ============
 
@@ -501,8 +504,21 @@ spmenu loads `~/.config/spmenu/spmenurc` or alternatively if you're
 old fashioned, `~/.spmenurc`. This requires that `xrdb` is available on your
 operating system.
 
-You can also use wildcards (such as `*`) to achieve a global colorscheme. Programs like
-`pywal` do this.
+You can also use wildcards (such as `*`) to achieve a global colorscheme.
+Programs like `pywal` do this to apply universal colorschemes.
+
+Run launcher
+============
+
+spmenu includes a shell script called spmenu_run. It lists executable programs in $PATH and displays them to the user in a list. Not only that but it shows recently run programs first in the list.
+
+spmenu_run will interpret any arguments as spmenu arguments and pass them to spmenu. Therefore `spmenu_run --prompt 'Run:'` will set the prompt to `Run:`. While it is similar to dmenu_run (and achieves the same goal), this version has some extra features.
+
+The selected option is piped to /bin/sh (by default). Unlike dmenu_run, spmenu_run has some cool features. For example:
+
+- Prepending `#` will spawn it in a terminal instead of just a shell.
+- Prepending `magnet ` will open a magnet link in $TORRENT
+- Prepending `www` will open a page in $BROWSER
 
 License
 =======
