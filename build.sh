@@ -89,7 +89,6 @@ build() {
         CC="$CC" \
         PREFIX="$PREFIX" \
         OPT="$OPT" \
-        INCDIR="$INCDIR" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
         IMLIB2LIBS="$imlib2libs" \
@@ -111,7 +110,6 @@ install() {
         CC="$CC" \
         PREFIX="$PREFIX" \
         OPT="$OPT" \
-        INCDIR="$INCDIR" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
         IMLIB2LIBS="$imlib2libs" \

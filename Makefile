@@ -2,9 +2,15 @@
 
 # See LICENSE file for copyright and license details.
 
-include options.mk
 include host.mk
+include options.mk
 include toggle.mk
+
+CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XINERAMATOGGLE) $(BDTOGGLE) $(PANGOTOGGLE) $(IMLIB2TOGGLE)
+CFLAGS   = -std=c99 -pedantic -Wall $(OPT) $(INCS) $(CPPFLAGS)
+LDFLAGS  = $(LIBS)
+INCS = -I$(X11INC) -I$(FREETYPEINC) -I$(BDINC) `pkg-config --cflags $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF)`
+LIBS = -L$(X11LIB) $(X11LIBS) $(XINERAMALIBS) $(FREETYPELIBS) $(XRENDERLIBS) -lm `pkg-config --libs $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF)` $(BDLIBS) $(IMLIB2LIBS)
 
 SRC = libs/sl/draw.c spmenu.c libs/sl/main.c
 OBJ = $(SRC:.c=.o)
