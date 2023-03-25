@@ -71,7 +71,7 @@ drawimage(void)
     int width = 0, height = 0;
     char *limg = NULL;
 
-    if (!lines || hideimage) return;
+    if (!lines || !columns || hideimage) return;
 
     // to prevent the image from being drawn multiple times
     if (!needredraw) {
