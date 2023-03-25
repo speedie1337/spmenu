@@ -81,6 +81,10 @@ build() {
         bdlibs="-lfribidi"
         bdinc="$INCDIR/fribidi"
         bdtoggle="-DRTL"
+    else
+        bdlibs=""
+        bdinc=""
+        bdtoggle=""
     fi
 
     make clean
@@ -99,7 +103,7 @@ build() {
         BDLIBS="$bdlibs" \
         BDINC="$bdinc" \
         BDTOGGLE="$bdtoggle" \
-        FREETYPEINC="$freetypeinc" \
+        FREETYPEINC="$FREETYPEINC" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
@@ -120,7 +124,7 @@ install() {
         BDLIBS="$bdlibs" \
         BDINC="$bdinc" \
         BDTOGGLE="$bdtoggle" \
-        FREETYPEINC="$freetypeinc" \
+        FREETYPEINC="$FREETYPEINC" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }

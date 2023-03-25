@@ -2,7 +2,9 @@ void
 eventloop(void)
 {
 	XEvent ev;
+    #if USEIMAGE
     int noimg = 0;
+    #endif
 
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, win))
@@ -15,11 +17,15 @@ eventloop(void)
 			exit(1);
 		case ButtonPress:
 			buttonpress(&ev);
+            #if USEIMAGE
             noimg = 0;
+            #endif
 			break;
         case MotionNotify:
             motionevent(&ev.xbutton);
-            noimg = 1;
+            #if USEIMAGE
+            noimg = 0;
+            #endif
             break;
 		case Expose:
 			if (ev.xexpose.count == 0)
