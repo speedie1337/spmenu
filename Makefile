@@ -3,8 +3,10 @@
 # See LICENSE file for copyright and license details.
 
 include host.mk
-include options.mk
 include toggle.mk
+
+# spmenu version
+VERSION = 0.3.2
 
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XINERAMATOGGLE) $(BDTOGGLE) $(PANGOTOGGLE) $(IMLIB2TOGGLE)
 CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations $(OPT) $(INCS) $(CPPFLAGS)
@@ -27,7 +29,7 @@ options:
 	$(CC) -c $(CFLAGS) -g $<
 
 
-$(OBJ): options.h options.mk libs/sl/draw.h
+$(OBJ): options.h libs/sl/draw.h
 
 spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
