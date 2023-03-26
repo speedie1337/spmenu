@@ -28,13 +28,13 @@ cache() {
     icons="$(find $icon_dir -type f)"
     rm -rf "$temporary_dir/*.entry"
 
-    oname="$name"
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
         exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g")"
+        oname="$name"
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-        icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
+        [ -n "$icon_name" ] && icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
 
         [ "$oname" = "$name" ] && continue
         printf "%s\n%s\n%s\n" "$name" "$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
