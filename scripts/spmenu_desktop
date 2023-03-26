@@ -3,7 +3,7 @@
 #
 # List desktop entries
 [ -z "$desktop_dir" ] && desktop_dir="/usr/share/applications"
-[ -z "$icon_dir" ] && icon_dir="/usr/share/icons/hicolor"
+[ -z "$icon_dir" ] && icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps"
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
 [ -z "$useimage" ] && useimage=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
@@ -25,7 +25,7 @@ scan() {
 
 cache() {
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
-    icons="$(find $icon_dir -type f)"
+    icons="$(find "$icon_dir" -type f)"
     rm -rf "$temporary_dir/*.entry"
 
     for i in $(seq "$entry_c"); do
@@ -36,6 +36,7 @@ cache() {
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
         [ -n "$icon_name" ] && icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
 
+        # no duplicates
         [ "$oname" = "$name" ] && continue
         printf "%s\n%s\n%s\n" "$name" "$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
     done
