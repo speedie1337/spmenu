@@ -7,7 +7,7 @@
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
 [ -z "$useimage" ] && useimage=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 20 -g 1 -is 200"
+[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 20 -g 1 -is 100 -ig 20"
 
 print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS "$@")"; cat /tmp/ls_desktop.log; }
 
@@ -18,16 +18,21 @@ prep() {
 
 scan() {
     entry_c="$(find "$desktop_dir" -type f | wc -l)"
-    entry="$(find "$desktop_dir" -type f)"
     cached_c="$(find "$temporary_dir" -type f | wc -l)"
-    cached="$(find "$temporary_dir" -type f)"
 }
 
 cache() {
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
-    icons="$(find "$icon_dir" -type f)"
+
+    # find
+    entry="$(find "$desktop_dir" -type f)"
+    cached="$(find "$temporary_dir" -type f)"
+    icons="$(find $icon_dir -type f)"
+
+    # remove old entries
     rm -rf "$temporary_dir/*.entry"
 
+    # write new entries
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
         exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g")"
@@ -36,8 +41,10 @@ cache() {
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
         [ -n "$icon_name" ] && icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
 
-        # no duplicates
+        # prevent duplicates
         [ "$oname" = "$name" ] && continue
+
+        # write the file
         printf "%s\n%s\n%s\n" "$name" "$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
     done
 }
@@ -45,6 +52,7 @@ cache() {
 print_list() {
     rm -f /tmp/ls_desktop.log; touch /tmp/ls_desktop.log
 
+    # print data from entries
     for i in $(seq "$cached_c"); do
         cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
         [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
@@ -60,6 +68,7 @@ print_list() {
 }
 
 execute_program() {
+    # loop through cached entries, if a file contains the name spmenu spits out, we break and execute it
     # TODO: clean up this
     for i in $(seq "$cached_c"); do
         cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
@@ -68,7 +77,8 @@ execute_program() {
         break
     done
 
-    $exec
+    # finally run the program
+    [ -n "$exec" ] && $exec
 
     return
 }
