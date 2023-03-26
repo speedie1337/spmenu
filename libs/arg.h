@@ -17,6 +17,7 @@ static void moveprev(const Arg *arg);
 static void paste(const Arg *arg);
 static void restoresel(const Arg *arg);
 static void clear(const Arg *arg);
+static void clearins(const Arg *arg);
 static void viewhist(const Arg *arg);
 static void moveword(const Arg *arg);
 static void deleteword(const Arg *arg);

@@ -323,6 +323,25 @@ clear(const Arg *arg)
 }
 
 void
+clearins(const Arg *arg)
+{
+    insert(NULL, 0 - cursor);
+
+    curMode = 1;
+    allowkeys = 0;
+
+    if (!curMode) {
+        strcpy(modetext, normtext);
+    } else {
+        strcpy(modetext, instext);
+    }
+
+    if (hidemode) strcpy(modetext, "");
+
+    drawmenu();
+}
+
+void
 quit(const Arg *arg)
 {
 	cleanup();

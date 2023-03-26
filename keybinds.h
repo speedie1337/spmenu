@@ -83,6 +83,7 @@ static Key keys[] = {
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
     { 0,       CONTROL|SHIFT,                XK_h,         viewhist,        {0} },
     { 0,       0,                            XK_d,         clear,           {0} },
+    { 0,       0,                            XK_c,         clearins,        {0} },
     { 0,       0,                            XK_Escape,    quit,            {0} },
     { 0,       0,                            XK_Home,      movestart,       {0} },
     { 0,       0,                            XK_End,       moveend,         {0} },
