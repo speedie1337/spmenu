@@ -90,6 +90,7 @@
 // various headers
 #include "libs/sl/draw.h"
 #include "libs/sl/main.h"
+#include "libs/draw.h"
 #include "libs/stream.h"
 #include "libs/schemes.h"
 #include "libs/arg.h"
@@ -187,8 +188,6 @@ static char **history;
 static size_t histsz, histpos;
 
 // declare functions
-static void drawmenu(void);
-static void drawhighlights(struct item *item, int x, int y, int w);
 static void calcoffsets(void);
 static void recalculatenumbers(void);
 static void usage(void);

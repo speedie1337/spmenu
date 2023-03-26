@@ -38,7 +38,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 }
 
 int
-drawitem(struct item *item, int x, int y, int w)
+drawitemtext(struct item *item, int x, int y, int w)
 {
     char buffer[MAXITEMLENGTH];
     Clr scm[3];
@@ -150,45 +150,98 @@ drawitem(struct item *item, int x, int y, int w)
     return r;
 }
 
-void
-drawmenu(void)
+int
+drawitem(int x, int y, int w)
 {
-	unsigned int curpos = 0;
 	struct item *item;
-	int x = 0, y = 0, fh = drw->font->h, w;
-    #if USEIMAGE
-    int ox = 0; // original x position
-    #endif
-	char *censort; // censor text (password)
-    plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
-
-    // draw menu first using menu scheme
-	drw_setscheme(drw, scheme[SchemeMenu]);
-	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
     int numberWidth = 0;
     int modeWidth = 0;
-    int larrowWidth = 0;
     int rarrowWidth = 0;
 
     // add width
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
-    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
 
-	if (prompt && *prompt) {
+        // mode indicator is always going to be at the right
+        if (hidemode) {
+            numberWidth += 2 * sp + borderwidth;
+        } else {
+            modeWidth += 2 * sp + borderwidth;
+        }
+
+    #if USEIMAGE
+    int ox = 0; // original x position
+    #endif
+
+    // draw items and image
+	if (lines > 0) {
+		int i = 0;
+        int rx = 0;
+
+        // draw image first
+        #if USEIMAGE
+        if (!hideimage && longestedge != 0) {
+            rx = ox;
+            rx += (imagegaps * 2) + imagewidth;
+        } else
+        #endif
+            if (!indentitems) {
+                rx = 0;
+            } else {
+                rx = x;
+            }
+
+		for (item = curr; item != next; item = item->right, i++) {
+			drawitemtext(
+				item,
+				rx + ((i / lines) *  ((mw - rx) / columns)),
+				y + (((i % lines) + 1) * bh),
+				(mw - rx) / columns
+			);
+        }
+
+    // horizontal list
+	} else if (matches) {
+		x += inputw;
+
+        drawlarrow(x, y, w);
+
+		for (item = curr; item != next; item = item->right) // draw items
+            x = drawitemtext(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
+
+        drawrarrow(x, y, w, numberWidth, modeWidth, rarrowWidth);
+	}
+
+    return x;
+}
+
+int
+drawprompt(int x, int y, int w)
+{
+	if (prompt && *prompt && !hideprompt) {
 		drw_setscheme(drw, scheme[SchemePrompt]);
 
-        #if USEIMAGE
-        ox = x;
-        #endif
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 
-        drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
-        drw_arrow(drw, x, 0, plw, bh, 1, 0);
+        if (!hidepowerline) {
+            drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
+            drw_arrow(drw, x, 0, plw, bh, 1, 0);
 
-        x += plw;
+            x += plw;
+        }
 	}
+
+    return x;
+}
+
+int
+drawinput(int x, int y, int w)
+{
+	char *censort; // censor text (password)
+	unsigned int curpos = 0;
+    int fh = drw->font->h;
 
     // draw input
 	w = (lines > 0 || !matches) ? mw - x : inputw;
@@ -215,69 +268,42 @@ drawmenu(void)
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
 	}
 
-    if (!hidematchcount) {
-        recalculatenumbers();
-        numberWidth = TEXTW(numbers);
+    return x;
+}
 
-        // mode indicator is always going to be at the right
-        if (hidemode) {
-            numberWidth += 2 * sp + borderwidth;
-        } else {
-            modeWidth += 2 * sp + borderwidth;
-        }
-
+int
+drawlarrow(int x, int y, int w)
+{
+    if (hidelarrow) {
+        return x;
     }
 
-    // draw items and image
-	if (lines > 0) {
-		int i = 0;
-        int rx = 0;
-
-        // draw image first
-        #if USEIMAGE
-        if (!hideimage && longestedge != 0) {
-            rx = ox;
-            rx += (imagegaps * 2) + imagewidth;
-        } else
-        #endif
-            if (!indentitems) {
-                rx = 0;
-            } else {
-                rx = x;
-            }
-
-		for (item = curr; item != next; item = item->right, i++) {
-			drawitem(
-				item,
-				rx + ((i / lines) *  ((mw - rx) / columns)),
-				y + (((i % lines) + 1) * bh),
-				(mw - rx) / columns
-			);
-        }
-
-    // horizontal list
-	} else if (matches) {
-		x += inputw;
-		w = larrowWidth;
-
-		if (curr->left && !hidelarrow) { // draw left arrow
-			drw_setscheme(drw, scheme[SchemeLArrow]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
-		}
-
-		x += w;
-
-		for (item = curr; item != next; item = item->right) // draw items
-            x = drawitem(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
-
-		if (next && !hiderarrow) { // draw right arrow
-			w = rarrowWidth;
-			drw_setscheme(drw, scheme[SchemeRArrow]);
-
-            drw_text(drw, mw - w - numberWidth - modeWidth, 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
-		}
+	if (curr->left) { // draw left arrow
+		drw_setscheme(drw, scheme[SchemeLArrow]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 	}
 
+	x += w;
+
+    return x;
+}
+
+int
+drawrarrow(int x, int y, int w, int numberWidth, int modeWidth, int rarrowWidth)
+{
+	if (next && !hiderarrow) { // draw right arrow
+		w = rarrowWidth;
+		drw_setscheme(drw, scheme[SchemeRArrow]);
+
+        drw_text(drw, mw - w, 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
+	}
+
+    return x;
+}
+
+int
+drawnumber(int x, int y, int w, int numberWidth, int modeWidth)
+{
     if (!hidematchcount) { // draw match count
         drw_setscheme(drw, scheme[SchemeNumber]);
 
@@ -292,6 +318,12 @@ drawmenu(void)
         }
     }
 
+    return x;
+}
+
+int
+drawmode(int x, int y, int w, int numberWidth, int modeWidth)
+{
     if (!hidemode) { // draw mode indicator
         drw_setscheme(drw, scheme[SchemeMode]);
 
@@ -306,6 +338,46 @@ drawmenu(void)
         }
     }
 
-    // map the drawing
+     return x;
+}
+
+void
+drawmenu(void)
+{
+	int x = 0, y = 0, w = 0;
+    plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
+
+    // draw menu first using menu scheme
+	drw_setscheme(drw, scheme[SchemeMenu]);
+	drw_rect(drw, 0, 0, mw, mh, 1, 1);
+
+    int numberWidth = 0;
+    int modeWidth = 0;
+
+    // add width
+    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+
+    // calculate match count
+    if (!hidematchcount) {
+        recalculatenumbers();
+        numberWidth = TEXTW(numbers);
+
+        // mode indicator is always going to be at the right
+        if (hidemode) {
+            numberWidth += 2 * sp + borderwidth;
+        } else {
+            modeWidth += 2 * sp + borderwidth;
+        }
+    }
+
+    x = drawprompt(x, y, w);
+    x = drawinput(x, y, w);
+
+    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+
+    drawitem(x, y, w);
+    drawnumber(x, y, w, numberWidth, modeWidth);
+    drawmode(x, y, w, numberWidth, modeWidth);
+
 	drw_map(drw, win, 0, 0, mw, mh);
 }
