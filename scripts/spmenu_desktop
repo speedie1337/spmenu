@@ -1,7 +1,6 @@
 #!/bin/sh
-# spmenu_desktop
-#
-# List desktop entries
+# spmenu_desktop - list .desktop entries with the icon.
+# NOTE: Please pull request if you have any possible improvements.
 [ -z "$desktop_dir" ] && desktop_dir="/usr/share/applications"
 [ -z "$icon_dir" ] && icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps"
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
@@ -9,28 +8,18 @@
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 20 -g 1 -is 100 -ig 20"
 
+# functions
 print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS "$@")"; cat /tmp/ls_desktop.log; }
+prep() { mkdir -p "$temporary_dir"; [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"; }
+scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
 
-prep() {
-    mkdir -p "$temporary_dir"
-    [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"
-}
-
-scan() {
-    entry_c="$(find "$desktop_dir" -type f | wc -l)"
-    cached_c="$(find "$temporary_dir" -type f | wc -l)"
-}
-
+# cache it, this means some speed improvements
 cache() {
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
 
     # find
-    entry="$(find "$desktop_dir" -type f)"
-    cached="$(find "$temporary_dir" -type f)"
+    entry="$(find $desktop_dir -type f)"
     icons="$(find $icon_dir -type f)"
-
-    # remove old entries
-    rm -rf "$temporary_dir/*.entry"
 
     # write new entries
     for i in $(seq "$entry_c"); do
@@ -45,7 +34,7 @@ cache() {
         [ "$oname" = "$name" ] && continue
 
         # write the file
-        printf "%s\n%s\n%s\n" "$name" "$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
+        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
     done
 }
 
@@ -54,11 +43,13 @@ print_list() {
 
     # print data from entries
     for i in $(seq "$cached_c"); do
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
-        [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
-        title="$(head -n 1 "$cur_file")"
-        exec="$(head -n 2 "$cur_file" | tail -n -1)"
+        # current file
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
+
+        # get details to display
+        title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
         icon="$(tail -n 1 "$cur_file")"
+
         [ "$useimage" = "true" ] && [ ! -e "$icon" ] && useimage=false && reenable=1
 
         [ "$useimage" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
@@ -68,19 +59,29 @@ print_list() {
 }
 
 execute_program() {
-    # loop through cached entries, if a file contains the name spmenu spits out, we break and execute it
-    # TODO: clean up this
     for i in $(seq "$cached_c"); do
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
-        grep -q "$res" "$cur_file" || continue
-        exec="$(head -n 2 "$cur_file" | tail -n -1)"
-        break
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
+        printf "User input: %s\n" "$res" >> /tmp/ls_desktop.log
+
+        if grep -q "Name:$res" "$cur_file"; then
+            exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
+            printf "Current file: '%s'\n" "$cur_file" >> /tmp/ls_desktop.log
+
+            break;
+        else
+            exec=""
+            continue;
+        fi
     done
 
     # finally run the program
-    [ -n "$exec" ] && $exec
+    if [ -n "$exec" ]; then
+        $exec
+    else
+        printf "No executable found. Try clearing cache." >> /tmp/ls_desktop.log
+    fi
 
-    return
+    return 0
 }
 
 main() {

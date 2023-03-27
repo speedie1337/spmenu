@@ -50,7 +50,6 @@ readstdin(void)
         // load image cache (or generate)
         if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg ? limg : "")) {
             loadimagecache(items[i].image, &w, &h);
-            fprintf(stdout, "spmenu: generating thumbnail for: %s\n", items[i].image);
         }
 
         if(items[i].image) {
