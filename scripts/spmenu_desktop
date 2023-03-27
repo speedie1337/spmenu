@@ -7,9 +7,10 @@
 [ -z "$useimage" ] && useimage=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 20 -g 1 -is 100 -ig 20"
+[ -z "$LOGFILE" ] && LOGFILE="/tmp/spmenu_desktop.log"
 
 # functions
-print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS "$@")"; cat /tmp/ls_desktop.log; }
+print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS "$@")"; cat "$LOGFILE"; }
 prep() { mkdir -p "$temporary_dir"; [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"; }
 scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
 
@@ -39,12 +40,12 @@ cache() {
 }
 
 print_list() {
-    rm -f /tmp/ls_desktop.log; touch /tmp/ls_desktop.log
+    rm -f "$LOGFILE"; touch "$LOGFILE"
 
     # print data from entries
     for i in $(seq "$cached_c"); do
         # current file
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
         # get details to display
         title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
@@ -60,12 +61,12 @@ print_list() {
 
 execute_program() {
     for i in $(seq "$cached_c"); do
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> /tmp/ls_desktop.log && continue
-        printf "User input: %s\n" "$res" >> /tmp/ls_desktop.log
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+        printf "User input: %s\n" "$res" >> "$LOGFILE"
 
         if grep -q "Name:$res" "$cur_file"; then
             exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
-            printf "Current file: '%s'\n" "$cur_file" >> /tmp/ls_desktop.log
+            printf "Current file: '%s'\n" "$cur_file" >> "$LOGFILE"
 
             break;
         else
@@ -78,7 +79,7 @@ execute_program() {
     if [ -n "$exec" ]; then
         $exec
     else
-        printf "No executable found. Try clearing cache." >> /tmp/ls_desktop.log
+        printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
 
     return 0
