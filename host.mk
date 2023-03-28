@@ -29,12 +29,6 @@ XFTCONF      = xft
 # xrender
 XRENDERLIBS  = -lXrender
 
-# imlib2
-IMLIB2LIBS   = -lImlib2
-
-# openssl
-OPENSSLCONF  = openssl
-
 # OpenBSD (uncomment)
 #INCDIR      = $(X11INC)
 #FREETYPEINC = $(INCDIR)/freetype2

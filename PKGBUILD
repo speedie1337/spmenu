@@ -28,4 +28,5 @@ package() {
   cd "$pkgname-$pkgver"
   make PREFIX=/usr DESTDIR="$pkgdir" CC=gcc install
   install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  touch "$pkgdir"/usr/share/spmenu/pkg_arch
 }

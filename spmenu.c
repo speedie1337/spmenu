@@ -44,10 +44,10 @@
 #endif
 
 // check if we should enable multimonitor support using libXinerama
-#ifdef XINERAMA
-#define USEXINERAMA 1
-#else
+#ifndef XINERAMA
 #define USEXINERAMA 0
+#else
+#define USEXINERAMA 1
 #endif
 
 // include fribidi used for right to left language support

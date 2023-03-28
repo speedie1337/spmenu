@@ -31,7 +31,7 @@ loadconf() {
 
     # mandatory deps
     [ "$freetype" = "false" ] && printf "Freetype not found. Install it.\n" && exit 1
-    [ "$openssl" = "false" ] && printf "OpenSSL not found. Install it.\n" && exit 1
+    [ "$openssl" = "false" ] && [ "$imlib2" = "true" ] && printf "OpenSSL not found. Install it.\n" && exit 1
     [ "$xrender" = "false" ] && printf "libXrender not found. Install it.\n" && exit 1
     [ "$x11" = "false" ] && printf "libX11 not found. Install it.\n" && exit 1
     [ "$xft" = "false" ] && printf "libXft not found. Install it.\n" && exit 1
@@ -69,6 +69,11 @@ build() {
         imlib2toggle="-DIMAGE"
     fi
 
+    # openssl
+    if [ "$openssl" = "true" ]; then
+        opensslconf="openssl"
+    fi
+
     # pango
     if [ "$pango" = "true" ] && [ "$pangoxft" = "true" ]; then
         pangoconf="pango"
@@ -89,6 +94,8 @@ build() {
 
     make clean
     [ "$GEN_MANUAL" != "false" ] && make man
+
+    [ "$INSTALL" != "true" ] && \
     make \
         CC="$CC" \
         PREFIX="$PREFIX" \
@@ -104,6 +111,7 @@ build() {
         BDINC="$bdinc" \
         BDTOGGLE="$bdtoggle" \
         FREETYPEINC="$FREETYPEINC" \
+        OPENSSLCONF="$opensslconf" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
@@ -125,6 +133,7 @@ install() {
         BDINC="$bdinc" \
         BDTOGGLE="$bdtoggle" \
         FREETYPEINC="$FREETYPEINC" \
+        OPENSSLCONF="$opensslconf" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }

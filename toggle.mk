@@ -23,3 +23,4 @@ PANGOTOGGLE    = -DPANGO
 # Comment these lines if you don't need it.
 IMLIB2LIBS     = -lImlib2
 IMLIB2TOGGLE   = -DIMAGE
+OPENSSLCONF    = openssl
