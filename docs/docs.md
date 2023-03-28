@@ -529,6 +529,8 @@ The selected option is piped to /bin/sh (by default). Unlike dmenu_run, spmenu_r
 - Prepending `magnet ` will open a magnet link in $TORRENT
 - Prepending `www` will open a page in $BROWSER
 
+Most of the time you don't need to prepend `www` though, for example typing in `https://gnu.org` will open gnu.org in $BROWSER even without the prefix. Same goes for magnet links.
+
 License
 =======
 
