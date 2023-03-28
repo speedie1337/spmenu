@@ -11,7 +11,7 @@
 [ -z "$logfile" ] && logfile="/tmp/spmenu_desktop.log"
 
 # functions
-print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"; }
+print_menu() { res="$(print_list | $RUNLAUNCHER $@ $RUNLAUNCHER_ARGS)"; }
 prep() { mkdir -p "$temporary_dir"; rm -f "$logfile"; touch "$logfile"; }
 scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
 
