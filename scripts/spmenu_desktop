@@ -6,16 +6,18 @@
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
 [ -z "$useimage" ] && useimage=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 20 -g 1 -is 100 -ig 20"
+[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20"
 [ -z "$LOGFILE" ] && LOGFILE="/tmp/spmenu_desktop.log"
 
 # functions
-print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS "$@")"; cat "$LOGFILE"; }
-prep() { mkdir -p "$temporary_dir"; [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"; }
+print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"; }
+prep() { mkdir -p "$temporary_dir"; [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
 scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
 
 # cache it, this means some speed improvements
 cache() {
+    printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
+    printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
 
     # find
@@ -26,13 +28,11 @@ cache() {
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
         exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g")"
-        oname="$name"
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+
+        # icon name
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
         [ -n "$icon_name" ] && icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
-
-        # prevent duplicates
-        [ "$oname" = "$name" ] && continue
 
         # write the file
         printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
@@ -40,8 +40,6 @@ cache() {
 }
 
 print_list() {
-    rm -f "$LOGFILE"; touch "$LOGFILE"
-
     # print data from entries
     for i in $(seq "$cached_c"); do
         # current file
@@ -60,9 +58,9 @@ print_list() {
 }
 
 execute_program() {
+    [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
     for i in $(seq "$cached_c"); do
         cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
-        printf "User input: %s\n" "$res" >> "$LOGFILE"
 
         if grep -q "Name:$res" "$cur_file"; then
             exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
@@ -77,7 +75,7 @@ execute_program() {
 
     # finally run the program
     if [ -n "$exec" ]; then
-        $exec
+        /bin/sh -c $exec
     else
         printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
