@@ -86,6 +86,7 @@ spmenu.class:              spmenu
 spmenu.fast:               0
 spmenu.managed:            0
 spmenu.mon:                -1
+spmenu.coloritems:         1
 
 !! Image
 spmenu.imagewidth:         86

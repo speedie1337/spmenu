@@ -64,6 +64,9 @@ drawitemtext(struct item *item, int x, int y, int w)
             memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
     }
 
+    // don't color
+    if (!coloritems) memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+
     drw_setscheme(drw, scm); // set scheme
 
     // parse item text

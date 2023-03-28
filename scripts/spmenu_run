@@ -1,9 +1,11 @@
 #!/bin/sh
-[ -z "$TERMINAL" ] && TERMINAL="st -e"
-[ -z "$BROWSER"  ] && BROWSER="xdg-open"
-[ -z "$TORRENT"  ] && TORRENT="qbittorrent"
-[ -z "$HISTORY" ] && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
-[ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
+[ -z "$TERMINAL" ]         && TERMINAL="st -e"
+[ -z "$BROWSER"  ]         && BROWSER="xdg-open"
+[ -z "$TORRENT"  ]         && TORRENT="qbittorrent"
+[ -z "$WEB_GREP" ]         && WEB_GREP="http:|https:|www[.]"
+[ -z "$MAGNET_GREP" ]      && MAGNET_GREP="magnet:?"
+[ -z "$HISTORY" ]          && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
+[ -z "$RUNLAUNCHER" ]      && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
 
 check() {
@@ -25,7 +27,7 @@ path() {
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --prompt "" > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy /usr/share/spmenu/example.Xresources to $HOME/.config/spmenu/spmenurc and edit that.
@@ -38,26 +40,52 @@ $(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmen
 EOF
 }
 
-# run spmenu and parse it
+print_config() {
+    [ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
+    mkdir -p "$HOME/.config/spmenu/run"
+cat << EOF > "$HOME/.config/spmenu/run/config"
+# spmenu_run default configuration file
+TERMINAL="\${TERMINAL:-st -e}" # Terminal
+BROWSER="\${BROWSER:-xdg-open}" # Web browser
+TORRENT="\${TORRENT:-qbittorrent}" # Torrent client
+WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
+MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
+HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file
+RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
+RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$*"
+EOF
+[ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
+}
+
 parse() {
     dout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"
 
     # parse
-    [ "$(printf '%c' "$dout")" = "#" ] && RUN_ARG="$TERMINAL"
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && "$TORRENT" "$(printf "$dout" | sed "s/magnet //")"
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "www" ] && "$BROWSER" "$(printf "$dout" | sed "s/www //")"
+    [ "$(printf '%c' "$dout")" = "#" ] && EXEC=term
+    [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && EXEC=torrent
+    [ "$(printf "$dout" | awk '{ print $1 }')" = "www" ] && EXEC=web
     [ "$(printf "$dout" | awk '{ print $1 }')" = "?" ] && print_help && main && return
 
-    # terminal
-    [ -z "$RUN_ARG" ] && \
-        printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} &
+    # check for keywords
+    printf "%s" "$dout" | grep -qE "$WEB_GREP" && EXEC=web
+    printf "%s" "$dout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+}
 
-    [ "$RUN_ARG" = "$TERMINAL" ] && $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")"; return
+exec_cmd() {
+    [ -z "$EXEC" ] && EXEC=shell
+    case "$EXEC" in
+        "shell") printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
+        "term") $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")" & ;;
+        "web") $BROWSER "$(printf "$dout" | sed "s/www //g")" & ;;
+        "torrent") $TORRENT "$(printf "$dout" | sed "s/magnet //g")" & ;;
+    esac
 }
 
 main() {
     check "$@"
+    print_config "$@"
     parse "$@"
+    exec_cmd "$@"
     rm -f "$HOME/.cache/spmenu_run"
 }
 

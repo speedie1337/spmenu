@@ -160,4 +160,5 @@ static int pango_password              = 0; /* Enable support for pango markup f
 #define borderalpha                    opaque /* Border alpha */
 
 /* Misc */
-static char worddelimiters[]           = " "; /* Word delimiters, " " is default. */
+static int coloritems                  = 1; /* Color items or not */
+static char worddelimiters[]           = " "; /* Word delimiters used for keybinds that change words, " " is default. */

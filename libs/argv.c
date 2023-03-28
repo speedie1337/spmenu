@@ -134,6 +134,10 @@ readargs(int argc, char *argv[])
 				indentitems = 1;
 		} else if (!strcmp(argv[i], "-nip") || (!strcmp(argv[i], "--no-indent"))) {  // don't indent to prompt width
 				indentitems = 0;
+		} else if (!strcmp(argv[i], "-ci") || (!strcmp(argv[i], "--color-items"))) {  // color items
+				coloritems = 1;
+		} else if (!strcmp(argv[i], "-nci") || (!strcmp(argv[i], "--no-color-items"))) {  // don't color items
+				coloritems = 0;
         } else if (i + 1 == argc) {
                 // any of the arguments we checked first
                 if ((!strcmp(argv[i], "-xrdb")
@@ -358,6 +362,8 @@ usage(void)
 		  "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
           "spmenu -ip,      --indent                                    Indent items to prompt width\n"
           "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
+          "spmenu -ci,      --color-items                               Color items\n"
+          "spmenu -nci,     --no-color-items                            Don't color items\n"
           "spmenu -a,       --alpha                                     Enable alpha\n"
           "spmenu -na,      --no-alpha                                  Disable alpha\n"
           "spmenu -tp,      --allow-typing                              Allow the user to type\n"

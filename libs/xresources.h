@@ -94,6 +94,7 @@ ResourcePref resources[] = {
 	{ "color14",             STRING,  &col_sgrcolor14 },
 	{ "color15",             STRING,  &col_sgrcolor15 },
 
+    { "coloritems",          INTEGER, &coloritems },
 	{ "menuposition",        INTEGER, &menuposition },
 	{ "menupaddingv",        INTEGER, &menupaddingv },
 	{ "menupaddingh",        INTEGER, &menupaddingh },

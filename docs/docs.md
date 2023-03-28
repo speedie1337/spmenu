@@ -82,6 +82,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nip,     --no-indent                               `
 :   Don't indent items to prompt width
 
+`-ci,     --color-items                              `
+:   Color items
+
+`-nci,    --no-color-items                           `
+:   Don't color items
+
 `-a,       --alpha                                   `
 :   Enable alpha
 
