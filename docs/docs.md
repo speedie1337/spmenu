@@ -166,6 +166,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-hpr,     --hide-prompt                             `
 :   Hide prompt
 
+`-hip,     --hide-input                              `
+:   Hide input
+
 `-hpl,     --hide-powerline                          `
 :   Hide powerline
 
@@ -192,6 +195,9 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-spr,     --show-prompt                             `
 :   Show prompt
+
+`-sin,     --show-input                              `
+:   Show input
 
 `-spl,     --show-powerline                          `
 :   Show powerline

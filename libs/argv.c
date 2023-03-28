@@ -114,10 +114,14 @@ readargs(int argc, char *argv[])
 				hideprompt = 1;
 		} else if (!strcmp(argv[i], "-hpl") || (!strcmp(argv[i], "--hide-powerline"))) {   // hide powerline
 				hidepowerline = 1;
+		} else if (!strcmp(argv[i], "-hin") || (!strcmp(argv[i], "--hide-input"))) {   // hide input
+				hideinput = 1;
 		} else if (!strcmp(argv[i], "-spr") || (!strcmp(argv[i], "--show-prompt"))) {  // show prompt
 				hideprompt = 0;
 		} else if (!strcmp(argv[i], "-spl") || (!strcmp(argv[i], "--show-powerline"))) {  // show prompt
 				hidepowerline = 0;
+		} else if (!strcmp(argv[i], "-sin") || (!strcmp(argv[i], "--show-input"))) {  // show input
+				hideinput = 0;
 		} else if (!strcmp(argv[i], "-hc") || (!strcmp(argv[i], "--hide-cursor"))) {   // hide cursor
 				hidecursor = 1;
 		} else if (!strcmp(argv[i], "-sc") || (!strcmp(argv[i], "--show-cursor"))) {  // show cursor
@@ -392,6 +396,7 @@ usage(void)
           "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
           "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
           "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
+          "spmenu -hip,     --hide-input                                Hide input\n"
           "spmenu -hpl,     --hide-powerline                            Hide powerline\n"
           "spmenu -hc,      --hide-cursor                               Hide cursor\n"
           "spmenu -hhl,     --hide-highlighting                         Hide highlight\n"
@@ -401,6 +406,8 @@ usage(void)
           "spmenu -sla,     --show-left-arrow                           Show left arrow\n"
           "spmenu -sra,     --show-right-arrow                          Show right arrow\n"
           "spmenu -spr,     --show-prompt                               Show prompt\n"
+          "spmenu -sin,     --show-input                                Show input\n"
+          "spmenu -spl,     --show-powerline                            Show powerline\n"
           "spmenu -sc,      --show-cursor                               Show cursor\n"
           "spmenu -shl,     --show-highlighting                         Show highlight\n"
           "spmenu -si,      --show-image                                Show image\n"

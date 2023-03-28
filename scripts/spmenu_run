@@ -27,7 +27,7 @@ path() {
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --prompt "" > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy /usr/share/spmenu/example.Xresources to $HOME/.config/spmenu/spmenurc and edit that.

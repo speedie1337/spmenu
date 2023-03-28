@@ -121,6 +121,7 @@ ResourcePref resources[] = {
     { "hidelarrow",          INTEGER, &hidelarrow },
     { "hiderarrow",          INTEGER, &hiderarrow },
     { "hideprompt",          INTEGER, &hideprompt },
+    { "hideinput",           INTEGER, &hideinput },
     { "hidepowerline",       INTEGER, &hidepowerline },
     { "hidecursor",          INTEGER, &hidecursor },
 	{ "histnodup",           INTEGER, &histnodup },

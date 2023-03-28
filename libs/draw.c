@@ -373,14 +373,25 @@ drawmenu(void)
         }
     }
 
-    x = drawprompt(x, y, w);
-    x = drawinput(x, y, w);
+    // why have an empty line?
+    if (hideprompt && hideinput && hidemode && hidematchcount) {
+        y -= bh;
+        mh = (lines + 1) * bh - bh;
 
+        if (!win) return;
+
+        XResizeWindow(dpy, win, mw, mh);
+        drw_resize(drw, mw, mh);
+    }
+
+    if (!hideprompt) x = drawprompt(x, y, w);
+    if (!hideinput) x = drawinput(x, y, w);
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
     drawitem(x, y, w);
-    drawnumber(x, y, w, numberWidth, modeWidth);
-    drawmode(x, y, w, numberWidth, modeWidth);
+
+    if (!hidematchcount) drawnumber(x, y, w, numberWidth, modeWidth);
+    if (!hidemode) drawmode(x, y, w, numberWidth, modeWidth);
 
 	drw_map(drw, win, 0, 0, mw, mh);
 }

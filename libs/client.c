@@ -65,6 +65,10 @@ resizeclient(void)
 
     mh = (lines + 1) * bh;
 
+    // why have an empty line?
+    if (hideprompt && hideinput && hidemode && hidematchcount)
+        mh += bh;
+
     if (!win || omh == mh) return;
 
     XResizeWindow(dpy, win, mw, mh);

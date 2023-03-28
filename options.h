@@ -64,14 +64,15 @@ static int indentitems                 = 1; /* Indent items to prompt width? (0/
 static char *prompt                    = NULL; /* Default prompt, set to NULL (nothing) */
 
 /* Hide options */
-static int hidematchcount              = 0; /* Hide match count (0/1) */
-static int hidemode                    = 0; /* Hide mode (0/1) */
+static int hideinput                   = 0; /* Hide input (0/1) */
 static int hidelarrow                  = 0; /* Hide left arrow (0/1) */
 static int hiderarrow                  = 0; /* Hide right arrow (0/1) */
 static int hideprompt                  = 0; /* Hide prompt (0/1) */
 static int hidepowerline               = 0; /* Hide powerline (0/1) */
 static int hidecursor                  = 0; /* Hide cursor (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
+static int hidematchcount              = 0; /* Hide match count (0/1) */
+static int hidemode                    = 0; /* Hide mode (0/1) */
 static int hideimage                   = 0; /* Hide image (0/1) */
 
 /* Color options
