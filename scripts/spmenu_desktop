@@ -49,6 +49,8 @@ print_list() {
         title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
         icon="$(tail -n 1 "$cur_file")"
 
+        [ -z "$title" ] && continue
+
         [ "$useimage" = "true" ] && [ ! -e "$icon" ] && useimage=false && reenable=1
 
         [ "$useimage" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
