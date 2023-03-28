@@ -51,7 +51,9 @@ install: all
 	rm -rf $(DESTDIR)$(PREFIX)/share/spmenu/
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/share/spmenu
+	cp docs/example.Xresources example.Xresources.orig && sed -i "s/VERSION/$(VERSION)/g" docs/example.Xresources
 	cp -r docs/* $(DESTDIR)$(PREFIX)/share/spmenu/
+	mv example.Xresources.orig docs/example.Xresources
 	echo "${VERSION}" > $(DESTDIR)$(PREFIX)/share/spmenu/version
 	echo "${CC}" > $(DESTDIR)$(PREFIX)/share/spmenu/cc
 	echo "${CFLAGS}" > $(DESTDIR)$(PREFIX)/share/spmenu/cflags
@@ -74,6 +76,8 @@ uninstall:
 		  $(DESTDIR)$(PREFIX)/bin/spmenu*
 
 help:
+	@echo spmenu Makefile help
+	@echo
 	@echo install:   Installs spmenu. You may need to run this as root.
 	@echo uninstall: Uninstalls spmenu. You may need to run this as root.
 	@echo dist:      Creates a release for spmenu.
