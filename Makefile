@@ -84,6 +84,7 @@ help:
 	@echo clean:     Removes objects and tarballs.
 	@echo man:       Generate man page for spmenu
 	@echo compat:    Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
+	@echo commit:    Commit to the repository
 	@echo pkg_arch:  Creates an Arch package based on the PKGBUILD
 	@echo help:      Displays this help sheet.
 
@@ -102,4 +103,9 @@ pkg_arch: dist
 	rm -rf src/ pkg/ *.tar.gz
 	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
 
-.PHONY: all options clean dist install uninstall pkg_arch help man
+commit: man
+	command -v git > /dev/null || exit 1
+	git commit -a
+	git push origin master
+
+.PHONY: all options clean dist install uninstall pkg_arch help man commit

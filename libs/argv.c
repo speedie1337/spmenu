@@ -347,6 +347,7 @@ readargs(int argc, char *argv[])
 void
 usage(void)
 {
+    // print help
 	fputs("spmenu: dynamic menu\n\n"
 		  "- Arguments -\n"
 		  "spmenu -l,       --lines <line>                              Set line count to stdin\n"
@@ -391,6 +392,7 @@ usage(void)
 		  "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
           "\n", stdout);
 
+    // more args
     fputs("spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
           "spmenu -hmc,     --hide-match-count                          Hide match count\n"
           "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
@@ -433,6 +435,7 @@ usage(void)
           "spmenu -v,       --version                                   Print spmenu version to stdout\n"
           "\n", stdout);
 
+    // colors
     fputs("- Appearance arguments -\n"
 		  "spmenu -fn,      --font  <font>                              Set the spmenu font to <font>\n"
           "spmenu -nif,     --normal-item-foreground <color>            Set the normal item foreground color\n"
@@ -463,6 +466,8 @@ usage(void)
           "spmenu -cc,      --caret-foreground <color>                  Set the caret color\n"
           "spmenu -bc,      --border-background <color>                 Set the border color\n"
           "\n", stdout);
+
+    // sgr sequences
     fputs("spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
 		  "spmenu -sgr1,    --sgr1 <color>                              Set the SGR 1 color\n"
 		  "spmenu -sgr2,    --sgr2 <color>                              Set the SGR 2 color\n"
@@ -480,6 +485,8 @@ usage(void)
 		  "spmenu -sgr14,   --sgr14 <color>                             Set the SGR 14 color\n"
 		  "spmenu -sgr15,   --sgr15 <color>                             Set the SGR 15 color\n"
           "\n", stdout);
+
+    // dmenu compat
     fputs("- dmenu compatibility -\n"
           "spmenu -S                                                    Don't sort matches\n"
 		  "spmenu -i                                                    Use case-insensitive matching\n"
@@ -488,5 +495,6 @@ usage(void)
 		  "spmenu -sb <color>                                           Set the selected background color\n"
 		  "spmenu -sf <color>                                           Set the selected foreground color\n"
           , stdout);
+
 	exit(1);
 }
