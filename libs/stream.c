@@ -55,7 +55,18 @@ readstdin(void)
         if(items[i].image) {
             limg = items[i].image;
         }
+        #else // remove the data, just for convenience
+        char *data;
+
+        if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
+            if(!(data = malloc(strlen(items[i].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
+            if(sscanf(items[i].text, "IMG:%[^\t]", data)) {
+                items[i].text += strlen("IMG:")+strlen(data)+1;
+            }
+        }
         #endif
+
 
         /* TODO: use this for something
          * current usage is not very useful, however it's here to be used later.
