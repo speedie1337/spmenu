@@ -40,7 +40,7 @@ static char font[]                     = "Noto Sans Mono 8"; /* Font to draw tex
 /* Symbol options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */
 static char *rightarrow                = ">"; /* Right arrow, used to indicate you can move to the right */
-static char *password                  = "."; /* Password character, when the -P argument is active this will replace all characters typed */
+static char password                   = '*'; /* Password character, when the -P argument is active this will replace all characters typed */
 
 /* Match options */
 static int type                        = 1; /* Allow typing into spmenu or only allow keybinds. */

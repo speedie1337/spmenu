@@ -70,9 +70,6 @@ You may use long, descriptive arguments or the shorter arguments.
 `-P,       --password                                `
 :   Hide characters
 
-`-Ps,      --password-symbol symbol                  `
-:   Set the password symbol to symbol
-
 `-p,       --prompt text                             `
 :   Set spmenu prompt text to text
 

@@ -169,8 +169,6 @@ readargs(int argc, char *argv[])
 			if (lines == 0) lines = 1;
 		} else if (!strcmp(argv[i], "-mc") || (!strcmp(argv[i], "--max-cache"))) { // max cache
 			maxcache = atoi(argv[++i]);
-		} else if (!strcmp(argv[i], "-") || (!strcmp(argv[i], "--password-symbol"))) { // password symbol
-			password = argv[++i];
 		} else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
 			lines = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight"))) { // line height
@@ -363,7 +361,6 @@ usage(void)
 		  "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
 		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
 		  "spmenu -P,       --password                                  Hide characters\n"
-          "spmenu -Ps,      --password-symbol <symbol>                  Set the password symbol to <symbol>\n"
 		  "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
           "spmenu -ip,      --indent                                    Indent items to prompt width\n"
           "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
