@@ -3,3 +3,5 @@
 - Mouse bind array (mouse.h)
 - Add configuration file using (probably) libconfig
 - Use higher level libraries, MD5() is deprecated as of OpenSSL 3 but it has been temporarily silenced. This might also improve compatibility for people who don't use OpenSSL.
+- Contextual completions
+- Fix segmentation fault when using -P option (i don't have time to fix it just yet)
