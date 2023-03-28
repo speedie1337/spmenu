@@ -90,7 +90,7 @@ readstdin(void)
 
             // spmenu:about
             if (!strncmp("about", items[i].ex, strlen("about"))) {
-                int i = system("printf \"spmenu $([ -f '/usr/share/spmenu/version' ] && cat /usr/share/spmenu/version || printf unknown)\\nBased on dmenu 5.2 from https://tools.suckless.org/dmenu\\nCompiled $([ -f '/usr/share/spmenu/compile-date' ] && cat /usr/share/spmenu/compile-date || printf unknown)\\nCFLAGS: $([ -f '/usr/share/spmenu/cflags' ] && cat /usr/share/spmenu/cflags || printf unknown)\\nCC: $([ -f '/usr/share/spmenu/cc' ] && cat /usr/share/spmenu/cc || printf unknown)\" | spmenu --columns 1 --lines 5 --hide-cursor --no-allow-typing --hide-mode --hide-match-count --hide-prompt --hide-powerline --hide-input --no-indent --no-color-items > /dev/null");
+                int i = system("printf \"spmenu $([ -f '/usr/share/spmenu/version' ] && cat /usr/share/spmenu/version || printf unknown)\\nBased on dmenu 5.2 from https://tools.suckless.org/dmenu\\nCompiled $([ -f '/usr/share/spmenu/compile-date' ] && cat /usr/share/spmenu/compile-date || printf Unknown)\\nCFLAGS: $([ -f '/usr/share/spmenu/cflags' ] && cat /usr/share/spmenu/cflags || printf unknown)\\nCC: $([ -f '/usr/share/spmenu/cc' ] && cat /usr/share/spmenu/cc || printf unknown)\\nDistro: $([ -f '/usr/share/spmenu/pkg_arch' ] && echo Arch || echo Installed manually)\\n\" | spmenu --columns 1 --lines 10 --hide-cursor --no-allow-typing --hide-mode --hide-match-count --hide-prompt --hide-powerline --hide-input --no-indent --no-color-items > /dev/null");
                 if (i||!i) exit(0);
             }
 

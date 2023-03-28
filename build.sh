@@ -95,7 +95,6 @@ build() {
     make clean
     [ "$GEN_MANUAL" != "false" ] && make man
 
-    [ "$INSTALL" != "true" ] && \
     make \
         CC="$CC" \
         PREFIX="$PREFIX" \
@@ -142,4 +141,4 @@ check_dist
 check
 loadconf
 build
-[ "$INSTALL" != "false" ] && install
+[ "$install" != "false" ] && install
