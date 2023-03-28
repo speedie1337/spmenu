@@ -46,7 +46,7 @@ command -v maim > /dev/null && maim -uB > /tmp/image.png
 IMAGE="/tmp/image.png"
 
 main() {
-[ -e "$IMAGE" ] && IMAGEARG="-is 500" && IMAGEPREFIX="IMG:" || IMAGE=""
+[ -e "$IMAGE" ] && IMAGEARG="--image-size 500" && IMAGEPREFIX="IMG:" || IMAGE=""
 
 printf "$IMAGEPREFIX$IMAGE\t\
 ${v1}\
@@ -107,7 +107,7 @@ ${v1}q${v2}w${v3}e${v4}r${v5}t${v6}y${v7}u${v8}i${v9}o${v10}p${v11}[${v12}]${v13
 \n\
 Arguments will be passed to spmenu.\n\
 Report any issues at the Codeberg repo.\n\
-" | spmenu -na -l 40 $IMAGEARG "$@" -g 1 -p "<big>spmenu <i>test</i> <small>script</small></big>"
+" | spmenu --no-alpha --lines 40 $IMAGEARG "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
 }
 
 main "$@"

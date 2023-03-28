@@ -9,7 +9,7 @@
 [ -z "$prefix" ] && prefix="/tmp/.list_songs"
 
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER="spmenu"
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 40 -g 1 -is 200 -ngc"
+[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 40 --columns 1 --image-size 200 --no-generate-cache"
 
 create_list() {
     [ -z "$i" ] && i=1

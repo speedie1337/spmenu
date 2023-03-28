@@ -8,7 +8,7 @@ path() { echo "$PATH" | tr ':' '\n' | uniq | sed 's#$#/#' | xargs ls -lu --time-
 
 # run spmenu and parse it
 parse() {
-    dout="$(path | sed "s/\&/\&amp;/g" | spmenu -im -H "$HISTORY" "$@")"
+    dout="$(path | sed "s/\&/\&amp;/g" | spmenu --insert --hist-file "$HISTORY" "$@")"
 
     # parse
     [ "$(printf '%c' "$dout")" = "#" ] && RUN_ARG="$TERMINAL"

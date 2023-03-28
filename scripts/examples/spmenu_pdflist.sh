@@ -3,7 +3,7 @@ c="$(find *.pdf -type f | wc -l)"
 i=1
 [ -z "$prefix" ] && prefix="/tmp/.list_pdfs"; mkdir -p ${prefix}
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER="spmenu"
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="-l 40 -g 1 -is 400 -ngc"
+[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 40 --columns 1 --image-size 400 --no-generate-cache"
 
 print_list() {
     while true; do

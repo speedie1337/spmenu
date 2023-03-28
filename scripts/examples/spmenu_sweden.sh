@@ -15,4 +15,4 @@ ${bg_blue}       ${bg_yellow}   ${bg_blue}\n\
 ${bg_blue}       ${bg_yellow}   ${bg_blue}\n\
 \n\
 ${reset}${fg_blue}c${fg_yellow}o${fg_blue}o${fg_yellow}l\n\
-" | spmenu -sgr4 "$color1" -sgr5 "$color3" -sgr12 "$color1" -sgr13 "$color3" -na -l 40 -g 7 "$@"
+" | spmenu --sgr4 "$color1" --sgr5 "$color3" --sgr12 "$color1" --sgr13 "$color3" --no-alpha --lines 40 --columns 7 "$@"
