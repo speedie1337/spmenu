@@ -284,7 +284,7 @@ selectitem(const Arg *arg)
 {
     char *selection;
 
-    if (sel) {
+    if (sel && arg->i) {
         selection = sel->text;
     } else {
         selection = text;

@@ -52,6 +52,7 @@ static Key keys[] = {
 
 	/* normal mode */
 	{ 0,       0,                            XK_i,         switchmode,      {0} },
+	{ 0,       0,                            XK_slash,     switchmode,      {0} },
     { 0,       CONTROL,                      XK_equal,     setimgsize,      {.i = +1 } },
     { 0,       CONTROL,                      XK_minus,     setimgsize,      {.i = -1 } },
     { 0,       0,                            XK_equal,     setimgsize,      {.i = +10 } },

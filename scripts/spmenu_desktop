@@ -5,19 +5,37 @@
 [ -z "$icon_dir" ] && icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps"
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
 [ -z "$useimage" ] && useimage=true
+[ -z "$config" ] && config="$HOME/.config/spmenu/desktop/config"
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20"
-[ -z "$LOGFILE" ] && LOGFILE="/tmp/spmenu_desktop.log"
+[ -z "$logfile" ] && logfile="/tmp/spmenu_desktop.log"
 
 # functions
 print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"; }
-prep() { mkdir -p "$temporary_dir"; [ -f "$temporary_dir/../config" ] && . "$temporary_dir/../config"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
+prep() { mkdir -p "$temporary_dir"; rm -f "$logfile"; touch "$logfile"; }
 scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
+
+w_conf() {
+if [ ! -f "$config" ]; then
+mkdir -p "$(dirname $config)"
+cat << EOF > "$config"
+# spmenu_desktop configuration file
+desktop_dir="/usr/share/applications" # Directories to look for .desktop files in
+icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps" # Directories to look for icons in
+temporary_dir="\$HOME/.config/spmenu/desktop/cache" # Directory used to store cache
+useimage=true # Enable image support
+RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}"
+RUNLAUNCHER_ARGS="\${RUNLAUNCHER_ARGS:- --lines 20 --columns 1 --image-size 100 --image-gaps 20}"
+logfile="/tmp/spmenu_desktop.log"
+EOF
+fi
+[ -f "$config" ] && . "$config"
+}
 
 # cache it, this means some speed improvements
 cache() {
-    printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
-    printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
+    printf "Cached: %s\n" "$cached_c" >> "$logfile"
+    printf "Entries: %s\n" "$entry_c" >> "$logfile"
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
 
     # find
@@ -43,7 +61,7 @@ print_list() {
     # print data from entries
     for i in $(seq "$cached_c"); do
         # current file
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$logfile" && continue
 
         # get details to display
         title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
@@ -60,13 +78,13 @@ print_list() {
 }
 
 execute_program() {
-    [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
+    [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$logfile"
     for i in $(seq "$cached_c"); do
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$logfile" && continue
 
         if grep -q "Name:$res" "$cur_file"; then
             exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
-            printf "Current file: '%s'\n" "$cur_file" >> "$LOGFILE"
+            printf "Current file: '%s'\n" "$cur_file" >> "$logfile"
 
             break;
         else
@@ -79,13 +97,14 @@ execute_program() {
     if [ -n "$exec" ]; then
         /bin/sh -c $exec
     else
-        printf "No executable found. Try clearing cache." >> "$LOGFILE"
+        printf "No executable found. Try clearing cache." >> "$logfile"
     fi
 
     return 0
 }
 
 main() {
+    w_conf "$@"
     prep
     scan
     cache
