@@ -1,5 +1,5 @@
 // color scheme arrays
-static const unsigned int alphas[][3]      = {
+static unsigned int alphas[][3]      = {
 	//                         fg       bg        border
 	[SchemeLArrow]         = { fgalpha, bgalpha,  borderalpha },
 	[SchemeRArrow]         = { fgalpha, bgalpha,  borderalpha },
@@ -18,7 +18,7 @@ static const unsigned int alphas[][3]      = {
     [SchemeBorder]         = { fgalpha, bgalpha,  borderalpha },
 };
 
-static const char *colors[SchemeLast][2] = {
+static char *colors[SchemeLast][2] = {
 	//                        fg                 bg
 	[SchemeLArrow]        = { col_larrowfg,      col_larrowbg        },
 	[SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg        },

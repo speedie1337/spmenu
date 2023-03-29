@@ -119,7 +119,7 @@ drw_font_free(Fnt *font)
 }
 
 void
-drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
+drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha)
 {
 	if (!drw || !dest || !clrname)
 		return;
@@ -134,7 +134,7 @@ drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
 /* Wrapper to create color schemes. The caller has to call free(3) on the
  * returned color scheme when done using it. */
 Clr *
-drw_scm_create(Drw *drw, const char *clrnames[], const unsigned int alphas[], size_t clrcount)
+drw_scm_create(Drw *drw, char *clrnames[], unsigned int alphas[], size_t clrcount)
 {
 	size_t i;
 	Clr *ret;

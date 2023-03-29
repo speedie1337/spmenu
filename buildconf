@@ -7,4 +7,4 @@ pangoxft=true
 xinerama=true
 openssl=true
 fribidi=true
-CC=tcc
+CC=gcc
