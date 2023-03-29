@@ -5,3 +5,4 @@
 - Use higher level libraries, MD5() is deprecated as of OpenSSL 3 but it has been temporarily silenced. This might also improve compatibility for people who don't use OpenSSL.
 - Contextual completions
 - Use cairo for text drawing over Xft
+- MAYBE wayland support, but only if it doesn't require writing any extra code which as of now seems unlikely
