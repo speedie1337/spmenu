@@ -2,6 +2,7 @@
 
 - Mouse bind array (mouse.h)
 - Add configuration file using (probably) libconfig
+- Fix arrow drawing (not sure what went wrong yet)
 - Use higher level libraries, MD5() is deprecated as of OpenSSL 3 but it has been temporarily silenced. This might also improve compatibility for people who don't use OpenSSL.
 - Contextual completions
 - Use cairo for text drawing over Xft
