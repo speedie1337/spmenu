@@ -55,13 +55,13 @@ install: spmenu
 	cp docs/example.Xresources example.Xresources.orig && sed -i "s/VERSION/$(VERSION)/g" docs/example.Xresources
 	cp -r docs/* $(DESTDIR)$(PREFIX)/share/spmenu/
 	mv example.Xresources.orig docs/example.Xresources
-	echo "${VERSION}" > $(DESTDIR)$(PREFIX)/share/spmenu/version
-	echo "${CC}" > $(DESTDIR)$(PREFIX)/share/spmenu/cc
-	echo "${CFLAGS}" > $(DESTDIR)$(PREFIX)/share/spmenu/cflags
+	echo "$(VERSION)" > $(DESTDIR)$(PREFIX)/share/spmenu/version
+	echo "$(CC)" > $(DESTDIR)$(PREFIX)/share/spmenu/cc
+	echo "$(CFLAGS)" > $(DESTDIR)$(PREFIX)/share/spmenu/cflags
 	echo "$$(date "+%D %T")" > $(DESTDIR)$(PREFIX)/share/spmenu/compile-date
 	cp -r spmenu scripts/spmenu* $(DESTDIR)$(PREFIX)/bin
-	[ -f spmenu.1 ] && mkdir -p ${DESTDIR}${MANPREFIX}/man1 || :
-	[ -f spmenu.1 ] && cp spmenu.1 ${DESTDIR}${MANPREFIX}/man1/spmenu.1 || :
+	[ -f spmenu.1 ] && mkdir -p $(DESTDIR)$(MANPREFIX)/man1 || :
+	[ -f spmenu.1 ] && cp spmenu.1 $(DESTDIR)$(MANPREFIX)/man1/spmenu.1 || :
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/spmenu*
 	rm -f *.o
 	rm -f spmenu

@@ -9,7 +9,7 @@ OPT          = -O2
 
 # paths
 PREFIX       = /usr
-MANPREFIX 	 = ${PREFIX}/share/man
+MANPREFIX 	 = $(PREFIX)/share/man
 INCDIR       = /usr/include
 
 # library paths
@@ -21,7 +21,7 @@ X11LIB       = /usr/X11R6/lib
 
 # freetype
 FREETYPELIBS = -lfontconfig -lXft
-FREETYPEINC  = ${INCDIR}/freetype2
+FREETYPEINC  = $(INCDIR)/freetype2
 
 # xft
 XFTCONF      = xft
