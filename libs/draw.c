@@ -81,6 +81,8 @@ drawitemtext(struct item *item, int x, int y, int w)
 				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
 				x += rw + lp;
+                w -= rw + lp;
+
                 orw += rw; // width of all colored text, we add this to the full width later
                 ib = 1;
                 lp = 0;
@@ -138,8 +140,6 @@ drawitemtext(struct item *item, int x, int y, int w)
 	}
 
 	buffer[wr] = '\0';
-
-    w -= orw;
 
     // now draw any non-colored text
     apply_fribidi(buffer);
