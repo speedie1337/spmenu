@@ -36,6 +36,7 @@ static int borderwidth                 = 2; /* Width of the border */
 
 /* Font options */
 static char font[]                     = "Noto Sans Mono 8"; /* Font to draw text and Pango markup with. */
+static int textpadding                 = 0; /* Text padding (lrpad) */
 
 /* Symbol options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */

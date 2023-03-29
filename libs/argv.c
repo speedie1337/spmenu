@@ -176,6 +176,8 @@ readargs(int argc, char *argv[])
 			if (columns == 0) columns = 1;
 		} else if (!strcmp(argv[i], "-mw") || (!strcmp(argv[i], "--min-width"))) { // line height
 	        minwidth = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-txp") || (!strcmp(argv[i], "--text-padding"))) { // text padding
+		    textpadding = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-lp") || (!strcmp(argv[i], "--vertical-padding"))) { // vertical padding
 		    menupaddingv = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-hp") || (!strcmp(argv[i], "--horizontal-padding"))) { // horizontal padding
@@ -416,6 +418,7 @@ usage(void)
 		  "spmenu -w,       --embed <window id>                         Embed spmenu inside <window id>\n"
 		  "spmenu -H,       --hist-file <hist file>                     Specify a path to save the history to\n"
           "spmenu -ig,      --image-gaps <gaps>                         Set image gaps to <gaps>\n"
+          "spmenu -txp,     --text-padding <padding>                    Set text padding to <padding>\n"
 		  "spmenu -lp,      --vertical-padding <padding>                Set the vertical padding\n"
 		  "spmenu -hp,      --horizontal-padding <padding>              Set the horizontal padding\n"
           "spmenu -la,      --left-arrow-symbol <symbol>                Set the left arrow to <symbol>\n"

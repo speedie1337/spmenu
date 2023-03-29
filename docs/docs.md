@@ -226,6 +226,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-ig,      --image-gaps gaps                         `
 :   Set image gaps to gaps
 
+`-txp,      --text-padding padding                   `
+:   Set text padding to padding
+
 `-lp,      --vertical-padding padding                `
 :   Set the vertical padding
 

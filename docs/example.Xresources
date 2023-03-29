@@ -5,6 +5,7 @@
 
 !! Fonts
 spmenu.font:               Noto Sans Mono 8
+spmenu.textpadding:        0
 
 !! Colors
 spmenu.col_itemnormfg:     #bbbbbb

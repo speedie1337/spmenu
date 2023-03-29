@@ -739,7 +739,7 @@ main(int argc, char *argv[])
 	if (!drw_font_create(drw, fonts, LENGTH(fonts)))
 	    die("no fonts could be loaded.");
 
-    lrpad = drw->font->h;
+    lrpad = drw->font->h + textpadding;
     prepare_window_size();
 
     #ifdef __OpenBSD__
