@@ -571,7 +571,44 @@ Most of the time you don\[cq]t need to prepend \f[V]www\f[R] though, for
 example typing in \f[V]https://gnu.org\f[R] will open gnu.org in
 $BROWSER even without the prefix.
 Same goes for magnet links.
+.PP
+You can also configure the run launcher through editing
+\f[V]\[ti]/.config/spmenu/run/config\f[R] which is configured in shell
+syntax.
+.SH spmenu_desktop
+.PP
+In addition to the aforementioned \f[V]spmenu_run\f[R], the spmenu
+package also provides \f[V]spmenu_desktop\f[R] which instead of reading
+$PATH only lists out .desktop entries.
+.PP
+Unlike the regular run launcher though, spmenu_desktop supports
+displaying an icon for entries that use one.
+.PP
+It can be configured through editing
+\f[V]\[ti]/.config/spmenu/desktop/config\f[R].
+.SH spmenu commands
+.PP
+spmenu has a few special commands.
+These work similar to the images.
+For example to list the version, in addition to the \f[V]--version\f[R]
+argument you can also simply run
+\f[V]printf \[aq]spmenu:version\[aq] | spmenu\f[R].
+There are a few of these.
+.TP
+\f[V]spmenu:version\f[R]
+Print the spmenu version
+.TP
+\f[V]spmenu:license\f[R]
+Print the spmenu license
+.TP
+\f[V]spmenu:about\f[R]
+Print various information about spmenu, such as compiler arguments.
+.TP
+\f[V]spmenu:test\f[R]
+Print a test script for spmenu which tests various features.
+Report any weird issues you may have.
 .SH License
 .PP
-spmenu is licensed under the MIT license.
+spmenu is licensed under the MIT license because that\[cq]s the original
+suckless license.
 See the included LICENSE file for more information.

@@ -8,6 +8,10 @@ spmenu is an X11 menu application based on
 it, and lets the user choose an option and sends the
 selected option to standard output.
 
+In addition to this, it also serves as a run launcher through the included
+shell script `spmenu_run`. Alternatively you may use `spmenu_desktop` which
+lists .desktop entries instead of $PATH.
+
 It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://codeberg.org/speedie/speedwm).
 
 ### Special features
@@ -18,10 +22,11 @@ Of course if you want, this is free software so you can use it in your own build
 - dwm-like keybind array (See keybinds.h)
 - Vim-like modes, including indicator.
 - The ability to move around items with keybinds.
-- Customizable line/column size.
+- Customizable/dynamic line/column size.
+- Powerlines
 - Web browser like keybindings.
 - 256 color support through SGR codes.
-- Image support (from [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
+- Image support (somewhat based on [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
 - Hiding each part of the menu.
@@ -30,7 +35,8 @@ Of course if you want, this is free software so you can use it in your own build
 
 ### Other features
 
-Note: This is an incomplete list, it's just here to give you an idea of what this build has to offer.
+Note: This is an incomplete list, it's just here to give you an idea of what
+this build has to offer.
 
 - Pango markup support
 - Alpha transparency
@@ -86,6 +92,8 @@ If you are on Arch GNU/Linux, you can add
 
 There's also a PKGBUILD. To use it, simply `makepkg -Si`.
 
+If you wish to package spmenu for your GNU/Linux distribution, feel free to add it to this list.
+
 ### Images
 
 To use an image, pipe `IMG:/path/to/image` to spmenu. If you want you can specify arguments.
@@ -98,4 +106,5 @@ This build allows you to define .Xresources values to load on startup. See docs/
 
 ### Scripts
 
-This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://codeberg.org/speedie/speedwm-extras) are a few I've written/use.
+This build of spmenu should work with all spmenu/dmenu scripts. [Here](https://git.speedie.gq/speedwm-extras) are a few I've written/use.
+If your scripts are useful enough, and written with spmenu in mind, feel free to pull request and put your scripts here!

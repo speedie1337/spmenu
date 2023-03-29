@@ -522,19 +522,62 @@ Programs like `pywal` do this to apply universal colorschemes.
 Run launcher
 ============
 
-spmenu includes a shell script called spmenu_run. It lists executable programs in $PATH and displays them to the user in a list. Not only that but it shows recently run programs first in the list.
+spmenu includes a shell script called spmenu_run. It lists executable programs
+in $PATH and displays them to the user in a list. Not only that but it shows
+recently run programs first in the list.
 
-spmenu_run will interpret any arguments as spmenu arguments and pass them to spmenu. Therefore `spmenu_run --prompt 'Run:'` will set the prompt to `Run:`. While it is similar to dmenu_run (and achieves the same goal), this version has some extra features.
+spmenu_run will interpret any arguments as spmenu arguments and pass them to
+spmenu. Therefore `spmenu_run --prompt 'Run:'` will set the prompt to `Run:`.
+While it is similar to dmenu_run (and achieves the same goal), this
+version has some extra features.
 
-The selected option is piped to /bin/sh (by default). Unlike dmenu_run, spmenu_run has some cool features. For example:
+The selected option is piped to /bin/sh (by default). Unlike dmenu_run,
+spmenu_run has some cool features. For example:
 
 - Prepending `#` will spawn it in a terminal instead of just a shell.
 - Prepending `magnet ` will open a magnet link in $TORRENT
 - Prepending `www` will open a page in $BROWSER
 
-Most of the time you don't need to prepend `www` though, for example typing in `https://gnu.org` will open gnu.org in $BROWSER even without the prefix. Same goes for magnet links.
+Most of the time you don't need to prepend `www` though, for example
+typing in `https://gnu.org` will open gnu.org in $BROWSER even
+without the prefix. Same goes for magnet links.
+
+You can also configure the run launcher through editing
+`~/.config/spmenu/run/config` which is configured in shell syntax.
+
+spmenu_desktop
+==============
+
+In addition to the aforementioned `spmenu_run`, the spmenu package also provides
+`spmenu_desktop` which instead of reading $PATH only lists out .desktop entries.
+
+Unlike the regular run launcher though, spmenu_desktop supports displaying an
+icon for entries that use one.
+
+It can be configured through editing `~/.config/spmenu/desktop/config`.
+
+spmenu commands
+===============
+
+spmenu has a few special commands. These work similar to the images. For example
+to list the version, in addition to the `--version` argument you can also simply
+run `printf 'spmenu:version' | spmenu`. There are a few of these.
+
+`spmenu:version`
+:    Print the spmenu version
+
+`spmenu:license`
+:    Print the spmenu license
+
+`spmenu:about`
+:    Print various information about spmenu, such as compiler arguments.
+
+`spmenu:test`
+:    Print a test script for spmenu which tests various features. Report any
+weird issues you may have.
 
 License
 =======
 
-spmenu is licensed under the MIT license. See the included LICENSE file for more information.
+spmenu is licensed under the MIT license because that's the original suckless
+license. See the included LICENSE file for more information.
