@@ -92,6 +92,7 @@ static Key keys[] = {
     { 0,       SHIFT,                        XK_g,         moveend,         {0} },
     { 0,       0,                            XK_Next,      movenext,        {0} },
     { 0,       0,                            XK_Prior,     moveprev,        {0} },
+    { 0,       CONTROL|SHIFT,                XK_p,         setprofile,      {0} },
     { 0,       MODIFIER1,                    XK_p,         navhistory,      {.i = -1 } },
     { 0,       MODIFIER1,                    XK_n,         navhistory,      {.i = +1 } },
 

@@ -5,7 +5,6 @@ readargs(int argc, char *argv[])
     int j = 0;
 
     int cxrdb = 0;
-    int hxrdb = 0;
 
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked (internal -> xresources -> arguments)
     for (j = 1; j < argc; j++) {
@@ -25,12 +24,11 @@ readargs(int argc, char *argv[])
         XrmInitialize();
 
         if (loadconfig) {
-            cxrdb = system("[ -e $HOME/.config/spmenu/spmenurc ] && xrdb -override $HOME/.config/spmenu/spmenurc");
-            hxrdb = system("[ -e $HOME/.spmenurc ] && xrdb -override $HOME/.spmenurc");
+            cxrdb = system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-load-default-profile > /dev/null");
         }
 
         // avoid an annoying warning gcc will spit out when you don't care about the result
-        if (!cxrdb || !hxrdb || cxrdb || hxrdb || xresources) load_xresources();
+        if (!cxrdb || cxrdb || xresources) load_xresources();
     }
 
     // no arguments
