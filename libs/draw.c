@@ -5,6 +5,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 	char *highlight;
 	char c;
 
+    // limitation in order to prevent highlighting from drawing when the text isn't visible
     if (columns > 5 && lines > 1) return;
 
 	char *itemtext = item->text;
@@ -40,18 +41,17 @@ drawhighlights(struct item *item, int x, int y, int w)
 int
 drawitemtext(struct item *item, int x, int y, int w)
 {
-    char buffer[MAXITEMLENGTH];
-    Clr scm[3];
-    int lp = lrpad / 2; // padding
-    int wr, rd;
-	int rw = 0; // width of text
-    int orw = 0;
-	int fg = 7;
-	int bg = 0;
-    int bgfg = 0;
-    int ignore = 0;
-    int ib = 0;
+    char buffer[MAXITEMLENGTH]; // buffer containing item text
+    Clr scm[2]; // color scheme
+    int leftpadding = lrpad / 2; // padding
+    int wr, rd; // character
+	int fg = 7; // foreground
+	int bg = 0; // background
+    int bgfg = 0; // both
+    int ignore = 0; // ignore colors
+    int skiphighlight = 0; // skip highlighting
 
+    // memcpy the correct scheme
     if (item == sel) {
         memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
 
@@ -77,52 +77,52 @@ drawitemtext(struct item *item, int x, int y, int w)
 				buffer[wr] = '\0';
 
                 apply_fribidi(buffer);
-                rw = MIN(w, TEXTW(buffer) - lrpad);
-				drw_text(drw, x, y, rw + lp, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+				drw_text(drw, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 
-				x += rw + lp;
-                w -= rw + lp;
+                // position and width
+				x += MIN(w, TEXTW(buffer) - lrpad) + leftpadding;
+                w -= MIN(w, TEXTW(buffer) - lrpad) + leftpadding;
 
-                orw += rw; // width of all colored text, we add this to the full width later
-                ib = 1;
-                lp = 0;
+                // no highlighting if colored text
+                skiphighlight = 1;
+                leftpadding = 0;
 
-				char *ep = item->text + rd + 1;
+				char *character = item->text + rd + 1; // current character
 
-                // parse hex colors in scm
-				while (*ep != 'm') {
-					unsigned v = strtoul(ep + 1, &ep, 10);
+                // parse hex colors in scm, m is always the last character
+				while (*character != 'm') {
+					unsigned nextchar = strtoul(character + 1, &character, 10);
                     if (ignore)
 						continue;
 					if (bgfg) {
-						if (bgfg < 4 && v == 5) {
+						if (bgfg < 4 && nextchar == 5) {
 							bgfg <<= 1;
 							continue;
 						}
 						if (bgfg == 4)
-							scm[0] = textclrs[fg = v];
+							scm[0] = textclrs[fg = nextchar];
 						else if (bgfg == 6)
-							scm[1] = textclrs[bg = v];
+							scm[1] = textclrs[bg = nextchar];
 						ignore = 1;
 
 						continue;
 					}
 
-					if (v == 1) {
+					if (nextchar == 1) {
 						fg |= 8;
 						scm[0] = textclrs[fg];
-					} else if (v == 22) {
+					} else if (nextchar == 22) {
 						fg &= ~8;
 						scm[0] = textclrs[fg];
-					} else if (v >= 30 && v <= 37) {
-						fg = v % 10 | (fg & 8);
+					} else if (nextchar >= 30 && nextchar <= 37) {
+						fg = nextchar % 10 | (fg & 8);
 						scm[0] = textclrs[fg];
-                    } else if (v == 38) {
+                    } else if (nextchar == 38) {
 						bgfg = 2;
-					} else if (v >= 40 && v <= 47) {
-						bg = v % 10;
+					} else if (nextchar >= 40 && nextchar <= 47) {
+						bg = nextchar % 10;
 						scm[1] = textclrs[bg];
-					} else if (v == 48) {
+					} else if (nextchar == 48) {
                         bgfg = 3;
                     }
 				}
@@ -143,10 +143,10 @@ drawitemtext(struct item *item, int x, int y, int w)
 
     // now draw any non-colored text
     apply_fribidi(buffer);
-	int r = drw_text(drw, x, y, w, bh, lp, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
-    if (!hidehighlight && !ib) drawhighlights(item, x, y, w);
+	int r = drw_text(drw, x, y, w, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+    if (!hidehighlight && !skiphighlight) drawhighlights(item, x, y, w);
 
-    // this should allow us to use it for tab completion
+    // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
     item->clntext = malloc(sizeof(buffer));
     memcpy(item->clntext, buffer, sizeof(buffer));
 
