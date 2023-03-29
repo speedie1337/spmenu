@@ -160,9 +160,12 @@ drawitem(int x, int y, int w)
 
     int numberWidth = 0;
     int modeWidth = 0;
+    int larrowWidth = 0;
     int rarrowWidth = 0;
 
     // add width
+    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
     if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
@@ -209,12 +212,12 @@ drawitem(int x, int y, int w)
 	} else if (matches) {
 		x += inputw;
 
-        drawlarrow(x, y, w);
+        x = drawlarrow(x, 0, larrowWidth);
 
 		for (item = curr; item != next; item = item->right) // draw items
             x = drawitemtext(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
 
-        drawrarrow(x, y, w, numberWidth, modeWidth, rarrowWidth);
+            x = drawrarrow(x, 0, rarrowWidth + numberWidth + modeWidth);
 	}
 
     return x;
@@ -277,28 +280,26 @@ drawinput(int x, int y, int w)
 int
 drawlarrow(int x, int y, int w)
 {
-    if (hidelarrow) {
-        return x;
-    }
+    if (hidelarrow) return x;
 
 	if (curr->left) { // draw left arrow
 		drw_setscheme(drw, scheme[SchemeLArrow]);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
+	    x += w;
 	}
-
-	x += w;
 
     return x;
 }
 
 int
-drawrarrow(int x, int y, int w, int numberWidth, int modeWidth, int rarrowWidth)
+drawrarrow(int x, int y, int w)
 {
-	if (next && !hiderarrow) { // draw right arrow
-		w = rarrowWidth;
-		drw_setscheme(drw, scheme[SchemeRArrow]);
+    if (hiderarrow) return x;
 
+	if (next) { // draw right arrow
+		drw_setscheme(drw, scheme[SchemeRArrow]);
         drw_text(drw, mw - w, 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
+        x += w;
 	}
 
     return x;
