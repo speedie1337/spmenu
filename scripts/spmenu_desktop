@@ -6,6 +6,7 @@
 [ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
 [ -z "$useimage" ] && useimage=true
 [ -z "$config" ] && config="$HOME/.config/spmenu/desktop/config"
+[ -z "$cache" ] && cache=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20"
 [ -z "$logfile" ] && logfile="/tmp/spmenu_desktop.log"
@@ -50,11 +51,14 @@ cache() {
 
         # icon name
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-        [ -n "$icon_name" ] && icon="$(printf "%s" "$icons" | grep "$icon_name[.]" | head -n 1)"
+        icon="$(printf "%s" "$icons" | grep "/$icon_name[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
         # write the file
-        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "$icon" > "$temporary_dir/$(basename "$cur_file").entry"
+        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$temporary_dir/$(basename "$cur_file").entry"
     done
+
+    # run scan() again
+    scan
 }
 
 print_list() {
@@ -65,12 +69,12 @@ print_list() {
 
         # get details to display
         title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-        icon="$(tail -n 1 "$cur_file")"
+        icon="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
 
-        [ -z "$title" ] && continue
+        [ -z "$title" ] && continue # no title isn't worth displaying, obviously
 
+        # print it all
         [ "$useimage" = "true" ] && [ ! -e "$icon" ] && useimage=false && reenable=1
-
         [ "$useimage" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
             printf "%s\n" "$title"
         [ "$reenable" = "1" ] && useimage=true
@@ -82,6 +86,7 @@ execute_program() {
     for i in $(seq "$cached_c"); do
         cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$logfile" && continue
 
+        # find the executable matching the selected name
         if grep -q "Name:$res" "$cur_file"; then
             exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
             printf "Current file: '%s'\n" "$cur_file" >> "$logfile"
@@ -95,9 +100,9 @@ execute_program() {
 
     # finally run the program
     if [ -n "$exec" ]; then
-        /bin/sh -c $exec
+        /bin/sh -c "$exec"
     else
-        printf "No executable found. Try clearing cache." >> "$logfile"
+        [ ! -z "$res" ] && printf "No executable found. Try clearing cache." >> "$logfile"
     fi
 
     return 0
