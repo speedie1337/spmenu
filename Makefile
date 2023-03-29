@@ -48,8 +48,7 @@ dist: clean
 	gzip spmenu-$(VERSION).tar
 	rm -rf spmenu-$(VERSION)
 
-install:
-	[ ! -x spmenu ] && make all || :
+install: spmenu
 	rm -rf $(DESTDIR)$(PREFIX)/share/spmenu/
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/share/spmenu

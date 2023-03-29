@@ -1,6 +1,7 @@
 #!/bin/bash
 [ -z "$CC" ] && CC=gcc
 [ -z "$PREFIX" ] && PREFIX="/usr"
+[ -z "$DESTDIR" ] && DESTDIR=""
 [ -z "$INCDIR" ] && INCDIR="/usr/include"
 [ -z "$OPT" ] && OPT="-O2"
 
@@ -28,6 +29,7 @@ check() {
 
 loadconf() {
     [ -x "buildconf" ] && source buildconf
+    [ -x "buildconf_script" ] && source buildconf_script
 
     # mandatory deps
     [ "$freetype" = "false" ] && printf "Freetype not found. Install it.\n" && exit 1
@@ -98,6 +100,7 @@ build() {
     make \
         CC="$CC" \
         PREFIX="$PREFIX" \
+        DISTDIR="$DISTDIR" \
         OPT="$OPT" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
@@ -116,7 +119,6 @@ build() {
 }
 
 install() {
-    [ "$(id -u)" != "0" ] && printf "You must run this as root in order to install.\n" && exit 1
     make install \
         CC="$CC" \
         PREFIX="$PREFIX" \
@@ -136,6 +138,8 @@ install() {
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
+
+[ "$1" = "--no-install" ]    && INSTALL=false
 
 check_dist
 check
