@@ -502,6 +502,8 @@ usage(void)
 		  "spmenu -nf <color>                                           Set the normal foreground color\n"
 		  "spmenu -sb <color>                                           Set the selected background color\n"
 		  "spmenu -sf <color>                                           Set the selected foreground color\n"
+          "\n"
+          "See the spmenu(1) man page for more information.\n"
           , stdout);
 
 	exit(1);

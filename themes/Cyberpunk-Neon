@@ -1,0 +1,49 @@
+! Cyberpunk-Neon color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #0abdc6
+spmenu.col_itemnormbg:     #000b1e
+spmenu.col_itemselfg:      #000b1e
+spmenu.col_itemselbg:      #0abdc6
+spmenu.col_itemnormprifg:  #0abdc6
+spmenu.col_itemnormpribg:  #000b1e
+spmenu.col_itemselprifg:   #000b1e
+spmenu.col_itemselpribg:   #d300c4
+spmenu.col_menubgcolor:    #000b1e
+spmenu.col_promptfg:       #000b1e
+spmenu.col_promptbg:       #d300c4
+spmenu.col_larrowfg:       #ff0000
+spmenu.col_rarrowfg:       #ff0000
+spmenu.col_larrowbg:       #000b1e
+spmenu.col_rarrowbg:       #000b1e
+spmenu.col_inputfg:        #0abdc6
+spmenu.col_inputbg:        #000b1e
+spmenu.col_numfgcolor:     #000b1e
+spmenu.col_numbgcolor:     #00ff00
+spmenu.col_normhlfgcolor:  #0abdc6
+spmenu.col_normhlbgcolor:  #123e7c
+spmenu.col_selhlfgcolor:   #d7d7d5
+spmenu.col_selhlbgcolor:   #1c61c2
+spmenu.col_caretfgcolor:   #0abdc6
+spmenu.col_bordercolor:    #711c91
+spmenu.col_modefgcolor:    #000b1e
+spmenu.col_modebgcolor:    #d300c4
+spmenu.col_sgrcolor0:      #123e7c
+spmenu.col_sgrcolor1:      #ff0000
+spmenu.col_sgrcolor2:      #d300c4
+spmenu.col_sgrcolor3:      #f57800
+spmenu.col_sgrcolor4:      #123e7c
+spmenu.col_sgrcolor5:      #711c91
+spmenu.col_sgrcolor6:      #0abdc6
+spmenu.col_sgrcolor7:      #d7d7d5
+spmenu.col_sgrcolor8:      #1c61c2
+spmenu.col_sgrcolor9:      #ff0000
+spmenu.col_sgrcolor10:     #d300c4
+spmenu.col_sgrcolor11:     #f57800
+spmenu.col_sgrcolor12:     #00ff00
+spmenu.col_sgrcolor13:     #711c91
+spmenu.col_sgrcolor14:     #0abdc6
+spmenu.col_sgrcolor15:     #d7d7d5

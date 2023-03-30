@@ -3,7 +3,8 @@
 
 load_profile() {
     [ -f "$HOME/.config/spmenu/.profile" ] && PROFILE="$(cat "$HOME/.config/spmenu/.profile")"
-    [ -z "$PROFILE" ] && xrdb -override "$HOME/.config/spmenu/spmenurc" || xrdb -override "$PROFILE"
+    xrdb -override "$HOME/.config/spmenu/spmenurc"
+    [ -n "$PROFILE" ] && xrdb -override "$PROFILE"
 }
 
 set_profile() {
