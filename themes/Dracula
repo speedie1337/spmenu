@@ -1,0 +1,49 @@
+! Dracula color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #f8f8f2
+spmenu.col_itemnormbg:     #282a36
+spmenu.col_itemselfg:      #000000
+spmenu.col_itemselbg:      #bd93f9
+spmenu.col_itemnormprifg:  #f8f8f2
+spmenu.col_itemnormpribg:  #282a36
+spmenu.col_itemselprifg:   #000000
+spmenu.col_itemselpribg:   #bd93f9
+spmenu.col_menubgcolor:    #282a36
+spmenu.col_promptfg:       #282a36
+spmenu.col_promptbg:       #ff5555
+spmenu.col_larrowfg:       #f1fa8c
+spmenu.col_rarrowfg:       #f1fa8c
+spmenu.col_larrowbg:       #282a36
+spmenu.col_rarrowbg:       #282a36
+spmenu.col_inputfg:        #f8f8f2
+spmenu.col_inputbg:        #282a36
+spmenu.col_numfgcolor:     #282a36
+spmenu.col_numbgcolor:     #50fa7b
+spmenu.col_normhlfgcolor:  #ffffff
+spmenu.col_normhlbgcolor:  #000000
+spmenu.col_selhlfgcolor:   #f1fa8c
+spmenu.col_selhlbgcolor:   #000000
+spmenu.col_caretfgcolor:   #f8f8f2
+spmenu.col_bordercolor:    #ff79c6
+spmenu.col_modefgcolor:    #282a36
+spmenu.col_modebgcolor:    #ff79c6
+spmenu.col_sgrcolor0:      #000000
+spmenu.col_sgrcolor1:      #ff5555
+spmenu.col_sgrcolor2:      #50fa7b
+spmenu.col_sgrcolor3:      #f1fa8c
+spmenu.col_sgrcolor4:      #bd93f9
+spmenu.col_sgrcolor5:      #ff79c6
+spmenu.col_sgrcolor6:      #8be9fd
+spmenu.col_sgrcolor7:      #bbbbbb
+spmenu.col_sgrcolor8:      #44475a
+spmenu.col_sgrcolor9:      #ff5555
+spmenu.col_sgrcolor10:     #50fa7b
+spmenu.col_sgrcolor11:     #f1fa8c
+spmenu.col_sgrcolor12:     #bd93f9
+spmenu.col_sgrcolor13:     #ff79c6
+spmenu.col_sgrcolor14:     #8b39fd
+spmenu.col_sgrcolor15:     #ffffff
