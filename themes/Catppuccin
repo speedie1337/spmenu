@@ -1,0 +1,49 @@
+! Catppuccin color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #cad3f5
+spmenu.col_itemnormbg:     #24273a
+spmenu.col_itemselfg:      #181926
+spmenu.col_itemselbg:      #91d7e3
+spmenu.col_itemnormprifg:  #cad3f5
+spmenu.col_itemnormpribg:  #24273a
+spmenu.col_itemselprifg:   #181926
+spmenu.col_itemselpribg:   #91d7e3
+spmenu.col_menubgcolor:    #24273a
+spmenu.col_promptfg:       #24273a
+spmenu.col_promptbg:       #ED8796
+spmenu.col_larrowfg:       #EED49F
+spmenu.col_rarrowfg:       #EED49F
+spmenu.col_larrowbg:       #24273a
+spmenu.col_rarrowbg:       #24273a
+spmenu.col_inputfg:        #B8C0E0
+spmenu.col_inputbg:        #24273a
+spmenu.col_numfgcolor:     #24273a
+spmenu.col_numbgcolor:     #A6DA95
+spmenu.col_normhlfgcolor:  #8BD5CA
+spmenu.col_normhlbgcolor:  #494D64
+spmenu.col_selhlfgcolor:   #EED49F
+spmenu.col_selhlbgcolor:   #494D64
+spmenu.col_caretfgcolor:   #cad3f5
+spmenu.col_bordercolor:    #8AADF4
+spmenu.col_modefgcolor:    #24273a
+spmenu.col_modebgcolor:    #F5BDE6
+spmenu.col_sgrcolor0:      #494D64
+spmenu.col_sgrcolor1:      #ED8796
+spmenu.col_sgrcolor2:      #A6DA95
+spmenu.col_sgrcolor3:      #EED49F
+spmenu.col_sgrcolor4:      #8AADF4
+spmenu.col_sgrcolor5:      #F5BDE6
+spmenu.col_sgrcolor6:      #8BD5CA
+spmenu.col_sgrcolor7:      #B8C0E0
+spmenu.col_sgrcolor8:      #5B6078
+spmenu.col_sgrcolor9:      #ED8796
+spmenu.col_sgrcolor10:     #A6DA95
+spmenu.col_sgrcolor11:     #EED49F
+spmenu.col_sgrcolor12:     #8AADF4
+spmenu.col_sgrcolor13:     #F5BDE6
+spmenu.col_sgrcolor14:     #8BD5CA
+spmenu.col_sgrcolor15:     #A5ADCB
