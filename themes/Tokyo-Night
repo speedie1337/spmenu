@@ -1,0 +1,49 @@
+! Tokyo-Night color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #a9b1d6
+spmenu.col_itemnormbg:     #1a1b26
+spmenu.col_itemselfg:      #32344a
+spmenu.col_itemselbg:      #e0af68
+spmenu.col_itemnormprifg:  #a9b1d6
+spmenu.col_itemnormpribg:  #444B6A
+spmenu.col_itemselprifg:   #a9b1d6
+spmenu.col_itemselpribg:   #D08770
+spmenu.col_menubgcolor:    #1a1b26
+spmenu.col_promptfg:       #1a1b26
+spmenu.col_promptbg:       #ad8ee6
+spmenu.col_larrowfg:       #7da6ff
+spmenu.col_rarrowfg:       #7da6ff
+spmenu.col_larrowbg:       #1a1b26
+spmenu.col_rarrowbg:       #1a1b26
+spmenu.col_inputfg:        #a9b1d6
+spmenu.col_inputbg:        #1a1b26
+spmenu.col_numfgcolor:     #1a1b26
+spmenu.col_numbgcolor:     #9ece6a
+spmenu.col_normhlfgcolor:  #7aa2f7
+spmenu.col_normhlbgcolor:  #1a1b26
+spmenu.col_selhlfgcolor:   #e0af68
+spmenu.col_selhlbgcolor:   #1a1b26
+spmenu.col_caretfgcolor:   #a9b1d6
+spmenu.col_bordercolor:    #7da6ff
+spmenu.col_modefgcolor:    #1a1b26
+spmenu.col_modebgcolor:    #ff7a93
+spmenu.col_sgrcolor0:      #32344a
+spmenu.col_sgrcolor1:      #f7768e
+spmenu.col_sgrcolor2:      #9ece6a
+spmenu.col_sgrcolor3:      #e0af68
+spmenu.col_sgrcolor4:      #7aa2f7
+spmenu.col_sgrcolor5:      #ad8ee6
+spmenu.col_sgrcolor6:      #449dab
+spmenu.col_sgrcolor7:      #787c99
+spmenu.col_sgrcolor8:      #444b6a
+spmenu.col_sgrcolor9:      #ff7a93
+spmenu.col_sgrcolor10:     #b9f27c
+spmenu.col_sgrcolor11:     #ff9e64
+spmenu.col_sgrcolor12:     #7da6ff
+spmenu.col_sgrcolor13:     #bb9af7
+spmenu.col_sgrcolor14:     #0db9d7
+spmenu.col_sgrcolor15:     #acb0d0
