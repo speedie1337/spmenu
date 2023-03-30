@@ -6,15 +6,15 @@ spmenu.globalcolors:       0
 
 spmenu.col_itemnormfg:     #fbf1c7
 spmenu.col_itemnormbg:     #282828
-spmenu.col_itemselfg:      #fcf1c7
-spmenu.col_itemselbg:      #cc241d
+spmenu.col_itemselfg:      #504945
+spmenu.col_itemselbg:      #98971a
 spmenu.col_itemnormprifg:  #fcf1c7
 spmenu.col_itemnormpribg:  #504945
 spmenu.col_itemselprifg:   #fbf1c7
 spmenu.col_itemselpribg:   #fe8019
 spmenu.col_menubgcolor:    #282828
 spmenu.col_promptfg:       #3c3836
-spmenu.col_promptbg:       #b16286
+spmenu.col_promptbg:       #fb4934
 spmenu.col_larrowfg:       #98971a
 spmenu.col_rarrowfg:       #98971a
 spmenu.col_larrowbg:       #282828
@@ -22,7 +22,7 @@ spmenu.col_rarrowbg:       #282828
 spmenu.col_inputfg:        #fbf1c7
 spmenu.col_inputbg:        #282828
 spmenu.col_numfgcolor:     #282828
-spmenu.col_numbgcolor:     #689d6a
+spmenu.col_numbgcolor:     #b16286
 spmenu.col_normhlfgcolor:  #458588
 spmenu.col_normhlbgcolor:  #282828
 spmenu.col_selhlfgcolor:   #fabd2f
@@ -30,8 +30,7 @@ spmenu.col_selhlbgcolor:   #282828
 spmenu.col_caretfgcolor:   #fbf1c7
 spmenu.col_bordercolor:    #d79921
 spmenu.col_modefgcolor:    #3c3836
-spmenu.col_modebgcolor:    #b8bb26
-
+spmenu.col_modebgcolor:    #d65d0e
 spmenu.col_sgrcolor0:      #282828
 spmenu.col_sgrcolor1:      #cc241d
 spmenu.col_sgrcolor2:      #98971a
