@@ -1,0 +1,48 @@
+! Solarized-Dark color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+spmenu.col_itemnormfg:     #eee8d5
+spmenu.col_itemnormbg:     #002b36
+spmenu.col_itemselfg:      #eee8d5
+spmenu.col_itemselbg:      #073642
+spmenu.col_itemnormprifg:  #eee8d5
+spmenu.col_itemnormpribg:  #002b36
+spmenu.col_itemselprifg:   #eee8d5
+spmenu.col_itemselpribg:   #586e75
+spmenu.col_menubgcolor:    #002b36
+spmenu.col_promptfg:       #262626
+spmenu.col_promptbg:       #b58900
+spmenu.col_larrowfg:       #2aa198
+spmenu.col_rarrowfg:       #2aa198
+spmenu.col_larrowbg:       #002b36
+spmenu.col_rarrowbg:       #002b36
+spmenu.col_inputfg:        #eee8d5
+spmenu.col_inputbg:        #002b36
+spmenu.col_numfgcolor:     #262626
+spmenu.col_numbgcolor:     #cb4b16
+spmenu.col_normhlfgcolor:  #268bd2
+spmenu.col_normhlbgcolor:  #002b36
+spmenu.col_selhlfgcolor:   #ffffd7
+spmenu.col_selhlbgcolor:   #262626
+spmenu.col_caretfgcolor:   #eee8d5
+spmenu.col_bordercolor:    #859900
+spmenu.col_modefgcolor:    #262626
+spmenu.col_modebgcolor:    #859900
+spmenu.col_sgrcolor0:      #073642
+spmenu.col_sgrcolor1:      #dc322f
+spmenu.col_sgrcolor2:      #859900
+spmenu.col_sgrcolor3:      #b58900
+spmenu.col_sgrcolor4:      #268bd2
+spmenu.col_sgrcolor5:      #d33682
+spmenu.col_sgrcolor6:      #2aa198
+spmenu.col_sgrcolor7:      #eee8d5
+spmenu.col_sgrcolor8:      #002b36
+spmenu.col_sgrcolor9:      #cb4b16
+spmenu.col_sgrcolor10:     #586e75
+spmenu.col_sgrcolor11:     #657b83
+spmenu.col_sgrcolor12:     #839496
+spmenu.col_sgrcolor13:     #6c71c4
+spmenu.col_sgrcolor14:     #93a1a1
+spmenu.col_sgrcolor15:     #fdf6e3
