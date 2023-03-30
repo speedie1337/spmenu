@@ -53,6 +53,7 @@ spmenu.col_sgrcolor14:     #00ffff
 spmenu.col_sgrcolor15:     #ffffff
 
 !! Misc color
+spmenu.globalcolors:       1
 spmenu.alpha:              1
 
 !! Width

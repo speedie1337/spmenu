@@ -16,6 +16,10 @@ readargs(int argc, char *argv[])
 			loadconfig = 1;
         } else if (!strcmp(argv[j], "-ncfg") || (!strcmp(argv[j], "--no-load-config"))) {
 			loadconfig = 0;
+        } else if (!strcmp(argv[j], "-gbc") || (!strcmp(argv[j], "--global-colors"))) {
+			globalcolors = 1;
+        } else if (!strcmp(argv[j], "-ngbc") || (!strcmp(argv[j], "--no-global-colors"))) {
+			globalcolors = 0;
         }
     }
 
@@ -150,6 +154,10 @@ readargs(int argc, char *argv[])
                     || !strcmp(argv[i], "-ncfg")
                     || !strcmp(argv[i], "--load-config")
                     || !strcmp(argv[i], "--no-load-config")
+                    || !strcmp(argv[i], "-gbc")
+                    || !strcmp(argv[i], "-ngbc")
+                    || !strcmp(argv[i], "--global-colors")
+                    || !strcmp(argv[i], "--no-global-colors")
                 ))
                     continue;
                 else
@@ -412,6 +420,8 @@ usage(void)
           "spmenu -si,      --show-image                                Show image\n"
           "spmenu -xrdb,    --xrdb                                      Load .Xresources on runtime\n"
           "spmenu -nxrdb,   --no-xrdb                                   Don't load .Xresources on runtime\n"
+          "spmenu -gbc,     --global-colors                             Recognize global colors (such as *.color1) on runtime\n"
+          "spmenu -ngbc,    --no-global-colors                          Don't recognize global colors (such as *.color1) on runtime\n"
 		  "spmenu -m,       --monitor <monitor>                         Specify a monitor to run spmenu on\n"
 		  "spmenu -w,       --embed <window id>                         Embed spmenu inside <window id>\n"
 		  "spmenu -H,       --hist-file <hist file>                     Specify a path to save the history to\n"

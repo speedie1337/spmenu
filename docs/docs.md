@@ -214,6 +214,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nxrdb,   --no-xrdb                                 `
 :   Don't load .Xresources on runtime
 
+`-gbc,     --global-colors                           `
+:   Recognize global colors (such as *.color1) on runtime
+
+`-ngbc,    --no-global-colors                        `
+:   Don't recognize global colors (such as *.color1) on runtime
+
 `-m,       --monitor monitor                         `
 :   Specify a monitor to run spmenu on
 
