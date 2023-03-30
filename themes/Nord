@@ -1,0 +1,49 @@
+! Nord color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #ECEFF4
+spmenu.col_itemnormbg:     #2E3440
+spmenu.col_itemselfg:      #ECEFF4
+spmenu.col_itemselbg:      #BF616A
+spmenu.col_itemnormprifg:  #ECEFF4
+spmenu.col_itemnormpribg:  #3B4252
+spmenu.col_itemselprifg:   #ECEFF4
+spmenu.col_itemselpribg:   #D08770
+spmenu.col_menubgcolor:    #2E3440
+spmenu.col_promptfg:       #2E3440
+spmenu.col_promptbg:       #B48EAD
+spmenu.col_larrowfg:       #8FBCBB
+spmenu.col_rarrowfg:       #8FBCBB
+spmenu.col_larrowbg:       #2E3440
+spmenu.col_rarrowbg:       #2E3440
+spmenu.col_inputfg:        #ECEFF4
+spmenu.col_inputbg:        #2E3440
+spmenu.col_numfgcolor:     #2E3440
+spmenu.col_numbgcolor:     #A3BE8C
+spmenu.col_normhlfgcolor:  #88C0D0
+spmenu.col_normhlbgcolor:  #2E3440
+spmenu.col_selhlfgcolor:   #EBCB8B
+spmenu.col_selhlbgcolor:   #2E3440
+spmenu.col_caretfgcolor:   #D8DEE9
+spmenu.col_bordercolor:    #5E81AC
+spmenu.col_modefgcolor:    #2E3440
+spmenu.col_modebgcolor:    #81A1C1
+spmenu.col_sgrcolor0:      #3b4252
+spmenu.col_sgrcolor1:      #bf616a
+spmenu.col_sgrcolor2:      #a3be8c
+spmenu.col_sgrcolor3:      #ebcb8b
+spmenu.col_sgrcolor4:      #81a1c1
+spmenu.col_sgrcolor5:      #b48ead
+spmenu.col_sgrcolor6:      #88c0d0
+spmenu.col_sgrcolor7:      #e5e9f0
+spmenu.col_sgrcolor8:      #4c566a
+spmenu.col_sgrcolor9:      #bf616a
+spmenu.col_sgrcolor10:     #a3be8c
+spmenu.col_sgrcolor11:     #ebcb8b
+spmenu.col_sgrcolor12:     #81a1c1
+spmenu.col_sgrcolor13:     #b48ead
+spmenu.col_sgrcolor14:     #8fbcbb
+spmenu.col_sgrcolor15:     #eceff4
