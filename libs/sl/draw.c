@@ -149,7 +149,7 @@ xfont_create(Drw *drw, const char *fontname)
 	return font;
 }
 
-static void
+void
 xfont_free(Fnt *font)
 {
 	if (!font)
@@ -199,7 +199,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 	return font;
 }
 
-static void
+void
 xfont_free(Fnt *font)
 {
 	if (!font)
