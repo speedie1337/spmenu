@@ -615,6 +615,7 @@ setupdisplay(void)
 	                XNClientWindow, win, XNFocusWindow, win, NULL);
 
 	XMapRaised(dpy, win);
+    XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
 
     // embed spmenu inside parent window
 	if (embed) {
@@ -658,6 +659,9 @@ main(int argc, char *argv[])
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
         fputs("warning: no locale support\n", stderr); // invalid locale, so notify the user about it
+
+    if (!XSetLocaleModifiers(""))
+		fputs("warning: no locale modifiers support\n", stderr);
 
     if (!(dpy = XOpenDisplay(NULL)))
         die("spmenu: cannot open display"); // failed to open display

@@ -7,7 +7,7 @@ eventloop(void)
     #endif
 
 	while (!XNextEvent(dpy, &ev)) {
-		if (XFilterEvent(&ev, win))
+		if (XFilterEvent(&ev, None))
 			continue;
 		switch(ev.type) {
 		case DestroyNotify:
