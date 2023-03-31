@@ -549,9 +549,9 @@ else on startup, as if this feature did not exist.
 Not only can profiles be used to configure color schemes and fonts, allowing you
 to swap color schemes quickly, but also any other options you may want.
 
-Note that any profiles are applied ON TOP of the default profile, meaning if
+Note that any profiles are applied ON TOP of the current loaded profile, meaning if
 any options are missing from the selected profile, the setting in
-the default profile will be used in place.
+the profile used before will be used in place.
 
 There are a few color schemes for spmenu included in the repository, see
 the `themes/` directory. Feel free to copy those to your profile directory.
