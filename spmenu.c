@@ -99,6 +99,7 @@
 #include "libs/key.h"
 #include "libs/mouse.h"
 #include "libs/sort.h"
+#include "libs/history.h"
 
 // misc
 #include "libs/key_struct.c"
@@ -182,11 +183,6 @@ static Drw *drw;
 static Clr *scheme[SchemeLast];
 static Clr textclrs[256];
 
-// history
-static char *histfile;
-static char **history;
-static size_t histsz, histpos;
-
 // declare functions
 static void calcoffsets(void);
 static void recalculatenumbers(void);
@@ -235,6 +231,7 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/client.c"
 #include "libs/match.h"
 #include "libs/match.c"
+#include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
 
@@ -258,11 +255,16 @@ recalculatenumbers(void)
 	struct item *item;
 	if (matchend) {
 		numer++;
+
+        // walk through items that match and add to numer
 		for (item = matchend; item && item->left; item = item->left)
 			numer++;
 	}
+
+    // walk through all items, matching or not and add to denom
 	for (item = items; item && item->text; item++)
 		denom++;
+
 	snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
 }
 
@@ -273,7 +275,7 @@ calcoffsets(void)
 
 	if (lines > 0)
 		n = lines * columns * bh;
-	else {
+	else { // no lines, therefore the size of items must be decreased to fit the menu elements
         int numberWidth = 0;
         int modeWidth = 0;
         int larrowWidth = 0;
@@ -287,10 +289,12 @@ calcoffsets(void)
 		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth);
     }
 
-	// calculate which items will begin the next page and previous page
+	// calculate which items will begin the next page
 	for (i = 0, next = curr; next; next = next->right)
 		if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text), n)) > n)
 			break;
+
+	// calculate which items will begin the previous page
 	for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
 		if ((i += (lines > 0) ? bh : MIN(TEXTWM(prev->left->text), n)) > n)
 			break;
@@ -300,8 +304,10 @@ int
 max_textw(void)
 {
 	int len = 0;
+
 	for (struct item *item = items; item && item->text; item++)
 		len = MAX(TEXTW(item->text), len);
+
 	return len;
 }
 
@@ -311,17 +317,20 @@ cleanup(void)
 	size_t i;
 
     #if USEIMAGE
-    cleanupimage();
+    cleanupimage(); // function frees images
     #endif
 
-	XUngrabKey(dpy, AnyKey, AnyModifier, root);
+	XUngrabKey(dpy, AnyKey, AnyModifier, root); // ungrab keys
 
+    // free color scheme
 	for (i = 0; i < SchemeLast; i++)
 		free(scheme[i]);
 
+    // free high priority items
     for (i = 0; i < hplength; ++i)
 		free(hpitems[i]);
 
+    // free drawing and close the display
 	drw_free(drw);
 	XSync(dpy, False);
 	XCloseDisplay(dpy);
@@ -337,11 +346,12 @@ cistrstr(const char *h, const char *n)
 
 	for (; *h; ++h) {
 		for (i = 0; n[i] && tolower((unsigned char)n[i]) ==
-		            tolower((unsigned char)h[i]); ++i)
-			;
+		            tolower((unsigned char)h[i]); ++i);
+
 		if (n[i] == '\0')
 			return (char *)h;
 	}
+
 	return NULL;
 }
 
@@ -356,20 +366,23 @@ grabfocus(void)
 		XGetInputFocus(dpy, &focuswin, &revertwin);
 		if (focuswin == win)
 			return;
+
+        // if it's a client, we can't just steal all the input for ourselves
 		if (managed) {
-		XTextProperty prop;
-		char *windowtitle = prompt != NULL ? prompt : "spmenu";
-		Xutf8TextListToTextProperty(dpy, &windowtitle, 1, XUTF8StringStyle, &prop);
-		XSetWMName(dpy, win, &prop);
-		XSetTextProperty(dpy, win, &prop, XInternAtom(dpy, "_NET_WM_NAME", False));
-		XFree(prop.value);
-	} else {
-		XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
-	}
+            XTextProperty prop;
+            char *windowtitle = prompt != NULL ? prompt : "spmenu";
+            Xutf8TextListToTextProperty(dpy, &windowtitle, 1, XUTF8StringStyle, &prop);
+            XSetWMName(dpy, win, &prop);
+            XSetTextProperty(dpy, win, &prop, XInternAtom(dpy, "_NET_WM_NAME", False));
+            XFree(prop.value);
+        } else { // spmenu is not managed, and is very greedy
+            XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
+        }
 
 		nanosleep(&ts, NULL);
 	}
-	die("cannot grab focus");
+
+	die("spmenu: cannot grab focus"); // not possible to grab focus, abort immediately
 }
 
 void
@@ -377,10 +390,15 @@ insert(const char *str, ssize_t n)
 {
 	if (strlen(text) + n > sizeof text - 1)
 		return;
+
 	// move existing text out of the way, insert new text, and update cursor
 	memmove(&text[cursor + n], &text[cursor], sizeof text - cursor - MAX(n, 0));
+
+    // update cursor
 	if (n > 0)
 		memcpy(&text[cursor], str, n);
+
+    // add to cursor position and continue matching
 	cursor += n;
 	match();
 }
@@ -392,95 +410,8 @@ nextrune(int inc)
 
 	// return location of next utf8 rune in the given direction (+1 or -1)
 	for (n = cursor + inc; n + inc >= 0 && (text[n] & 0xc0) == 0x80; n += inc)
-		;
-	return n;
-}
-
-void
-loadhistory(void)
-{
-	FILE *fp = NULL;
-	static size_t cap = 0;
-	size_t llen;
-	char *line;
-
-	if (!histfile) {
-		return;
-	}
-
-	fp = fopen(histfile, "r");
-	if (!fp) {
-		return;
-	}
-
-	for (;;) {
-		line = NULL;
-		llen = 0;
-		if (-1 == getline(&line, &llen, fp)) {
-			if (ferror(fp)) {
-				die("failed to read history");
-			}
-			free(line);
-			break;
-		}
-
-		if (cap == histsz) {
-			cap += 64 * sizeof(char*);
-			history = realloc(history, cap);
-			if (!history) {
-				die("failed to realloc memory");
-			}
-		}
-		strtok(line, "\n");
-		history[histsz] = line;
-		histsz++;
-	}
-	histpos = histsz;
-
-	if (fclose(fp)) {
-		die("failed to close file %s", histfile);
-	}
-}
-
-void
-navigatehistfile(int dir)
-{
-	static char def[BUFSIZ];
-	char *p = NULL;
-	size_t len = 0;
-
-	if (!history || histpos + 1 == 0)
-		return;
-
-	if (histsz == histpos) {
-		strncpy(def, text, sizeof(def));
-	}
-
-	switch (dir) {
-        case 1:
-            if (histpos < histsz - 1) {
-                p = history[++histpos];
-            } else if (histpos == histsz - 1) {
-                p = def;
-                histpos++;
-            }
-            break;
-        case -1:
-            if (histpos > 0) {
-                p = history[--histpos];
-            }
-            break;
-	}
-
-	if (p == NULL) {
-		return;
-	}
-
-	len = MIN(strlen(p), BUFSIZ - 1);
-	strcpy(text, p);
-	text[len] = '\0';
-	cursor = len;
-	match();
+        ;
+	    return n;
 }
 
 void
@@ -495,9 +426,11 @@ pastesel(void)
 	if (XGetWindowProperty(dpy, win, utf8, 0, (sizeof text / 4) + 1, False,
 	                   utf8, &da, &di, &dl, &dl, (unsigned char **)&p)
 	    == Success && p) {
-		insert(p, (q = strchr(p, '\n')) ? q - p : (ssize_t)strlen(p));
+		insert(p, (q = strchr(p, '\n')) ? q - p : (ssize_t)strlen(p)); // insert selection
 		XFree(p);
 	}
+
+    // draw the menu
 	drawmenu();
 }
 
@@ -509,7 +442,7 @@ xinitvisual()
 	int nitems;
 	int i;
 
-    // properties
+    // visual properties
 	XVisualInfo tpl = {
 		.screen = screen,
 		.depth = 32,
@@ -520,6 +453,8 @@ xinitvisual()
 
 	infos = XGetVisualInfo(dpy, masks, &tpl, &nitems);
 	visual = NULL;
+
+    // create colormap
 	for(i = 0; i < nitems; i ++) {
 		fmt = XRenderFindVisualFormat(dpy, infos[i].visual);
 		if (fmt->type == PictTypeDirect && fmt->direct.alphaMask) {
@@ -542,7 +477,7 @@ xinitvisual()
 }
 
 void
-setup(void)
+setupdisplay(void)
 {
 	int x, y, i;
     #if USEXINERAMA
@@ -563,7 +498,7 @@ setup(void)
 
     init_appearance(); // init colorschemes by reading arrays
 
-    // properties
+    // set properties indicating what spmenu handles
 	clip = XInternAtom(dpy, "CLIPBOARD",   False);
 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
    	types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
@@ -581,6 +516,7 @@ setup(void)
 
     mh = (lines + 1) * bh; // lines + 1 * bh is the menu height
 
+    // set prompt width based on prompt size
     promptw = (prompt && *prompt)
         ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - lrpad / 4 : 0; // prompt width
 
@@ -628,11 +564,11 @@ setup(void)
 					break;
 
         // calculate x/y position
-		if (menuposition == 2) {
+		if (menuposition == 2) { // centered
 			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
 			y = info[i].y_org + ((info[i].height - mh) / 2);
-		} else {
+		} else { // top or bottom
 		    x = info[i].x_org + dmx;
 			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
 			mw = (dmw>0 ? dmw : info[i].width);
@@ -643,14 +579,14 @@ setup(void)
     #endif
 	{
 		if (!XGetWindowAttributes(dpy, parentwin, &wa))
-			die("could not get embedding window attributes: 0x%lx",
-			    parentwin);
+			die("spmenu: could not get embedding window attributes: 0x%lx",
+			    parentwin); // die because unable to get attributes for the parent window
 
-		if (menuposition == 2) {
+		if (menuposition == 2) { // centered
 			mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
 			x = (wa.width  - mw) / 2;
 			y = (wa.height - mh) / 2;
-		} else {
+		} else { // top or bottom
 			x = 0;
 			y = 0;
 			mw = wa.width;
@@ -660,9 +596,9 @@ setup(void)
 	// might be faster in some instances, most of the time unnecessary
     if (!accuratewidth) inputw = MIN(inputw, mw/3);
 
-	match();
+	match(); // match entries
 
-	// create menu window
+	// create menu window and set properties for it
     create_window(x + sp, y + vp - (menuposition == 2 ? 0 : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
     set_window();
     set_prop();
@@ -679,6 +615,8 @@ setup(void)
 	                XNClientWindow, win, XNFocusWindow, win, NULL);
 
 	XMapRaised(dpy, win);
+
+    // embed spmenu inside parent window
 	if (embed) {
 		XSelectInput(dpy, parentwin, FocusChangeMask | SubstructureNotifyMask);
 		if (XQueryTree(dpy, parentwin, &dw, &w, &dws, &du) && dws) {
@@ -699,12 +637,13 @@ main(int argc, char *argv[])
 {
 	XWindowAttributes wa;
 
-    readargs(argc, argv);
+    readargs(argc, argv); // start by reading arguments
 
     #if USEIMAGE
     longestedge = MAX(imagewidth, imageheight);
     #endif
 
+    // set default mode, must be done before the event loop or keybindings will not work
     if (mode) {
         curMode = 1;
         allowkeys = 1;
@@ -718,36 +657,40 @@ main(int argc, char *argv[])
     }
 
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
-		fputs("warning: no locale support\n", stderr);
+        fputs("warning: no locale support\n", stderr); // invalid locale, so notify the user about it
 
-        if (!(dpy = XOpenDisplay(NULL)))
-		die("spmenu: cannot open display");
+    if (!(dpy = XOpenDisplay(NULL)))
+        die("spmenu: cannot open display"); // failed to open display
 
+    // set screen and root window
     screen = DefaultScreen(dpy);
 	root = RootWindow(dpy, screen);
 
+    // parent window is the root window (ie. window manager) because we're not embedding
     if (!embed || !(parentwin = strtol(embed, NULL, 0)))
 		parentwin = root;
 
     if (!XGetWindowAttributes(dpy, parentwin, &wa))
 		die("spmenu: could not get embedding window attributes: 0x%lx", parentwin);
 
-	xinitvisual();
-	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
+	xinitvisual(); // init visual and create drawable after
+	drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap); // wrapper function creating a drawable
 
     // load fonts
 	if (!drw_font_create(drw, fonts, LENGTH(fonts)))
 	    die("no fonts could be loaded.");
 
+    // resize window
     lrpad = drw->font->h + textpadding;
-    prepare_window_size();
+    prepare_window_size(); // this function sets padding size
 
+    // openbsd specifics, i use gnu/linux so i have no idea why this is here
     #ifdef __OpenBSD__
 	if (pledge("stdio rpath", NULL) == -1)
 		die("pledge");
     #endif
 
-	loadhistory();
+	loadhistory(); // read history entries
 
     // fast (-f) means we grab keyboard before reading standard input
 	if (fast && !isatty(0)) {
@@ -767,8 +710,8 @@ main(int argc, char *argv[])
     }
     #endif
 
-	setup();
-	eventloop();
+	setupdisplay(); // set up display and create window
+	eventloop(); // function is a loop which checks X11 events and calls other functions accordingly
 
-	return 1;
+	return 1; // should be unreachable
 }

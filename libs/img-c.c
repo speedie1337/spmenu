@@ -1,6 +1,7 @@
 void
 setimagesize(int width, int height)
 {
+    // don't even bother if we don't have image support
     #if !USEIMAGE
     return;
     #endif
@@ -11,6 +12,7 @@ setimagesize(int width, int height)
     // this makes sure we cannot scale the image up or down too much
     if ((!image && height < imageheight) || (!image && width < imagewidth) || width > mw || hideimage) return;
 
+    // original width/height
     oih = imageheight;
     oiw = imagewidth;
 
@@ -33,6 +35,7 @@ setimagesize(int width, int height)
 void
 flipimage(void)
 {
+    // flip image
     switch (flip) {
         case 1: // horizontal
             imlib_image_flip_horizontal();
@@ -59,7 +62,7 @@ rotateimage(void)
 void
 cleanupimage(void)
 {
-    if (image) {
+    if (image) { // free image using imlib2
         imlib_free_image();
         image = NULL;
     }
@@ -73,29 +76,30 @@ drawimage(void)
 
     if (!lines || !columns || hideimage) return;
 
-    // to prevent the image from being drawn multiple times
+    // to prevent the image from being drawn multiple times wasting resources
     if (!needredraw) {
         needredraw = 1;
         return;
     }
 
+    // load image cache
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
         if (longestedge)
             loadimagecache(sel->image, &width, &height);
-    } else if ((!sel || !sel->image) && image) {
-        imlib_free_image();
-        image = NULL;
-    } if (image && longestedge) {
-
+    } else if ((!sel || !sel->image) && image) { // free image
+        cleanupimage();
+    } if (image && longestedge) { // render the image
+        // rotate and flip, will return if we don't need to
         rotateimage();
         flipimage();
 
         int leftmargin = imagegaps;
 
-       	if(mh != bh + height + imagegaps * 2) {
+       	if (mh != bh + height + imagegaps * 2) { // menu height cannot be smaller than image height
 		    resizetoimageheight(height);
 	    }
 
+        // render image
         if (!imageposition) { // top mode = 0
             if (height > width)
                 width = height;
@@ -110,9 +114,9 @@ drawimage(void)
             int minh = MIN(height, mh-bh-imagegaps*2);
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+bh+imagegaps);
         }
+    }
 
-
-    } if (sel) {
+    if (sel) {
         limg = sel->image;
     } else {
         limg = NULL;
@@ -135,13 +139,16 @@ setimageopts(void)
 void
 createifnexist(const char *dir)
 {
-	if(access(dir, F_OK) == 0)
+    // exists, so return
+	if (access(dir, F_OK) == 0)
         return;
 
-	if(errno == EACCES)
+    // fatal: permission denied
+	if (errno == EACCES)
         fprintf(stderr, "spmenu: no access to create directory: %s\n", dir);
 
-	if(mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
+    // mkdir() failure
+	if (mkdir(dir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1)
 		fprintf(stderr, "spmenu: failed to create directory: %s\n", dir);
 }
 
@@ -181,21 +188,22 @@ loadimage(const char *file, int *width, int *height)
 void
 scaleimage(int *width, int *height)
 {
-	int nwidth, nheight;
+	int new_width, new_height;
 	float aspect = 1.0f;
 
+    // depending on what size, we determine aspect ratio
 	if (imagewidth > *width)
 		aspect = (float)(*width)/imagewidth;
 	else
 		aspect = (float)imagewidth/(*width);
 
-	nwidth = *width * aspect;
-	nheight = *height * aspect;
+	new_width = *width * aspect;
+	new_height = *height * aspect;
 
-	if(nwidth == *width && nheight == *height)
+	if (new_width == *width && new_height == *height)
         return;
 
-	image = imlib_create_cropped_scaled_image(0,0,*width,*height,nwidth,nheight);
+	image = imlib_create_cropped_scaled_image(0,0,*width,*height,new_width,new_height);
 
 	imlib_free_image();
 
@@ -204,8 +212,8 @@ scaleimage(int *width, int *height)
 
 	imlib_context_set_image(image);
 
-	*width = nwidth;
-	*height = nheight;
+	*width = new_width;
+	*height = new_height;
 
     return;
 }
@@ -343,6 +351,7 @@ resizetoimageheight(int imageheight)
        	struct item *item;
 		unsigned int i = 1;
 
+        // walk through all matches
 		for (item = matches; item && item != sel; item = item->right)
             ++i;
 

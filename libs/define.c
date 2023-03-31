@@ -14,7 +14,7 @@
 // item
 #define MAXITEMLENGTH         1024
 
-// user friendly names for all the modifiers
+// user friendly names for all the modifiers we're using, but there are many more
 #define CONTROL ControlMask
 #define SHIFT ShiftMask
 #define ALT Mod1Mask

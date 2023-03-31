@@ -509,6 +509,6 @@ setcolumns(const Arg *arg)
 void
 setprofile(const Arg *arg)
 {
-    int ax = system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile > /dev/null");
-    exit(ax);
+    // this just runs an external shell script to set the profile
+    exit(system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile > /dev/null"));
 }

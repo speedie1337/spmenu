@@ -13,19 +13,18 @@ resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
 	snprintf(fullname, sizeof(fullname), "%s.%s", "spmenu", name);
 	fullname[sizeof(fullname) - 1] = '\0';
 	XrmGetResource(db, fullname, "*", &type, &ret);
-	if (!(ret.addr == NULL || strncmp("String", type, 64)))
-	{
-		switch (rtype) {
-		case STRING:
-			strcpy(sdst, ret.addr);
-			break;
-		case INTEGER:
-			*idst = strtoul(ret.addr, NULL, 10);
-			break;
-		case FLOAT:
-			*fdst = strtof(ret.addr, NULL);
-			break;
-		}
+	if (!(ret.addr == NULL || strncmp("String", type, 64))) {
+		switch (rtype) { // type
+            case STRING:
+                strcpy(sdst, ret.addr);
+                break;
+            case INTEGER:
+                *idst = strtoul(ret.addr, NULL, 10);
+                break;
+            case FLOAT:
+                *fdst = strtof(ret.addr, NULL);
+                break;
+        }
 	}
 }
 

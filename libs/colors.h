@@ -1,4 +1,4 @@
-// color scheme arrays
+// alpha array
 static unsigned int alphas[][3]      = {
 	//                         fg       bg        border
 	[SchemeLArrow]         = { fgalpha, bgalpha,  borderalpha },
@@ -18,6 +18,7 @@ static unsigned int alphas[][3]      = {
     [SchemeBorder]         = { fgalpha, bgalpha,  borderalpha },
 };
 
+// colorscheme array
 static char *colors[SchemeLast][2] = {
 	//                        fg                 bg
 	[SchemeLArrow]        = { col_larrowfg,      col_larrowbg        },
@@ -37,7 +38,7 @@ static char *colors[SchemeLast][2] = {
     [SchemeBorder]        = { NULL,              col_bordercolor     },
 };
 
-// sgr colors
+// sgr color array
 // to enable 256 color support, append to this.
 static char *textcolors[] = {
 	col_sgrcolor0,

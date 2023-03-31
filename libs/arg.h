@@ -1,8 +1,8 @@
 typedef union {
-	int i;
-	unsigned int ui;
-	float f;
-	const void *v;
+	int i; // integer
+	unsigned int ui; // unsigned int
+	float f; // float
+	const void *v; // void
 } Arg;
 
 // declare keybind functions

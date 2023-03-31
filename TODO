@@ -7,3 +7,4 @@
 - Use cairo for text drawing over Xft
 - MAYBE wayland support, but only if it doesn't require writing any extra code which as of now seems unlikely
 - Write documentation about profiles
+- FIFO, used to dynamically refresh

@@ -36,10 +36,10 @@ eventloop(void)
 			if (ev.xfocus.window != win)
 				grabfocus();
 			break;
-		case KeyPress:
+		case KeyPress: // read key array and call functions
 			keypress(&ev);
 			break;
-		case SelectionNotify:
+		case SelectionNotify: // paste selection
 			if (ev.xselection.property == utf8)
 				pastesel();
 			break;
