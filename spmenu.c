@@ -686,7 +686,7 @@ main(int argc, char *argv[])
 
     // pledge limits what programs can do, so here we specify what spmenu should be allowed to do
     #ifdef __OpenBSD__
-	if (pledge("stdio rpath", NULL) == -1)
+	if (pledge("stdio rpath wpath cpath", NULL) == -1)
 		die("pledge");
     #endif
 
