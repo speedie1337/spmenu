@@ -79,15 +79,16 @@ uninstall:
 help:
 	@echo spmenu Makefile help
 	@echo
-	@echo install:   Installs spmenu. You may need to run this as root.
-	@echo uninstall: Uninstalls spmenu. You may need to run this as root.
-	@echo dist:      Creates a release for spmenu.
-	@echo clean:     Removes objects and tarballs.
-	@echo man:       Generate man page for spmenu
-	@echo compat:    Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
-	@echo commit:    Commit to the repository
-	@echo pkg_arch:  Creates an Arch package based on the PKGBUILD
-	@echo help:      Displays this help sheet.
+	@echo install:      Installs spmenu. You may need to run this as root.
+	@echo uninstall:    Uninstalls spmenu. You may need to run this as root.
+	@echo install_arch: Uses the PKGBUILD to install spmenu using pacman.
+	@echo dist:         Creates a release for spmenu.
+	@echo clean:        Removes objects and tarballs.
+	@echo man:          Generate man page for spmenu
+	@echo compat:       Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
+	@echo commit:       Commit to the repository
+	@echo pkg_arch:     Creates an Arch package based on the PKGBUILD
+	@echo help:         Displays this help sheet.
 
 man:
 	printf "%% spmenu(1) $(VERSION) | dynamic menu\n" > .man.md
@@ -104,9 +105,18 @@ pkg_arch: dist
 	rm -rf src/ pkg/ *.tar.gz
 	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
 
+install_arch: dist
+	command -v makepkg > /dev/null || exit 1
+	[ -f PKGBUILD ] || exit 1
+	cp -f PKGBUILD PKGBUILD.orig
+	sed -i "s/VERSION/$(VERSION)/g; s/MD5SUM/$$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
+	makepkg -si || exit 1
+	rm -rf src/ pkg/ *.tar.gz
+	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
+
 commit: man
 	command -v git > /dev/null || exit 1
 	git commit -a
 	git push origin master
 
-.PHONY: all options clean dist install uninstall pkg_arch help man commit
+.PHONY: all options clean dist install install_arch uninstall pkg_arch help man commit

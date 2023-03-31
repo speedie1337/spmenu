@@ -107,7 +107,7 @@ If you are on Arch GNU/Linux, you can add
 [my repository](https://git.speedie.gq/speedie-repository) which includes
 `spmenu` as well as other useful packages.
 
-There's also a PKGBUILD. To use it, simply `makepkg -Si` in the directory
+There's also a PKGBUILD. To use it, simply `make install_arch` in the directory
 the PKGBUILD is located.
 
 If you wish to package spmenu for your GNU/Linux distribution, feel free to add
