@@ -14,3 +14,5 @@ If you want to install a profile, simply copy it to
 it to start using it!
 
 To switch back remove the profile or switch back to the default profile using 'Default'.
+
+Alternatively, run `install.sh` to install all the themes instantly.
