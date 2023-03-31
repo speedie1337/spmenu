@@ -110,7 +110,7 @@ install_arch: dist
 	[ -f PKGBUILD ] || exit 1
 	cp -f PKGBUILD PKGBUILD.orig
 	sed -i "s/VERSION/$(VERSION)/g; s/MD5SUM/$$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
-	makepkg -si || exit 1
+	makepkg -si || :
 	rm -rf src/ pkg/ *.tar.gz
 	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
 
