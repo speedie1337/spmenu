@@ -525,6 +525,37 @@ operating system.
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.
 
+Profiles
+========
+
+spmenu supports profiles. Profiles are like configuration
+files (See `Configuration`) that can be switched between quickly using a keybind.
+
+Pressing (by default) Ctrl+Shift+p will list out profiles, and also
+allow you to add/remove existing profiles. Selecting a profile will switch
+to that profile. The selected profile will now be loaded on startup just
+like the spmenurc until another profile is selected.
+
+Selecting 'Add' allows you to create a new profile. When a new profile is
+created it is going to use the spmenu defaults (copied from `/usr/share/spmenu/example.Xresources`).
+Profiles are going to be in `~/.config/spmenu/profiles/` and the current profile
+is in `~/.config/spmenu/.profile`. The profile can simply be edited using
+any text editor and be configured in .Xresources syntax.
+
+Selecting `Remove` will allow you to pick a profile which will be permanently
+removed. Selecting `Default` will simply load `spmenurc` and nothing
+else on startup, as if this feature did not exist.
+
+Not only can profiles be used to configure color schemes and fonts, allowing you
+to swap color schemes quickly, but also any other options you may want.
+
+Note that any profiles are applied ON TOP of the default profile, meaning if
+any options are missing from the selected profile, the setting in
+the default profile will be used in place.
+
+There are a few color schemes for spmenu included in the repository, see
+the `themes/` directory. Feel free to copy those to your profile directory.
+
 Run launcher
 ============
 

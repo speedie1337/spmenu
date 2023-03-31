@@ -548,6 +548,42 @@ This requires that \f[V]xrdb\f[R] is available on your operating system.
 You can also use wildcards (such as \f[V]*\f[R]) to achieve a global
 colorscheme.
 Programs like \f[V]pywal\f[R] do this to apply universal colorschemes.
+.SH Profiles
+.PP
+spmenu supports profiles.
+Profiles are like configuration files (See \f[V]Configuration\f[R]) that
+can be switched between quickly using a keybind.
+.PP
+Pressing (by default) Ctrl+Shift+p will list out profiles, and also
+allow you to add/remove existing profiles.
+Selecting a profile will switch to that profile.
+The selected profile will now be loaded on startup just like the
+spmenurc until another profile is selected.
+.PP
+Selecting `Add' allows you to create a new profile.
+When a new profile is created it is going to use the spmenu defaults
+(copied from \f[V]/usr/share/spmenu/example.Xresources\f[R]).
+Profiles are going to be in \f[V]\[ti]/.config/spmenu/profiles/\f[R] and
+the current profile is in \f[V]\[ti]/.config/spmenu/.profile\f[R].
+The profile can simply be edited using any text editor and be configured
+in .Xresources syntax.
+.PP
+Selecting \f[V]Remove\f[R] will allow you to pick a profile which will
+be permanently removed.
+Selecting \f[V]Default\f[R] will simply load \f[V]spmenurc\f[R] and
+nothing else on startup, as if this feature did not exist.
+.PP
+Not only can profiles be used to configure color schemes and fonts,
+allowing you to swap color schemes quickly, but also any other options
+you may want.
+.PP
+Note that any profiles are applied ON TOP of the default profile,
+meaning if any options are missing from the selected profile, the
+setting in the default profile will be used in place.
+.PP
+There are a few color schemes for spmenu included in the repository, see
+the \f[V]themes/\f[R] directory.
+Feel free to copy those to your profile directory.
 .SH Run launcher
 .PP
 spmenu includes a shell script called spmenu_run.
