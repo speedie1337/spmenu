@@ -1,4 +1,4 @@
-# spmenu - dynamic menu
+# spmenu - fancy dynamic menu
 # See LICENSE file for copyright details.
 
 # Multi-monitor support.

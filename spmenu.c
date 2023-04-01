@@ -1,4 +1,4 @@
-/* spmenu - speedie's dmenu fork
+/* spmenu - fancy dynamic menu
  *
  * If you're looking for functions used to draw text, see 'libs/draw.c'
  * If you're looking for wrapper functions used inside the draw functions, see 'libs/sl/draw.c'

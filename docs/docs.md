@@ -1,11 +1,6 @@
 spmenu
 ======
 
-![image](/docs/preview.png)
-
-What is spmenu?
-===============
-
 spmenu is a program for X11 that reads standard input and allows the user to
 select items separated by a newline. It is a fork of suckless's dmenu which is
 a good more minimal alternative to spmenu.
@@ -13,7 +8,8 @@ a good more minimal alternative to spmenu.
 Unlike dmenu and the many builds out there, spmenu has features like color
 support, Vim-like modes, image support, proper keybind configuration, and more.
 
-Most of these features can be disabled during compile time by editing `toggle.mk`.
+It should be noted that most of these features may be disabled by the user, either
+during compile time or through configuration.
 
 Usage
 =====
@@ -657,7 +653,7 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 :    Print the spmenu license
 
 `spmenu:about`
-:    Print various information about spmenu, such as compiler arguments.
+:    Print various information about spmenu, such as compiler arguments and packaging.
 
 `spmenu:test`
 :    Print a test script for spmenu which tests various features. Report any
@@ -673,4 +669,5 @@ Reporting issues
 ================
 
 Please report issues on the
-[Codeberg repository](https://codeberg.org/speedie/speediegq) or alternatively email me.
+[Codeberg repository](https://codeberg.org/speedie/speediegq) or alternatively
+email me.

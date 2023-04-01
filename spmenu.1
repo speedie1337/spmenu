@@ -14,10 +14,9 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "spmenu" "1" "" "0.3.3" "dynamic menu"
+.TH "spmenu" "1" "" "0.3.3" "fancy dynamic menu"
 .hy
 .SH spmenu
-.SH What is spmenu?
 .PP
 spmenu is a program for X11 that reads standard input and allows the
 user to select items separated by a newline.
@@ -28,8 +27,8 @@ Unlike dmenu and the many builds out there, spmenu has features like
 color support, Vim-like modes, image support, proper keybind
 configuration, and more.
 .PP
-Most of these features can be disabled during compile time by editing
-\f[V]toggle.mk\f[R].
+It should be noted that most of these features may be disabled by the
+user, either during compile time or through configuration.
 .SH Usage
 .PP
 On runtime, spmenu reads from standard input (stdin).
@@ -697,7 +696,8 @@ Print the spmenu version
 Print the spmenu license
 .TP
 \f[V]spmenu:about\f[R]
-Print various information about spmenu, such as compiler arguments.
+Print various information about spmenu, such as compiler arguments and
+packaging.
 .TP
 \f[V]spmenu:test\f[R]
 Print a test script for spmenu which tests various features.

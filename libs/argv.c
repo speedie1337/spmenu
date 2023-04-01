@@ -358,7 +358,7 @@ void
 usage(void)
 {
     // print help
-	fputs("spmenu: dynamic menu\n\n"
+	fputs("spmenu: fancy dynamic menu\n\n"
 		  "- Arguments -\n"
 		  "spmenu -l,       --lines <line>                              Set line count to stdin\n"
 		  "spmenu -mh,      --lineheight <height>                       Set spmenu line height to <height>\n"

@@ -91,7 +91,7 @@ help:
 	@echo help:         Displays this help sheet.
 
 man:
-	printf "%% spmenu(1) $(VERSION) | dynamic menu\n" > .man.md
+	printf "%% spmenu(1) $(VERSION) | fancy dynamic menu\n" > .man.md
 	grep -v docs/preview.png docs/docs.md >> .man.md
 	pandoc --standalone --to man .man.md -o spmenu.1
 	rm -f .man.md
