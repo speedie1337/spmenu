@@ -55,6 +55,8 @@ flipimage(void)
 void
 rotateimage(void)
 {
+    if (!image) return;
+
     rotation %= 4;
     imlib_image_orientate(rotation);
 }
@@ -94,8 +96,16 @@ drawimage(void)
         flipimage();
 
         int leftmargin = imagegaps;
+        int wtr = 0;
+        int wta = 0;
 
-       	if (mh != bh + height + imagegaps * 2) { // menu height cannot be smaller than image height
+        if (hideprompt && hideinput && hidemode && hidematchcount) {
+            wtr = bh;
+        } else {
+            wta = bh;
+        }
+
+       	if (mh != bh + height + imagegaps * 2 - wtr) { // menu height cannot be smaller than image height
 		    resizetoimageheight(height);
 	    }
 
@@ -103,16 +113,16 @@ drawimage(void)
         if (!imageposition) { // top mode = 0
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, bh+imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, wta+imagegaps);
         } else if (imageposition == 1) { // bottom mode = 1
             if (height > width)
                 width = height;
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, mh-height-imagegaps);
         } else if (imageposition == 2) { // center mode = 2
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-bh-height)/2+bh);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-wta-height)/2+wta);
         } else {
             int minh = MIN(height, mh-bh-imagegaps*2);
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+bh+imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+wta+imagegaps);
         }
     }
 
@@ -176,6 +186,7 @@ void
 loadimage(const char *file, int *width, int *height)
 {
 	image = imlib_load_image(file);
+
 	if (!image)
         return;
 
@@ -332,14 +343,18 @@ resizetoimageheight(int imageheight)
 {
 	int omh = mh, olines = lines;
 	lines = reallines;
+    int wtr = 0;
 
 	if (lines * bh < imageheight + imagegaps * 2)
         lines = (imageheight + imagegaps * 2) / bh;
 
-	mh = (lines + 1) * bh;
+    if (hideprompt && hideinput && hidemode && hidematchcount)
+        wtr = bh;
+
+	mh = (lines + 1) * bh - wtr;
 
 	if (mh - bh < imageheight + imagegaps * 2)
-        mh = imageheight + imagegaps * 2 + bh;
+        mh = imageheight + imagegaps * 2 + bh - wtr;
 
 	if (!win || omh == mh)
         return;

@@ -170,12 +170,12 @@ drawitem(int x, int y, int w)
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
     if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
 
-        // mode indicator is always going to be at the right
-        if (hidemode) {
-            numberWidth += 2 * sp + borderwidth;
-        } else {
-            modeWidth += 2 * sp + borderwidth;
-        }
+    // mode indicator is always going to be at the right
+    if (hidemode) {
+        numberWidth += 2 * sp + borderwidth;
+    } else {
+        modeWidth += 2 * sp + borderwidth;
+    }
 
     #if USEIMAGE
     int ox = 0; // original x position
@@ -375,7 +375,12 @@ drawmenu(void)
     }
 
     // why have an empty line?
-    if (hideprompt && hideinput && hidemode && hidematchcount) {
+    if ((hideprompt && hideinput && hidemode && hidematchcount
+        #if USEIMAGE
+        ) && !image || hideimage) {
+        #else
+        )) {
+        #endif
         y -= bh;
         mh = (lines + 1) * bh - bh;
 
@@ -384,6 +389,11 @@ drawmenu(void)
         XResizeWindow(dpy, win, mw, mh);
         drw_resize(drw, mw, mh);
     }
+    #if USEIMAGE
+    else if (hideprompt && hideinput && hidemode && hidematchcount) {
+        y -= bh;
+    }
+    #endif
 
     if (!hideprompt) x = drawprompt(x, y, w);
     if (!hideinput) x = drawinput(x, y, w);
