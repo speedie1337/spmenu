@@ -1,3 +1,0 @@
-! This "colorscheme" simply disables global colors.
-! Apply 'default' first if you want the default colorscheme.
-spmenu.globalcolors:       0

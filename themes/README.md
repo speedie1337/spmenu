@@ -1,6 +1,7 @@
 # spmenu themes
 
-spmenu has a profile feature, which allows you to quickly switch between configuration files. For this reason, it is possible to quickly switch between colorschemes.
+spmenu has a profile feature, which allows you to quickly switch between
+configuration files. For this reason, it is possible to quickly switch between colorschemes.
 
 Feel free to contribute your own colorschemes here.
 

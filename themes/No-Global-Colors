@@ -1,0 +1,4 @@
+! This "colorscheme" simply disables global colors.
+! Apply 'default' first if you want the default colorscheme.
+! Note that applying another profile after this one containing `globalcolors` will override this profile.
+spmenu.globalcolors: 0
