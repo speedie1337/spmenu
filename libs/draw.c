@@ -377,7 +377,7 @@ drawmenu(void)
     // why have an empty line?
     if ((hideprompt && hideinput && hidemode && hidematchcount
         #if USEIMAGE
-        ) && !image || hideimage) {
+        ) && (!image || hideimage)) {
         #else
         )) {
         #endif

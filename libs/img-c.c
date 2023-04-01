@@ -345,19 +345,23 @@ resizetoimageheight(int imageheight)
 	lines = reallines;
     int wtr = 0;
 
-	if (lines * bh < imageheight + imagegaps * 2)
+	if (lines * bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / bh;
+    }
 
-    if (hideprompt && hideinput && hidemode && hidematchcount)
+    if (hideprompt && hideinput && hidemode && hidematchcount) {
         wtr = bh;
+    }
 
 	mh = MAX((lines + 1) * bh, ((lines + 1) * bh) - wtr);
 
-	if (mh - bh < imageheight + imagegaps * 2)
+	if (mh - bh < imageheight + imagegaps * 2) {
         mh = (imageheight + imagegaps * 2 + bh) - wtr;
+    }
 
-	if (!win || omh == mh)
+	if (!win || omh == mh) {
         return;
+    }
 
 	XResizeWindow(dpy, win, mw, mh);
 	drw_resize(drw, mw, mh);
