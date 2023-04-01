@@ -351,10 +351,10 @@ resizetoimageheight(int imageheight)
     if (hideprompt && hideinput && hidemode && hidematchcount)
         wtr = bh;
 
-	mh = (lines + 1) * bh - wtr;
+	mh = MAX((lines + 1) * bh, ((lines + 1) * bh) - wtr);
 
 	if (mh - bh < imageheight + imagegaps * 2)
-        mh = imageheight + imagegaps * 2 + bh - wtr;
+        mh = (imageheight + imagegaps * 2 + bh) - wtr;
 
 	if (!win || omh == mh)
         return;
