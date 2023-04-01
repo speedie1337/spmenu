@@ -117,7 +117,7 @@ install_arch: dist
 commit: man
 	command -v git > /dev/null || exit 1
 	git add *
-	git commit -a
+	git commit -a || :
 	git remote | xargs -L1 git push --all
 
 .PHONY: all options clean dist install install_arch uninstall pkg_arch help man commit
