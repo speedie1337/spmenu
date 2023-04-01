@@ -11,20 +11,20 @@ set_profile() {
     profiles="$(find "$HOME/.config/spmenu/profiles" -type f)"
     profilec="$(find "$HOME/.config/spmenu/profiles" -type f | wc -l)"
 
-    sel="$(list_profiles list | spmenu --lines 20 --columns 1 --prompt "Profile settings" --hide-match-count --hide-left-arrow --hide-right-arrow --hide-input --hide-image --hide-cursor --hide-highlighting --normal --no-allow-typing)"
+    sel="$(list_profiles list | spmenu --lines 20 --columns 1 --prompt "Profile settings" --hide-match-count --hide-left-arrow --hide-right-arrow --hide-input --hide-image --hide-cursor --hide-highlighting --normal --no-allow-typing | sed -e 's/\x1b\[[0-9;]*m//g')"
 
     check
 }
 
 add_profile() {
-    selprofile="$(printf "" | spmenu --lines 20 --columns 1 --prompt "Enter a name for the profile:" --hide-mode --hide-match-count --hide-left-arrow --hide-right-arrow --hide-image --hide-cursor --hide-highlighting --insert | tr -d ' ')"
+    selprofile="$(printf "" | spmenu --lines 20 --columns 1 --prompt "Enter a name for the profile:" --hide-mode --hide-match-count --hide-left-arrow --hide-right-arrow --hide-image --hide-cursor --hide-highlighting --insert | tr -d ' ' | sed -e 's/\x1b\[[0-9;]*m//g')"
     [ -f "/usr/share/spmenu/example.Xresources" ] && cp "/usr/share/spmenu/example.Xresources" "$HOME/.config/spmenu/profiles/$selprofile"
 
     set_profile
 }
 
 remove_profile() {
-    selprofile="$(list_profiles noopts | spmenu --lines 20 --columns 1 --prompt "Select a profile to remove" --hide-mode --hide-match-count --hide-left-arrow --hide-right-arrow --hide-image --hide-highlighting --insert)"
+    selprofile="$(list_profiles noopts | spmenu --lines 20 --columns 1 --prompt "Select a profile to remove" --hide-mode --hide-match-count --hide-left-arrow --hide-right-arrow --hide-image --hide-highlighting --insert | sed -e 's/\x1b\[[0-9;]*m//g')"
     [ ! -f "$HOME/.config/spmenu/profiles/$selprofile" ] && return
     rm -f "$HOME/.config/spmenu/profiles/$selprofile" "$HOME/.config/spmenu/.profile"
 
@@ -57,7 +57,7 @@ list_profiles() {
 
     for i in $(seq "$profilec"); do
         curprofile="$(basename "$(printf "%s" "$profiles" | sed "${i}q;d")")"
-        printf "%s\n" "$curprofile"
+        printf "\033[1;34m%s\033[0m\n" "$curprofile"
     done
 
     [ "$1" != "noopts" ] && list_ex_options
