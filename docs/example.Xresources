@@ -118,7 +118,7 @@ spmenu.hideimage:          0
 spmenu.prompt:
 spmenu.normtext:           Normal
 spmenu.instext:            Insert
-spmenu.password:           .
+spmenu.password:           *
 
 !! Pango markup toggles
 spmenu.pango_item:         1

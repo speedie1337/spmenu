@@ -34,379 +34,379 @@ Arguments
 
 You may use long, descriptive arguments or the shorter arguments.
 
-`-mh,      --lineheight height                       `
+`-mh, --lineheight height`
 :   Set spmenu line height to height
 
-`-mw,      --min-width width                         `
+`-mw, --min-width width`
 :   Set minimum width to width
 
-`-g,       --columns grid                            `
+`-g, --columns grid`
 :   Set the number of grids to grid
 
-`-gc,      --generate-cache                          `
+`-gc, --generate-cache`
 :   Generate image cache
 
-`-ngc,     --no-generate-cache                       `
+`-ngc, --no-generate-cache`
 :   Don't generate image cache
 
-`-mc,      --max-cache size                          `
+`-mc, --max-cache size`
 :   Set max image cache size to size
 
-`-rw,      --relative-width                          `
+`-rw, --relative-width`
 :   Enable relative input width
 
-`-nrw,     --no-relative-width                       `
+`-nrw, --no-relative-width`
 :   Disable relative input width
 
-`-f,       --fast                                    `
+`-f, --fast`
 :   Grabs keyboard before reading stdin
 
-`-F,       --fuzzy                                   `
+`-F, --fuzzy`
 :   Enable fuzzy matching
 
-`-NF,      --no-fuzzy                                `
+`-NF, --no-fuzzy`
 :   Disable fuzzy matching
 
-`-P,       --password                                `
+`-P, --password`
 :   Hide characters
 
-`-p,       --prompt text                             `
+`-p, --prompt text`
 :   Set spmenu prompt text to text
 
-`-ip,      --indent                                  `
+`-ip, --indent`
 :   Indent items to prompt width
 
-`-nip,     --no-indent                               `
+`-nip, --no-indent`
 :   Don't indent items to prompt width
 
-`-ci,     --color-items                              `
+`-ci, --color-items`
 :   Color items
 
-`-nci,    --no-color-items                           `
+`-nci, --no-color-items`
 :   Don't color items
 
-`-a,       --alpha                                   `
+`-a, --alpha`
 :   Enable alpha
 
-`-na,      --no-alpha                                `
+`-na, --no-alpha`
 :   Disable alpha
 
-`-tp,      --allow-typing                            `
+`-tp, --allow-typing`
 :   Allow the user to type
 
-`-nt,      --no-allow-typing                         `
+`-nt, --no-allow-typing`
 :   Don't allow typing, the user must select an option
 
-`-x,       --x-position x offset                     `
+`-x, --x-position x offset`
 :   Offset spmenu x position by x offset
 
-`-y,       --y-position y offset                     `
+`-y, --y-position y offset`
 :   Offset spmenu y position by y offset
 
-`-n,       --preselect line                          `
-:   Preselect line   in the list of items
+`-n, --preselect line`
+:   Preselect line line in the list of items
 
-`-z,       --width width                             `
+`-z, --width width`
 :   Width of the spmenu window
 
-`-nmt,     --normal-mode-text text                   `
+`-nmt, --normal-mode-text text`
 :   Set normal mode text to text
 
-`-imt,     --insert-mode-text text                   `
+`-imt, --insert-mode-text text`
 :   Set insert mode text to text
 
-`-bw,      --border-width width                      `
+`-bw, --border-width width`
 :   Set width of the border to width  . 0 will disable the border
 
-`-so,      --sort                                    `
+`-so, --sort`
 :   Sort matches
 
-`-nso,     --no-sort                                 `
+`-nso, --no-sort`
 :   Don't sort matches
 
-`-pri,     --priority pri1,pri2,pri3                 `
+`-pri, --priority pri1,pri2,pri3`
 :   Specify a list of items that take priority
 
-`-s,       --case-sensitive                          `
+`-s, --case-sensitive`
 :   Use case-sensitive matching
 
-`-ns,      --case-insensitive                        `
+`-ns, --case-insensitive`
 :   Use case-insensitive matching
 
-`-nm,      --normal                                  `
+`-nm, --normal`
 :   Start spmenu in normal mode
 
-`-im,      --insert                                  `
+`-im, --insert`
 :   Start spmenu in insert mode
 
-`-t,       --top                                     `
+`-t, --top`
 :   Position spmenu at the top of the screen
 
-`-b,       --bottom                                  `
+`-b, --bottom`
 :   Position spmenu at the bottom of the screen
 
-`-c,       --center                                  `
+`-c, --center`
 :   Position spmenu at the center of the screen
 
-`-hm,      --hide-mode                               `
+`-hm, --hide-mode`
 :   Hide mode indicator
 
-`-hmc,     --hide-match-count                        `
+`-hmc, --hide-match-count`
 :   Hide match count
 
-`-hla,     --hide-left-arrow                         `
+`-hla, --hide-left-arrow`
 :   Hide left arrow
 
-`-hra,     --hide-right-arrow                        `
+`-hra, --hide-right-arrow`
 :   Hide right arrow
 
-`-hpr,     --hide-prompt                             `
+`-hpr, --hide-prompt`
 :   Hide prompt
 
-`-hip,     --hide-input                              `
+`-hip, --hide-input`
 :   Hide input
 
-`-hpl,     --hide-powerline                          `
+`-hpl, --hide-powerline`
 :   Hide powerline
 
-`-hc,      --hide-cursor                             `
+`-hc, --hide-cursor`
 :   Hide cursor
 
-`-hhl,     --hide-highlighting                       `
+`-hhl, --hide-highlighting`
 :   Hide highlight
 
-`-hi,      --hide-image                              `
+`-hi, --hide-image`
 :   Hide image
 
-`-sm,      --show-mode                               `
+`-sm, --show-mode`
 :   Show mode indicator
 
-`-smc,     --show-match-count                        `
+`-smc, --show-match-count`
 :   Show match count
 
-`-sla,     --show-left-arrow                         `
+`-sla, --show-left-arrow`
 :   Show left arrow
 
-`-sra,     --show-right-arrow                        `
+`-sra, --show-right-arrow`
 :   Show right arrow
 
-`-spr,     --show-prompt                             `
+`-spr, --show-prompt`
 :   Show prompt
 
-`-sin,     --show-input                              `
+`-sin, --show-input`
 :   Show input
 
-`-spl,     --show-powerline                          `
+`-spl, --show-powerline`
 :   Show powerline
 
-`-sc,      --show-cursor                             `
+`-sc, --show-cursor`
 :   Show cursor
 
-`-shl,     --show-highlighting                       `
+`-shl, --show-highlighting`
 :   Show highlight
 
-`-si,      --show-image                              `
+`-si, --show-image`
 :   Show image
 
-`-xrdb,    --xrdb                                    `
+`-xrdb, --xrdb`
 :   Load .Xresources on runtime
 
-`-nxrdb,   --no-xrdb                                 `
+`-nxrdb, --no-xrdb`
 :   Don't load .Xresources on runtime
 
-`-gbc,     --global-colors                           `
+`-gbc, --global-colors`
 :   Recognize global colors (such as *.color1) on runtime
 
-`-ngbc,    --no-global-colors                        `
+`-ngbc, --no-global-colors`
 :   Don't recognize global colors (such as *.color1) on runtime
 
-`-m,       --monitor monitor                         `
+`-m, --monitor monitor`
 :   Specify a monitor to run spmenu on
 
-`-w,       --embed window id                         `
+`-w, --embed window id`
 :   Embed spmenu inside window id
 
-`-H,       --hist-file hist file                     `
+`-H, --hist-file hist file`
 :   Specify a path to save the history to
 
-`-ig,      --image-gaps gaps                         `
+`-ig, --image-gaps gaps`
 :   Set image gaps to gaps
 
-`-txp,      --text-padding padding                   `
+`-txp, --text-padding padding`
 :   Set text padding to padding
 
-`-lp,      --vertical-padding padding                `
+`-lp, --vertical-padding padding`
 :   Set the vertical padding
 
-`-hp,      --horizontal-padding padding              `
+`-hp, --horizontal-padding padding`
 :   Set the horizontal padding
 
-`-la,      --left-arrow-symbol symbol                `
+`-la, --left-arrow-symbol symbol`
 :   Set the left arrow to symbol
 
-`-ra,      --right-arrow-symbol symbol               `
+`-ra, --right-arrow-symbol symbol`
 :   Set the right arrow to symbol
 
-`-is,      --image-size size                         `
+`-is, --image-size size`
 :   Image size
 
-`-it,      --image-top                               `
+`-it, --image-top`
 :   Position the image at the top
 
-`-ib,      --image-bottom                            `
+`-ib, --image-bottom`
 :   Position the image at the bottom
 
-`-ic,      --image-center                            `
+`-ic, --image-center`
 :   Position the image in the center
 
-`-itc,     --image-topcenter                         `
+`-itc, --image-topcenter`
 :   Position the image in the top center
 
-`-wm,      --managed, --x11-client                   `
+`-wm, --managed, --x11-client`
 :   Spawn spmenu as a window manager controlled client/window. Useful for testing
 
-`-nwm,     --unmanaged                               `
+`-nwm, --unmanaged`
 :   Don't spawn spmenu as a window manager controlled client/window. Useful for testing
 
-`-lcfg,    --load-config                             `
+`-lcfg, --load-config`
 :   Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
 
-`-ncfg,    --no-load-config                          `
+`-ncfg, --no-load-config`
 :   Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
 
-`-v,       --version                                 `
+`-v, --version`
 :   Print spmenu version to stdout
 
-`-fn,      --font  font`
+`-fn, --font font`
 :   Set the spmenu font to font
 
-`-nif,     --normal-item-foreground color            `
+`-nif, --normal-item-foreground color`
 :   Set the normal item foreground color
 
-`-nib,     --normal-item-background color            `
+`-nib, --normal-item-background color`
 :   Set the normal item background color
 
-`-sif,     --selected-item-foreground color          `
+`-sif, --selected-item-foreground color`
 :   Set the selected item foreground color
 
-`-sib,     --selected-item-background color          `
+`-sib, --selected-item-background color`
 :   Set the selected item background color
 
-`-npf,     --normal-item-priority-foreground color   `
+`-npf, --normal-item-priority-foreground color`
 :   Set the normal item (high priority) foreground color
 
-`-npb,     --normal-item-priority-background color   `
+`-npb, --normal-item-priority-background color`
 :   Set the normal item (high priority) background color
 
-`-spf,     --selected-item-priority-foreground color `
+`-spf, --selected-item-priority-foreground color`
 :   Set the selected item (high priority) foreground color
 
-`-spb,     --selected-item-priority-background color `
+`-spb, --selected-item-priority-background color`
 :   Set the selected item (high priority) background color
 
-`-pfg,     --prompt-foreground color                 `
+`-pfg, --prompt-foreground color`
 :   Set the prompt foreground color
 
-`-pbg,     --prompt-background color                 `
+`-pbg, --prompt-background color`
 :   Set the prompt background color
 
-`-ifg,     --input-foreground color                  `
+`-ifg, --input-foreground color`
 :   Set input foreground color
 
-`-ibg,     --input-background color                  `
+`-ibg, --input-background color`
 :   Set input background color
 
-`-mnbg,    --menu-background color                   `
+`-mnbg, --menu-background color`
 :   Set the menu background color
 
-`-nhf,     --normal-highlight-foreground color       `
+`-nhf, --normal-highlight-foreground color`
 :   Set the normal highlight foreground color
 
-`-nhb,     --normal-highlight-background color       `
+`-nhb, --normal-highlight-background color`
 :   Set the normal highlight background color
 
-`-shf,     --selected-highlight-foreground color     `
+`-shf, --selected-highlight-foreground color`
 :   Set the selected highlight foreground color
 
-`-shb,     --selected-highlight-background color     `
+`-shb, --selected-highlight-background color`
 :   Set the selected highlight background color
 
-`-nfg,     --number-foreground color                 `
+`-nfg, --number-foreground color`
 :   Set the foreground color for the match count
 
-`-nbg,     --number-background color                 `
+`-nbg, --number-background color`
 :   Set the background color for the match count
 
-`-mfg,     --mode-foreground color                   `
+`-mfg, --mode-foreground color`
 :   Set the foreground color for the mode indicator
 
-`-mbg,     --mode-background color                   `
+`-mbg, --mode-background color`
 :   Set the background color for the mode indicator
 
-`-laf,     --left-arrow-foreground color             `
+`-laf, --left-arrow-foreground color`
 :   Set the left arrow foreground color
 
-`-raf,     --right-arrow-foreground color            `
+`-raf, --right-arrow-foreground color`
 :   Set the right arrow foreground color
 
-`-lab,     --left-arrow-background color             `
+`-lab, --left-arrow-background color`
 :   Set the left arrow background color
 
-`-rab,     --right-arrow-background color            `
+`-rab, --right-arrow-background color`
 :   Set the right arrow background color
 
-`-cc,      --caret-foreground color                  `
+`-cc, --caret-foreground color`
 :   Set the caret color
 
-`-bc,      --border-background color                 `
+`-bc, --border-background color`
 :   Set the border color
 
-`-sgr0,    --sgr0 color                              `
+`-sgr0, --sgr0 color`
 :   Set the SGR 0 color
 
-`-sgr1,    --sgr1 color                              `
+`-sgr1, --sgr1 color`
 :   Set the SGR 1 color
 
-`-sgr2,    --sgr2 color                              `
+`-sgr2, --sgr2 color`
 :   Set the SGR 2 color
 
-`-sgr3,    --sgr3 color                              `
+`-sgr3, --sgr3 color`
 :   Set the SGR 3 color
 
-`-sgr4,    --sgr4 color                              `
+`-sgr4, --sgr4 color`
 :   Set the SGR 4 color
 
-`-sgr5,    --sgr5 color                              `
+`-sgr5, --sgr5 color`
 :   Set the SGR 5 color
 
-`-sgr6,    --sgr6 color                              `
+`-sgr6, --sgr6 color`
 :   Set the SGR 6 color
 
-`-sgr7,    --sgr7 color                              `
+`-sgr7, --sgr7 color`
 :   Set the SGR 7 color
 
-`-sgr8,    --sgr8 color                              `
+`-sgr8, --sgr8 color`
 :   Set the SGR 8 color
 
-`-sgr9,    --sgr9 color                              `
+`-sgr9, --sgr9 color`
 :   Set the SGR 9 color
 
-`-sgr10,   --sgr10 color                             `
+`-sgr10, --sgr10 color`
 :   Set the SGR 10 color
 
-`-sgr11,   --sgr11 color                             `
+`-sgr11, --sgr11 color`
 :   Set the SGR 11 color
 
-`-sgr12,   --sgr12 color                             `
+`-sgr12, --sgr12 color`
 :   Set the SGR 12 color
 
-`-sgr13,   --sgr13 color                             `
+`-sgr13, --sgr13 color`
 :   Set the SGR 13 color
 
-`-sgr14,   --sgr14 color                             `
+`-sgr14, --sgr14 color`
 :   Set the SGR 14 color
 
-`-sgr15,   --sgr15 color                             `
+`-sgr15, --sgr15 color`
 :   Set the SGR 15 color
 
 dmenu compatibility can be achieved using these arguments:
@@ -511,6 +511,56 @@ spmenu supports most color sequences, although not true color by default
 
 There are a few arguments, you can override SGR colors on-the-fly
 using the `-sgrX` arguments. See 'Arguments' for more information.
+
+Just as a tip, you can pipe your colored spmenu output
+to `sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from the output.
+This is useful when you want to check what the output actually is.
+
+Pango markup
+============
+
+If spmenu was compiled with Pango enabled (default), you should be able to
+utilize Pango markup in every part of spmenu. That is, the mode indicator,
+items, input, prompt, etc.
+
+Pango markup allows you to style text similar to an HTML document. It also
+provides the `<span>` tag, which can be used to do surprisingly complex things.
+
+There are many convenient tags as well which can be used to
+avoid using a `<span>` tag, such as:
+
+`<b>`
+:    **Bold** text (`<b>Bold</b>`)
+
+`<i>`
+:    *Italic* text (`<i>Italic</i>`)
+
+`<s>`
+:    Strikethrough text (`<s>Strikethrough</s>`)
+
+`<u>`
+:    Underline text (`<u>Underline</u>`)
+
+`<sub>`
+:    Subscript (`<sub>Subscript</sub>`)
+
+`<sup>`
+:    Superscript (`<sup>Supscript</sup>`)
+
+`<tt>`
+:    Monospace font (`<tt>Monospaced font is used here</tt>`)
+
+`<small>`
+:    Small text (`<small>text is so small here</small>`)
+
+`<big>`
+:    Big text (`<big>text is so big here</big>`)
+
+Note that Pango markup is NOT escaped, and is piped to stdout. Therefore you
+need to parse it manually. Doing so with `sed` is very easy. For example:
+`... | spmenu ... | sed 's/<big>//g; s/</big>//g'`
+
+See [this page](https://docs.gtk.org/Pango/pango_markup.html) for more information.
 
 Configuration
 =============
@@ -618,3 +668,9 @@ License
 
 spmenu is licensed under the MIT license because that's the original suckless
 license. See the included LICENSE file for more information.
+
+Reporting issues
+================
+
+Please report issues on the
+[Codeberg repository](https://codeberg.org/speedie/speediegq) or alternatively email me.
