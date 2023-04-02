@@ -20,14 +20,17 @@ It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [
 This build of spmenu has some features written for this build.
 Of course if you want, this is free software so you can use it in your own build.
 
-- dwm-like keybind array (See keybinds.h)
+- dwm-like key/mouse bind array (See keybinds.h and mouse.h)
 - Vim-like modes, including indicator.
 - The ability to move around items with keybinds.
 - Customizable/dynamic line/column size.
+- IME support
+  - Was removed from suckless dmenu years ago due to issues I've resolved
 - Powerlines
 - Web browser like keybindings.
 - 256 color support through SGR codes.
-- Image support (somewhat based on [this repository](https://github.com/Cloudef/dmenu-pango-imlib))
+- Image support
+  - Somewhat based on [this repository](https://github.com/Cloudef/dmenu-pango-imlib)
 - Option to block typing.
 - Rewritten arguments, old arguments still work though.
 - Hiding each part of the menu.
