@@ -124,6 +124,21 @@ drawitemtext(struct item *item, int x, int y, int w)
 						scm[1] = textclrs[bg];
 					} else if (nextchar == 48) {
                         bgfg = 3;
+                    } else if (nextchar == 0) {
+                        if (item == sel) {
+                            memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
+
+                            if (item->hp)
+                                memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
+                        } else {
+                            memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+
+                            if (item->hp)
+                                memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
+                        }
+
+                        // don't color
+                        if (!coloritems) memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
                     }
 				}
 
