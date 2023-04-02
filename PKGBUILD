@@ -3,7 +3,7 @@
 pkgname=spmenu
 pkgver=VERSION
 pkgrel=1
-pkgdesc="speedie's fork of suckless dmenu with color support and more"
+pkgdesc="Fancy dynamic menu, compatible with dmenu!"
 url="https://git.speedie/gq/spmenu"
 arch=(i686 x86_64)
 license=(MIT)

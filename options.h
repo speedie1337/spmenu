@@ -1,6 +1,7 @@
-/* spmenu
+/* spmenu - fancy dynamic menu
+ *
  * Below is a configuration file which is technically C source code.
- * See the LICENSE file for license details.
+ * See the included LICENSE file for license details.
  */
 
 /* spmenu options */

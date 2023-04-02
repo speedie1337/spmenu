@@ -127,6 +127,7 @@ keybinds to be configured without recompiling spmenu.
 - Image support: Stop using OpenSSL for caching images, mostly because MD5()
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
+- Image support: Ability to display icons, similar to rofi
 - Matching: Add support for contextual completions similar to xprompt
 - Text drawing: Use cairo for text drawing over Xft.
 - Matching: FIFO, used to dynamically refresh entries.
