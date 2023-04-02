@@ -482,6 +482,10 @@ that you might already be using in your shell scripts. This means you can
 pipe practically any colored shell script straight into spmenu,
 no need to filter the output or anything.
 
+Not only does it support colored text, but it also supports colored backgrounds.
+This allows something similar to the emoji highlight patch, except even more useful.
+Example: `printf "\033[0;44m😀\033[0mEmoji highlighting\n" | spmenu --columns 1`
+
 For 256 color support to work, you must add to the array. See `libs/color.h`
 if you want this.
 
@@ -501,6 +505,8 @@ Reset: `0`
 
 NOTE: `;` is a separator, and in this example it separates the
 color number and normal/bright. \033 may also be written as `^]` or simply `ESC`.
+The separator may be omitted for some sequences, such as `\033[0m` which
+resets the colorscheme.
 
 spmenu supports most color sequences, although not true color by default
 (unless -sgr arguments are used).
@@ -508,9 +514,9 @@ spmenu supports most color sequences, although not true color by default
 There are a few arguments, you can override SGR colors on-the-fly
 using the `-sgrX` arguments. See 'Arguments' for more information.
 
-Just as a tip, you can pipe your colored spmenu output
-to `sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from the output.
-This is useful when you want to check what the output actually is.
+Just as a tip, you can pipe your colored spmenu output to
+`sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from
+the output. This is useful when you want to check what the output actually is.
 
 Pango markup
 ============
