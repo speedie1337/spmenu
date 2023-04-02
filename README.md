@@ -1,6 +1,6 @@
 # spmenu
 
-![image](/docs/preview.png)
+![image](docs/preview.png)
 
 ## What is spmenu?
 
@@ -168,3 +168,12 @@ See the included `man` page.
 
 spmenu is licensed under the MIT license. See the included LICENSE file for
 more information!
+
+## Screenshots
+
+If you do something cool with spmenu, feel free to add yours here!
+
+![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/preview.png)
+![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/spmenu-iron.png)
+![image](https://codeberg.org/speedie/spmenu-screenshots/src/branch/master/spmenu-gruvbox.png)
+![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/colorscheme3.png)
