@@ -2,7 +2,7 @@
  *
  * Types
  *
- * MODIFIER1 is what you defined below, default is Super)
+ * MODIFIER1 is what you defined below, default is Alt)
  *
  * SHIFT is unless changed going to be your Shift key.
  * CONTROL is unless changed going to be your Control key.

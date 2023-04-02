@@ -199,6 +199,7 @@ static size_t nextrune(int inc);
 // user configuration
 #include "options.h"
 #include "keybinds.h"
+#include "mouse.h"
 
 // xresources/color arrays
 #include "libs/xresources.h"

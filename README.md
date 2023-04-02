@@ -119,7 +119,6 @@ Pull requests would be greatly appreciated for any of these issues!
 
 ### General
 
-- Key: Mouse bind array (Likely mouse.h).
 - Config file: Add configuration file using (probably) libconfig, allowing
 keybinds to be configured without recompiling spmenu.
 - Image support: Stop using OpenSSL for caching images, mostly because MD5()
