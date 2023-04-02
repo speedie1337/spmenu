@@ -46,8 +46,7 @@ set_window(void)
 void
 set_prop(void)
 {
-    // TODO: add toggle for this
-    XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1); // set dock property
+    if (dockproperty) XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1); // set dock property
     return;
 }
 

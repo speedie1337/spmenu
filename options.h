@@ -19,6 +19,9 @@ static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
 static int minwidth                    = 1000; /* Minimum width */
 static int managed                     = 0; /* Let your window manager manage spmenu? */
 
+/* Window properties */
+static int dockproperty                = 1; /* Set _NET_WM_WINDOW_TYPE_DOCK */
+
 /* Image options */
 static int imagewidth                  = 86; /* Default image width */
 static int imageheight                 = 86; /* Default image height */

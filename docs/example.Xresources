@@ -83,6 +83,9 @@ spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
 spmenu.minwidth:           1000
 
+!! Properties
+spmenu.dockproperty:       1
+
 !! General
 spmenu.class:              spmenu
 spmenu.fast:               0
@@ -97,7 +100,6 @@ spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      1
 spmenu.maxcache:           512
-
 
 !! Mode options
 spmenu.mode:               0
