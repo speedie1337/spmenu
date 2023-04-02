@@ -11,7 +11,7 @@ set_profile() {
     profiles="$(find "$HOME/.config/spmenu/profiles" -type f)"
     profilec="$(find "$HOME/.config/spmenu/profiles" -type f | wc -l)"
 
-    sel="$(list_profiles list | spmenu --lines 20 --columns 1 --prompt "Profile settings" --hide-match-count --hide-left-arrow --hide-right-arrow --hide-input --hide-image --hide-cursor --hide-highlighting --normal --no-allow-typing | sed -e 's/\x1b\[[0-9;]*m//g')"
+    sel="$(list_profiles list | spmenu --lines 20 --columns 1 --prompt "Profile settings" --hide-match-count --hide-left-arrow --hide-right-arrow --hide-input --hide-image --hide-mode --hide-cursor --hide-highlighting --normal --no-allow-typing | sed -e 's/\x1b\[[0-9;]*m//g')"
 
     check
 }
