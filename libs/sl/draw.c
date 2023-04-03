@@ -363,8 +363,9 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	if (len) {
 		drw_font_getexts(drw->font, text, len, &ew, NULL, markup);
 		/* shorten text if necessary */
-		for (len = MIN(len, sizeof(buf) - 1); len && ew > w; len--)
-			drw_font_getexts(drw->font, text, len, &ew, NULL, markup);
+        for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, text, len, &ew, NULL, markup))
+            len--;
+
 
 		if (len) {
 			memcpy(buf, text, len);
@@ -451,8 +452,8 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 		if (utf8strlen) {
 			drw_font_getexts(usedfont, utf8str, utf8strlen, &ew, NULL, True);
 			/* shorten text if necessary */
-			for (len = MIN(utf8strlen, sizeof(buf) - 1); len && ew > w; len--)
-				drw_font_getexts(usedfont, utf8str, len, &ew, NULL, True);
+			for (len = MIN(utf8strlen, sizeof(buf) - 1); len && ew > w; drw_font_getexts(usedfont, utf8str, len, &ew, NULL, True))
+                len--;
 
 			if (len) {
 				memcpy(buf, utf8str, len);
