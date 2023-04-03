@@ -380,13 +380,6 @@ drawmenu(void)
     if (!hidematchcount) {
         recalculatenumbers();
         numberWidth = TEXTW(numbers);
-
-        // mode indicator is always going to be at the right
-        if (hidemode) {
-            numberWidth += 2 * sp + borderwidth;
-        } else {
-            modeWidth += 2 * sp + borderwidth;
-        }
     }
 
     // why have an empty line?
