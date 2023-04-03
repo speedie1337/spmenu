@@ -62,7 +62,6 @@ ResourcePref resources[] = {
     { "minwidth",                    INTEGER, &minwidth },
     { "preselected",                 INTEGER, &preselected },
     { "password",                    STRING,  &password },
-	{ "prompt",                      STRING,  &prompt },
 	{ "class",                       STRING,  &class },
     { "normtext",                    STRING,  &normtext },
     { "instext",                     STRING,  &instext },

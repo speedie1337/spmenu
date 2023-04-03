@@ -43,10 +43,12 @@ static int borderwidth                 = 2; /* Width of the border */
 static char font[]                     = "Noto Sans Mono 8"; /* Font to draw text and Pango markup with. */
 static int textpadding                 = 0; /* Text padding (lrpad) */
 
-/* Symbol options */
+/* Text options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */
 static char *rightarrow                = ">"; /* Right arrow, used to indicate you can move to the right */
 static char password                   = '*'; /* Password character, when the -P argument is active this will replace all characters typed */
+static char *prompt                    = NULL; /* Default prompt */
+static char *input                     = NULL; /* Default input text */
 
 /* Match options */
 static int type                        = 1; /* Allow typing into spmenu or only allow keybinds. */
@@ -67,7 +69,6 @@ static int histnodup                   = 1;	/* If 0, record repeated histories *
 
 /* Prompt options */
 static int indentitems                 = 1; /* Indent items to prompt width? (0/1) */
-static char *prompt                    = NULL; /* Default prompt, set to NULL (nothing) */
 
 /* Hide options */
 static int hideinput                   = 0; /* Hide input (0/1) */

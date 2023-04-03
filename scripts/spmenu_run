@@ -7,6 +7,7 @@
 [ -z "$HISTORY" ]          && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
 [ -z "$RUNLAUNCHER" ]      && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
+[ -z "$PREFIX" ]           && PREFIX="/usr"
 
 check() {
     [ ! -d "$HOME/.config/spmenu/run" ] && mkdir -p "$HOME/.config/spmenu/run"
@@ -30,7 +31,7 @@ print_help() {
 cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
-To configure spmenu, you may also copy /usr/share/spmenu/example.Xresources to $HOME/.config/spmenu/spmenurc and edit that.
+To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $HOME/.config/spmenu/spmenurc and edit that.
 
 - Type in '?' to show this help screen at any time.
 - If the entry selected starts with 'www', it will instead be treated as a link and spawned in a web browser (\$BROWSER)

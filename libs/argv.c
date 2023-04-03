@@ -352,6 +352,10 @@ readargs(int argc, char *argv[])
 	    fstrncmp = strncasecmp;
 	    fstrstr = cistrstr;
     }
+
+    // initial text
+    if (input)
+        insert(input, strlen(input));
 }
 
 void

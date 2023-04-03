@@ -118,6 +118,7 @@ spmenu.hideimage:          0
 
 !! Text
 spmenu.prompt:
+spmenu.input:
 spmenu.normtext:           Normal
 spmenu.instext:            Insert
 spmenu.password:           *
