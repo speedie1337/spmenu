@@ -8,3 +8,4 @@ xinerama=true
 openssl=true
 fribidi=true
 CC=gcc
+OPT="-O2"

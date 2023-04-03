@@ -6,6 +6,7 @@ PREFIX="${PREFIX:-/usr}"
 
 load_profile() {
     [ -f "${CONFDIR}/spmenu/.profile" ] && PROFILE="$(cat "${CONFDIR}/spmenu/.profile")"
+    [ -f "$HOME/.spmenurc" ] && xrdb -override "$HOME/.spmenurc" # legacy config
     [ -n "$PROFILE" ] && xrdb -override "$PROFILE"
 }
 
