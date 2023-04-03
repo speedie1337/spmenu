@@ -50,7 +50,7 @@ IMAGE="/tmp/image.png"
 main() {
 [ -e "$IMAGE" ] && IMAGEARG="--image-size 500" && IMAGEPREFIX="IMG:" || IMAGE=""
 
-printf "$IMAGEPREFIX$IMAGE\t${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $([ -f '/usr/share/spmenu/version' ] && cat /usr/share/spmenu/version)\n\
+printf "$IMAGEPREFIX$IMAGE\t${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $([ -f "${DESTDIR}${PREFIX}/share/spmenu/version" ] && cat "${DESTDIR}${PREFIX}/share/spmenu/version")\n\
 ${b1}\n\
 ${b2}\n\
 ${b3}\n\
