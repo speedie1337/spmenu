@@ -71,6 +71,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-p, --prompt text`
 :   Set spmenu prompt text to text
 
+`-It, --input text`
+:   Set initial input text to text
+
 `-ip, --indent`
 :   Indent items to prompt width
 
@@ -486,7 +489,7 @@ no need to filter the output or anything.
 
 Not only does it support colored text, but it also supports colored backgrounds.
 This allows something similar to the emoji highlight patch, except even more useful.
-Example: `printf "\033[0;44m😀\033[0mEmoji highlighting\n" | spmenu --columns 1`
+Example: `printf "\033[0;44m😀\033[0m Emoji highlighting\n" | spmenu --columns 1`
 
 For 256 color support to work, you must add to the array. See `libs/color.h`
 if you want this.
@@ -645,7 +648,8 @@ In addition to the aforementioned `spmenu_run`, the spmenu package also provides
 Unlike the regular run launcher though, spmenu_desktop supports displaying an
 icon for entries that use one.
 
-It can be configured through editing `~/.config/spmenu/desktop/config`.
+It can be configured through editing `~/.config/spmenu/desktop/config`. The
+configuration file can also be moved by setting `${XDG_CONFIG_HOME}`.
 
 spmenu commands
 ===============

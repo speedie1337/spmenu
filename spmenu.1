@@ -88,6 +88,9 @@ Hide characters
 \f[V]-p, --prompt text\f[R]
 Set spmenu prompt text to text
 .TP
+\f[V]-It, --input text\f[R]
+Set initial input text to text
+.TP
 \f[V]-ip, --indent\f[R]
 Indent items to prompt width
 .TP
@@ -513,7 +516,7 @@ backgrounds.
 This allows something similar to the emoji highlight patch, except even
 more useful.
 Example:
-\f[V]printf \[dq]\[rs]033[0;44m😀\[rs]033[0mEmoji highlighting\[rs]n\[dq] | spmenu --columns 1\f[R]
+\f[V]printf \[dq]\[rs]033[0;44m😀\[rs]033[0m Emoji highlighting\[rs]n\[dq] | spmenu --columns 1\f[R]
 .PP
 For 256 color support to work, you must add to the array.
 See \f[V]libs/color.h\f[R] if you want this.
@@ -689,6 +692,8 @@ displaying an icon for entries that use one.
 .PP
 It can be configured through editing
 \f[V]\[ti]/.config/spmenu/desktop/config\f[R].
+The configuration file can also be moved by setting
+\f[V]${XDG_CONFIG_HOME}\f[R].
 .SH spmenu commands
 .PP
 spmenu has a few special commands.

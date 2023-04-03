@@ -214,6 +214,8 @@ readargs(int argc, char *argv[])
 			dmw = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-p") || (!strcmp(argv[i], "--prompt")))   // adds prompt to left of input field
 			prompt = argv[++i];
+		else if (!strcmp(argv[i], "-It") || (!strcmp(argv[i], "--input")))   // specify initial text
+			input = argv[++i];
 		else if (!strcmp(argv[i], "-fn") || (!strcmp(argv[i], "--font")))  // font or font set
             fonts[0] = argv[++i];
 		else if (!strcmp(argv[i], "-nmt") || (!strcmp(argv[i], "--normal-mode-text")))  // normal mode text
@@ -378,6 +380,7 @@ usage(void)
 		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
 		  "spmenu -P,       --password                                  Hide characters\n"
 		  "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
+          "spmenu -It,      --input <text>                              Set initial input text to <text>\n"
           "spmenu -ip,      --indent                                    Indent items to prompt width\n"
           "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
           "spmenu -ci,      --color-items                               Color items\n"
