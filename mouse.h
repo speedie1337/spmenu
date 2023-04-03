@@ -23,4 +23,6 @@
 static Mouse buttons[] = {
     { clickinput,           0,         Button1,         clear,        {0} },
     { clickprompt,          0,         Button1,         clear,        {0} },
+    { clickmode,            0,         Button1,         switchmode,   {0} },
+    { clicknumber,          0,         Button1,         viewhist,     {0} },
 };
