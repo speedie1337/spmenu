@@ -607,7 +607,7 @@ setupdisplay(void)
 	match(); // match entries
 
 	// create menu window and set properties for it
-    create_window(x + sp, y + vp - (menuposition == 1 ? 0 : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
+    create_window(x + sp, y + vp - (menuposition == 1 ? 0 : menuposition == 2 ? borderwidth : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
     set_window();
     set_prop();
 
