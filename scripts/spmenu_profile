@@ -47,7 +47,7 @@ check() {
     case "$sel" in
         "Add") add_profile ;;
         "Remove") remove_profile ;;
-        "Default") printf "${CONFDIR}/spmenu/spmenurc\n" > "${CONFDIR}/spmenu/.profile" && set_profile ;;
+        "Default") printf "%s%s/share/spmenu/example.Xresources\n" "${DESTDIR}" "${PREFIX}" > "${CONFDIR}/spmenu/.profile" && set_profile ;;
         "None") printf "NONE\n" > "${CONFDIR}/spmenu/.profile" ;;
         "") exit 0 ;;
         *) profile="$sel" && write_profile && set_profile ;;
@@ -83,8 +83,6 @@ list_ex_options() {
 main() {
     command -v xrdb > /dev/null || exit 1
     [ ! -d "${CONFDIR}/spmenu/profiles" ] && mkdir -p "${CONFDIR}/spmenu/profiles"
-    [ ! -f "${CONFDIR}/spmenu/spmenurc" ] && [ -e "${DESTDIR}${PREFIX}/share/spmenu/example.Xresources" ] && \
-        cp "${DESTDIR}${PREFIX}/share/spmenu/example.Xresources" "${CONFDIR}/spmenu/spmenurc"
 
     [ "$1" = "--spmenu-load-default-profile" ] && load_profile
     [ "$1" = "--spmenu-set-profile" ] && set_profile
