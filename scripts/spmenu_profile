@@ -8,7 +8,6 @@ load_profile() {
     [ -f "${CONFDIR}/spmenu/.profile" ] && [ "$(cat "${CONFDIR}/spmenu/.profile")" = "NONE" ] && NONE=true
 
     if [ "$NONE" = "true" ]; then
-        xrdb -remove spmenu*
         return
     fi
 
