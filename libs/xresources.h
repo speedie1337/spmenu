@@ -80,7 +80,7 @@ ResourcePref resources[] = {
     { "hideinput",                   INTEGER, &hideinput },
     { "hidepowerline",               INTEGER, &hidepowerline },
     { "hidecursor",                  INTEGER, &hidecursor },
-	{ "histnodup",                   INTEGER, &histnodup },
+	{ "histdup",                     INTEGER, &histdup },
     { "casesensitive",               INTEGER, &casesensitive },
     { "imagewidth",                  INTEGER, &imagewidth },
     { "imageheight",                 INTEGER, &imageheight },

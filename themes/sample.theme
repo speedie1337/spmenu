@@ -1,0 +1,9 @@
+/* This is a sample theme.
+ * It simply sets the font to Terminus.
+ *
+ * You can include this from your spmenu.conf using `@include "path/to/sample.theme`
+ */
+
+spmenu = {
+    text = ( { font = "Terminus 8"; } );
+};

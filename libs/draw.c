@@ -269,7 +269,9 @@ drawinput(int x, int y, int w)
 	drw_setscheme(drw, scheme[SchemeInput]);
 	if (passwd && !hideprompt) {
 	    censort = ecalloc(1, sizeof(text));
-		memset(censort, (int)password, strlen(text));
+
+        for (int i = 0; i < strlen(text); i++)
+            memcpy(&censort[i], password, strlen(text));
 
         apply_fribidi(censort);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False);

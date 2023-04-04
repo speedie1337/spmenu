@@ -7,7 +7,7 @@ readargs(int argc, char *argv[])
     int cxrdb = 0;
 
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked
-    // priority: internal -> xresources -> arguments
+    // priority: internal -> config -> xresources -> arguments
     for (j = 1; j < argc; j++) {
 		if (!strcmp(argv[j], "-xrdb") || (!strcmp(argv[j], "--xrdb"))) {
 			xresources = 1;
@@ -24,7 +24,9 @@ readargs(int argc, char *argv[])
         }
     }
 
+    #if USECONFIG
     conf_init();
+    #endif
 
     // init/read xrdb
     if (xresources) {

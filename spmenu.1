@@ -601,13 +601,30 @@ See this page (https://docs.gtk.org/Pango/pango_markup.html) for more
 information.
 .SH Configuration
 .PP
-spmenu has .Xresources (xrdb) support built in.
+Unlike dmenu, spmenu has a configuration file which can be edited by
+hand.
+It is located in \[ti]/.config/spmenu/spmenu.conf, but you can override
+this by exporting \f[V]$XDG_CONFIG_HOME\f[R].
+.PP
+When spmenu is installed, it copies a sample configuration to
+/usr/share/spmenu/spmenu.conf.
+You can copy this to your \f[V].config/spmenu\f[R] directory.
+This configuration file is loaded on startup.
+.PP
+You can also include other configuration files in the configuration file
+using \f[V]\[at]include \[dq]path/to/config\[dq]\f[R].
+.SH .Xresources
+.PP
+spmenu also has .Xresources (xrdb) support built in.
 It reads the xrdb (.Xresources database) on runtime.
 You may disable it by passing -nxrdb, or enable it by padding -xrdb.
+You can also set this in the regular config file.
 .PP
 spmenu loads \f[V]\[ti]/.config/spmenu/spmenurc\f[R] or alternatively if
-you\[cq]re old fashioned, \f[V]\[ti]/.spmenurc\f[R].
+you\[cq]re old fashioned, \f[V]\[ti]/.spmenurc\f[R] on startup.
 This requires that \f[V]xrdb\f[R] is available on your operating system.
+Of course, you don\[cq]t NEED to use them, as you can just
+\f[V]xrdb -override\f[R] any .Xresources file you want.
 .PP
 You can also use wildcards (such as \f[V]*\f[R]) to achieve a global
 colorscheme.

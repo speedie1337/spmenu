@@ -20,6 +20,7 @@ href="https://git.speedie.gq/speedwm">speedwm</a>.</p>
 course if you want, this is free software so you can use it in your own
 build.</p>
 <ul>
+<li>Proper configuration file support</li>
 <li>dwm-like key/mouse bind array (See keybinds.h and mouse.h)</li>
 <li>Vim-like modes, including indicator.</li>
 <li>The ability to move around items with keybinds.</li>
@@ -118,6 +119,16 @@ lines.</li>
 lines.</li>
 </ul></li>
 </ul></li>
+<li>libconfig
+<ul>
+<li>Can be disabled if you don’t want/need config file support by:
+<ul>
+<li>build.sh: Setting <code>libconfig=false</code> in
+<code>buildconf</code>.</li>
+<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
+lines.</li>
+</ul></li>
+</ul></li>
 </ul>
 <h2 id="installation-gnulinux-bsd-macosos-xmac-os-x">Installation
 (GNU/Linux, *BSD, macOS/OS X/Mac OS X)</h2>
@@ -166,8 +177,7 @@ but maybe at some point in the distant future</h3>
 <li>Wayland: Wayland support, but only if it doesn’t require writing any
 extra code which as of now seems unlikely.
 <ul>
-<li>Before this can even be done, we need to add a configuration file
-using anything but .Xresources, replace Xft with cairo, deal with
+<li>Before this can even be done, replace Xft with cairo, deal with
 keybinds in some Wayland compatible way, and figure out a way to
 preserve X11 compatibility as I do not want to use Wayland anyway.</li>
 <li>You can just use XWayland anyway if you happen to use Wayland, so

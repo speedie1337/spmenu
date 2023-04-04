@@ -69,7 +69,7 @@ spmenu.indentitems:        1
 
 !! History
 spmenu.maxhist:            64
-spmenu.histnodup:          1
+spmenu.histdup:            0
 
 !! Matches
 spmenu.type:               1

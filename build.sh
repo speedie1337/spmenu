@@ -25,6 +25,7 @@ check() {
     [ -n "$(ldconfig -p | grep libgnutls-openssl)" ] && printf "openssl found\n" && openssl=true || openssl=false
     [ -n "$(ldconfig -p | grep fribidi)" ] && printf "fribidi found\n" && fribidi=true || fribidi=false
     [ -n "$(ldconfig -p | grep freetype)" ] && printf "freetype found\n" && freetype=true || freetype=false
+    [ -n "$(ldconfig -p | grep libconfig)" ] && printf "libconfig found\n" && libconfig=true || libconfig=false
 }
 
 loadconf() {
@@ -83,6 +84,12 @@ build() {
         pangotoggle="-DPANGO"
     fi
 
+    # libconfig
+    if [ "$libconfig" = "true" ]; then
+        libconfigtoggle="-DCONFIG"
+        libconfigconf="libconfig"
+    fi
+
     # fribidi
     if [ "$fribidi" = "true" ]; then
         bdlibs="-lfribidi"
@@ -114,6 +121,8 @@ build() {
         BDTOGGLE="$bdtoggle" \
         FREETYPEINC="$FREETYPEINC" \
         OPENSSLCONF="$opensslconf" \
+        LIBCONFIGTOGGLE="$libconfigtoggle" \
+        LIBCONFIGCONF="$libconfigconf" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
@@ -135,6 +144,8 @@ install() {
         BDTOGGLE="$bdtoggle" \
         FREETYPEINC="$FREETYPEINC" \
         OPENSSLCONF="$opensslconf" \
+        LIBCONFIGTOGGLE="$libconfigtoggle" \
+        LIBCONFIGCONF="$libconfigconf" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }

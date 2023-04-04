@@ -369,7 +369,7 @@ savehistory(char *input)
 			die("failed to write to %s", histfile);
 		}
 	}
-	if (histsz == 0 || !histnodup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
+	if (histsz == 0 || histdup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
 		if (0 >= fputs(input, fp)) {
 			die("failed to write to %s", histfile);
 		}

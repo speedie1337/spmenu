@@ -50,6 +50,13 @@
 #define USEXINERAMA 1
 #endif
 
+// check if we should enable config file support using libconfig
+#ifndef CONFIG
+#define USECONFIG 0
+#else
+#define USECONFIG 1
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
@@ -205,11 +212,13 @@ static size_t nextrune(int inc);
 #include "libs/xresources.h"
 #include "libs/colors.h"
 
+static char *fonts[] = { font };
+
 // config file
+#if USECONFIG
 #include "libs/conf/config.h"
 #include "libs/conf/config.c"
-
-static char *fonts[] = { font };
+#endif
 
 // matching
 static char * cistrstr(const char *s, const char *sub);

@@ -46,7 +46,7 @@ static int textpadding                 = 0; /* Text padding (lrpad) */
 /* Text options */
 static char *leftarrow                 = "<"; /* Left arrow, used to indicate you can move to the left */
 static char *rightarrow                = ">"; /* Right arrow, used to indicate you can move to the right */
-static char password                   = '*'; /* Password character, when the -P argument is active this will replace all characters typed */
+static char *password                  = "*"; /* Password character, when the -P argument is active this will replace all characters typed */
 static char *prompt                    = NULL; /* Default prompt */
 static char *input                     = NULL; /* Default input text */
 
@@ -64,8 +64,8 @@ static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */
 
 /* History options */
-static unsigned int maxhist            = 64; /* Max number of history entries */
-static int histnodup                   = 1;	/* If 0, record repeated histories */
+static int maxhist                     = 64; /* Max number of history entries */
+static int histdup                     = 0;	/* If 1, record repeated histories */
 
 /* Prompt options */
 static int indentitems                 = 1; /* Indent items to prompt width? (0/1) */
@@ -169,4 +169,4 @@ static int pango_password              = 0; /* Enable support for pango markup f
 
 /* Misc */
 static int coloritems                  = 1; /* Color items or not */
-static char worddelimiters[]           = " "; /* Word delimiters used for keybinds that change words, " " is default. */
+static char *worddelimiters            = " "; /* Word delimiters used for keybinds that change words, " " is default. */

@@ -572,12 +572,28 @@ See [this page](https://docs.gtk.org/Pango/pango_markup.html) for more informati
 Configuration
 =============
 
-spmenu has .Xresources (xrdb) support built in. It reads the xrdb (.Xresources database)
-on runtime. You may disable it by passing -nxrdb, or enable it by padding -xrdb.
+Unlike dmenu, spmenu has a configuration file which can be edited by hand. It
+is located in ~/.config/spmenu/spmenu.conf, but you can override this by
+exporting `$XDG_CONFIG_HOME`.
+
+When spmenu is installed, it copies a sample configuration
+to /usr/share/spmenu/spmenu.conf. You can copy this to your `.config/spmenu` directory.
+This configuration file is loaded on startup.
+
+You can also include other configuration files in the configuration file using
+`@include "path/to/config"`.
+
+.Xresources
+=============
+
+spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
+(.Xresources database) on runtime. You may disable it by passing -nxrdb,
+or enable it by padding -xrdb. You can also set this in the regular config file.
 
 spmenu loads `~/.config/spmenu/spmenurc` or alternatively if you're
-old fashioned, `~/.spmenurc`. This requires that `xrdb` is available on your
-operating system.
+old fashioned, `~/.spmenurc` on startup. This requires that `xrdb` is
+available on your operating system. Of course, you don't NEED to use them,
+as you can just `xrdb -override` any .Xresources file you want.
 
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.

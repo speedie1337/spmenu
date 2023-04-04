@@ -12,7 +12,7 @@ PREFIX        = /usr
 MANPREFIX 	  = $(PREFIX)/share/man
 INCDIR        = /usr/include
 
-# library pat hs
+# library paths
 #
 # libx11
 X11LIBS       = -lX11
@@ -28,9 +28,6 @@ XFTCONF       = xft
 
 # xrender
 XRENDERLIBS   = -lXrender
-
-# libconfig
-LIBCONFIGCONF = libconfig
 
 # OpenBSD (uncomment)
 #INCDIR      = $(X11INC)

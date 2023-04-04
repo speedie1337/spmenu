@@ -20,6 +20,7 @@ It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [
 This build of spmenu has some features written for this build.
 Of course if you want, this is free software so you can use it in your own build.
 
+- Proper configuration file support
 - dwm-like key/mouse bind array (See keybinds.h and mouse.h)
 - Vim-like modes, including indicator.
 - The ability to move around items with keybinds.
@@ -84,6 +85,10 @@ disabled if you don't want this by:
   - Can be disabled if you don't want/need Pango markup by:
     - build.sh: Setting `pango=false` and `pangoxft=false` in `buildconf`.
     - Makefile: Editing `toggle.mk` and commenting out a few lines.
+- libconfig
+  - Can be disabled if you don't want/need config file support by:
+    - build.sh: Setting `libconfig=false` in `buildconf`.
+    - Makefile: Editing `toggle.mk` and commenting out a few lines.
 
 ## Installation (GNU/Linux, \*BSD, macOS/OS X/Mac OS X)
 
@@ -122,8 +127,7 @@ Pull requests would be greatly appreciated for any of these issues!
 
 ### General
 
-- Config file: Add configuration file using (probably) libconfig, allowing
-keybinds to be configured without recompiling spmenu.
+- Config file: Add mouse/keybind configuration
 - Image support: Stop using OpenSSL for caching images, mostly because MD5()
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
@@ -136,10 +140,10 @@ have LibreSSL compatibility.
 
 - Wayland: Wayland support, but only if it doesn't require writing any extra
 code which as of now seems unlikely.
-  - Before this can even be done, we need to add a configuration file using
-anything but .Xresources, replace Xft with cairo, deal with keybinds in some
-Wayland compatible way, and figure out a way to preserve X11 compatibility
-as I do not want to use Wayland anyway.
+  - Before this can even be done, replace Xft with cairo,
+  deal with keybinds in some Wayland compatible way, and
+  figure out a way to preserve X11 compatibility as I do
+  not want to use Wayland anyway.
   - You can just use XWayland anyway if you happen to use Wayland, so it's not
 like you will be unable to use spmenu in its current state.
 

@@ -1,6 +1,7 @@
 #!/bin/sh
 # install.sh
 # This script installs all the profiles, allowing spmenu to see and choose them.
-mkdir -p "$HOME/.config/spmenu/profiles/"
-cp ./* "$HOME/.config/spmenu/profiles/"
-rm -f "$HOME/.config/spmenu/profiles/install.sh" "$HOME/.config/spmenu/profiles/README.md"
+CONFDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+mkdir -p "$CONFDIR/spmenu/profiles/"
+cp ./* legacy/* "$CONFDIR/spmenu/profiles/"
+rm -f "$CONFDIR/spmenu/profiles/install.sh" "$CONFDIR/spmenu/profiles/README.md" "$CONFDIR/spmenu/profiles/sample.theme"
