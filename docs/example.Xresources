@@ -87,7 +87,6 @@ spmenu.minwidth:           1000
 spmenu.dockproperty:       1
 
 !! General
-spmenu.class:              spmenu
 spmenu.fast:               0
 spmenu.managed:            0
 spmenu.mon:                -1
@@ -115,13 +114,6 @@ spmenu.hidepowerline:      0
 spmenu.hidecursor:         0
 spmenu.hidehighlight:      0
 spmenu.hideimage:          0
-
-!! Text
-spmenu.prompt:
-spmenu.input:
-spmenu.normtext:           Normal
-spmenu.instext:            Insert
-spmenu.password:           *
 
 !! Pango markup toggles
 spmenu.pango_item:         1
