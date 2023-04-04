@@ -114,13 +114,14 @@ buttonpress(XEvent *e)
 			y += h;
 
 			if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
-
-                // TODO: make clickitem a thing
-                if (ev->button != Button1)
-                    return;
-
-                puts(item->text);
-                exit(0);
+                for (i = 0; i < LENGTH(buttons); i++) {
+                    if (buttons[i].click == clickselitem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                        puts(item->text);
+                        exit(0);
+                    } else if (buttons[i].click == clickitem) {
+                        click = clickitem;
+                    }
+                }
 			}
 		}
 	} else if (matches) {
@@ -138,12 +139,15 @@ buttonpress(XEvent *e)
 			x += w;
 			w = MIN(TEXTW(item->text), mw - x - rarrowWidth);
 			if (ev->x >= x && ev->x <= x + w) {
-                // TODO: make clickitem a thing
-                if (ev->button != Button1)
-                    return;
+                for (i = 0; i < LENGTH(buttons); i++) {
+                    if (buttons[i].click == clickselitem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                        puts(item->text);
+                        exit(0);
+                    } else if (buttons[i].click == clickitem) {
+                        click = clickitem;
+                    }
+                }
 
-                puts(item->text);
-                exit(0);
 			}
 		}
 		// left-click on right arrow

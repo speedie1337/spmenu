@@ -12,6 +12,8 @@ enum {
     clickprompt,
     clickinput,
     clicklarrow,
+    clickitem,
+    clickselitem,
     clickrarrow,
     clicknumber,
     clickmode,
