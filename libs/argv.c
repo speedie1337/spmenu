@@ -24,7 +24,7 @@ readargs(int argc, char *argv[])
         }
     }
 
-    // TODO: improve this function significantly
+    conf_init();
 
     // init/read xrdb
     if (xresources) {

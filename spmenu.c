@@ -205,6 +205,10 @@ static size_t nextrune(int inc);
 #include "libs/xresources.h"
 #include "libs/colors.h"
 
+// config file
+#include "libs/conf/config.h"
+#include "libs/conf/config.c"
+
 static char *fonts[] = { font };
 
 // matching

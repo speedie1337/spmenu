@@ -2,32 +2,35 @@
 # See LICENSE file for copyright details.
 
 # compiler
-CC           = tcc
+CC            = tcc
 
 # optimization
-OPT          = -O2
+OPT           = -O2
 
 # paths
-PREFIX       = /usr
-MANPREFIX 	 = $(PREFIX)/share/man
-INCDIR       = /usr/include
+PREFIX        = /usr
+MANPREFIX 	  = $(PREFIX)/share/man
+INCDIR        = /usr/include
 
-# library paths
+# library pat hs
 #
 # libx11
-X11LIBS      = -lX11
-X11INC       = /usr/X11R6/include
-X11LIB       = /usr/X11R6/lib
+X11LIBS       = -lX11
+X11INC        = /usr/X11R6/include
+X11LIB        = /usr/X11R6/lib
 
 # freetype
-FREETYPELIBS = -lfontconfig -lXft
-FREETYPEINC  = $(INCDIR)/freetype2
+FREETYPELIBS  = -lfontconfig -lXft
+FREETYPEINC   = $(INCDIR)/freetype2
 
 # xft
-XFTCONF      = xft
+XFTCONF       = xft
 
 # xrender
-XRENDERLIBS  = -lXrender
+XRENDERLIBS   = -lXrender
+
+# libconfig
+LIBCONFIGCONF = libconfig
 
 # OpenBSD (uncomment)
 #INCDIR      = $(X11INC)

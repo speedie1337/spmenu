@@ -94,8 +94,8 @@ spmenu.mon:                -1
 spmenu.coloritems:         1
 
 !! Image
-spmenu.imagewidth:         86
-spmenu.imageheight:        86
+spmenu.imagewidth:         200
+spmenu.imageheight:        200
 spmenu.imagegaps:          0
 spmenu.imageposition:      0
 spmenu.generatecache:      1
