@@ -1,0 +1,49 @@
+! Doom-One color scheme for spmenu
+
+! We must disable global colors first, because otherwise we can use Pywal to override.
+! If you want that, then you may set this to 1.
+spmenu.globalcolors:       0
+
+spmenu.col_itemnormfg:     #d7d7d7
+spmenu.col_itemnormbg:     #282c34
+spmenu.col_itemselfg:      #282c34
+spmenu.col_itemselbg:      #ff6c6b
+spmenu.col_itemnormprifg:  #d7d7d7
+spmenu.col_itemnormpribg:  #5b6268
+spmenu.col_itemselprifg:   #d7d7d7
+spmenu.col_itemselpribg:   #da8548
+spmenu.col_menubgcolor:    #282c34
+spmenu.col_promptfg:       #282c34
+spmenu.col_promptbg:       #c678dd
+spmenu.col_larrowfg:       #5699af
+spmenu.col_rarrowfg:       #5699af
+spmenu.col_larrowbg:       #282c34
+spmenu.col_rarrowbg:       #282c34
+spmenu.col_inputfg:        #d7d7d7
+spmenu.col_inputbg:        #282c34
+spmenu.col_numfgcolor:     #282c34
+spmenu.col_numbgcolor:     #98be65
+spmenu.col_normhlfgcolor:  #88C0D0
+spmenu.col_normhlbgcolor:  #282c34
+spmenu.col_selhlfgcolor:   #ecbe7b
+spmenu.col_selhlbgcolor:   #282c34
+spmenu.col_caretfgcolor:   #d7d7d7
+spmenu.col_bordercolor:    #ff6c6b
+spmenu.col_modefgcolor:    #282c34
+spmenu.col_modebgcolor:    #51afef
+spmenu.col_sgrcolor0:      #1c1f24
+spmenu.col_sgrcolor1:      #ff6c6b
+spmenu.col_sgrcolor2:      #98be65
+spmenu.col_sgrcolor3:      #da8548
+spmenu.col_sgrcolor4:      #51afef
+spmenu.col_sgrcolor5:      #c678dd
+spmenu.col_sgrcolor6:      #5699af
+spmenu.col_sgrcolor7:      #202328
+spmenu.col_sgrcolor8:      #5b6268
+spmenu.col_sgrcolor9:      #da8548
+spmenu.col_sgrcolor10:     #4db5bd
+spmenu.col_sgrcolor11:     #ecbe7b
+spmenu.col_sgrcolor12:     #3071db
+spmenu.col_sgrcolor13:     #a9a1e1
+spmenu.col_sgrcolor14:     #46d9ff
+spmenu.col_sgrcolor15:     #dfdfdf
