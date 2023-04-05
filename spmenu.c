@@ -108,9 +108,6 @@
 #include "libs/sort.h"
 #include "libs/history.h"
 
-// misc
-#include "libs/key_struct.c"
-
 // text
 static char text[BUFSIZ] = "";
 static char numbers[NUMBERSBUFSIZE] = "";
