@@ -228,13 +228,13 @@ drawitem(int x, int y, int w)
 		x += inputw;
 
         w = larrowWidth;
-        x = drawlarrow(x, 0, w);
+        x = drawlarrow(x, y, w);
 
 		for (item = curr; item != next; item = item->right) // draw items
-            x = drawitemtext(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
+            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
 
             w = rarrowWidth + numberWidth + modeWidth;
-            x = drawrarrow(mw - w, 0, w);
+            x = drawrarrow(mw - w, y, w);
 	}
 
     return x;
@@ -250,7 +250,7 @@ drawprompt(int x, int y, int w)
 
         if (!hidepowerline) {
             drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
-            drw_arrow(drw, x, 0, plw, bh, 1, 0);
+            drw_arrow(drw, x, y, plw, bh, 1, 0);
 
             x += plw;
         }
@@ -283,7 +283,7 @@ drawinput(int x, int y, int w)
         free(censort);
 	} else if (!passwd && !hideprompt) {
         apply_fribidi(text);
-        drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
 
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
@@ -409,11 +409,11 @@ drawmenu(void)
 
     if (!hideprompt) {
         w = promptw;
-        x = drawprompt(x, 0, w);
+        x = drawprompt(x, y, w);
     }
     if (!hideinput) {
         w = (lines > 0 || !matches) ? mw - x : inputw;
-        x = drawinput(x, 0, w);
+        x = drawinput(x, y, w);
     }
 
 
@@ -425,12 +425,12 @@ drawmenu(void)
 
     if (!hidematchcount) {
         w = numberWidth;
-        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, 0, w);
+        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, y, w);
     }
 
     if (!hidemode) {
         w = modeWidth;
-        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth, 0, w);
+        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth, y, w);
     }
 
 	drw_map(drw, win, 0, 0, mw, mh);
