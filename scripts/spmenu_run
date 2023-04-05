@@ -8,6 +8,12 @@
 [ -z "$RUNLAUNCHER" ]      && RUNLAUNCHER=spmenu
 [ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
 [ -z "$PREFIX" ]           && PREFIX="/usr"
+[ -z "$SORT_BY_NUMBER" ]   && SORT_BY_NUMBER="true"
+[ -z "$SORT_IN_REVERSE" ]  && SORT_IN_REVERSE="true"
+[ -z "$SORT_BY_RECENT" ]   && SORT_BY_RECENT="false"
+[ -z "$SORT_ARGS" ]        && SORT_ARGS=""
+[ -z "$HIDDEN_KEYWORDS" ]  && HIDDEN_KEYWORDS="spmenu"
+[ -z "$KEYWORDS" ]         && KEYWORDS=""
 
 check() {
     [ ! -d "$HOME/.config/spmenu/run" ] && mkdir -p "$HOME/.config/spmenu/run"
@@ -18,13 +24,26 @@ check() {
 }
 
 path() {
-    printf "%s\n" "$PATH" | \
-        tr ':' '\n' | \
-        uniq | sed 's#$#/#' | \
-        xargs ls -lu --time-style=+%s 2>&1 | \
-        awk '/^(-|l)/ { print $6, $7 }' | \
-        sort -rn | \
-        cut -d' ' -f 2 2>&1
+    [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
+    [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
+    SORTARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
+
+    [ -z "$HIDDEN_KEYWORDS" ] && HIDDEN_KEYWORDS="NULL_ENTRY"
+
+    print() {
+        printf "%s\n" "$PATH" | \
+            tr ':' '\n' | \
+            uniq | sed 's#$#/#' | \
+            xargs ls -lu --time-style=+%s 2>&1 | \
+            grep -vE "$HIDDEN_KEYWORDS" | \
+            grep -E "$KEYWORDS"
+    }
+
+    if [ "$SORT_BY_RECENT" != "false" ]; then
+        print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+    else
+        print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+    fi
 }
 
 print_help() {
@@ -54,6 +73,12 @@ MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
 RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$*"
+SORT_BY_NUMBER="true" # Sort by numbers
+SORT_IN_REVERSE="true" # Sort in reverse
+SORT_BY_RECENT="false" # Sort by recent
+SORT_ARGS="" # Extra arguments passed to the sort command.
+HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -vE syntax.
+KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 EOF
 [ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
 }
