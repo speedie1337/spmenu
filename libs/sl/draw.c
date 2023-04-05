@@ -176,7 +176,13 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 			fprintf(stderr, "error, cannot load font from name: '%s'\n", fontname);
 			return NULL;
 		}
-		if (!(pattern = FcNameParse((FcChar8 *) fontname))) {
+
+        if (fontname[0] == '-')
+            pattern = XftXlfdParse(fontname, False, False);
+        else
+            pattern = FcNameParse((FcChar8 *) fontname);
+
+		if (!pattern) {
 			fprintf(stderr, "error, cannot parse font name to pattern: '%s'\n", fontname);
 			XftFontClose(drw->dpy, xfont);
 			return NULL;
