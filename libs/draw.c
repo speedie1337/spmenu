@@ -227,12 +227,14 @@ drawitem(int x, int y, int w)
 	} else if (matches) {
 		x += inputw;
 
-        x = drawlarrow(x, 0, larrowWidth);
+        w = larrowWidth;
+        x = drawlarrow(x, 0, w);
 
 		for (item = curr; item != next; item = item->right) // draw items
             x = drawitemtext(item, x, 0, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
 
-            x = drawrarrow(x, 0, rarrowWidth + numberWidth + modeWidth);
+            w = rarrowWidth + numberWidth + modeWidth;
+            x = drawrarrow(mw - w, 0, w);
 	}
 
     return x;
@@ -301,7 +303,7 @@ drawlarrow(int x, int y, int w)
 
 	if (curr->left) { // draw left arrow
 		drw_setscheme(drw, scheme[SchemeLArrow]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
+		drw_text(drw, x, y, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
 	    x += w;
 	}
 
@@ -315,7 +317,7 @@ drawrarrow(int x, int y, int w)
 
 	if (next) { // draw right arrow
 		drw_setscheme(drw, scheme[SchemeRArrow]);
-        drw_text(drw, mw - w, 0, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
+        drw_text(drw, mw - w, y, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
         x += w;
 	}
 
@@ -323,37 +325,37 @@ drawrarrow(int x, int y, int w)
 }
 
 int
-drawnumber(int x, int y, int w, int numberWidth, int modeWidth)
+drawnumber(int x, int y, int w)
 {
-    if (!hidematchcount) { // draw match count
-        drw_setscheme(drw, scheme[SchemeNumber]);
+    if (hidematchcount) return x;
 
-        drw_text(drw, mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, 0, numberWidth, bh, lrpad / 2 + plw / 2, numbers, 0, pango_numbers ? True : False);
+    drw_setscheme(drw, scheme[SchemeNumber]);
 
-        // draw powerline for match count
-        if (!hidepowerline) {
-            drw_settrans(drw, scheme[SchemeNumber], scheme[SchemeMenu]);
-            drw_arrow(drw, mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, 0, plw, bh, 0, 0);
+    drw_text(drw, x, y, w, bh, lrpad / 2 + plw / 2, numbers, 0, pango_numbers ? True : False);
 
-            x += plw;
-        }
+    // draw powerline for match count
+    if (!hidepowerline) {
+        drw_settrans(drw, scheme[SchemeNumber], scheme[SchemeMenu]);
+        drw_arrow(drw, x, y, plw, bh, 0, 0);
+
+        x += plw;
     }
 
     return x;
 }
 
 int
-drawmode(int x, int y, int w, int numberWidth, int modeWidth)
+drawmode(int x, int y, int w)
 {
     if (!hidemode) { // draw mode indicator
         drw_setscheme(drw, scheme[SchemeMode]);
 
-        drw_text(drw, mw - modeWidth - 2 * sp - 2 * borderwidth, 0, modeWidth, bh, lrpad / 2 + plw / 2, modetext, 0, pango_mode ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2 + plw / 2, modetext, 0, pango_mode ? True : False);
 
         // draw powerline for match count
         if (!hidepowerline) {
             drw_settrans(drw, scheme[SchemeMode], hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber]);
-            drw_arrow(drw, mw - modeWidth - 2 * sp - 2 * borderwidth, 0, plw, bh, 0, 0);
+            drw_arrow(drw, x, y, plw, bh, 0, 0);
 
             x += plw;
         }
@@ -421,8 +423,15 @@ drawmenu(void)
     // TODO: Allow hiding items, without setting columns to 0
     drawitem(x, y, w);
 
-    if (!hidematchcount) drawnumber(x, y, w, numberWidth, modeWidth);
-    if (!hidemode) drawmode(x, y, w, numberWidth, modeWidth);
+    if (!hidematchcount) {
+        w = numberWidth;
+        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, 0, w);
+    }
+
+    if (!hidemode) {
+        w = modeWidth;
+        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth, 0, w);
+    }
 
 	drw_map(drw, win, 0, 0, mw, mh);
 }
