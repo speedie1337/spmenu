@@ -215,7 +215,7 @@ drawitem(int x, int y, int w)
             }
 
 		for (item = curr; item != next; item = item->right, i++) {
-			drawitemtext(
+			x = drawitemtext(
 				item,
 				rx + ((i / lines) *  ((mw - rx) / columns)),
 				y + (((i % lines) + 1) * bh),
@@ -244,7 +244,7 @@ drawprompt(int x, int y, int w)
 	if (prompt && *prompt && !hideprompt) {
 		drw_setscheme(drw, scheme[SchemePrompt]);
 
-		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
+		x = drw_text(drw, x, y, w, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 
         if (!hidepowerline) {
             drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
@@ -405,7 +405,10 @@ drawmenu(void)
     }
     #endif
 
-    if (!hideprompt) x = drawprompt(x, y, w);
+    if (!hideprompt) {
+        w = promptw;
+        x = drawprompt(x, 0, w);
+    }
     if (!hideinput) x = drawinput(x, y, w);
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
