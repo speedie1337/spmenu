@@ -265,8 +265,8 @@ drawinput(int x, int y, int w)
     int fh = drw->font->h;
 
     // draw input
-	w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeInput]);
+
 	if (passwd && !hideprompt) {
 	    censort = ecalloc(1, sizeof(text));
 
@@ -274,7 +274,7 @@ drawinput(int x, int y, int w)
             memcpy(&censort[i], password, strlen(text));
 
         apply_fribidi(censort);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False);
+		drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False);
 
 	    curpos = TEXTW(censort) - TEXTW(&text[cursor]);
 
@@ -409,7 +409,12 @@ drawmenu(void)
         w = promptw;
         x = drawprompt(x, 0, w);
     }
-    if (!hideinput) x = drawinput(x, y, w);
+    if (!hideinput) {
+        w = (lines > 0 || !matches) ? mw - x : inputw;
+        x = drawinput(x, 0, w);
+    }
+
+
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
     // draw the items, this function also calls drawrarrow() and drawlarrow()
