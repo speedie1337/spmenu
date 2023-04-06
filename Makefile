@@ -35,9 +35,7 @@ spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:
-	rm -f spmenu *.o \
-		spmenu-$(VERSION).tar.gz \
-		*zst* spmenu-$(VERSION).PKGBUILD
+	rm -f spmenu spmenu-$(VERSION).tar.gz spmenu-$(VERSION).PKGBUILD *.o *zst*
 
 dist: clean
 	mkdir -p spmenu-$(VERSION)

@@ -1,19 +1,20 @@
 #!/bin/sh
-[ -z "$TERMINAL" ]         && TERMINAL="st -e"
-[ -z "$BROWSER"  ]         && BROWSER="xdg-open"
-[ -z "$TORRENT"  ]         && TORRENT="qbittorrent"
-[ -z "$WEB_GREP" ]         && WEB_GREP="http:|https:|www[.]"
-[ -z "$MAGNET_GREP" ]      && MAGNET_GREP="magnet:?"
-[ -z "$HISTORY" ]          && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
-[ -z "$RUNLAUNCHER" ]      && RUNLAUNCHER=spmenu
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
-[ -z "$PREFIX" ]           && PREFIX="/usr"
-[ -z "$SORT_BY_NUMBER" ]   && SORT_BY_NUMBER="true"
-[ -z "$SORT_IN_REVERSE" ]  && SORT_IN_REVERSE="true"
-[ -z "$SORT_BY_RECENT" ]   && SORT_BY_RECENT="false"
-[ -z "$SORT_ARGS" ]        && SORT_ARGS=""
-[ -z "$HIDDEN_KEYWORDS" ]  && HIDDEN_KEYWORDS="spmenu"
-[ -z "$KEYWORDS" ]         && KEYWORDS=""
+[ -z "$TERMINAL" ]           && TERMINAL="st -e"
+[ -z "$BROWSER"  ]           && BROWSER="xdg-open"
+[ -z "$TORRENT"  ]           && TORRENT="qbittorrent"
+[ -z "$WEB_GREP" ]           && WEB_GREP="http:|https:|www[.]"
+[ -z "$MAGNET_GREP" ]        && MAGNET_GREP="magnet:?"
+[ -z "$HISTORY" ]            && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
+[ -z "$RUNLAUNCHER" ]        && RUNLAUNCHER=spmenu
+[ -z "$RUNLAUNCHER_ARGS" ]   && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
+[ -z "$PREFIX" ]             && PREFIX="/usr"
+[ -z "$SORT_BY_NUMBER" ]     && SORT_BY_NUMBER="true"
+[ -z "$SORT_IN_REVERSE" ]    && SORT_IN_REVERSE="true"
+[ -z "$SORT_BY_RECENT" ]     && SORT_BY_RECENT="false"
+[ -z "$SORT_ARGS" ]          && SORT_ARGS=""
+[ -z "$HIDDEN_KEYWORDS" ]    && HIDDEN_KEYWORDS="spmenu"
+[ -z "$KEYWORDS" ]           && KEYWORDS=""
+[ -z "$DISPLAY_DUPLICATES" ] && DISPLAY_DUPLICATES="false"
 
 check() {
     [ ! -d "$HOME/.config/spmenu/run" ] && mkdir -p "$HOME/.config/spmenu/run"
@@ -30,20 +31,31 @@ path() {
 
     [ -z "$HIDDEN_KEYWORDS" ] && HIDDEN_KEYWORDS="NULL_ENTRY"
 
-    print() {
-        printf "%s\n" "$PATH" | \
-            tr ':' '\n' | \
-            uniq | sed 's#$#/#' | \
-            xargs ls -lu --time-style=+%s 2>&1 | \
-            grep -vE "$HIDDEN_KEYWORDS" | \
-            grep -E "$KEYWORDS"
+    print_menu() {
+        print() {
+            printf "%s\n" "$PATH" | \
+                tr ':' '\n' | \
+                sed 's#$#/#' | \
+                xargs ls -lu --time-style=+%s 2>&1 | \
+                grep -vE "$HIDDEN_KEYWORDS" | \
+                grep -E "$KEYWORDS"
+        }
+
+        if [ "$SORT_BY_RECENT" != "false" ]; then
+            print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+        else
+            print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+        fi
     }
 
-    if [ "$SORT_BY_RECENT" != "false" ]; then
-        print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+    # uniq
+    if [ "$DISPLAY_DUPLICATES" != "false" ]; then
+        print_menu
     else
-        print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+        print_menu | uniq
     fi
+
+    command -v pre_func && pre_func
 }
 
 print_help() {
@@ -65,20 +77,35 @@ print_config() {
     mkdir -p "$HOME/.config/spmenu/run"
 cat << EOF > "$HOME/.config/spmenu/run/config"
 # spmenu_run default configuration file
-TERMINAL="\${TERMINAL:-st -e}" # Terminal
-BROWSER="\${BROWSER:-xdg-open}" # Web browser
-TORRENT="\${TORRENT:-qbittorrent}" # Torrent client
+#
+# This is the configuration file for the run launcher spmenu comes with.
+# It is not the configuration file for spmenu, see ~/.config/spmenu/spmenu.conf for that.
+#
+# spmenu_run runs function 'pre_func' before spawning spmenu, and 'post_func' after spawning spmenu.
+# You may create those functions below. For 'post_func', the selected item is passed as an argument (\$1)
+#
+# For example, to implement a basic history file:
+#
+# post_func() {
+#   rm -f /tmp/spmenu_entryhist; printf "\$1\n" >> /tmp/spmenu_entryhist
+# }
+#
+# You can use anything POSIX compliant shells support, as well as programs available on the system.
+TERMINAL="\${TERMINAL:-st -e}" # Terminal commands are spawned in
+BROWSER="\${BROWSER:-xdg-open}" # Web browser, for URLs
+TORRENT="\${TORRENT:-qbittorrent}" # Torrent client, for magnet links
 WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
-HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file
+HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
-RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$*"
+RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$*" # Arguments passed to \$RUNLAUNCHER
 SORT_BY_NUMBER="true" # Sort by numbers
 SORT_IN_REVERSE="true" # Sort in reverse
 SORT_BY_RECENT="false" # Sort by recent
 SORT_ARGS="" # Extra arguments passed to the sort command.
 HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -vE syntax.
 KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
+DISPLAY_DUPLICATES="false" # Display duplicates or not
 EOF
 [ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
 }
@@ -99,11 +126,13 @@ parse() {
 
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
+    command -v post_func && post_func "$dout"
+
     case "$EXEC" in
         "shell") printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")" & ;;
-        "web") $BROWSER "$(printf "$dout" | sed "s/www //g")" & ;;
-        "torrent") $TORRENT "$(printf "$dout" | sed "s/magnet //g")" & ;;
+        "web") $BROWSER "$(printf "%s" "$dout" | sed "s/www //g")" & ;;
+        "torrent") $TORRENT "$(printf "%s" "$dout" | sed "s/magnet //g")" & ;;
     esac
 }
 
@@ -112,7 +141,6 @@ main() {
     print_config "$@"
     parse "$@"
     exec_cmd "$@"
-    rm -f "$HOME/.cache/spmenu_run"
 }
 
 main "$@"
