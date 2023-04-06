@@ -46,7 +46,7 @@ cache() {
     # write new entries
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
-        exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g")"
+        exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g")"
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
 
         # icon name
