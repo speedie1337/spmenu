@@ -126,7 +126,7 @@ parse() {
 
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
-    command -v post_func && post_func "$dout"
+    command -v post_func > /dev/null && post_func "$dout"
 
     case "$EXEC" in
         "shell") printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
