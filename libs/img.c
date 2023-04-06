@@ -6,7 +6,7 @@ setimagesize(int width, int height)
     int oiw = 0;
 
     // this makes sure we cannot scale the image up or down too much
-    if ((!image && height < imageheight) || (!image && width < imagewidth) || width > mw || hideimage) return;
+    if ((!image && height < imageheight) || (!image && width < imagewidth) || (width < 0) || width > mw || hideimage) return;
 
     // original width/height
     oih = imageheight;
@@ -86,7 +86,7 @@ drawimage(void)
             loadimagecache(sel->image, &width, &height);
     } else if ((!sel || !sel->image) && image) { // free image
         cleanupimage();
-    } if (image && longestedge) { // render the image
+    } if (image && longestedge && width && height) { // render the image
         // rotate and flip, will return if we don't need to
         rotateimage();
         flipimage();
