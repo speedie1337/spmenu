@@ -76,6 +76,10 @@ drawitemtext(struct item *item, int x, int y, int w)
 			if (item->text[rd + alen + 2] == 'm') { // last character in sequence is always 'm'
 				buffer[wr] = '\0';
 
+                if (!lines) {
+                    w -= item->text[rd + alen];
+                }
+
                 apply_fribidi(buffer);
 				drw_text(drw, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
 

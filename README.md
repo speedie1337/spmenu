@@ -151,9 +151,6 @@ like you will be unable to use spmenu in its current state.
 
 - Text drawing: Pango will sometimes spit out errors for invalid markup.
 Silencing this would be a good idea.
-- Items: If we have zero lines, the width of items that contain SGR sequences
-will be the max size of one item. This is fine, and there is not much I can do
-about it without significant rewrites I don't think are worth doing.
 - Image support: Images take a long time to load sometimes, particularly when
 items are selected using the cursor so what we really need is a way to
 skip over images after a set time limit
