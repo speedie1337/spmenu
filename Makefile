@@ -1,12 +1,11 @@
-# spmenu
-
+# spmenu - fancy dynamic menu
 # See LICENSE file for copyright and license details.
 
 include host.mk
 include toggle.mk
 
 # spmenu version
-VERSION = 0.3.3
+VERSION = 0.4
 
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700L -D_POSIX_C_SOURCE=200809L -DVERSION=\"$(VERSION)\" $(XINERAMATOGGLE) $(BDTOGGLE) $(PANGOTOGGLE) $(IMLIB2TOGGLE) $(LIBCONFIGTOGGLE)
 CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations $(OPT) $(INCS) $(CPPFLAGS)
