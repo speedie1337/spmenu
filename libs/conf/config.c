@@ -12,24 +12,32 @@ conf_init(void)
     if (!loadconfig) return;
 
     // get path for configuration file
-    if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
-        // ~/.config/spmenu/spmenu.conf
-        home = getenv("HOME");
+    if (!cconf || !argconf) {
+        if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
+            // ~/.config/spmenu/spmenu.conf
+            home = getenv("HOME");
 
-        // malloc
-        if (!(cfgfile = malloc(snprintf(NULL, 0, "%s/%s", home, ".config/spmenu/spmenu.conf") + 1))) {
-            die("spmenu: failed to malloc cfgfile");
+            // malloc
+            if (!(cfgfile = malloc(snprintf(NULL, 0, "%s/%s", home, ".config/spmenu/spmenu.conf") + 1))) {
+                die("spmenu: failed to malloc cfgfile");
+            }
+
+            sprintf(cfgfile, "%s/%s", home, ".config/spmenu/spmenu.conf");
+        } else {
+            // malloc
+            if (!(cfgfile = malloc(snprintf(NULL, 0, "%s/%s", xdg_conf, "spmenu/spmenu.conf") + 1))) {
+                die("spmenu: failed to malloc cfgfile");
+            }
+
+            // XDG_CONFIG_HOME is set, so let's use that instead
+            sprintf(cfgfile, "%s/%s", xdg_conf, "spmenu/spmenu.conf");
         }
+    } else { // custom config path
+            if (!(cfgfile = malloc(snprintf(NULL, 0, "%s", argconf) + 1))) {
+                die("spmenu: failed to malloc cfgfile");
+            }
 
-        sprintf(cfgfile, "%s/%s", home, ".config/spmenu/spmenu.conf");
-    } else {
-        // malloc
-        if (!(cfgfile = malloc(snprintf(NULL, 0, "%s/%s", xdg_conf, "spmenu/spmenu.conf") + 1))) {
-            die("spmenu: failed to malloc cfgfile");
-        }
-
-        // XDG_CONFIG_HOME is set, so let's use that instead
-        sprintf(cfgfile, "%s/%s", xdg_conf, "spmenu/spmenu.conf");
+            sprintf(cfgfile, "%s", argconf);
     }
 
     // don't bother trying to load if it doesn't exist.

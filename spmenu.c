@@ -161,6 +161,11 @@ static int imageh = 0;
 static int imageg = 0;
 #endif
 
+#if USECONFIG
+static int cconf = 0; // custom config path
+static char *argconf = NULL;
+#endif
+
 // set an integer to 1 if we have rtl enabled, this saves a lot of lines and duplicate code
 #if USERTL
 static int isrtl = 1;

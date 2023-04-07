@@ -278,11 +278,15 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nwm, --unmanaged`
 :   Don't spawn spmenu as a window manager controlled client/window. Useful for testing
 
+`-cf, --config-file file`
+:   Set config file to load to file
+
 `-lcfg, --load-config`
-:   Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
+:   Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenurc or ~/.config/spmenu/spmenurc)
 
 `-ncfg, --no-load-config`
-:   Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)
+:   Don't load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenurc
+or ~/.config/spmenu/spmenurc)
 
 `-v, --version`
 :   Print spmenu version to stdout

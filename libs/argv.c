@@ -4,7 +4,7 @@ readargs(int argc, char *argv[])
     int i = 0;
     int j = 0;
 
-    int cxrdb = 0;
+    int profilecmd = 0;
 
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked
     // priority: internal -> config -> xresources -> arguments
@@ -21,6 +21,13 @@ readargs(int argc, char *argv[])
 			globalcolors = 1;
         } else if (!strcmp(argv[j], "-ngbc") || (!strcmp(argv[j], "--no-global-colors"))) {
 			globalcolors = 0;
+        } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
+            if (argv[j+1]) {
+                cconf = 1;
+                argconf = argv[++j];
+            } else {
+                die("This argument requires a second argument.\n");
+            }
         }
     }
 
@@ -34,10 +41,10 @@ readargs(int argc, char *argv[])
 
         // also load config/profile if .Xresources
         if (loadconfig) {
-            cxrdb = system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-load-default-profile > /dev/null");
+            profilecmd = system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-load-default-profile > /dev/null");
         }
 
-        if (!cxrdb||cxrdb) // load .Xresources, cxrdb is only here to avoid an annoying gcc warning
+        if (!profilecmd||profilecmd) // load .Xresources, profilecmd is only here to avoid an annoying gcc warning
             load_xresources();
     }
 
@@ -170,6 +177,9 @@ readargs(int argc, char *argv[])
                     || !strcmp(argv[i], "-ngbc")
                     || !strcmp(argv[i], "--global-colors")
                     || !strcmp(argv[i], "--no-global-colors")
+                    || !strcmp(argv[i], "-cf")
+                    || !strcmp(argv[i], "--config-file")
+                    || !strcmp(argv[i], argconf)
                 ))
                     continue;
                 else
@@ -350,6 +360,13 @@ readargs(int argc, char *argv[])
                 || !strcmp(argv[i], "-ncfg")
                 || !strcmp(argv[i], "--load-config")
                 || !strcmp(argv[i], "--no-load-config")
+                || !strcmp(argv[i], "-gbc")
+                || !strcmp(argv[i], "-ngbc")
+                || !strcmp(argv[i], "--global-colors")
+                || !strcmp(argv[i], "--no-global-colors")
+                || !strcmp(argv[i], "-cf")
+                || !strcmp(argv[i], "--config-file")
+                || !strcmp(argv[i], argconf)
             ))
                 continue;
             else
@@ -460,8 +477,9 @@ usage(void)
           "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
           "spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
-          "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
-          "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
+          "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenu or ~/.config/spmenu/spmenurc)\n"
           "spmenu -v,       --version                                   Print spmenu version to stdout\n"
           "\n", stdout);
 
