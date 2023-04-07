@@ -435,7 +435,7 @@ conf_init(void)
             config_setting_lookup_int(conf, "prompt", &hideprompt); // spmenu.hide.prompt
             config_setting_lookup_int(conf, "items",  &hideitem); // spmenu.hide.items
             config_setting_lookup_int(conf, "powerline", &hidepowerline); // spmenu.hide.powerline
-            config_setting_lookup_int(conf, "cursor", &hidecursor); // spmenu.hide.cursor
+            config_setting_lookup_int(conf, "caret", &hidecaret); // spmenu.hide.caret
             config_setting_lookup_int(conf, "highlight", &hidehighlight); // spmenu.hide.highlight
             config_setting_lookup_int(conf, "matchcount", &hidematchcount); // spmenu.hide.matchcount
             config_setting_lookup_int(conf, "mode", &hidemode); // spmenu.hide.mode

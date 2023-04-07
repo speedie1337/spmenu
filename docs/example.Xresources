@@ -114,7 +114,7 @@ spmenu.hideitem:           0
 spmenu.hideprompt:         0
 spmenu.hideinput:          0
 spmenu.hidepowerline:      0
-spmenu.hidecursor:         0
+spmenu.hidecaret:          0
 spmenu.hidehighlight:      0
 spmenu.hideimage:          0
 

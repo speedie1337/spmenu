@@ -292,7 +292,7 @@ drawinput(int x, int y, int w)
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
-	if ((curpos += lrpad / 2 - 1) < w && !hidecursor && !hideprompt) {
+	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && !hideprompt) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
 	}

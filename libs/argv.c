@@ -145,10 +145,10 @@ readargs(int argc, char *argv[])
 				hidepowerline = 0;
 		} else if (!strcmp(argv[i], "-sin") || (!strcmp(argv[i], "--show-input"))) {  // show input
 				hideinput = 0;
-		} else if (!strcmp(argv[i], "-hc") || (!strcmp(argv[i], "--hide-cursor"))) {   // hide cursor
-				hidecursor = 1;
-		} else if (!strcmp(argv[i], "-sc") || (!strcmp(argv[i], "--show-cursor"))) {  // show cursor
-				hidecursor = 0;
+		} else if (!strcmp(argv[i], "-hc") || (!strcmp(argv[i], "--hide-cursor") || (!strcmp(argv[i], "--hide-caret")))) {   // hide cursor
+				hidecaret = 1;
+		} else if (!strcmp(argv[i], "-sc") || (!strcmp(argv[i], "--show-cursor") || (!strcmp(argv[i], "--show-caret")))) {  // show cursor
+				hidecaret = 0;
 		} else if (!strcmp(argv[i], "-hhl") || (!strcmp(argv[i], "--hide-highlighting"))) {   // hide highlighting
 				hidehighlight = 1;
 		} else if (!strcmp(argv[i], "-shl") || (!strcmp(argv[i], "--show-highlighting"))) {  // show highlighting
@@ -449,7 +449,7 @@ usage(void)
           "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
           "spmenu -hip,     --hide-input                                Hide input\n"
           "spmenu -hpl,     --hide-powerline                            Hide powerline\n"
-          "spmenu -hc,      --hide-cursor                               Hide cursor\n"
+          "spmenu -hc,      --hide-caret, --hide-cursor                 Hide caret\n"
           "spmenu -hhl,     --hide-highlighting                         Hide highlight\n"
           "spmenu -hi,      --hide-image                                Hide image\n"
           "spmenu -sm,      --show-mode                                 Show mode indicator\n"
@@ -460,7 +460,7 @@ usage(void)
           "spmenu -spr,     --show-prompt                               Show prompt\n"
           "spmenu -sin,     --show-input                                Show input\n"
           "spmenu -spl,     --show-powerline                            Show powerline\n"
-          "spmenu -sc,      --show-cursor                               Show cursor\n"
+          "spmenu -sc,      --show-caret, --show-cursor                 Show caret\n"
           "spmenu -shl,     --show-highlighting                         Show highlight\n"
           "spmenu -si,      --show-image                                Show image\n"
           "spmenu -xrdb,    --xrdb                                      Load .Xresources on runtime\n"

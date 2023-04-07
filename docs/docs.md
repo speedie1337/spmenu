@@ -176,8 +176,8 @@ You may use long, descriptive arguments or the shorter arguments.
 `-hpl, --hide-powerline`
 :   Hide powerline
 
-`-hc, --hide-cursor`
-:   Hide cursor
+`-hc, --hide-caret, --hide-cursor`
+:   Hide caret
 
 `-hhl, --hide-highlighting`
 :   Hide highlight
@@ -209,8 +209,8 @@ You may use long, descriptive arguments or the shorter arguments.
 `-spl, --show-powerline`
 :   Show powerline
 
-`-sc, --show-cursor`
-:   Show cursor
+`-sc, --show-caret, --show-cursor`
+:   Show caret
 
 `-shl, --show-highlighting`
 :   Show highlight
