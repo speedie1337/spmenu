@@ -107,8 +107,7 @@ moveup(const Arg *arg)
 void
 complete(const Arg *arg)
 {
- 	if (!sel) return;
-
+    if (hideitem) return;
 	strncpy(text, sel->clntext, sizeof text - 1);
 	text[sizeof text - 1] = '\0';
 	cursor = strlen(text);
@@ -284,7 +283,7 @@ selectitem(const Arg *arg)
 {
     char *selection;
 
-    if (sel && arg->i) {
+    if (sel && arg->i && !hideitem) {
         selection = sel->text;
     } else {
         selection = text;
