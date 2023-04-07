@@ -48,6 +48,12 @@ ResourcePref resources[] = {
 	{ "col_sgrcolor15",              STRING,  &col_sgrcolor15 },
 
     // General options
+    { "promptpwlstyle",              INTEGER, &promptpwlstyle },
+    { "matchcountpwlstyle",          INTEGER, &matchcountpwlstyle },
+    { "modepwlstyle",                INTEGER, &modepwlstyle },
+    { "powerlineprompt",             INTEGER, &powerlineprompt },
+    { "powerlinecount",              INTEGER, &powerlinecount },
+    { "powerlinemode",               INTEGER, &powerlinemode },
     { "dockproperty",                INTEGER, &dockproperty },
     { "globalcolors",                INTEGER, &globalcolors },
     { "coloritems",                  INTEGER, &coloritems },

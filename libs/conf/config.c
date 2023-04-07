@@ -100,6 +100,26 @@ conf_init(void)
         }
     }
 
+    // load options spmenu.powerline
+    setting = config_lookup(&cfg, "spmenu.powerline");
+    if (setting != NULL) {
+        unsigned int i = 0;
+
+        conflength = config_setting_length(setting);
+
+        for (i = 0; i < conflength; ++i) {
+            config_setting_t *conf = config_setting_get_elem(setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "promptstyle", &promptpwlstyle); // spmenu.powerline.promptstyle
+            config_setting_lookup_int(conf, "matchcountstyle", &matchcountpwlstyle); // spmenu.powerline.matchcountstyle
+            config_setting_lookup_int(conf, "modestyle", &modepwlstyle); // spmenu.powerline.modestyle
+            config_setting_lookup_int(conf, "prompt", &powerlineprompt); // spmenu.powerline.prompt
+            config_setting_lookup_int(conf, "matchcount", &powerlinecount); // spmenu.powerline.matchcount
+            config_setting_lookup_int(conf, "mode", &powerlinemode); // spmenu.powerline.mode
+        }
+    }
+
     // load options spmenu.center
     setting = config_lookup(&cfg, "spmenu.center");
     if (setting != NULL) {

@@ -83,7 +83,7 @@ buttonpress(XEvent *e)
     click = clickwindow;
 
     // check if we clicked on the prompt or the input
-    if (ev->x < x + promptw + plw) {
+    if (ev->x < x + promptw + powerlineprompt ? plw : 0) {
         click = clickprompt;
     } else if (ev->x > mw - modeWidth - 2 * sp - 2 * borderwidth) {
         click = clickmode;

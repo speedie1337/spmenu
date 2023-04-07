@@ -252,9 +252,9 @@ drawprompt(int x, int y, int w)
 
 		x = drw_text(drw, x, y, w, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
 
-        if (!hidepowerline) {
+        if (!hidepowerline && powerlineprompt) {
             drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
-            drw_arrow(drw, x, y, plw, bh, 1, 0);
+            drw_arrow(drw, x, y, plw, bh, 1, promptpwlstyle);
 
             x += plw;
         }
@@ -333,14 +333,19 @@ drawnumber(int x, int y, int w)
 {
     if (hidematchcount) return x;
 
-    drw_setscheme(drw, scheme[SchemeNumber]);
+    int powerlinewidth = 0;
 
-    drw_text(drw, x, y, w, bh, lrpad / 2 + plw / 2, numbers, 0, pango_numbers ? True : False);
+    if (!hidepowerline && powerlinecount) {
+        powerlinewidth = plw / 2;
+    }
+
+    drw_setscheme(drw, scheme[SchemeNumber]);
+    drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, numbers, 0, pango_numbers ? True : False);
 
     // draw powerline for match count
-    if (!hidepowerline) {
+    if (!hidepowerline && powerlinecount) {
         drw_settrans(drw, scheme[SchemeNumber], scheme[SchemeMenu]);
-        drw_arrow(drw, x, y, plw, bh, 0, 0);
+        drw_arrow(drw, x, y, plw, bh, 0, matchcountpwlstyle);
 
         x += plw;
     }
@@ -352,14 +357,19 @@ int
 drawmode(int x, int y, int w)
 {
     if (!hidemode) { // draw mode indicator
-        drw_setscheme(drw, scheme[SchemeMode]);
+        int powerlinewidth = 0;
 
-        drw_text(drw, x, y, w, bh, lrpad / 2 + plw / 2, modetext, 0, pango_mode ? True : False);
+        if (!hidepowerline && powerlinemode) {
+            powerlinewidth = plw / 2;
+        }
+
+        drw_setscheme(drw, scheme[SchemeMode]);
+        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, modetext, 0, pango_mode ? True : False);
 
         // draw powerline for match count
-        if (!hidepowerline) {
+        if (!hidepowerline && powerlinemode) {
             drw_settrans(drw, scheme[SchemeMode], hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber]);
-            drw_arrow(drw, x, y, plw, bh, 0, 0);
+            drw_arrow(drw, x, y, plw, bh, 0, modepwlstyle);
 
             x += plw;
         }

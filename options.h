@@ -23,6 +23,14 @@ static int xpos                        = 0; /* X position to offset spmenu */
 static int ypos                        = 0; /* Y position to offset spmenu */
 static int managed                     = 0; /* Let your window manager manage spmenu? */
 
+/* Powerline options */
+static int powerlineprompt             = 0; /* Enable powerline for the prompt */
+static int powerlinecount              = 0; /* Enable powerline for the match count */
+static int powerlinemode               = 0; /* Enable powerline for the mode indicator */
+static int promptpwlstyle              = 0; /* Prompt powerline style (0: >, 1: \) */
+static int matchcountpwlstyle          = 0; /* Match count powerline style (0: <, 1: /) */
+static int modepwlstyle                = 0; /* Mode indicator powerline style (0: <, 1: /) */
+
 /* Window properties */
 static int dockproperty                = 1; /* Set _NET_WM_WINDOW_TYPE_DOCK */
 
