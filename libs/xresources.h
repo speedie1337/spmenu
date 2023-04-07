@@ -70,6 +70,7 @@ ResourcePref resources[] = {
     { "lineheight",                  INTEGER, &lineheight },
 	{ "columns",                     INTEGER, &columns },
 	{ "maxhist",                     INTEGER, &maxhist },
+    { "hideitem",                    INTEGER, &hideitem },
     { "hidematchcount",              INTEGER, &hidematchcount },
     { "hidehighlight",               INTEGER, &hidehighlight },
     { "hidemode",                    INTEGER, &hidemode },

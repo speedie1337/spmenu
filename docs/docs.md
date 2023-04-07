@@ -68,6 +68,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-P, --password`
 :   Hide characters
 
+`-nP, --no-password`
+:   Don't hide characters
+
 `-p, --prompt text`
 :   Set spmenu prompt text to text
 
@@ -152,6 +155,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-hm, --hide-mode`
 :   Hide mode indicator
 
+`-hit, --hide-item`
+:   Hide items
+
 `-hmc, --hide-match-count`
 :   Hide match count
 
@@ -181,6 +187,9 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-sm, --show-mode`
 :   Show mode indicator
+
+`-sit, --show-item`
+:   Show items
 
 `-smc, --show-match-count`
 :   Show match count

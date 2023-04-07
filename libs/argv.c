@@ -102,6 +102,8 @@ readargs(int argc, char *argv[])
                 type = 0;
 		} else if (!strcmp(argv[i], "-P") || (!strcmp(argv[i], "--password"))) {  // is the input a password
 				passwd = 1;
+		} else if (!strcmp(argv[i], "-nP") || (!strcmp(argv[i], "--no-password"))) {  // is the input a password
+				passwd = 0;
 		} else if (!strcmp(argv[i], "-hmc") || (!strcmp(argv[i], "--hide-match-count"))) {   // hide match count
 				hidematchcount = 1;
 		} else if (!strcmp(argv[i], "-smc") || (!strcmp(argv[i], "--show-match-count"))) {  // show match count
@@ -110,6 +112,10 @@ readargs(int argc, char *argv[])
 				hidemode = 1;
 		} else if (!strcmp(argv[i], "-sm") || (!strcmp(argv[i], "--show-mode"))) {  // show mode indicator
 				hidemode = 0;
+		} else if (!strcmp(argv[i], "-hit") || (!strcmp(argv[i], "--hide-item"))) {   // hide items
+				hideitem = 1;
+		} else if (!strcmp(argv[i], "-sit") || (!strcmp(argv[i], "--show-item"))) {  // show items
+				hideitem = 0;
 		} else if (!strcmp(argv[i], "-hla") || (!strcmp(argv[i], "--hide-left-arrow"))) {   // hide left arrow
 				hidelarrow = 1;
 		} else if (!strcmp(argv[i], "-sla") || (!strcmp(argv[i], "--show-left-arrow"))) {  // show left arrow
@@ -381,6 +387,7 @@ usage(void)
 		  "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
 		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
 		  "spmenu -P,       --password                                  Hide characters\n"
+          "spmenu -nP,      --no-password                               Don't hide characters\n"
 		  "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
           "spmenu -It,      --input <text>                              Set initial input text to <text>\n"
           "spmenu -ip,      --indent                                    Indent items to prompt width\n"
@@ -415,6 +422,7 @@ usage(void)
           "spmenu -hmc,     --hide-match-count                          Hide match count\n"
           "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
           "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
+          "spmenu -hit,     --hide-item                                 Hide items\n"
           "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
           "spmenu -hip,     --hide-input                                Hide input\n"
           "spmenu -hpl,     --hide-powerline                            Hide powerline\n"
@@ -425,6 +433,7 @@ usage(void)
           "spmenu -smc,     --show-match-count                          Show match count\n"
           "spmenu -sla,     --show-left-arrow                           Show left arrow\n"
           "spmenu -sra,     --show-right-arrow                          Show right arrow\n"
+          "spmenu -sit,     --show-item                                 Show items\n"
           "spmenu -spr,     --show-prompt                               Show prompt\n"
           "spmenu -sin,     --show-input                                Show input\n"
           "spmenu -spl,     --show-powerline                            Show powerline\n"

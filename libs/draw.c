@@ -424,8 +424,7 @@ drawmenu(void)
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
     // draw the items, this function also calls drawrarrow() and drawlarrow()
-    // TODO: Allow hiding items, without setting columns to 0
-    drawitem(x, y, w);
+    if (!hideitem) drawitem(x, y, w);
 
     if (!hidematchcount) {
         w = numberWidth;
