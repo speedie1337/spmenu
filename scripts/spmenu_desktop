@@ -1,33 +1,64 @@
 #!/bin/sh
 # spmenu_desktop - list .desktop entries with the icon.
 # NOTE: Please pull request if you have any possible improvements.
-[ -z "$desktop_dir" ] && desktop_dir="/usr/share/applications"
-[ -z "$icon_dir" ] && icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps"
-[ -z "$temporary_dir" ] && temporary_dir="$HOME/.config/spmenu/desktop/cache"
-[ -z "$useimage" ] && useimage=true
-[ -z "$config" ] && config="$HOME/.config/spmenu/desktop/config"
+[ -z "$CONFDIR" ] && CONFDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+[ -z "$DESKTOP_DIR" ] && DESKTOP_DIR="/usr/share/applications"
+[ -z "$ICON_DIR" ] && ICON_DIR="/usr/share/icons/hicolor /usr/share/pixmaps"
+[ -z "$TEMPORARY_DIR" ] && TEMPORARY_DIR="$CONFDIR/spmenu/desktop/cache"
+[ -z "$USEIMAGE" ] && USEIMAGE=true
+[ -z "$config" ] && config="$CONFDIR/spmenu/desktop/config"
 [ -z "$cache" ] && cache=true
 [ -z "$RUNLAUNCHER" ] && RUNLAUNCHER=spmenu
-[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20"
-[ -z "$logfile" ] && logfile="/tmp/spmenu_desktop.log"
+[ -z "$RUNLAUNCHER_ARGS" ] && RUNLAUNCHER_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20 \$*"
+[ -z "$LOGFILE" ] && LOGFILE="/tmp/spmenu_desktop.log"
+[ -z "$PREFIX" ] && PREFIX="/usr"
 
 # functions
-print_menu() { res="$(print_list | $RUNLAUNCHER $@ $RUNLAUNCHER_ARGS)"; }
-prep() { mkdir -p "$temporary_dir"; rm -f "$logfile"; touch "$logfile"; }
-scan() { entry_c="$(find "$desktop_dir" -type f | wc -l)"; cached_c="$(find "$temporary_dir" -type f | wc -l)"; cached="$(find "$temporary_dir" -type f)"; }
+print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"; }
+prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
+scan() { entry_c="$(find "$DESKTOP_DIR" -type f | wc -l)"; cached_c="$(find "$TEMPORARY_DIR" -type f | wc -l)"; cached="$(find "$TEMPORARY_DIR" -type f)"; }
+
+print_help() {
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
+To set spmenu options, you modify \$RUNLAUNCHER_ARGS in $config. See 'spmenu --help' for a list of valid arguments to add to the variable.
+To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
+
+By default, spmenu_desktop will cache entries for speed reasons. You can find these entries in ~/.config/spmenu/desktop/cache.
+If you make changes to .desktop files (not new entries, modified old entries), you need to clear the cache for the changes to appear. Simply delete the directory to do this.
+
+- Type in '?' to show this help screen at any time.
+
+$(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
+EOF
+}
 
 w_conf() {
 if [ ! -f "$config" ]; then
 mkdir -p "$(dirname $config)"
 cat << EOF > "$config"
-# spmenu_desktop configuration file
-desktop_dir="/usr/share/applications" # Directories to look for .desktop files in
-icon_dir="/usr/share/icons/hicolor /usr/share/pixmaps" # Directories to look for icons in
-temporary_dir="\$HOME/.config/spmenu/desktop/cache" # Directory used to store cache
-useimage=true # Enable image support
+# spmenu_desktop default configuration file
+#
+# This is the configuration file for the desktop launcher spmenu comes with.
+# It is not the configuration file for spmenu, see ~/.config/spmenu/spmenu.conf for that.
+#
+# spmenu_desktop runs function 'pre_func' before listing items, the output will be passed to spmenu. It also runs function 'post_func' after spawning spmenu.
+# You may create those functions below. For 'post_func', the selected item is passed as an argument (\$1).
+#
+# For example, to implement a basic history file:
+#
+# post_func() {
+# rm -f /tmp/spmenu_entryhist; printf "\$1\n" >> /tmp/spmenu_entryhist
+# }
+#
+# You can use anything POSIX compliant shells support, as well as programs available on the system.
+DESKTOP_DIR="/usr/share/applications" # Directories to look for .desktop files in
+ICON_DIR="/usr/share/icons/hicolor /usr/share/pixmaps" # Directories to look for icons in
+TEMPORARY_DIR="\$CONFDIR/spmenu/desktop/cache" # Directory used to store cache
+USEIMAGE=true # Enable image support
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}"
 RUNLAUNCHER_ARGS="\${RUNLAUNCHER_ARGS:- --lines 20 --columns 1 --image-size 100 --image-gaps 20}"
-logfile="/tmp/spmenu_desktop.log"
+LOGFILE="/tmp/spmenu_desktop.log"
 EOF
 fi
 [ -f "$config" ] && . "$config"
@@ -35,13 +66,13 @@ fi
 
 # cache it, this means some speed improvements
 cache() {
-    printf "Cached: %s\n" "$cached_c" >> "$logfile"
-    printf "Entries: %s\n" "$entry_c" >> "$logfile"
+    printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
+    printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
     [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
 
     # find
-    entry="$(find $desktop_dir -type f)"
-    icons="$(find $icon_dir -type f)"
+    entry="$(find $DESKTOP_DIR -type f)"
+    icons="$(find $ICON_DIR -type f)"
 
     # write new entries
     for i in $(seq "$entry_c"); do
@@ -54,7 +85,7 @@ cache() {
         icon="$(printf "%s" "$icons" | grep "/$icon_name[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
         # write the file
-        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$temporary_dir/$(basename "$cur_file").entry"
+        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$TEMPORARY_DIR/$(basename "$cur_file").entry"
     done
 
     # run scan() again
@@ -62,10 +93,11 @@ cache() {
 }
 
 print_list() {
+    command -v pre_func > /dev/null && pre_func
     # print data from entries
     for i in $(seq "$cached_c"); do
         # current file
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$logfile" && continue
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
         # get details to display
         title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
@@ -74,22 +106,24 @@ print_list() {
         [ -z "$title" ] && continue # no title isn't worth displaying, obviously
 
         # print it all
-        [ "$useimage" = "true" ] && [ ! -e "$icon" ] && useimage=false && reenable=1
-        [ "$useimage" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
+        [ "$USEIMAGE" = "true" ] && [ ! -e "$icon" ] && USEIMAGE=false && reenable=1
+        [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
             printf "%s\n" "$title"
-        [ "$reenable" = "1" ] && useimage=true
+        [ "$reenable" = "1" ] && USEIMAGE=true
     done
 }
 
 execute_program() {
-    [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$logfile"
+    [ "$res" = "?" ] && print_help && main "$@"
+    command -v post_func > /dev/null && post_func "$res"
+    [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
     for i in $(seq "$cached_c"); do
-        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$logfile" && continue
+        cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
         # find the executable matching the selected name
         if grep -q "Name:$res" "$cur_file"; then
             exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
-            printf "Current file: '%s'\n" "$cur_file" >> "$logfile"
+            printf "Current file: '%s'\n" "$cur_file" >> "$LOGFILE"
 
             break;
         else
@@ -102,15 +136,24 @@ execute_program() {
     if [ -n "$exec" ]; then
         /bin/sh -c "$exec"
     else
-        [ ! -z "$res" ] && printf "No executable found. Try clearing cache." >> "$logfile"
+        [ -n "$res" ] && printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
 
     return 0
 }
 
+check() {
+    [ ! -d "$CONFDIR/spmenu/desktop" ] && mkdir -p "$CONFDIR/spmenu/desktop"
+    if [ ! -f "$CONFDIR/spmenu/desktop/.first_run" ]; then
+        print_help
+        touch "$CONFDIR/spmenu/desktop/.first_run"
+    fi
+}
+
 main() {
     w_conf "$@"
     prep
+    check
     scan
     cache
     print_menu "$@"

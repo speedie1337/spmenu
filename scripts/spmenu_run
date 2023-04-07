@@ -1,4 +1,5 @@
 #!/bin/sh
+[ -z "$CONFDIR" ]            && CONFDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 [ -z "$TERMINAL" ]           && TERMINAL="st -e"
 [ -z "$BROWSER"  ]           && BROWSER="xdg-open"
 [ -z "$TORRENT"  ]           && TORRENT="qbittorrent"
@@ -17,10 +18,10 @@
 [ -z "$DISPLAY_DUPLICATES" ] && DISPLAY_DUPLICATES="false"
 
 check() {
-    [ ! -d "$HOME/.config/spmenu/run" ] && mkdir -p "$HOME/.config/spmenu/run"
-    if [ ! -f "$HOME/.config/spmenu/run/.first_run" ]; then
+    [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
+    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
         print_help
-        touch "$HOME/.config/spmenu/run/.first_run"
+        touch "$CONFDIR/spmenu/run/.first_run"
     fi
 }
 
@@ -62,7 +63,7 @@ print_help() {
 cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
-To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $HOME/.config/spmenu/spmenurc and edit that.
+To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
 
 - Type in '?' to show this help screen at any time.
 - If the entry selected starts with 'www', it will instead be treated as a link and spawned in a web browser (\$BROWSER)
@@ -73,9 +74,9 @@ EOF
 }
 
 print_config() {
-    [ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
-    mkdir -p "$HOME/.config/spmenu/run"
-cat << EOF > "$HOME/.config/spmenu/run/config"
+    [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
+    mkdir -p "$CONFDIR/spmenu/run"
+cat << EOF > "$CONFDIR/spmenu/run/config"
 # spmenu_run default configuration file
 #
 # This is the configuration file for the run launcher spmenu comes with.
@@ -107,7 +108,7 @@ HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -v
 KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 DISPLAY_DUPLICATES="false" # Display duplicates or not
 EOF
-[ -f "$HOME/.config/spmenu/run/config" ] && . "$HOME/.config/spmenu/run/config" && return
+[ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
 }
 
 parse() {
