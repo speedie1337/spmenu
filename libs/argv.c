@@ -182,7 +182,7 @@ readargs(int argc, char *argv[])
                     #if USECONFIG
                     || !strcmp(argv[i], "-cf")
                     || !strcmp(argv[i], "--config-file")
-                    || !strcmp(argv[i], argconf)
+                    || (argconf && !strcmp(argv[i], argconf))
                     #endif
                 ))
                     continue;
@@ -371,7 +371,7 @@ readargs(int argc, char *argv[])
                 #if USECONFIG
                 || !strcmp(argv[i], "-cf")
                 || !strcmp(argv[i], "--config-file")
-                || !strcmp(argv[i], argconf)
+                || (argconf && !strcmp(argv[i], argconf))
                 #endif
             ))
                 continue;
