@@ -209,11 +209,11 @@ readargs(int argc, char *argv[])
         } else if (!strcmp(argv[i], "-H") || (!strcmp(argv[i], "--hist-file"))) // hist file location
 			histfile = argv[++i];
 	    else if (!strcmp(argv[i], "-x") || (!strcmp(argv[i], "--x-position")))  // window x offset
-			dmx = atoi(argv[++i]);
+			xpos = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-y") || (!strcmp(argv[i], "--y-position")))   // window y offset (from bottom up if -b)
-			dmy = atoi(argv[++i]);
+			ypos = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-z") || (!strcmp(argv[i], "--width")))   // make spmenu this wide
-			dmw = atoi(argv[++i]);
+			menuwidth = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-p") || (!strcmp(argv[i], "--prompt")))   // adds prompt to left of input field
 			prompt = argv[++i];
 		else if (!strcmp(argv[i], "-It") || (!strcmp(argv[i], "--input")))   // specify initial text

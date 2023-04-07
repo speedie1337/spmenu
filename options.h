@@ -17,7 +17,10 @@ static int alpha                       = 1; /* Enable alpha */
 static int menuposition                = 1; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
 static int menupaddingv				   = 0; /* Vertical padding of bar (in pixels) */
 static int menupaddingh				   = 0; /* Horizontal padding of bar (in pixels) */
-static int minwidth                    = 1000; /* Minimum width */
+static int menuwidth                   = 0; /* spmenu width when setting X/Y position */
+static int minwidth                    = 1000; /* Minimum width when centered */
+static int xpos                        = 0; /* X position to offset spmenu */
+static int ypos                        = 0; /* Y position to offset spmenu */
 static int managed                     = 0; /* Let your window manager manage spmenu? */
 
 /* Window properties */
@@ -52,6 +55,7 @@ static char *input                     = NULL; /* Default input text */
 
 /* Match options */
 static int type                        = 1; /* Allow typing into spmenu or only allow keybinds. */
+static int passwd                      = 0; /* Replace input with another character and don't read stdin */
 static int sortmatches                 = 1; /* Sort matches (0/1) */
 static int casesensitive               = 0; /* Case-sensitive by default? (0/1) */
 static int preselected                 = 0; /* Which line should spmenu preselect? */

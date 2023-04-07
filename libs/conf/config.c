@@ -64,6 +64,9 @@ conf_init(void)
             config_setting_lookup_int(conf, "position", &menuposition); // spmenu.window.menuposition
             config_setting_lookup_int(conf, "paddingv", &menupaddingv); // spmenu.window.paddingv
             config_setting_lookup_int(conf, "paddingh", &menupaddingh); // spmenu.window.paddingh
+            config_setting_lookup_int(conf, "x", &xpos); // spmenu.window.x
+            config_setting_lookup_int(conf, "y", &xpos); // spmenu.window.y
+            config_setting_lookup_int(conf, "width", &menuwidth); // spmenu.window.width
             config_setting_lookup_int(conf, "border", &borderwidth); // spmenu.window.border
             config_setting_lookup_int(conf, "managed", &managed); // spmenu.window.managed
             config_setting_lookup_int(conf, "monitor", &mon); // spmenu.window.monitor
@@ -327,6 +330,7 @@ conf_init(void)
             // look up
             config_setting_lookup_int(conf, "fast", &fast); // spmenu.input.fast
             config_setting_lookup_int(conf, "type", &type); // spmenu.input.type
+            config_setting_lookup_int(conf, "password", &passwd); // spmenu.input.password
         }
     }
 

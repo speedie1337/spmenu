@@ -56,10 +56,6 @@ spmenu.col_sgrcolor15:     #ffffff
 spmenu.globalcolors:       1
 spmenu.alpha:              1
 
-!! Width
-spmenu.accuratewidth:      1
-spmenu.borderwidth:        0
-
 !! Lines and columns
 spmenu.lineheight:         1
 spmenu.lines:              0
@@ -73,6 +69,7 @@ spmenu.histdup:            0
 
 !! Matches
 spmenu.type:               1
+spmenu.passwd:             0
 spmenu.fuzzy:              1
 spmenu.sortmatches:        1
 spmenu.casesensitive:      0
@@ -81,7 +78,12 @@ spmenu.casesensitive:      0
 spmenu.menuposition:       1
 spmenu.menupaddingv:       0
 spmenu.menupaddingh:       0
+spmenu.menuwidth:          0
+spmenu.xpos:               0
+spmenu.ypos:               0
 spmenu.minwidth:           1000
+spmenu.accuratewidth:      1
+spmenu.borderwidth:        0
 
 !! Properties
 spmenu.dockproperty:       1

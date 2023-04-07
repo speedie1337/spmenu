@@ -125,13 +125,9 @@ static int numlockmask = 0;
 // height of each item, menu width, menu height
 static int bh, mw, mh;
 static int reallines = 0;
-static int dmx = 0; // put spmenu at this x offset
-static int dmy = 0; // put spmenu at this y offset (measured from the bottom if menuposition is 0)
-static unsigned int dmw = 0; // make spmenu this wide
 static int inputw = 0;
 static int promptw;
 static int plw = 0;
-static int passwd = 0;
 static int lrpad; // sum of left and right padding
 static int vp;    // vertical padding for bar
 static int sp;    // side padding for bar
@@ -587,9 +583,9 @@ setupdisplay(void)
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
 			y = info[i].y_org + ((info[i].height - mh) / 2);
 		} else { // top or bottom
-		    x = info[i].x_org + dmx;
-			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - dmy);
-			mw = (dmw>0 ? dmw : info[i].width);
+		    x = info[i].x_org + xpos;
+			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
+			mw = (menuwidth>0 ? menuwidth : info[i].width);
 		}
 
 		XFree(info);
