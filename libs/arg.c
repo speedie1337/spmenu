@@ -498,7 +498,7 @@ void
 setcolumns(const Arg *arg)
 {
     columns += arg->i;
-    if (columns < 0) columns = 0;
+    if (columns < 1) columns = 1;
 
     match();
     resizeclient();

@@ -386,6 +386,9 @@ readargs(int argc, char *argv[])
 	    fstrstr = cistrstr;
     }
 
+    if (!columns)
+        columns = 1;
+
     // initial text
     if (input)
         insert(input, strlen(input));
