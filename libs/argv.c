@@ -21,6 +21,7 @@ readargs(int argc, char *argv[])
 			globalcolors = 1;
         } else if (!strcmp(argv[j], "-ngbc") || (!strcmp(argv[j], "--no-global-colors"))) {
 			globalcolors = 0;
+        #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
                 cconf = 1;
@@ -28,6 +29,7 @@ readargs(int argc, char *argv[])
             } else {
                 die("This argument requires a second argument.\n");
             }
+        #endif
         }
     }
 
@@ -177,9 +179,11 @@ readargs(int argc, char *argv[])
                     || !strcmp(argv[i], "-ngbc")
                     || !strcmp(argv[i], "--global-colors")
                     || !strcmp(argv[i], "--no-global-colors")
+                    #if USECONFIG
                     || !strcmp(argv[i], "-cf")
                     || !strcmp(argv[i], "--config-file")
                     || !strcmp(argv[i], argconf)
+                    #endif
                 ))
                     continue;
                 else
@@ -364,9 +368,11 @@ readargs(int argc, char *argv[])
                 || !strcmp(argv[i], "-ngbc")
                 || !strcmp(argv[i], "--global-colors")
                 || !strcmp(argv[i], "--no-global-colors")
+                #if USECONFIG
                 || !strcmp(argv[i], "-cf")
                 || !strcmp(argv[i], "--config-file")
                 || !strcmp(argv[i], argconf)
+                #endif
             ))
                 continue;
             else
@@ -475,7 +481,10 @@ usage(void)
           "spmenu -ib,      --image-bottom                              Position the image at the bottom\n"
           "spmenu -ic,      --image-center                              Position the image in the center\n"
           "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
-          "spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
+          , stdout);
+
+    // general/config related
+    fputs("spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
           "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenu or ~/.config/spmenu/spmenurc)\n"
