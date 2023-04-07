@@ -658,7 +658,7 @@ setupdisplay(void)
 	}
 
     // resize and draw
-	drw_resize(drw, mw, mh);
+	drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
 	drawmenu();
 }
 

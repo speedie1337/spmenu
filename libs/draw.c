@@ -402,8 +402,8 @@ drawmenu(void)
 
         if (!win) return;
 
-        XResizeWindow(dpy, win, mw, mh);
-        drw_resize(drw, mw, mh);
+        XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
+        drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
     }
     #if USEIMAGE
     else if (hideprompt && hideinput && hidemode && hidematchcount) {

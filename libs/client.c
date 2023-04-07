@@ -79,6 +79,6 @@ resizeclient(void)
     // no window/invalid window or menu height we had before is the same as the current window height
     if (!win || omh == mh) return;
 
-    XResizeWindow(dpy, win, mw, mh);
-    drw_resize(drw, mw, mh);
+    XResizeWindow(dpy, win, mw - 2 * sp - borderwidth * 2, mh);
+    drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
 }
