@@ -40,6 +40,7 @@ static Key keys[] = {
      * any mode
      */
     { -1,      0,                            XK_Return,    selectitem,      {.i = +1 } },
+    { -1,      SHIFT,                        XK_Return,    selectitem,      {0} },
     { -1,      0,                            XK_Tab,       complete,        {0} },
     { -1,      CONTROL,                      XK_v,         paste,           {.i = 2  } },
     { -1,      CONTROL|SHIFT,                XK_v,         paste,           {.i = 1  } },
