@@ -658,7 +658,9 @@ The selected option is piped to /bin/sh (by default). Unlike dmenu_run,
 spmenu_run has some cool features. For example:
 
 - Prepending `#` will spawn it in a terminal instead of just a shell.
-- Prepending `magnet ` will open a magnet link in $TORRENT
+- Prepending `?` will run the command in a function, most of the time used to
+display the man page.
+- Prepending `magnet` will open a magnet link in $TORRENT
 - Prepending `www` will open a page in $BROWSER
 
 Most of the time you don't need to prepend `www` though, for example

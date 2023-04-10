@@ -1,21 +1,26 @@
 #!/bin/sh
-[ -z "$CONFDIR" ]            && CONFDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
-[ -z "$TERMINAL" ]           && TERMINAL="st -e"
-[ -z "$BROWSER"  ]           && BROWSER="xdg-open"
-[ -z "$TORRENT"  ]           && TORRENT="qbittorrent"
-[ -z "$WEB_GREP" ]           && WEB_GREP="http:|https:|www[.]"
-[ -z "$MAGNET_GREP" ]        && MAGNET_GREP="magnet:?"
-[ -z "$HISTORY" ]            && HISTORY="${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist"
-[ -z "$RUNLAUNCHER" ]        && RUNLAUNCHER=spmenu
-[ -z "$RUNLAUNCHER_ARGS" ]   && RUNLAUNCHER_ARGS="--insert --hist-file $HISTORY $*"
-[ -z "$PREFIX" ]             && PREFIX="/usr"
-[ -z "$SORT_BY_NUMBER" ]     && SORT_BY_NUMBER="true"
-[ -z "$SORT_IN_REVERSE" ]    && SORT_IN_REVERSE="true"
-[ -z "$SORT_BY_RECENT" ]     && SORT_BY_RECENT="false"
-[ -z "$SORT_ARGS" ]          && SORT_ARGS=""
-[ -z "$HIDDEN_KEYWORDS" ]    && HIDDEN_KEYWORDS="spmenu"
-[ -z "$KEYWORDS" ]           && KEYWORDS=""
-[ -z "$DISPLAY_DUPLICATES" ] && DISPLAY_DUPLICATES="false"
+# spmenu_run
+# Run launcher for spmenu
+
+# Set basic variables, in case the config isn't valid, env variables and config file can override these
+CONFDIR="${CONFDIR:-${XDG_CONFIG_HOME:-$HOME/.config}}"
+TERMINAL="${TERMINAL:-st -e}"
+BROWSER="${BROWSER:-xdg-open}"
+TORRENT="${TORRENT:-qbittorrent}"
+WEB_GREP="${WEB_GREP:-http:|https:|www[.]}"
+MAGNET_GREP="${MAGNET_GREP:-magnet:?}"
+HISTORY="${HISTORY:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist}"
+RUNLAUNCHER="${RUNLAUNCHER:-spmenu}"
+PREFIX="${PREFIX:-/usr}"
+DESTDIR="${DESTDIR:-}"
+SORT_BY_NUMBER="${SORT_BY_NUMBER:-true}"
+SORT_IN_REVERSE="${SORT_IN_REVERSE:-true}"
+SORT_BY_RECENT="${SORT_BY_RECENT:-false}"
+SORT_ARGS="${SORT_ARGS:-}"
+UNIQ_ARGS="${UNIQ_ARGS:-}"
+HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
+KEYWORDS="${KEYWORDS:-}"
+DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
@@ -53,7 +58,7 @@ path() {
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then
         print_menu
     else
-        print_menu | uniq
+        print_menu | uniq $UNIQ_ARGS
     fi
 
     command -v pre_func && pre_func
@@ -68,8 +73,20 @@ To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.
 - Type in '?' to show this help screen at any time.
 - If the entry selected starts with 'www', it will instead be treated as a link and spawned in a web browser (\$BROWSER)
 - If the entry selected starts with 'magnet', it will instead be treated as a magnet link and spawned in a torrent client (\$TORRENT)
+- If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
+- If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
 
 $(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
+EOF
+}
+
+print_cli_help() {
+cat << EOF
+spmenu_run - Run launcher for spmenu
+
+spmenu -x, --run      List entries in \$PATH.
+spmenu -f, --fm <dir> List files and directories in <dir>.
+spmeni -h, --help     Print this help.
 EOF
 }
 
@@ -82,8 +99,8 @@ cat << EOF > "$CONFDIR/spmenu/run/config"
 # This is the configuration file for the run launcher spmenu comes with.
 # It is not the configuration file for spmenu, see ~/.config/spmenu/spmenu.conf for that.
 #
-# spmenu_run runs function 'pre_func' before spawning spmenu, and 'post_func' after spawning spmenu.
-# You may create those functions below. For 'post_func', the selected item is passed as an argument (\$1)
+# spmenu_run runs function 'pre_func' before spawning spmenu, 'post_func' after spawning spmenu, and 'read_man' when reading a man page.
+# You may create those functions below. For 'post_func' and 'read_man', the selected item is passed as an argument (\$1)
 #
 # For example, to implement a basic history file:
 #
@@ -99,7 +116,7 @@ WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
-RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$*" # Arguments passed to \$RUNLAUNCHER
+RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER
 SORT_BY_NUMBER="true" # Sort by numbers
 SORT_IN_REVERSE="true" # Sort in reverse
 SORT_BY_RECENT="false" # Sort by recent
@@ -107,6 +124,11 @@ SORT_ARGS="" # Extra arguments passed to the sort command.
 HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -vE syntax.
 KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 DISPLAY_DUPLICATES="false" # Display duplicates or not
+DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/help)
+DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
+
+# function to read the man page in spmenu
+read_man() { man "\$1" | col -b | \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man "\$1"; }
 EOF
 [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
 }
@@ -115,10 +137,16 @@ parse() {
     dout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"
 
     # parse
-    [ "$(printf '%c' "$dout")" = "#" ] && EXEC=term
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "magnet" ] && EXEC=torrent
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "www" ] && EXEC=web
-    [ "$(printf "$dout" | awk '{ print $1 }')" = "?" ] && print_help && main && return
+    case "$(printf '%c' "$dout")" in
+        "#") EXEC="term" ;;
+        "?") EXEC="man" ;;
+    esac
+
+    case "$(printf "%s" "$dout" | awk '{ print $1 }')" in
+        "magnet") EXEC=torrent ;;
+        "www") EXEC=web ;;
+        "?") [ "$EXEC" != "man" ] && print_help && main && return ;;
+    esac
 
     # check for keywords
     printf "%s" "$dout" | grep -qE "$WEB_GREP" && EXEC=web
@@ -129,19 +157,77 @@ exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
     command -v post_func > /dev/null && post_func "$dout"
 
+    read_nman() {
+        $TERMINAL -e man "$1"
+    }
+
     case "$EXEC" in
         "shell") printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")" & ;;
         "web") $BROWSER "$(printf "%s" "$dout" | sed "s/www //g")" & ;;
         "torrent") $TORRENT "$(printf "%s" "$dout" | sed "s/magnet //g")" & ;;
+        "man") exec="$(printf "%s" "$dout" | sed "s/?//g")"
+               [ -x "$(command -v "$exec")" ] || return
+               if [ "$(command -v read_man)" ]; then
+                   read_man "$exec"
+                   return
+               else
+                   read_nman "$exec"
+                   return
+               fi
+               ;;
     esac
 }
 
+remove_arg() { args="$(printf "%s\n" "$args" | sed "s|$1||g")"; }
+
+read_args() {
+    function="${DEFAULT_FEATURE:-run}" # default functionality
+    dir="${DEFAULT_DIRECTORY:-$(pwd)}" # default directory
+    args="$(printf "%s\n" "$@")"
+    argc="$(printf "%s\n" "$@" | wc -l)"
+
+    while true; do
+        i=$(($i+1))
+        arg="$(printf "%s\n" "$args" | sed "${i}q;d")"
+        narg="$(printf "%s\n" "$args" | sed "$((i+1))q;d")"
+
+        case "$arg" in
+            -x|-run|--run) remove_arg "$arg" && function=run ;;
+            -f|-fm|--fm) remove_arg "$arg"
+                         [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
+                         function=fm ;;
+            -h|--help) remove_arg "$arg" && function=help ;;
+        esac
+
+        [ "$argc" = "$i" ] && break
+    done
+}
+
 main() {
-    check "$@"
-    print_config "$@"
-    parse "$@"
-    exec_cmd "$@"
+    read_args "$@"
+    check "$args"
+    print_config "$args"
+
+    RUNLAUNCHER_ARGS="${RUNLAUNCHER_ARGS:- --insert --hist-file $HISTORY $args}"
+
+    # $PATH listing
+    case "$function" in
+        "run")
+            parse "$args"
+            exec_cmd "$args"
+        ;;
+        "fm") printf "Directory: %s\n" "$dir"
+        ;;
+        "help")
+            print_cli_help
+            exit 0
+        ;;
+        *)
+            printf "Undefined function: '%s'\n" "$function"
+            exit 1
+        ;;
+    esac
 }
 
 main "$@"
