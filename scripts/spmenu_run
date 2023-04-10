@@ -128,7 +128,7 @@ DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/help)
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
 
 # function to read the man page in spmenu
-read_man() { man "\$1" | col -b | \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man "\$1"; }
+read_man() { man "\$1" | col -b | \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"; }
 EOF
 [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
 }
