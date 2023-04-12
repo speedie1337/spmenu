@@ -17,7 +17,7 @@ HISTORY="${HISTORY:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist}"
 RUNLAUNCHER="${RUNLAUNCHER:-spmenu}"
 PREFIX="${PREFIX:-/usr}"
 DESTDIR="${DESTDIR:-}"
-STDOUT="false"
+STDOUT="${STDOUT:-false}"
 SORT_BY_NUMBER="${SORT_BY_NUMBER:-true}"
 SORT_IN_REVERSE="${SORT_IN_REVERSE:-true}"
 SORT_BY_RECENT="${SORT_BY_RECENT:-false}"
@@ -54,9 +54,9 @@ path() {
         }
 
         if [ "$SORT_BY_RECENT" != "false" ]; then
-            print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $6, $7 }' | sort "$SORTARGS" | cut -d' ' -f 2 2>&1
         else
-            print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $7 }' | sort "$SORTARGS" | cut -d' ' -f 2 2>&1
         fi
     }
 
@@ -64,14 +64,14 @@ path() {
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then
         print_menu
     else
-        print_menu | uniq $UNIQ_ARGS
+        print_menu | uniq "$UNIQ_ARGS"
     fi
 
     command -v run_pre_func && run_pre_func
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+cat << EOF | $RUNLAUNCHER "$RUNLAUNCHER_HELP_ARGS" --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -141,9 +141,9 @@ HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spm
 
 # run launcher options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
-RUNLAUNCHER_RUN_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the run launcher
-RUNLAUNCHER_FM_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the file manager
-RUNLAUNCHER_HELP_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the help
+RUNLAUNCHER_RUN_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the run launcher
+RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
+RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
 
 # sorting
 SORT_BY_NUMBER="true" # Sort by numbers
@@ -171,40 +171,40 @@ EOF
 }
 
 parse() {
-    dout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_RUN_ARGS)"
+    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "$RUNLAUNCHER_RUN_ARGS")"
 
     # parse
-    case "$(printf '%c' "$dout")" in
+    case "$(printf '%c' "$sout")" in
         "#") EXEC="term" ;;
         "?") EXEC="man" ;;
     esac
 
-    case "$(printf "%s" "$dout" | awk '{ print $1 }')" in
+    case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
         "?") print_help && main && return ;;
     esac
 
     # check for keywords
-    printf "%s" "$dout" | grep -qE "$WEB_GREP" && EXEC=web
-    printf "%s" "$dout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+    printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
+    printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
 }
 
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
-    [ "$STDOUT" != "false" ] && printf "%s\n" "$dout" && exit 1
-    command -v run_post_func > /dev/null && run_post_func "$dout"
+    [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
+    command -v run_post_func > /dev/null && run_post_func "$sout"
 
     read_nman() {
         $TERMINAL -e man "$1"
     }
 
     case "$EXEC" in
-        "shell") printf "%s" "$dout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
-        "term") $TERMINAL -e "$(printf "%s" "$dout" | sed "s/#//g")" & ;;
-        "web") $BROWSER "$(printf "%s" "$dout" | sed "s/www //g")" & ;;
-        "torrent") $TORRENT "$(printf "%s" "$dout" | sed "s/magnet //g")" & ;;
-        "man") exec="$(printf "%s" "$dout" | sed "s/?//g")"
+        "shell") printf "%s" "$sout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
+        "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
+        "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
+        "torrent") $TORRENT "$(printf "%s" "$sout" | sed "s/magnet //g")" & ;;
+        "man") exec="$(printf "%s" "$sout" | sed "s/?//g")"
                [ -x "$(command -v "$exec")" ] || return
                if [ "$(command -v read_man)" ]; then
                    read_man "$exec"
@@ -233,7 +233,7 @@ read_args() {
         case "$arg" in
             -x|-run|--run) remove_arg "$arg" && function=run ;;
             -o|-stdout|--stdout) remove_arg "$arg" && STDOUT=true ;;
-            -no|--no-stdout|--no-stdout) remove_arg "$arg" && STDOUT=false ;;
+            -no|-no-stdout) remove_arg "$arg" && STDOUT=false ;;
             -f|-fm|--fm) remove_arg "$arg"
                          [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                          function=fm ;;
@@ -242,6 +242,8 @@ read_args() {
 
         [ "$argc" = "$i" ] && break
     done
+
+    args="$(printf "%s\n" "$*")"
 }
 
 exec_file() {
@@ -269,14 +271,14 @@ prepare_dirnav() {
 
     listing() {
         command -v fm_pre_list_func > /dev/null && fm_pre_list_func
-        ls $LS_ARGS # this allows us SGR colors
+        ls "$LS_ARGS" # this allows us SGR colors
         printf "..\n"
         command -v fm_post_list_func > /dev/null && fm_post_list_func
     }
 
     command -v fm_pre_func > /dev/null && fm_pre_func
 
-    dir="$(listing | $RUNLAUNCHER $RUNLAUNCHER_FM_ARGS | sed -e 's/\x1b\[[0-9;]*m//g')"
+    dir="$(listing | $RUNLAUNCHER "$RUNLAUNCHER_FM_ARGS" | sed -e 's/\x1b\[[0-9;]*m//g')"
 
     case "$dir" in
         *)
@@ -295,14 +297,14 @@ prepare_dirnav() {
 }
 
 main() {
-    print_config "$args"
-    read_args "$@"
+    print_config
+    read_args "$*"
     check "$args"
 
     # some run launcher args
-    RUNLAUNCHER_FM_ARGS="${RUNLAUNCHER_FM_ARGS:- --insert --hist-file $HISTORY $args}"
-    RUNLAUNCHER_RUN_ARGS="${RUNLAUNCHER_RUN_ARGS:- --insert --hist-file $HISTORY $args}"
-    RUNLAUNCHER_HELP_ARGS="${RUNLAUNCHER_HELP_ARGS:- --insert --hist-file $HISTORY $args}"
+    RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $args"
+    RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $args"
+    RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $args"
 
     # $PATH listing
     case "$function" in
@@ -323,4 +325,4 @@ main() {
     esac
 }
 
-main "$@"
+main "$*"
