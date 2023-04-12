@@ -54,9 +54,9 @@ path() {
         }
 
         if [ "$SORT_BY_RECENT" != "false" ]; then
-            print | awk '/^(-|l)/ { print $6, $7 }' | sort "$SORTARGS" | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
         else
-            print | awk '/^(-|l)/ { print $7 }' | sort "$SORTARGS" | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
         fi
     }
 
@@ -64,14 +64,14 @@ path() {
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then
         print_menu
     else
-        print_menu | uniq "$UNIQ_ARGS"
+        print_menu | uniq $UNIQ_ARGS
     fi
 
     command -v run_pre_func && run_pre_func
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER "$RUNLAUNCHER_HELP_ARGS" --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -171,7 +171,7 @@ EOF
 }
 
 parse() {
-    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "$RUNLAUNCHER_RUN_ARGS")"
+    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_RUN_ARGS)"
 
     # parse
     case "$(printf '%c' "$sout")" in
@@ -271,14 +271,14 @@ prepare_dirnav() {
 
     listing() {
         command -v fm_pre_list_func > /dev/null && fm_pre_list_func
-        ls "$LS_ARGS" # this allows us SGR colors
+        ls $LS_ARGS # this allows us SGR colors
         printf "..\n"
         command -v fm_post_list_func > /dev/null && fm_post_list_func
     }
 
     command -v fm_pre_func > /dev/null && fm_pre_func
 
-    dir="$(listing | $RUNLAUNCHER "$RUNLAUNCHER_FM_ARGS" | sed -e 's/\x1b\[[0-9;]*m//g')"
+    dir="$(listing | $RUNLAUNCHER $RUNLAUNCHER_FM_ARGS | sed -e 's/\x1b\[[0-9;]*m//g')"
 
     case "$dir" in
         *)
