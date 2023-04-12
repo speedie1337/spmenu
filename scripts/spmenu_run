@@ -7,12 +7,17 @@ CONFDIR="${CONFDIR:-${XDG_CONFIG_HOME:-$HOME/.config}}"
 TERMINAL="${TERMINAL:-st -e}"
 BROWSER="${BROWSER:-xdg-open}"
 TORRENT="${TORRENT:-qbittorrent}"
+PDF_READER="${PDF_READER:-zathura}"
+EDITOR="${EDITOR:-nvim}"
+PLAYER="${PLAYER:-mpv}"
+GENERIC="${GENERIC:-$EDITOR}"
 WEB_GREP="${WEB_GREP:-http:|https:|www[.]}"
 MAGNET_GREP="${MAGNET_GREP:-magnet:?}"
 HISTORY="${HISTORY:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist}"
 RUNLAUNCHER="${RUNLAUNCHER:-spmenu}"
 PREFIX="${PREFIX:-/usr}"
 DESTDIR="${DESTDIR:-}"
+STDOUT="false"
 SORT_BY_NUMBER="${SORT_BY_NUMBER:-true}"
 SORT_IN_REVERSE="${SORT_IN_REVERSE:-true}"
 SORT_BY_RECENT="${SORT_BY_RECENT:-false}"
@@ -21,6 +26,7 @@ UNIQ_ARGS="${UNIQ_ARGS:-}"
 HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
+LS_ARGS="${LS_ARGS:- --color=always}"
 
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
@@ -61,11 +67,11 @@ path() {
         print_menu | uniq $UNIQ_ARGS
     fi
 
-    command -v pre_func && pre_func
+    command -v run_pre_func && run_pre_func
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -84,9 +90,11 @@ print_cli_help() {
 cat << EOF
 spmenu_run - Run launcher for spmenu
 
-spmenu -x, --run      List entries in \$PATH.
-spmenu -f, --fm <dir> List files and directories in <dir>.
-spmeni -h, --help     Print this help.
+spmenu -x, --run        List entries in \$PATH.
+spmenu -f, --fm <dir>   List files and directories in <dir>.
+spmenu -h, --help       Print this help.
+spmenu -o, --stdout     Print to standard input and do not execute the selected item.
+spmenu -no, --no-stdout Don't print to standard input, execute the selected item.
 EOF
 }
 
@@ -99,33 +107,62 @@ cat << EOF > "$CONFDIR/spmenu/run/config"
 # This is the configuration file for the run launcher spmenu comes with.
 # It is not the configuration file for spmenu, see ~/.config/spmenu/spmenu.conf for that.
 #
-# spmenu_run runs function 'pre_func' before spawning spmenu, 'post_func' after spawning spmenu, and 'read_man' when reading a man page.
-# You may create those functions below. For 'post_func' and 'read_man', the selected item is passed as an argument (\$1)
+# spmenu_run also runs these functions:
+#
+# 'run_pre_func' before spawning spmenu.
+# 'run_post_func' after spawning spmenu, selected item passed as an argument.
+# 'fm_pre_func' before spawning spmenu.
+# 'fm_post_func' after spawning spmenu, selected item passed as an argument.
+# 'fm_pre_list_func' right before listing out files.
+# 'fm_post_list_func' right after listing out files.
+# 'read_man' when reading a man page, selected item passed as an argument.
+#
+# You may create those functions below.
 #
 # For example, to implement a basic history file:
 #
-# post_func() {
+# run_post_func() {
 #   rm -f /tmp/spmenu_entryhist; printf "\$1\n" >> /tmp/spmenu_entryhist
 # }
 #
 # You can use anything POSIX compliant shells support, as well as programs available on the system.
+
+# misc software
 TERMINAL="\${TERMINAL:-st -e}" # Terminal commands are spawned in
 BROWSER="\${BROWSER:-xdg-open}" # Web browser, for URLs
 TORRENT="\${TORRENT:-qbittorrent}" # Torrent client, for magnet links
+PDF_READER="\${PDF_READER:-zathura}" # PDF reader, for file management
+EDITOR="\${EDITOR:-nvim}" # Editor, used to open documents
+PLAYER="\${PLAYER:-mpv}" # Player, used to play audio/video
+GENERIC="\${GENERIC:-\$EDITOR}" # Generic, used to open unknown files
 WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
+
+# run launcher options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
-RUNLAUNCHER_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER
+RUNLAUNCHER_RUN_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the run launcher
+RUNLAUNCHER_FM_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the file manager
+RUNLAUNCHER_HELP_ARGS="--insert --hist-file \$HISTORY \$args" # Arguments passed to \$RUNLAUNCHER when using the help
+
+# sorting
 SORT_BY_NUMBER="true" # Sort by numbers
 SORT_IN_REVERSE="true" # Sort in reverse
 SORT_BY_RECENT="false" # Sort by recent
 SORT_ARGS="" # Extra arguments passed to the sort command.
+
+# keywords
 HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -vE syntax.
 KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
+
+# misc
+STDOUT="false" # Print to stdout and exit (true/false)
 DISPLAY_DUPLICATES="false" # Display duplicates or not
 DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/help)
+
+# file management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
+LS_ARGS="\${LS_ARGS:- --color=always}" # Arguments passed to /bin/ls
 
 # function to read the man page in spmenu
 read_man() { man "\$1" | col -b | \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"; }
@@ -134,7 +171,7 @@ EOF
 }
 
 parse() {
-    dout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_ARGS)"
+    dout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_RUN_ARGS)"
 
     # parse
     case "$(printf '%c' "$dout")" in
@@ -145,7 +182,7 @@ parse() {
     case "$(printf "%s" "$dout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
-        "?") [ "$EXEC" != "man" ] && print_help && main && return ;;
+        "?") print_help && main && return ;;
     esac
 
     # check for keywords
@@ -155,7 +192,8 @@ parse() {
 
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
-    command -v post_func > /dev/null && post_func "$dout"
+    [ "$STDOUT" != "false" ] && printf "%s\n" "$dout" && exit 1
+    command -v run_post_func > /dev/null && run_post_func "$dout"
 
     read_nman() {
         $TERMINAL -e man "$1"
@@ -194,6 +232,8 @@ read_args() {
 
         case "$arg" in
             -x|-run|--run) remove_arg "$arg" && function=run ;;
+            -o|-stdout|--stdout) remove_arg "$arg" && STDOUT=true ;;
+            -no|--no-stdout|--no-stdout) remove_arg "$arg" && STDOUT=false ;;
             -f|-fm|--fm) remove_arg "$arg"
                          [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                          function=fm ;;
@@ -204,12 +244,65 @@ read_args() {
     done
 }
 
+exec_file() {
+    [ "$STDOUT" != "false" ] && printf "%s\n" "$1" && exit 0
+    command -v fm_post_func > /dev/null && fm_post_func "$1"
+
+    # some default basic parsing
+    case "$1" in
+        *.html|*.htm) $BROWSER "$1" ;;
+        *.pdf) $PDF_READER "$1" ;;
+        *.flac|*.mp3|*.wav|*.ogg) $PLAYER "$1" ;;
+        *.mp4|*.mov|*.mkv) $PLAYER "$1" ;;
+        *)
+            if [ -x "$1" ]; then
+                $TERMINAL -e "$1"
+            else
+                $GENERIC "$1"
+            fi
+        ;;
+    esac
+}
+
+prepare_dirnav() {
+    [ ! -d "$dir" ] && return 1
+
+    listing() {
+        command -v fm_pre_list_func > /dev/null && fm_pre_list_func
+        ls $LS_ARGS # this allows us SGR colors
+        printf "..\n"
+        command -v fm_post_list_func > /dev/null && fm_post_list_func
+    }
+
+    command -v fm_pre_func > /dev/null && fm_pre_func
+
+    dir="$(listing | $RUNLAUNCHER $RUNLAUNCHER_FM_ARGS | sed -e 's/\x1b\[[0-9;]*m//g')"
+
+    case "$dir" in
+        *)
+            if [ -d "$dir" ]; then
+                cd "$dir" || printf "Invalid directory.. somehow\n"
+                dir="$(pwd)"
+                prepare_dirnav
+            elif [ -f "$dir" ]; then
+                exec_file "$dir" && return 0
+                return 1
+            else
+                return 1
+            fi
+        ;;
+    esac
+}
+
 main() {
+    print_config "$args"
     read_args "$@"
     check "$args"
-    print_config "$args"
 
-    RUNLAUNCHER_ARGS="${RUNLAUNCHER_ARGS:- --insert --hist-file $HISTORY $args}"
+    # some run launcher args
+    RUNLAUNCHER_FM_ARGS="${RUNLAUNCHER_FM_ARGS:- --insert --hist-file $HISTORY $args}"
+    RUNLAUNCHER_RUN_ARGS="${RUNLAUNCHER_RUN_ARGS:- --insert --hist-file $HISTORY $args}"
+    RUNLAUNCHER_HELP_ARGS="${RUNLAUNCHER_HELP_ARGS:- --insert --hist-file $HISTORY $args}"
 
     # $PATH listing
     case "$function" in
@@ -217,7 +310,7 @@ main() {
             parse "$args"
             exec_cmd "$args"
         ;;
-        "fm") printf "Directory: %s\n" "$dir"
+        "fm") prepare_dirnav "$args"
         ;;
         "help")
             print_cli_help
