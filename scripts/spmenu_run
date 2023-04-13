@@ -284,6 +284,7 @@ exec_file() {
 
 prepare_dirnav() {
     [ ! -d "$dir" ] && return 1
+    cd "$dir" || printf "Invalid directory.. somehow\n"
 
     listing() {
         command -v fm_pre_list_func > /dev/null && fm_pre_list_func
@@ -299,8 +300,7 @@ prepare_dirnav() {
     case "$dir" in
         *)
             if [ -d "$dir" ]; then
-                cd "$dir" || printf "Invalid directory.. somehow\n"
-                dir="$(pwd)"
+                dir="$(pwd)/$dir"
                 prepare_dirnav
             elif [ -f "$dir" ]; then
                 exec_file "$dir" && return 0
