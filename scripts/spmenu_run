@@ -10,7 +10,7 @@ TORRENT="${TORRENT:-qbittorrent}"
 PDF_READER="${PDF_READER:-zathura}"
 EDITOR="${EDITOR:-nvim}"
 PLAYER="${PLAYER:-mpv}"
-GENERIC="${GENERIC:-$EDITOR}"
+GENERIC="${GENERIC:-$TERMINAL -e $EDITOR}"
 WEB_GREP="${WEB_GREP:-http:|https:|www[.]}"
 MAGNET_GREP="${MAGNET_GREP:-magnet:?}"
 HISTORY="${HISTORY:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.hist}"
@@ -90,11 +90,12 @@ print_cli_help() {
 cat << EOF
 spmenu_run - Run launcher for spmenu
 
-spmenu -x, --run        List entries in \$PATH.
-spmenu -f, --fm <dir>   List files and directories in <dir>.
-spmenu -h, --help       Print this help.
-spmenu -o, --stdout     Print to standard input and do not execute the selected item.
-spmenu -no, --no-stdout Don't print to standard input, execute the selected item.
+spmenu -x, --run          List entries in \$PATH.
+spmenu -f, --fm <dir>     List files and directories in <dir>.
+spmenu -h, --help         Print this help.
+spmenu -o, --stdout       Print to standard input and do not execute the selected item.
+spmenu -no, --no-stdout   Don't print to standard input, execute the selected item.
+spmenu -a, --args <args>  Pass <args> to spmenu.
 EOF
 }
 
@@ -134,7 +135,7 @@ TORRENT="\${TORRENT:-qbittorrent}" # Torrent client, for magnet links
 PDF_READER="\${PDF_READER:-zathura}" # PDF reader, for file management
 EDITOR="\${EDITOR:-nvim}" # Editor, used to open documents
 PLAYER="\${PLAYER:-mpv}" # Player, used to play audio/video
-GENERIC="\${GENERIC:-\$EDITOR}" # Generic, used to open unknown files
+GENERIC="\${GENERIC:-\$TERMINAL -e \$EDITOR}" # Generic, used to open unknown files
 WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
@@ -165,7 +166,11 @@ DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
 LS_ARGS="\${LS_ARGS:- --color=always}" # Arguments passed to /bin/ls
 
 # function to read the man page in spmenu
-read_man() { man "\$1" | col -b | \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"; }
+read_man() {
+    man "\$1" | \
+    col -b | \
+    \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"
+}
 EOF
 [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
 }
@@ -236,7 +241,17 @@ read_args() {
             -no|-no-stdout) remove_arg "$arg" && STDOUT=false ;;
             -f|-fm|--fm) remove_arg "$arg"
                          [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
-                         function=fm ;;
+                         function=fm
+                         ;;
+            -a|-args|--args) remove_arg "$arg"
+                             if [ -z "$narg" ]; then
+                                 printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER"
+                                 exit 1
+                             fi
+
+                             remove_arg "$narg"
+                             MARGS="$narg"
+                          ;;
             -h|--help) remove_arg "$arg" && function=help ;;
         esac
 
@@ -256,6 +271,7 @@ exec_file() {
         *.pdf) $PDF_READER "$1" ;;
         *.flac|*.mp3|*.wav|*.ogg) $PLAYER "$1" ;;
         *.mp4|*.mov|*.mkv) $PLAYER "$1" ;;
+        *.theme) $EDITOR "$1" ;;
         *)
             if [ -x "$1" ]; then
                 $TERMINAL -e "$1"
@@ -298,13 +314,13 @@ prepare_dirnav() {
 
 main() {
     print_config
-    read_args "$*"
+    read_args "$@"
     check "$args"
 
     # some run launcher args
-    RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $args"
-    RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $args"
-    RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $args"
+    RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $MARGS"
+    RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
+    RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # $PATH listing
     case "$function" in
@@ -325,4 +341,4 @@ main() {
     esac
 }
 
-main "$*"
+main "$@"
