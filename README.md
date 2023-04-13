@@ -13,7 +13,7 @@ In addition to this, it also serves as a run launcher through the included
 shell script `spmenu_run`. Alternatively you may use `spmenu_desktop` which
 lists .desktop entries instead of $PATH.
 
-It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.gq/speedwm).
+It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.site/speedwm).
 
 ## Special features
 
@@ -94,7 +94,7 @@ disabled if you don't want this by:
 
 `emerge dev-vcs/git # Install dev-vcs/git using your favorite package manager`
 
-`git clone https://git.speedie.gq/spmenu`
+`git clone https://git.speedie.site/spmenu`
 
 `cd spmenu/`
 
@@ -106,13 +106,13 @@ you can use but it may require editing host.mk and toggle.mk manually.
 ## Installation (Gentoo GNU/Linux)
 
 If you are on Gentoo GNU/Linux, you can add
-[my overlay](https://git.speedie.gq/speedie-overlay) which includes
+[my overlay](https://git.speedie.site/speedie-overlay) which includes
 `x11-misc/spmenu` as well as other useful packages.
 
 ## Installation (Arch GNU/Linux)
 
 If you are on Arch GNU/Linux, you can add
-[my repository](https://git.speedie.gq/speedie-repository) which includes
+[my repository](https://git.speedie.site/speedie-repository) which includes
 `spmenu` as well as other useful packages.
 
 There's also a PKGBUILD. To use it, simply `make install_arch` in the directory
@@ -158,7 +158,7 @@ skip over images after a set time limit
 ## Scripts
 
 This build of spmenu should work with all spmenu/dmenu scripts.
-[Here](https://git.speedie.gq/speedwm-extras) are a few I've written/use.
+[Here](https://git.speedie.site/speedwm-extras) are a few I've written/use.
 If your scripts are useful enough, and written with spmenu in mind, feel free
 to pull request and put your scripts here!
 
