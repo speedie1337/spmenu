@@ -1,6 +1,6 @@
 #!/bin/sh
 # spmenu_run
-# Run launcher for spmenu
+# Feature rich run launcher, file lister and .desktop launcher for spmenu
 
 # Set basic variables, in case the config isn't valid, env variables and config file can override these
 CONFDIR="${CONFDIR:-${XDG_CONFIG_HOME:-$HOME/.config}}"
@@ -28,10 +28,17 @@ KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 
+DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
+ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
+TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
+USEIMAGE="${USEIMAGE:-true}"
+CACHE="${CACHE:-true}"
+LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
+
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
     if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
-        print_help
+        print_help "$@"
         touch "$CONFDIR/spmenu/run/.first_run"
     fi
 }
@@ -84,6 +91,8 @@ To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.
 
 $(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
+parse "$args"
+exec_cmd "$args"
 }
 
 print_cli_help() {
@@ -92,6 +101,7 @@ spmenu_run - Run launcher for spmenu
 
 spmenu -x, --run          List entries in \$PATH.
 spmenu -f, --fm <dir>     List files and directories in <dir>.
+spmenu -d, --desktop      List .desktop entries.
 spmenu -h, --help         Print this help.
 spmenu -o, --stdout       Print to standard input and do not execute the selected item.
 spmenu -no, --no-stdout   Don't print to standard input, execute the selected item.
@@ -112,6 +122,8 @@ cat << EOF > "$CONFDIR/spmenu/run/config"
 #
 # 'run_pre_func' before spawning spmenu.
 # 'run_post_func' after spawning spmenu, selected item passed as an argument.
+# 'desktop_pre_func' before spawning spmenu.
+# 'desktop_post_func' after spawning spmenu, selected item passed as an argument.
 # 'fm_pre_func' before spawning spmenu.
 # 'fm_post_func' after spawning spmenu, selected item passed as an argument.
 # 'fm_pre_list_func' right before listing out files.
@@ -143,6 +155,7 @@ HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spm
 # run launcher options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
 RUNLAUNCHER_RUN_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the run launcher
+RUNLAUNCHER_DESKTOP_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the .desktop launcher
 RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
 RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
 
@@ -159,7 +172,15 @@ KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 # misc
 STDOUT="false" # Print to stdout and exit (true/false)
 DISPLAY_DUPLICATES="false" # Display duplicates or not
-DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/help)
+DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/desktop/help)
+
+# .desktop options
+DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .desktop entries
+ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
+TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
+USEIMAGE="true" # Enable images (true/false)
+CACHE="true" # Cache entries (true/false)
+LOGFILE="/tmp/spmenu_run.log" # Log file
 
 # file management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
@@ -167,8 +188,8 @@ LS_ARGS="\${LS_ARGS:- --color=always}" # Arguments passed to /bin/ls
 
 # function to read the man page in spmenu
 read_man() {
-    man "\$1" | \
-    col -b | \
+    man "\$1" | \\
+    col -b | \\
     \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"
 }
 EOF
@@ -187,7 +208,7 @@ parse() {
     case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
-        "?") print_help && main && return ;;
+        "?") print_help "$@" && main && return ;;
     esac
 
     # check for keywords
@@ -243,6 +264,9 @@ read_args() {
                          [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                          function=fm
                          ;;
+            -d|-desktop|--desktop) remove_arg "$arg"
+                                   function=desktop
+                                  ;;
             -a|-args|--args) remove_arg "$arg"
                              if [ -z "$narg" ]; then
                                  printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER"
@@ -312,6 +336,112 @@ prepare_dirnav() {
     esac
 }
 
+print_desktop_help() {
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
+To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
+To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
+
+By default, spmenu_run will cache entries for speed reasons. You can find these entries in ~/.config/spmenu/run/cache.
+If you make changes to .desktop files (not new entries, modified old entries), you need to clear the cache for the changes to appear. Simply delete the directory to do this.
+
+- Type in '?' to show this help screen at any time.
+
+$(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
+EOF
+}
+
+main_desktop() {
+    print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"; }
+    prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
+    scan() { entry_c="$(find "$DESKTOP_DIR" -type f | wc -l)"; cached_c="$(find "$TEMPORARY_DIR" -type f | wc -l)"; cached="$(find "$TEMPORARY_DIR" -type f)"; }
+
+    # cache it, this means some speed improvements
+    cache() {
+        printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
+        printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
+        [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
+
+        # find
+        entry="$(find $DESKTOP_DIR -type f)"
+        icons="$(find $ICON_DIR -type f)"
+
+        # write new entries
+        for i in $(seq "$entry_c"); do
+            cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+            exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g")"
+            name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+
+            # icon name
+            icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
+            icon="$(printf "%s" "$icons" | grep "/$icon_name[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
+
+            # write the file
+            printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$TEMPORARY_DIR/$(basename "$cur_file").entry"
+        done
+
+        # run scan() again
+        scan
+    }
+
+    print_list() {
+        command -v desktop_pre_func > /dev/null && desktop_pre_func
+        # print data from entries
+        for i in $(seq "$cached_c"); do
+            # current file
+            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+
+            # get details to display
+            title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
+            icon="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+
+            [ -z "$title" ] && continue # no title isn't worth displaying, obviously
+
+            # print it all
+            [ "$USEIMAGE" = "true" ] && [ ! -e "$icon" ] && USEIMAGE=false && reenable=1
+            [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
+                printf "%s\n" "$title"
+            [ "$reenable" = "1" ] && USEIMAGE=true
+        done
+    }
+
+    execute_program() {
+        [ "$res" = "?" ] && print_desktop_help && main "$@"
+        command -v desktop_post_func > /dev/null && desktop_post_func "$res"
+        [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
+        for i in $(seq "$cached_c"); do
+            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+
+            # find the executable matching the selected name
+            if grep -q "Name:$res" "$cur_file"; then
+                exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
+                printf "Current file: '%s'\n" "$cur_file" >> "$LOGFILE"
+
+                break;
+            else
+                exec=""
+                continue;
+            fi
+        done
+
+        # finally run the program
+        if [ -n "$exec" ]; then
+            /bin/sh -c "$exec"
+        else
+            [ -n "$res" ] && printf "No executable found. Try clearing cache." >> "$LOGFILE"
+        fi
+
+        return 0
+    }
+
+    prep
+    check
+    scan
+    cache
+    print_menu "$@"
+    execute_program "$@"
+}
+
 main() {
     print_config
     read_args "$@"
@@ -320,6 +450,7 @@ main() {
     # some run launcher args
     RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
+    RUNLAUNCHER_DESKTOP_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # $PATH listing
@@ -329,6 +460,8 @@ main() {
             exec_cmd "$args"
         ;;
         "fm") prepare_dirnav "$args"
+        ;;
+        "desktop") main_desktop "$args"
         ;;
         "help")
             print_cli_help
