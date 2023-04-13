@@ -22,7 +22,8 @@ build(){
   cd $pkgname-$pkgver
   make \
     X11INC=/usr/include/X11 \
-    X11LIB=/usr/lib/X11 CC=gcc
+    X11LIB=/usr/lib/X11 \
+    CC=gcc
 }
 
 package() {
