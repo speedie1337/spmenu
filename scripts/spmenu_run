@@ -352,7 +352,14 @@ EOF
 }
 
 main_desktop() {
-    print_menu() { res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"; }
+    print_menu() {
+        if [ "$DISPLAY_DUPLICATES" != "false" ]; then
+            res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+        else
+            res="$(print_list | uniq $UNIQ_ARGS | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+        fi
+    }
+
     prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
     scan() { entry_c="$(find "$DESKTOP_DIR" -type f | wc -l)"; cached_c="$(find "$TEMPORARY_DIR" -type f | wc -l)"; cached="$(find "$TEMPORARY_DIR" -type f)"; }
 
