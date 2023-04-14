@@ -695,9 +695,6 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 `spmenu:license`
 :    Print the spmenu license
 
-`spmenu:about`
-:    Print various information about spmenu, such as compiler arguments and packaging.
-
 `spmenu:test`
 :    Print a test script for spmenu which tests various features. Report any
 weird issues you may have.
