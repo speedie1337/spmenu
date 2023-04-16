@@ -63,6 +63,8 @@ ResourcePref resources[] = {
     { "menuwidth",                   INTEGER, &menuwidth },
 	{ "menupaddingv",                INTEGER, &menupaddingv },
 	{ "menupaddingh",                INTEGER, &menupaddingh },
+    { "menumarginv",                 INTEGER, &menumarginv },
+    { "menumarginh",                 INTEGER, &menumarginh },
     { "textpadding",                 INTEGER, &textpadding },
     { "indentitems",                 INTEGER, &indentitems },
     { "accuratewidth",               INTEGER, &accuratewidth },

@@ -533,7 +533,7 @@ setupdisplay(void)
     if (image) resizetoimageheight(imageheight);
     #endif
 
-    mh = (lines + 1) * bh; // lines + 1 * bh is the menu height
+    mh = (lines + 1) * bh + 2 * menumarginv; // lines + 1 * bh is the menu height
 
     // set prompt width based on prompt size
     promptw = (prompt && *prompt)

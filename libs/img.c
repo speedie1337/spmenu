@@ -94,12 +94,16 @@ drawimage(void)
         int leftmargin = imagegaps;
         int wtr = 0;
         int wta = 0;
+        int xta = 0;
 
         if (hideprompt && hideinput && hidemode && hidematchcount) {
             wtr = bh;
         } else {
-            wta = bh;
+            wta = bh + menumarginv;
         }
+
+        // margin
+        xta += menumarginh;
 
        	if (mh != bh + height + imagegaps * 2 - wtr) { // menu height cannot be smaller than image height
 		    resizetoimageheight(height);
@@ -109,16 +113,16 @@ drawimage(void)
         if (!imageposition) { // top mode = 0
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, wta+imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, wta+imagegaps);
         } else if (imageposition == 1) { // bottom mode = 1
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, mh-height-imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, mh-height-imagegaps);
         } else if (imageposition == 2) { // center mode = 2
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (mh-wta-height)/2+wta);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
         } else {
             int minh = MIN(height, mh-bh-imagegaps*2);
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2, (minh-height)/2+wta+imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+imagegaps);
         }
     }
 
@@ -349,10 +353,10 @@ resizetoimageheight(int imageheight)
         wtr = bh;
     }
 
-	mh = MAX((lines + 1) * bh, ((lines + 1) * bh) - wtr);
+	mh = MAX((lines + 1) * bh + 2 * menumarginv, ((lines + 1) * bh) - wtr + 2 * menumarginv);
 
 	if (mh - bh < imageheight + imagegaps * 2) {
-        mh = (imageheight + imagegaps * 2 + bh) - wtr;
+        mh = (imageheight + imagegaps * 2 + bh) - wtr + 2 * menumarginv;
     }
 
 	if (!win || omh == mh) {

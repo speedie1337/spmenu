@@ -39,9 +39,10 @@ motionevent(XButtonEvent *ev)
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
 
 	xy = lines > 0 ? bh : inputw + promptw + larrowWidth;
+    xy += menumarginv;
 	ev_xy = lines > 0 ? ev->y : ev->x;
 	for (item = curr; item && item != next; item = item->right) {
-		int wh = lines > 0 ? bh : textw_clamp(item->text, mw - xy - rarrowWidth);
+		int wh = lines > 0 ? bh : textw_clamp(item->text, mw - xy - rarrowWidth - menumarginh);
 		if (ev_xy >= xy && ev_xy < (xy + wh)) {
 			sel = item;
 			calcoffsets();
@@ -64,6 +65,8 @@ buttonpress(XEvent *e)
     if (!hidepowerline) {
         x = xpad = plw;
     }
+
+    x += menumarginh;
 
     int larrowWidth = 0;
     int rarrowWidth = 0;

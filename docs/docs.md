@@ -245,6 +245,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-txp, --text-padding padding`
 :   Set text padding to padding
 
+`-vem, --vertical-margin margin`
+:   Set the vertical margin
+
+`-hem, --horizontal-margin margin`
+:   Set the horizontal margin
+
 `-lp, --vertical-padding padding`
 :   Set the vertical padding
 

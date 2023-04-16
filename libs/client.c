@@ -70,7 +70,7 @@ resizeclient(void)
     if (image) resizetoimageheight(imageheight);
     #endif
 
-    mh = (lines + 1) * bh;
+    mh = (lines + 1) * bh + 2 * menumarginv;
 
     // why have an empty line? when there's nothing to draw there anyway?
     if (hideprompt && hideinput && hidemode && hidematchcount)

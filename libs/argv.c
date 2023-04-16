@@ -214,6 +214,10 @@ readargs(int argc, char *argv[])
 		    menupaddingv = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-hp") || (!strcmp(argv[i], "--horizontal-padding"))) { // horizontal padding
 		    menupaddingh = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-vem") || (!strcmp(argv[i], "--vertical-margin"))) { // vertical margin
+		    menumarginv = atoi(argv[++i]);
+		} else if (!strcmp(argv[i], "-hom") || (!strcmp(argv[i], "--horizontal-margin"))) { // horizontal margin
+		    menumarginh = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-pri") || (!strcmp(argv[i], "--priority"))) { // high priority (csv format)
             hpitems = tokenize(argv[++i], ",", &hplength);
 		} else if (!strcmp(argv[i], "-ig") || (!strcmp(argv[i], "--image-gaps"))) { // gaps between image
@@ -477,6 +481,8 @@ usage(void)
           "spmenu -txp,     --text-padding <padding>                    Set text padding to <padding>\n"
 		  "spmenu -lp,      --vertical-padding <padding>                Set the vertical padding\n"
 		  "spmenu -hp,      --horizontal-padding <padding>              Set the horizontal padding\n"
+          "spmenu -vem,     --vertical-margin <margin>                  Set the vertical margin\n"
+          "spmenu -hem,     --horizontal-margin <margin>                Set the horizontal margin\n"
           "spmenu -la,      --left-arrow-symbol <symbol>                Set the left arrow to <symbol>\n"
           "spmenu -ra,      --right-arrow-symbol <symbol>               Set the right arrow to <symbol>\n"
           "spmenu -is,      --image-size <size>                         Image size\n"

@@ -204,12 +204,13 @@ drawitem(int x, int y, int w)
 	if (lines > 0) {
 		int i = 0;
         int rx = 0;
+        int ew = 0;
 
         // draw image first
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
             rx = ox;
-            rx += (imagegaps * 2) + imagewidth;
+            rx += (imagegaps * 2) + imagewidth + menumarginh;
         } else
         #endif
             if (!indentitems) {
@@ -218,12 +219,16 @@ drawitem(int x, int y, int w)
                 rx = x;
             }
 
+        if (!hidepowerline && (powerlinemode || powerlinecount)) {
+            ew = plw / 2;
+        }
+
 		for (item = curr; item != next; item = item->right, i++) {
 			x = drawitemtext(
 				item,
 				rx + ((i / lines) *  ((mw - rx) / columns)),
 				y + (((i % lines) + 1) * bh),
-				(mw - rx) / columns
+				(mw - rx) / columns - (menumarginh + ew / 2)
 			);
         }
 
@@ -235,9 +240,9 @@ drawitem(int x, int y, int w)
         x = drawlarrow(x, y, w);
 
 		for (item = curr; item != next; item = item->right) // draw items
-            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth));
+            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth - menumarginh));
 
-            w = rarrowWidth + numberWidth + modeWidth;
+            w = rarrowWidth + numberWidth + modeWidth + menumarginh;
             x = drawrarrow(mw - w, y, w);
 	}
 
@@ -294,7 +299,7 @@ drawinput(int x, int y, int w)
 
 	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && !hideprompt) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
-		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
+		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0);
 	}
 
     return x;
@@ -400,6 +405,9 @@ drawmenu(void)
         numberWidth = TEXTW(numbers);
     }
 
+    x += menumarginh;
+    y += menumarginv;
+
     // why have an empty line?
     if ((hideprompt && hideinput && hidemode && hidematchcount
         #if USEIMAGE
@@ -408,7 +416,7 @@ drawmenu(void)
         )) {
         #endif
         y -= bh;
-        mh = (lines + 1) * bh - bh;
+        mh = (lines + 1) * bh - bh + 2 * menumarginv;
 
         if (!win) return;
 
@@ -438,12 +446,12 @@ drawmenu(void)
 
     if (!hidematchcount) {
         w = numberWidth;
-        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth, y, w);
+        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
     }
 
     if (!hidemode) {
         w = modeWidth;
-        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth, y, w);
+        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
     }
 
 	drw_map(drw, win, 0, 0, mw, mh);

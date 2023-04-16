@@ -70,8 +70,14 @@ conf_init(void)
 
             // look up
             config_setting_lookup_int(conf, "position", &menuposition); // spmenu.window.menuposition
+
             config_setting_lookup_int(conf, "paddingv", &menupaddingv); // spmenu.window.paddingv
             config_setting_lookup_int(conf, "paddingh", &menupaddingh); // spmenu.window.paddingh
+            config_setting_lookup_int(conf, "padding-vertical", &menupaddingv); // spmenu.window.padding-vertical
+            config_setting_lookup_int(conf, "padding-horizontal", &menupaddingh); // spmenu.window.padding-horizontal
+            config_setting_lookup_int(conf, "margin-vertical", &menumarginv); // spmenu.window.margin-vertical
+            config_setting_lookup_int(conf, "margin-horizontal", &menumarginh); // spmenu.window.margin-horizontal
+
             config_setting_lookup_int(conf, "x", &xpos); // spmenu.window.x
             config_setting_lookup_int(conf, "y", &xpos); // spmenu.window.y
             config_setting_lookup_int(conf, "width", &menuwidth); // spmenu.window.width
