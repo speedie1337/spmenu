@@ -27,6 +27,7 @@ HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 LS_ARGS="${LS_ARGS:- --color=always}"
+USE_FULL_PATH="${USE_FULL_PATH:-false}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
@@ -99,13 +100,15 @@ print_cli_help() {
 cat << EOF
 spmenu_run - Run launcher for spmenu
 
-spmenu -x, --run          List entries in \$PATH.
-spmenu -f, --fm <dir>     List files and directories in <dir>.
-spmenu -d, --desktop      List .desktop entries.
-spmenu -h, --help         Print this help.
-spmenu -o, --stdout       Print to standard input and do not execute the selected item.
-spmenu -no, --no-stdout   Don't print to standard input, execute the selected item.
-spmenu -a, --args <args>  Pass <args> to spmenu.
+spmenu -x, --run             List entries in \$PATH.
+spmenu -f, --fm <dir>        List files and directories in <dir>.
+spmenu -d, --desktop         List .desktop entries.
+spmenu -p, --full-path       Print the full path to the file selected (-fm)
+spmenu -np, --no-full-path   Don't print the full path to the file selected (-fm)
+spmenu -h, --help            Print this help.
+spmenu -o, --stdout          Print to standard input and do not execute the selected item.
+spmenu -no, --no-stdout      Don't print to standard input, execute the selected item.
+spmenu -a, --args <args>     Pass <args> to spmenu.
 EOF
 }
 
@@ -185,6 +188,7 @@ LOGFILE="/tmp/spmenu_run.log" # Log file
 # file management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
 LS_ARGS="\${LS_ARGS:- --color=always}" # Arguments passed to /bin/ls
+USE_FULL_PATH="true" # Return full path (true/false)
 
 # function to read the man page in spmenu
 read_man() {
@@ -267,6 +271,12 @@ read_args() {
             -d|-desktop|--desktop) remove_arg "$arg"
                                    function=desktop
                                   ;;
+            -p|-full-path|--full-path) remove_arg "$arg"
+                                       USE_FULL_PATH="true"
+                                       ;;
+            -np|-no-full-path|--no-full-path) remove_arg "$arg"
+                                       USE_FULL_PATH="false"
+                                       ;;
             -a|-args|--args) remove_arg "$arg"
                              if [ -z "$narg" ]; then
                                  printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER"
@@ -286,7 +296,8 @@ read_args() {
 }
 
 exec_file() {
-    [ "$STDOUT" != "false" ] && printf "%s\n" "$1" && exit 0
+    [ "$USE_FULL_PATH" != "false" ] && DIR="$(pwd)/"
+    [ "$STDOUT" != "false" ] && printf "%s%s\n" "${DIR}" "$1" && exit 0
     command -v fm_post_func > /dev/null && fm_post_func "$1"
 
     # some default basic parsing
