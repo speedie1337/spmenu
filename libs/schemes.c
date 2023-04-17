@@ -29,10 +29,10 @@ init_appearance(void)
     alphas[SchemeInput][ColBg] = alpha_inputbg;
     alphas[SchemePrompt][ColFg] = alpha_promptfg;
     alphas[SchemePrompt][ColBg] = alpha_promptbg;
-    alphas[SchemeNormHighlight][ColFg] = alpha_normhlfg;
-    alphas[SchemeNormHighlight][ColBg] = alpha_normhlbg;
-    alphas[SchemeSelHighlight][ColFg] = alpha_selhlfg;
-    alphas[SchemeSelHighlight][ColBg] = alpha_selhlbg;
+    alphas[SchemeNormHighlight][ColFg] = alpha_hlnormfg;
+    alphas[SchemeNormHighlight][ColBg] = alpha_hlnormbg;
+    alphas[SchemeSelHighlight][ColFg] = alpha_hlselfg;
+    alphas[SchemeSelHighlight][ColBg] = alpha_hlselbg;
     alphas[SchemeCaret][ColFg] = alpha_caretfg;
     alphas[SchemeCaret][ColBg] = alpha_caretbg;
     alphas[SchemeNumber][ColFg] = alpha_numfg;

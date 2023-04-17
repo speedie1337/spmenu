@@ -208,10 +208,10 @@ conf_init(void)
             config_setting_lookup_int(conf, "rarrowfg", &alpha_rarrowfg); // spmenu.alpha.rarrowfg
             config_setting_lookup_int(conf, "rarrowbg", &alpha_rarrowbg); // spmenu.alpha.rarrowbg
 
-            config_setting_lookup_int(conf, "normhlfg", &alpha_normhlfg); // spmenu.alpha.normhlfg
-            config_setting_lookup_int(conf, "normhlbg", &alpha_normhlbg); // spmenu.alpha.normhlbg
-            config_setting_lookup_int(conf, "selhlfg", &alpha_selhlfg); // spmenu.alpha.selhlfg
-            config_setting_lookup_int(conf, "selhlbg", &alpha_selhlbg); // spmenu.alpha.selhlbg
+            config_setting_lookup_int(conf, "hlnormfg", &alpha_hlnormfg); // spmenu.alpha.hlnormfg
+            config_setting_lookup_int(conf, "hlnormbg", &alpha_hlnormbg); // spmenu.alpha.hlnormbg
+            config_setting_lookup_int(conf, "hlselfg", &alpha_hlselfg); // spmenu.alpha.hlselfg
+            config_setting_lookup_int(conf, "hlselbg", &alpha_hlselbg); // spmenu.alpha.hlselbg
 
             config_setting_lookup_int(conf, "numfg", &alpha_numfg); // spmenu.alpha.numfg
             config_setting_lookup_int(conf, "numbg", &alpha_numbg); // spmenu.alpha.numbg

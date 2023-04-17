@@ -1,21 +1,21 @@
 // alpha array
 static unsigned int alphas[][2]      = {
-	//                         fg      bg
-	[SchemeLArrow]         = { opaque, 200 },
-	[SchemeRArrow]         = { opaque, 200 },
-	[SchemeItemNorm]       = { opaque, 200 },
-	[SchemeItemSel]        = { opaque, 200 },
-	[SchemeItemNormPri]    = { opaque, 200 },
-	[SchemeItemSelPri]     = { opaque, 200 },
-	[SchemeMenu]           = { opaque, 200 },
-    [SchemeInput]          = { opaque, 200 },
-	[SchemePrompt]         = { opaque, 200 },
-	[SchemeNormHighlight]  = { opaque, 200 },
-	[SchemeSelHighlight]   = { opaque, 200 },
-    [SchemeMode]           = { opaque, 200 },
-    [SchemeCaret]          = { opaque, 200 },
-    [SchemeNumber]         = { opaque, 200 },
-    [SchemeBorder]         = { opaque, 200 },
+	//                         fg   bg
+	[SchemeLArrow]         = { 255, 200 },
+	[SchemeRArrow]         = { 255, 200 },
+	[SchemeItemNorm]       = { 255, 200 },
+	[SchemeItemSel]        = { 255, 200 },
+	[SchemeItemNormPri]    = { 255, 200 },
+	[SchemeItemSelPri]     = { 255, 200 },
+	[SchemeMenu]           = { 255, 200 },
+    [SchemeInput]          = { 255, 200 },
+	[SchemePrompt]         = { 255, 200 },
+	[SchemeNormHighlight]  = { 255, 200 },
+	[SchemeSelHighlight]   = { 255, 200 },
+    [SchemeMode]           = { 255, 200 },
+    [SchemeCaret]          = { 255, 200 },
+    [SchemeNumber]         = { 255, 200 },
+    [SchemeBorder]         = { 255, 200 },
 };
 
 // colorscheme array
@@ -30,8 +30,8 @@ static char *colors[SchemeLast][2] = {
     [SchemeInput]         = { col_inputfg,       col_inputbg,        },
 	[SchemeMenu]          = { NULL,              col_menubgcolor     },
 	[SchemePrompt]        = { col_promptfg,      col_promptbg        },
-    [SchemeNormHighlight] = { col_normhlfgcolor, col_normhlbgcolor   },
-    [SchemeSelHighlight]  = { col_selhlfgcolor,  col_selhlbgcolor    },
+    [SchemeNormHighlight] = { col_hlnormfgcolor, col_hlnormbgcolor   },
+    [SchemeSelHighlight]  = { col_hlselfgcolor,  col_hlselbgcolor    },
     [SchemeCaret]         = { col_caretfgcolor,  NULL                },
     [SchemeMode]          = { col_modefgcolor,   col_modebgcolor     },
     [SchemeNumber]        = { col_numfgcolor,    col_numbgcolor      },

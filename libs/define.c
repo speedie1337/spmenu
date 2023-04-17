@@ -21,6 +21,3 @@
 #define ALTR Mod3Mask
 #define SUPER Mod4Mask
 #define SUPERR Mod5Mask
-
-// alpha
-#define opaque 0xffU

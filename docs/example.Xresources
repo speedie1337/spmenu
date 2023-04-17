@@ -6,8 +6,8 @@
 !! Fonts
 spmenu.font:                Noto Sans Mono 8
 spmenu.textpadding:         0
-                            
-!! Colors                   
+
+!! Colors
 spmenu.col_itemnormfg:      #bbbbbb
 spmenu.col_itemnormbg:      #222222
 spmenu.col_itemselfg:       #eeeeee
@@ -27,10 +27,10 @@ spmenu.col_inputfg:         #eeeeee
 spmenu.col_inputbg:         #222222
 spmenu.col_numfgcolor:      #ffffff
 spmenu.col_numbgcolor:      #2d3856
-spmenu.col_normhlfgcolor:   #ffffff
-spmenu.col_normhlbgcolor:   #000000
-spmenu.col_selhlfgcolor:    #ffffff
-spmenu.col_selhlbgcolor:    #000000
+spmenu.col_hlnormfgcolor:   #ffffff
+spmenu.col_hlnormbgcolor:   #000000
+spmenu.col_hlselfgcolor:    #ffffff
+spmenu.col_hlselbgcolor:    #000000
 spmenu.col_caretfgcolor:    #ffffff
 spmenu.col_bordercolor:     #35638A
 spmenu.col_modefgcolor:     #ffffff
@@ -51,8 +51,8 @@ spmenu.col_sgrcolor12:      #0000ff
 spmenu.col_sgrcolor13:      #ff00ff
 spmenu.col_sgrcolor14:      #00ffff
 spmenu.col_sgrcolor15:      #ffffff
-                            
-!! Alpha                    
+
+!! Alpha
 spmenu.alpha_itemnormfg:    255
 spmenu.alpha_itemnormbg:    200
 spmenu.alpha_itemselfg:     255
@@ -70,10 +70,10 @@ spmenu.alpha_larrowfg:      255
 spmenu.alpha_larrowbg:      200
 spmenu.alpha_rarrowfg:      255
 spmenu.alpha_rarrowbg:      200
-spmenu.alpha_normhlfg:      255
-spmenu.alpha_normhlbg:      200
-spmenu.alpha_selhlfg:       255
-spmenu.alpha_selhlbg:       200
+spmenu.alpha_hlnormfg:      255
+spmenu.alpha_hlnormbg:      200
+spmenu.alpha_hlselfg:       255
+spmenu.alpha_hlselbg:       200
 spmenu.alpha_numfg:         255
 spmenu.alpha_numbg:         200
 spmenu.alpha_borderbg:      255
@@ -81,39 +81,39 @@ spmenu.alpha_caretfg:       255
 spmenu.alpha_caretbg:       200
 spmenu.alpha_modefg:        255
 spmenu.alpha_modebg:        200
-                            
-                            
-!! Powerline                
+
+
+!! Powerline
 spmenu.powerlineprompt:     1
 spmenu.powerlinecount:      1
 spmenu.powerlinemode:       1
 spmenu.promptpwlstyle:      0
 spmenu.matchcountpwlstyle:  0
 spmenu.modepwlstyle:        0
-                            
-!! Misc color               
+
+!! Misc color
 spmenu.globalcolors:        1
 spmenu.alpha:               1
-                            
-!! Lines and columns        
+
+!! Lines and columns
 spmenu.lineheight:          1
 spmenu.lines:               0
 spmenu.columns:             10
 spmenu.preselected:         0
 spmenu.indentitems:         1
-                            
-!! History                  
+
+!! History
 spmenu.maxhist:             64
 spmenu.histdup:             0
-                            
-!! Matches                  
+
+!! Matches
 spmenu.type:                1
 spmenu.passwd:              0
 spmenu.fuzzy:               1
 spmenu.sortmatches:         1
 spmenu.casesensitive:       0
-                            
-!! Menu                     
+
+!! Menu
 spmenu.menuposition:        1
 spmenu.menupaddingv:        0
 spmenu.menupaddingh:        0
@@ -125,28 +125,28 @@ spmenu.ypos:                0
 spmenu.minwidth:            1000
 spmenu.accuratewidth:       1
 spmenu.borderwidth:         0
-                            
-!! Properties               
+
+!! Properties
 spmenu.dockproperty:        1
-                            
-!! General                  
+
+!! General
 spmenu.fast:                0
 spmenu.managed:             0
 spmenu.mon:                 -1
 spmenu.coloritems:          1
-                            
-!! Image                    
+
+!! Image
 spmenu.imagewidth:          200
 spmenu.imageheight:         200
 spmenu.imagegaps:           0
 spmenu.imageposition:       0
 spmenu.generatecache:       1
 spmenu.maxcache:            512
-                            
-!! Mode options             
+
+!! Mode options
 spmenu.mode:                0
-                            
-!! Hide options             
+
+!! Hide options
 spmenu.hidematchcount:      0
 spmenu.hidemode:            0
 spmenu.hidelarrow:          0
@@ -158,8 +158,8 @@ spmenu.hidepowerline:       0
 spmenu.hidecaret:           0
 spmenu.hidehighlight:       0
 spmenu.hideimage:           0
-                            
-!! Pango markup toggles     
+
+!! Pango markup toggles
 spmenu.pango_item:          1
 spmenu.pango_prompt:        1
 spmenu.pango_input:         1
