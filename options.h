@@ -178,9 +178,8 @@ static int pango_mode                  = 0; /* Enable support for pango markup f
 static int pango_password              = 0; /* Enable support for pango markup for the password text */
 
 /* Alpha options */
-#define fgalpha                        opaque /* Foreground alpha */
-#define bgalpha                        200 /* Background alpha */
-#define borderalpha                    opaque /* Border alpha */
+static int fgalpha                     = opaque;
+static int bgalpha                     = 200;
 
 /* Misc */
 static int coloritems                  = 1; /* Color items or not */

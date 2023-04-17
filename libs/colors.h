@@ -1,21 +1,21 @@
 // alpha array
-static unsigned int alphas[][3]      = {
-	//                         fg       bg        border
-	[SchemeLArrow]         = { fgalpha, bgalpha,  borderalpha },
-	[SchemeRArrow]         = { fgalpha, bgalpha,  borderalpha },
-	[SchemeItemNorm]       = { fgalpha, bgalpha,  borderalpha },
-	[SchemeItemSel]        = { fgalpha, bgalpha,  borderalpha },
-	[SchemeItemNormPri]    = { fgalpha, bgalpha,  borderalpha },
-	[SchemeItemSelPri]     = { fgalpha, bgalpha,  borderalpha },
-	[SchemeMenu]           = { fgalpha, bgalpha,  borderalpha },
-    [SchemeInput]          = { fgalpha, bgalpha,  borderalpha },
-	[SchemePrompt]         = { fgalpha, bgalpha,  borderalpha },
-	[SchemeNormHighlight]  = { fgalpha, bgalpha,  borderalpha },
-	[SchemeSelHighlight]   = { fgalpha, bgalpha,  borderalpha },
-    [SchemeMode]           = { fgalpha, bgalpha,  borderalpha },
-    [SchemeCaret]          = { fgalpha, bgalpha,  borderalpha },
-    [SchemeNumber]         = { fgalpha, bgalpha,  borderalpha },
-    [SchemeBorder]         = { fgalpha, bgalpha,  borderalpha },
+static unsigned int alphas[][2]      = {
+	//                         fg      bg
+	[SchemeLArrow]         = { opaque, 200 },
+	[SchemeRArrow]         = { opaque, 200 },
+	[SchemeItemNorm]       = { opaque, 200 },
+	[SchemeItemSel]        = { opaque, 200 },
+	[SchemeItemNormPri]    = { opaque, 200 },
+	[SchemeItemSelPri]     = { opaque, 200 },
+	[SchemeMenu]           = { opaque, 200 },
+    [SchemeInput]          = { opaque, 200 },
+	[SchemePrompt]         = { opaque, 200 },
+	[SchemeNormHighlight]  = { opaque, 200 },
+	[SchemeSelHighlight]   = { opaque, 200 },
+    [SchemeMode]           = { opaque, 200 },
+    [SchemeCaret]          = { opaque, 200 },
+    [SchemeNumber]         = { opaque, 200 },
+    [SchemeBorder]         = { opaque, 200 },
 };
 
 // colorscheme array

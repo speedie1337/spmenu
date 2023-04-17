@@ -7,9 +7,42 @@ sixd_to_8bit(int x)
 void
 init_appearance(void)
 {
-    int i, j;
+    int i, j, k;
 
     char cbuf[8];
+
+    // set alpha
+    // TODO: allow these to be individually set, instead of all using fg/bgalpha
+    alphas[SchemeLArrow][ColFg] = fgalpha;
+    alphas[SchemeLArrow][ColBg] = bgalpha;
+    alphas[SchemeRArrow][ColFg] = fgalpha;
+    alphas[SchemeRArrow][ColBg] = bgalpha;
+    alphas[SchemeItemNorm][ColFg] = fgalpha;
+    alphas[SchemeItemNorm][ColBg] = bgalpha;
+    alphas[SchemeItemSel][ColFg] = fgalpha;
+    alphas[SchemeItemSel][ColBg] = bgalpha;
+    alphas[SchemeItemNormPri][ColFg] = fgalpha;
+    alphas[SchemeItemNormPri][ColBg] = bgalpha;
+    alphas[SchemeItemSelPri][ColFg] = fgalpha;
+    alphas[SchemeItemSelPri][ColBg] = bgalpha;
+    alphas[SchemeMenu][ColBg] = bgalpha;
+    alphas[SchemeMenu][ColFg] = fgalpha; // this one isn't actually used
+    alphas[SchemeInput][ColFg] = fgalpha;
+    alphas[SchemeInput][ColBg] = bgalpha;
+    alphas[SchemePrompt][ColFg] = fgalpha;
+    alphas[SchemePrompt][ColBg] = bgalpha;
+    alphas[SchemeNormHighlight][ColFg] = fgalpha;
+    alphas[SchemeNormHighlight][ColBg] = bgalpha;
+    alphas[SchemeSelHighlight][ColFg] = fgalpha;
+    alphas[SchemeSelHighlight][ColBg] = bgalpha;
+    alphas[SchemeCaret][ColFg] = fgalpha;
+    alphas[SchemeCaret][ColBg] = bgalpha;
+    alphas[SchemeNumber][ColFg] = fgalpha;
+    alphas[SchemeNumber][ColBg] = bgalpha;
+    alphas[SchemeMode][ColFg] = fgalpha;
+    alphas[SchemeMode][ColBg] = bgalpha;
+    alphas[SchemeBorder][ColFg] = fgalpha; // this one isn't actually used
+    alphas[SchemeBorder][ColBg] = bgalpha;
 
     // create color schemes from array
 	for (j = 0; j < SchemeLast; j++) {
