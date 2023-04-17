@@ -12,37 +12,34 @@ init_appearance(void)
     char cbuf[8];
 
     // set alpha
-    // TODO: allow these to be individually set, instead of all using fg/bgalpha
-    alphas[SchemeLArrow][ColFg] = fgalpha;
-    alphas[SchemeLArrow][ColBg] = bgalpha;
-    alphas[SchemeRArrow][ColFg] = fgalpha;
-    alphas[SchemeRArrow][ColBg] = bgalpha;
-    alphas[SchemeItemNorm][ColFg] = fgalpha;
-    alphas[SchemeItemNorm][ColBg] = bgalpha;
-    alphas[SchemeItemSel][ColFg] = fgalpha;
-    alphas[SchemeItemSel][ColBg] = bgalpha;
-    alphas[SchemeItemNormPri][ColFg] = fgalpha;
-    alphas[SchemeItemNormPri][ColBg] = bgalpha;
-    alphas[SchemeItemSelPri][ColFg] = fgalpha;
-    alphas[SchemeItemSelPri][ColBg] = bgalpha;
-    alphas[SchemeMenu][ColBg] = bgalpha;
-    alphas[SchemeMenu][ColFg] = fgalpha; // this one isn't actually used
-    alphas[SchemeInput][ColFg] = fgalpha;
-    alphas[SchemeInput][ColBg] = bgalpha;
-    alphas[SchemePrompt][ColFg] = fgalpha;
-    alphas[SchemePrompt][ColBg] = bgalpha;
-    alphas[SchemeNormHighlight][ColFg] = fgalpha;
-    alphas[SchemeNormHighlight][ColBg] = bgalpha;
-    alphas[SchemeSelHighlight][ColFg] = fgalpha;
-    alphas[SchemeSelHighlight][ColBg] = bgalpha;
-    alphas[SchemeCaret][ColFg] = fgalpha;
-    alphas[SchemeCaret][ColBg] = bgalpha;
-    alphas[SchemeNumber][ColFg] = fgalpha;
-    alphas[SchemeNumber][ColBg] = bgalpha;
-    alphas[SchemeMode][ColFg] = fgalpha;
-    alphas[SchemeMode][ColBg] = bgalpha;
-    alphas[SchemeBorder][ColFg] = fgalpha; // this one isn't actually used
-    alphas[SchemeBorder][ColBg] = bgalpha;
+    alphas[SchemeLArrow][ColFg] = alpha_larrowfg;
+    alphas[SchemeLArrow][ColBg] = alpha_larrowbg;
+    alphas[SchemeRArrow][ColFg] = alpha_rarrowfg;
+    alphas[SchemeRArrow][ColBg] = alpha_rarrowbg;
+    alphas[SchemeItemNorm][ColFg] = alpha_itemnormfg;
+    alphas[SchemeItemNorm][ColBg] = alpha_itemnormbg;
+    alphas[SchemeItemSel][ColFg] = alpha_itemselfg;
+    alphas[SchemeItemSel][ColBg] = alpha_itemselbg;
+    alphas[SchemeItemNormPri][ColFg] = alpha_itemnormprifg;
+    alphas[SchemeItemNormPri][ColBg] = alpha_itemnormpribg;
+    alphas[SchemeItemSelPri][ColFg] = alpha_itemselprifg;
+    alphas[SchemeItemSelPri][ColBg] = alpha_itemselpribg;
+    alphas[SchemeMenu][ColBg] = alpha_menubg;
+    alphas[SchemeInput][ColFg] = alpha_inputfg;
+    alphas[SchemeInput][ColBg] = alpha_inputbg;
+    alphas[SchemePrompt][ColFg] = alpha_promptfg;
+    alphas[SchemePrompt][ColBg] = alpha_promptbg;
+    alphas[SchemeNormHighlight][ColFg] = alpha_normhlfg;
+    alphas[SchemeNormHighlight][ColBg] = alpha_normhlbg;
+    alphas[SchemeSelHighlight][ColFg] = alpha_selhlfg;
+    alphas[SchemeSelHighlight][ColBg] = alpha_selhlbg;
+    alphas[SchemeCaret][ColFg] = alpha_caretfg;
+    alphas[SchemeCaret][ColBg] = alpha_caretbg;
+    alphas[SchemeNumber][ColFg] = alpha_numfg;
+    alphas[SchemeNumber][ColBg] = alpha_numbg;
+    alphas[SchemeMode][ColFg] = alpha_modefg;
+    alphas[SchemeMode][ColBg] = alpha_modebg;
+    alphas[SchemeBorder][ColBg] = alpha_borderbg;
 
     // create color schemes from array
 	for (j = 0; j < SchemeLast; j++) {

@@ -166,6 +166,36 @@ static char col_sgrcolor13[]           = "#ff00ff"; /* SGR color #13 */
 static char col_sgrcolor14[]           = "#00ffff"; /* SGR color #14 */
 static char col_sgrcolor15[]           = "#ffffff"; /* SGR color #15 */
 
+/* Alpha options */
+static int alpha_itemnormfg            = opaque; /* Alpha for normal item foreground (0-255) */
+static int alpha_itemnormbg            = 200; /* Alpha for normal item background (0-255) */
+static int alpha_itemselfg             = opaque; /* Alpha for selected item foreground (0-255) */
+static int alpha_itemselbg             = 200; /* Alpha for selected item background (0-255) */
+static int alpha_itemnormprifg         = opaque; /* alpha for normal priority item foreground (0-255) */
+static int alpha_itemnormpribg         = 200; /* Alpha for normal priority item background (0-255) */
+static int alpha_itemselprifg          = opaque; /* Alpha for selected priority item foreground (0-255) */
+static int alpha_itemselpribg          = 200; /* Alpha for selected priority item background (0-255) */
+static int alpha_inputfg               = opaque; /* Alpha for input foreground (0-255) */
+static int alpha_inputbg               = 200; /* Alpha for input background (0-255) */
+static int alpha_menubg                = 200; /* Alpha for menu background (0-255) */
+static int alpha_promptfg              = opaque; /* Alpha for prompt foreground (0-255) */
+static int alpha_promptbg              = 200; /* Alpha for prompt background (0-255) */
+static int alpha_larrowfg              = opaque; /* Alpha for left arrow foreground (0-255) */
+static int alpha_larrowbg              = 200; /* Alpha for left arrow background (0-255) */
+static int alpha_rarrowfg              = opaque; /* Alpha for right arrow foreground (0-255) */
+static int alpha_rarrowbg              = 200; /* Alpha for right arrow background (0-255) */
+static int alpha_normhlfg              = opaque; /* Alpha for normal highlight foreground (0-255) */
+static int alpha_normhlbg              = 200; /* Alpha for normal highlight background (0-255) */
+static int alpha_selhlfg               = opaque; /* Alpha for selected highlight foreground (0-255) */
+static int alpha_selhlbg               = 200; /* Alpha for selected highlight background (0-255) */
+static int alpha_numfg                 = opaque; /* Alpha for match count foreground (0-255) */
+static int alpha_numbg                 = 200; /* Alpha for the match count background (0-255) */
+static int alpha_borderbg              = opaque; /* Alpha for the border (0-255) */
+static int alpha_caretfg               = opaque; /* Alpha for the caret foreground (0-255) */
+static int alpha_caretbg               = 200; /* Alpha for the caret background (0-255) */
+static int alpha_modefg                = opaque; /* Alpha for the mode indicator foreground (0-255) */
+static int alpha_modebg                = 200; /* Alpha for the mode indicator background (0-255) */
+
 /* Pango options */
 static int pango_item                  = 1; /* Enable support for pango markup for the items */
 static int pango_highlight             = 1; /* Enable support for pango markup for the highlighting */
@@ -176,10 +206,6 @@ static int pango_rightarrow            = 0; /* Enable support for pango markup f
 static int pango_numbers               = 0; /* Enable support for pango markup for the match count */
 static int pango_mode                  = 0; /* Enable support for pango markup for the mode indicator */
 static int pango_password              = 0; /* Enable support for pango markup for the password text */
-
-/* Alpha options */
-static int fgalpha                     = opaque;
-static int bgalpha                     = 200;
 
 /* Misc */
 static int coloritems                  = 1; /* Color items or not */
