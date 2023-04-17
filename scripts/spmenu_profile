@@ -45,10 +45,10 @@ remove_profile() {
 
 check() {
     case "$sel" in
-        "Add") add_profile ;;
-        "Remove") remove_profile ;;
-        "Default") printf "%s%s/share/spmenu/example.Xresources\n" "${DESTDIR}" "${PREFIX}" > "${CONFDIR}/spmenu/.profile" && set_profile ;;
-        "None") printf "NONE\n" > "${CONFDIR}/spmenu/.profile" ;;
+        "<b>Add</b>") add_profile ;;
+        "<b>Remove</b>") remove_profile ;;
+        "<b>Default</b>") printf "%s%s/share/spmenu/example.Xresources\n" "${DESTDIR}" "${PREFIX}" > "${CONFDIR}/spmenu/.profile" && set_profile ;;
+        "<b>None</b>") printf "NONE\n" > "${CONFDIR}/spmenu/.profile" ;;
         "") exit 0 ;;
         *) profile="$sel" && write_profile && set_profile ;;
     esac
