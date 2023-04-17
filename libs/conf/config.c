@@ -174,6 +174,58 @@ conf_init(void)
         }
     }
 
+    // load options spmenu.alpha
+    setting = config_lookup(&cfg, "spmenu.alpha");
+    if (setting != NULL) {
+        unsigned int i = 0;
+
+        conflength = config_setting_length(setting);
+
+        for (i = 0; i < conflength; ++i) {
+            config_setting_t *conf = config_setting_get_elem(setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "itemnormfg", &alpha_itemnormfg); // spmenu.alpha.itemnormfg
+            config_setting_lookup_int(conf, "itemnormbg", &alpha_itemnormbg); // spmenu.alpha.itemnormbg
+            config_setting_lookup_int(conf, "itemselfg", &alpha_itemselfg); // spmenu.alpha.itemselfg
+            config_setting_lookup_int(conf, "itemselbg", &alpha_itemselbg); // spmenu.alpha.itemselbg
+
+            config_setting_lookup_int(conf, "itemnormprifg", &alpha_itemnormprifg); // spmenu.alpha.itemnormprifg
+            config_setting_lookup_int(conf, "itemnormpribg", &alpha_itemnormpribg); // spmenu.alpha.itemnormpribg
+            config_setting_lookup_int(conf, "itemselprifg", &alpha_itemselprifg); // spmenu.alpha.itemselprifg
+            config_setting_lookup_int(conf, "itemselpribg", &alpha_itemselpribg); // spmenu.alpha.itemselpribg
+
+            config_setting_lookup_int(conf, "inputfg", &alpha_inputfg); // spmenu.alpha.inputfg
+            config_setting_lookup_int(conf, "inputbg", &alpha_inputbg); // spmenu.alpha.inputbg
+
+            config_setting_lookup_int(conf, "menubg", &alpha_menubg); // spmenu.alpha.menubg
+
+            config_setting_lookup_int(conf, "promptfg", &alpha_promptfg); // spmenu.alpha.promptfg
+            config_setting_lookup_int(conf, "promptbg", &alpha_promptbg); // spmenu.alpha.promptbg
+
+            config_setting_lookup_int(conf, "larrowfg", &alpha_larrowfg); // spmenu.alpha.larrowfg
+            config_setting_lookup_int(conf, "larrowbg", &alpha_larrowbg); // spmenu.alpha.larrowbg
+            config_setting_lookup_int(conf, "rarrowfg", &alpha_rarrowfg); // spmenu.alpha.rarrowfg
+            config_setting_lookup_int(conf, "rarrowbg", &alpha_rarrowbg); // spmenu.alpha.rarrowbg
+
+            config_setting_lookup_int(conf, "normhlfg", &alpha_normhlfg); // spmenu.alpha.normhlfg
+            config_setting_lookup_int(conf, "normhlbg", &alpha_normhlbg); // spmenu.alpha.normhlbg
+            config_setting_lookup_int(conf, "selhlfg", &alpha_selhlfg); // spmenu.alpha.selhlfg
+            config_setting_lookup_int(conf, "selhlbg", &alpha_selhlbg); // spmenu.alpha.selhlbg
+
+            config_setting_lookup_int(conf, "numfg", &alpha_numfg); // spmenu.alpha.numfg
+            config_setting_lookup_int(conf, "numbg", &alpha_numbg); // spmenu.alpha.numbg
+
+            config_setting_lookup_int(conf, "borderbg", &alpha_borderbg); // spmenu.alpha.borderbg
+
+            config_setting_lookup_int(conf, "caretfg", &alpha_caretfg); // spmenu.alpha.caretfg
+            config_setting_lookup_int(conf, "caretbg", &alpha_caretbg); // spmenu.alpha.caretbg
+
+            config_setting_lookup_int(conf, "modefg", &alpha_modefg); // spmenu.alpha.modefg
+            config_setting_lookup_int(conf, "modebg", &alpha_modebg); // spmenu.alpha.modebg
+        }
+    }
+
     // load options spmenu.color
     setting = config_lookup(&cfg, "spmenu.color");
     if (setting != NULL) {
