@@ -24,7 +24,7 @@ init_appearance(void)
     alphas[SchemeItemNormPri][ColBg] = alpha_itemnormpribg;
     alphas[SchemeItemSelPri][ColFg] = alpha_itemselprifg;
     alphas[SchemeItemSelPri][ColBg] = alpha_itemselpribg;
-    alphas[SchemeMenu][ColBg] = alpha_menubg;
+    alphas[SchemeMenu][ColBg] = alpha_menu;
     alphas[SchemeInput][ColFg] = alpha_inputfg;
     alphas[SchemeInput][ColBg] = alpha_inputbg;
     alphas[SchemePrompt][ColFg] = alpha_promptfg;
@@ -39,7 +39,7 @@ init_appearance(void)
     alphas[SchemeNumber][ColBg] = alpha_numbg;
     alphas[SchemeMode][ColFg] = alpha_modefg;
     alphas[SchemeMode][ColBg] = alpha_modebg;
-    alphas[SchemeBorder][ColBg] = alpha_borderbg;
+    alphas[SchemeBorder][ColBg] = alpha_border;
 
     // create color schemes from array
 	for (j = 0; j < SchemeLast; j++) {

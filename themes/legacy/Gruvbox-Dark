@@ -1,6 +1,6 @@
-! Gruvbox-Dark color scheme for spmenu
+! Gruvbox-Dark  scheme for spmenu
 
-! We must disable global colors first, because otherwise we can use Pywal to override.
+! We must disable global s first, because otherwise we can use Pywal to override.
 ! If you want that, then you may set this to 1.
 spmenu.globalcolors:       0
 
@@ -12,7 +12,7 @@ spmenu.col_itemnormprifg:  #fcf1c7
 spmenu.col_itemnormpribg:  #504945
 spmenu.col_itemselprifg:   #fbf1c7
 spmenu.col_itemselpribg:   #fe8019
-spmenu.col_menubgcolor:    #282828
+spmenu.col_menu:           #282828
 spmenu.col_promptfg:       #3c3836
 spmenu.col_promptbg:       #fb4934
 spmenu.col_larrowfg:       #98971a
@@ -21,29 +21,29 @@ spmenu.col_larrowbg:       #282828
 spmenu.col_rarrowbg:       #282828
 spmenu.col_inputfg:        #fbf1c7
 spmenu.col_inputbg:        #282828
-spmenu.col_numfgcolor:     #282828
-spmenu.col_numbgcolor:     #b16286
-spmenu.col_normhlfgcolor:  #458588
-spmenu.col_normhlbgcolor:  #282828
-spmenu.col_selhlfgcolor:   #fabd2f
-spmenu.col_selhlbgcolor:   #282828
-spmenu.col_caretfgcolor:   #fbf1c7
-spmenu.col_bordercolor:    #d79921
-spmenu.col_modefgcolor:    #3c3836
-spmenu.col_modebgcolor:    #d65d0e
-spmenu.col_sgrcolor0:      #282828
-spmenu.col_sgrcolor1:      #cc241d
-spmenu.col_sgrcolor2:      #98971a
-spmenu.col_sgrcolor3:      #d79921
-spmenu.col_sgrcolor4:      #458588
-spmenu.col_sgrcolor5:      #b16286
-spmenu.col_sgrcolor6:      #689d6a
-spmenu.col_sgrcolor7:      #a89984
-spmenu.col_sgrcolor8:      #928374
-spmenu.col_sgrcolor9:      #fb4934
-spmenu.col_sgrcolor10:     #b8bb26
-spmenu.col_sgrcolor11:     #fabd2f
-spmenu.col_sgrcolor12:     #83a598
-spmenu.col_sgrcolor13:     #d3869b
-spmenu.col_sgrcolor14:     #8ec07c
-spmenu.col_sgrcolor15:     #ebdbb2
+spmenu.col_numfg:          #282828
+spmenu.col_numbg:          #b16286
+spmenu.col_normhlfg:       #458588
+spmenu.col_normhlbg:       #282828
+spmenu.col_selhlfg:        #fabd2f
+spmenu.col_selhlbg:        #282828
+spmenu.col_caretfg:        #fbf1c7
+spmenu.col_border:         #d79921
+spmenu.col_modefg:         #3c3836
+spmenu.col_modebg:         #d65d0e
+spmenu.col_sgr0:           #282828
+spmenu.col_sgr1:           #cc241d
+spmenu.col_sgr2:           #98971a
+spmenu.col_sgr3:           #d79921
+spmenu.col_sgr4:           #458588
+spmenu.col_sgr5:           #b16286
+spmenu.col_sgr6:           #689d6a
+spmenu.col_sgr7:           #a89984
+spmenu.col_sgr8:           #928374
+spmenu.col_sgr9:           #fb4934
+spmenu.col_sgr10:          #b8bb26
+spmenu.col_sgr11:          #fabd2f
+spmenu.col_sgr12:          #83a598
+spmenu.col_sgr13:          #d3869b
+spmenu.col_sgr14:          #8ec07c
+spmenu.col_sgr15:          #ebdbb2

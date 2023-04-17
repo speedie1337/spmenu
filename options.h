@@ -114,7 +114,7 @@ static char col_inputbg[]              = "#222222"; /* Input field background co
 static char col_inputfg[]              = "#eeeeee"; /* Input field foreground color */
 
 /* Menu colors */
-static char col_menubgcolor[]          = "#222222"; /* Menu background color */
+static char col_menu[]                 = "#222222"; /* Menu background color */
 
 /* Prompt colors */
 static char col_promptfg[]             = "#eeeeee"; /* Prompt foreground color */
@@ -127,44 +127,45 @@ static char col_larrowbg[]             = "#222222"; /* Left arrow color */
 static char col_rarrowbg[]             = "#222222"; /* Right arrow color */
 
 /* Normal highlight colors */
-static char col_hlnormfgcolor[]        = "#ffffff"; /* Text highlight color for unselected */
-static char col_hlnormbgcolor[]        = "#000000"; /* Background highlight color for unselected */
+static char col_hlnormfg[]             = "#ffffff"; /* Normal text highlight color */
+static char col_hlnormbg[]             = "#000000"; /* Normal background highlight color */
 
 /* Selected highlight colors */
-static char col_hlselfgcolor[]         = "#ffffff"; /* Text highlight color for selected */
-static char col_hlselbgcolor[]         = "#000000"; /* Background highlight color for selected */
+static char col_hlselfg[]              = "#ffffff"; /* Selected text highlight color */
+static char col_hlselbg[]              = "#000000"; /* Selected background highlight color */
 
 /* Match count colors */
-static char col_numfgcolor[]           = "#ffffff"; /* Match count text color */
-static char col_numbgcolor[]           = "#2d3856"; /* Match count background color */
+static char col_numfg[]                = "#ffffff"; /* Match count text color */
+static char col_numbg[]                = "#2d3856"; /* Match count background color */
 
 /* Border color */
-static char col_bordercolor[]          = "#35638A"; /* Border color */
+static char col_border[]               = "#35638A"; /* Border color */
 
 /* Caret colors */
-static char col_caretfgcolor[]         = "#ffffff"; /* Caret color */
+static char col_caretfg[]              = "#ffffff"; /* Foreground caret color */
+static char col_caretbg[]              = "#222222"; /* Background caret color */
 
 /* Mode colors */
-static char col_modefgcolor[]          = "#ffffff"; /* Mode text color */
-static char col_modebgcolor[]          = "#35638A"; /* Mode background color */
+static char col_modefg[]               = "#ffffff"; /* Mode text color */
+static char col_modebg[]               = "#35638A"; /* Mode background color */
 
 /* SGR colors */
-static char col_sgrcolor0[]            = "#000000"; /* SGR color #0 */
-static char col_sgrcolor1[]            = "#7f0000"; /* SGR color #1 */
-static char col_sgrcolor2[]            = "#007f00"; /* SGR color #2 */
-static char col_sgrcolor3[]            = "#7f7f00"; /* SGR color #3 */
-static char col_sgrcolor4[]            = "#00007f"; /* SGR color #4 */
-static char col_sgrcolor5[]            = "#7f007f"; /* SGR color #5 */
-static char col_sgrcolor6[]            = "#007f7f"; /* SGR color #6 */
-static char col_sgrcolor7[]            = "#cccccc"; /* SGR color #7 */
-static char col_sgrcolor8[]            = "#333333"; /* SGR color #8 */
-static char col_sgrcolor9[]            = "#ff0000"; /* SGR color #9 */
-static char col_sgrcolor10[]           = "#00ff00"; /* SGR color #10 */
-static char col_sgrcolor11[]           = "#ffff00"; /* SGR color #11 */
-static char col_sgrcolor12[]           = "#0000ff"; /* SGR color #12 */
-static char col_sgrcolor13[]           = "#ff00ff"; /* SGR color #13 */
-static char col_sgrcolor14[]           = "#00ffff"; /* SGR color #14 */
-static char col_sgrcolor15[]           = "#ffffff"; /* SGR color #15 */
+static char col_sgr0[]                 = "#000000"; /* SGR color #0 */
+static char col_sgr1[]                 = "#7f0000"; /* SGR color #1 */
+static char col_sgr2[]                 = "#007f00"; /* SGR color #2 */
+static char col_sgr3[]                 = "#7f7f00"; /* SGR color #3 */
+static char col_sgr4[]                 = "#00007f"; /* SGR color #4 */
+static char col_sgr5[]                 = "#7f007f"; /* SGR color #5 */
+static char col_sgr6[]                 = "#007f7f"; /* SGR color #6 */
+static char col_sgr7[]                 = "#cccccc"; /* SGR color #7 */
+static char col_sgr8[]                 = "#333333"; /* SGR color #8 */
+static char col_sgr9[]                 = "#ff0000"; /* SGR color #9 */
+static char col_sgr10[]                = "#00ff00"; /* SGR color #10 */
+static char col_sgr11[]                = "#ffff00"; /* SGR color #11 */
+static char col_sgr12[]                = "#0000ff"; /* SGR color #12 */
+static char col_sgr13[]                = "#ff00ff"; /* SGR color #13 */
+static char col_sgr14[]                = "#00ffff"; /* SGR color #14 */
+static char col_sgr15[]                = "#ffffff"; /* SGR color #15 */
 
 /* Alpha options */
 static int alpha_itemnormfg            = 255; /* Alpha for normal item foreground (0-255) */
@@ -177,7 +178,7 @@ static int alpha_itemselprifg          = 255; /* Alpha for selected priority ite
 static int alpha_itemselpribg          = 200; /* Alpha for selected priority item background (0-255) */
 static int alpha_inputfg               = 255; /* Alpha for input foreground (0-255) */
 static int alpha_inputbg               = 200; /* Alpha for input background (0-255) */
-static int alpha_menubg                = 200; /* Alpha for menu background (0-255) */
+static int alpha_menu                  = 200; /* Alpha for menu background (0-255) */
 static int alpha_promptfg              = 255; /* Alpha for prompt foreground (0-255) */
 static int alpha_promptbg              = 200; /* Alpha for prompt background (0-255) */
 static int alpha_larrowfg              = 255; /* Alpha for left arrow foreground (0-255) */
@@ -190,7 +191,7 @@ static int alpha_hlselfg               = 255; /* Alpha for selected highlight fo
 static int alpha_hlselbg               = 200; /* Alpha for selected highlight background (0-255) */
 static int alpha_numfg                 = 255; /* Alpha for match count foreground (0-255) */
 static int alpha_numbg                 = 200; /* Alpha for the match count background (0-255) */
-static int alpha_borderbg              = 255; /* Alpha for the border (0-255) */
+static int alpha_border                = 255; /* Alpha for the border (0-255) */
 static int alpha_caretfg               = 255; /* Alpha for the caret foreground (0-255) */
 static int alpha_caretbg               = 200; /* Alpha for the caret background (0-255) */
 static int alpha_modefg                = 255; /* Alpha for the mode indicator foreground (0-255) */

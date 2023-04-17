@@ -1,6 +1,6 @@
-! Catppuccin color scheme for spmenu
+! Catppuccin  scheme for spmenu
 
-! We must disable global colors first, because otherwise we can use Pywal to override.
+! We must disable global s first, because otherwise we can use Pywal to override.
 ! If you want that, then you may set this to 1.
 spmenu.globalcolors:       0
 
@@ -12,7 +12,7 @@ spmenu.col_itemnormprifg:  #cad3f5
 spmenu.col_itemnormpribg:  #24273a
 spmenu.col_itemselprifg:   #181926
 spmenu.col_itemselpribg:   #91d7e3
-spmenu.col_menubgcolor:    #24273a
+spmenu.col_menu:           #24273a
 spmenu.col_promptfg:       #24273a
 spmenu.col_promptbg:       #ED8796
 spmenu.col_larrowfg:       #EED49F
@@ -21,29 +21,29 @@ spmenu.col_larrowbg:       #24273a
 spmenu.col_rarrowbg:       #24273a
 spmenu.col_inputfg:        #B8C0E0
 spmenu.col_inputbg:        #24273a
-spmenu.col_numfgcolor:     #24273a
-spmenu.col_numbgcolor:     #A6DA95
-spmenu.col_normhlfgcolor:  #8BD5CA
-spmenu.col_normhlbgcolor:  #494D64
-spmenu.col_selhlfgcolor:   #EED49F
-spmenu.col_selhlbgcolor:   #494D64
-spmenu.col_caretfgcolor:   #cad3f5
-spmenu.col_bordercolor:    #8AADF4
-spmenu.col_modefgcolor:    #24273a
-spmenu.col_modebgcolor:    #F5BDE6
-spmenu.col_sgrcolor0:      #494D64
-spmenu.col_sgrcolor1:      #ED8796
-spmenu.col_sgrcolor2:      #A6DA95
-spmenu.col_sgrcolor3:      #EED49F
-spmenu.col_sgrcolor4:      #8AADF4
-spmenu.col_sgrcolor5:      #F5BDE6
-spmenu.col_sgrcolor6:      #8BD5CA
-spmenu.col_sgrcolor7:      #B8C0E0
-spmenu.col_sgrcolor8:      #5B6078
-spmenu.col_sgrcolor9:      #ED8796
-spmenu.col_sgrcolor10:     #A6DA95
-spmenu.col_sgrcolor11:     #EED49F
-spmenu.col_sgrcolor12:     #8AADF4
-spmenu.col_sgrcolor13:     #F5BDE6
-spmenu.col_sgrcolor14:     #8BD5CA
-spmenu.col_sgrcolor15:     #A5ADCB
+spmenu.col_numfg:          #24273a
+spmenu.col_numbg:          #A6DA95
+spmenu.col_normhlfg:       #8BD5CA
+spmenu.col_normhlbg:       #494D64
+spmenu.col_selhlfg:        #EED49F
+spmenu.col_selhlbg:        #494D64
+spmenu.col_caretfg:        #cad3f5
+spmenu.col_border:         #8AADF4
+spmenu.col_modefg:         #24273a
+spmenu.col_modebg:         #F5BDE6
+spmenu.col_sgr0:           #494D64
+spmenu.col_sgr1:           #ED8796
+spmenu.col_sgr2:           #A6DA95
+spmenu.col_sgr3:           #EED49F
+spmenu.col_sgr4:           #8AADF4
+spmenu.col_sgr5:           #F5BDE6
+spmenu.col_sgr6:           #8BD5CA
+spmenu.col_sgr7:           #B8C0E0
+spmenu.col_sgr8:           #5B6078
+spmenu.col_sgr9:           #ED8796
+spmenu.col_sgr10:          #A6DA95
+spmenu.col_sgr11:          #EED49F
+spmenu.col_sgr12:          #8AADF4
+spmenu.col_sgr13:          #F5BDE6
+spmenu.col_sgr14:          #8BD5CA
+spmenu.col_sgr15:          #A5ADCB

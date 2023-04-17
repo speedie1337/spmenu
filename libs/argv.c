@@ -320,9 +320,9 @@ readargs(int argc, char *argv[])
 			colors[SchemeSelHighlight][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-shb") || (!strcmp(argv[i], "--selected-highlight-background"))) { // selected highlight background color
 			colors[SchemeSelHighlight][ColBg] = argv[++i];
-        } else if (!strcmp(argv[i], "-nbg") || (!strcmp(argv[i], "--number-background"))) { // numbgcolor
+        } else if (!strcmp(argv[i], "-nbg") || (!strcmp(argv[i], "--number-background"))) { // numbg
 			colors[SchemeNumber][ColBg] = argv[++i];
-        } else if (!strcmp(argv[i], "-nfg") || (!strcmp(argv[i], "--number-foreground"))) { // numfgcolor
+        } else if (!strcmp(argv[i], "-nfg") || (!strcmp(argv[i], "--number-foreground"))) { // numfg
 			colors[SchemeNumber][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-mbg") || (!strcmp(argv[i], "--mode-background"))) { // mode
 			colors[SchemeMode][ColBg] = argv[++i];
@@ -338,8 +338,10 @@ readargs(int argc, char *argv[])
 			colors[SchemeRArrow][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-bc") || (!strcmp(argv[i], "--border-background"))) { // border
 			colors[SchemeBorder][ColBg] = argv[++i];
-        } else if (!strcmp(argv[i], "-cc") || (!strcmp(argv[i], "--caret-foreground"))) {   // caret color
+        } else if (!strcmp(argv[i], "-cc") || (!strcmp(argv[i], "-cfc")) || (!strcmp(argv[i], "--caret-foreground"))) {   // caret color
 			colors[SchemeCaret][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-cbc") || (!strcmp(argv[i], "--caret-background"))) {   // caret color
+			colors[SchemeCaret][ColBg] = argv[++i];
         }
 
         // sgr colors
@@ -529,7 +531,8 @@ usage(void)
           "spmenu -raf,     --right-arrow-foreground <color>            Set the right arrow foreground color\n"
           "spmenu -lab,     --left-arrow-background <color>             Set the left arrow background color\n"
           "spmenu -rab,     --right-arrow-background <color>            Set the right arrow background color\n"
-          "spmenu -cc,      --caret-foreground <color>                  Set the caret color\n"
+          "spmenu -cfc,     --caret-foreground <color>                  Set the caret foreground color\n"
+          "spmenu -cbc,     --caret-background <color>                  Set the caret background color\n"
           "spmenu -bc,      --border-background <color>                 Set the border color\n"
           "\n", stdout);
 

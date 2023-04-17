@@ -375,8 +375,11 @@ or ~/.config/spmenu/spmenurc)
 `-rab, --right-arrow-background color`
 :   Set the right arrow background color
 
-`-cc, --caret-foreground color`
-:   Set the caret color
+`-cfc, --caret-foreground color`
+:   Set the caret foreground color
+
+`-cbc, --caret-background color`
+:   Set the caret background color
 
 `-bc, --border-background color`
 :   Set the border color
