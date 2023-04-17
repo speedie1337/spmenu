@@ -54,6 +54,15 @@ void
 resizeclient(void)
 {
     int omh = mh;
+    int x, y;
+    #if USEXINERAMA
+    int j, di, a, n, area = 0;
+    XineramaScreenInfo *info;
+	Window pw;
+    unsigned int du;
+    #endif
+    Window w, dw, *dws;
+    XWindowAttributes wa;
     struct item *item;
     int itemCount = 0;
 
@@ -72,6 +81,59 @@ resizeclient(void)
 
     mh = (lines + 1) * bh + 2 * menumarginv;
 
+    // init xinerama screens
+    #if USEXINERAMA
+	int i = 0;
+	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
+		XGetInputFocus(dpy, &w, &di);
+		if (mon >= 0 && mon < n)
+			i = mon;
+		else if (w != root && w != PointerRoot && w != None) {
+			// find top-level window containing current input focus
+			do {
+				if (XQueryTree(dpy, (pw = w), &dw, &w, &dws, &du) && dws)
+					XFree(dws);
+			} while (w != root && w != pw);
+			// find xinerama screen with which the window intersects most
+			if (XGetWindowAttributes(dpy, pw, &wa))
+				for (j = 0; j < n; j++)
+					if ((a = INTERSECT(wa.x, wa.y, wa.width, wa.height, info[j])) > area) {
+						area = a;
+						i = j;
+					}
+		}
+		// no focused window is on screen, so use pointer location instead
+		if (mon < 0 && !area && XQueryPointer(dpy, root, &dw, &dw, &x, &y, &di, &di, &du))
+			for (i = 0; i < n; i++)
+				if (INTERSECT(x, y, 1, 1, info[i]))
+					break;
+
+        // calculate x/y position
+		if (menuposition == 2) { // centered
+			mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
+			x = info[i].x_org + ((info[i].width  - mw) / 2);
+			y = info[i].y_org + ((info[i].height - mh) / 2);
+		} else { // top or bottom
+		    x = info[i].x_org + xpos;
+			y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
+			mw = (menuwidth>0 ? menuwidth : info[i].width);
+		}
+
+		XFree(info);
+	} else
+    #endif
+	{
+		if (menuposition == 2) { // centered
+			mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
+			x = (wa.width  - mw) / 2;
+			y = (wa.height - mh) / 2;
+		} else { // top or bottom
+			x = 0;
+			y = menuposition ? 0 : wa.height - mh - ypos;
+			mw = wa.width;
+		}
+	}
+
     // why have an empty line? when there's nothing to draw there anyway?
     if (hideprompt && hideinput && hidemode && hidematchcount)
         mh += bh;
@@ -79,6 +141,6 @@ resizeclient(void)
     // no window/invalid window or menu height we had before is the same as the current window height
     if (!win || omh == mh) return;
 
-    XResizeWindow(dpy, win, mw - 2 * sp - borderwidth * 2, mh);
+    XMoveResizeWindow(dpy, win, x, y, mw - 2 * sp - 2 * borderwidth, mh);
     drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
 }

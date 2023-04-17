@@ -607,7 +607,7 @@ setupdisplay(void)
 			y = (wa.height - mh) / 2;
 		} else { // top or bottom
 			x = 0;
-			y = 0;
+			y = menuposition ? 0 : wa.width - mh - ypos;
 			mw = wa.width;
 		}
 	}
