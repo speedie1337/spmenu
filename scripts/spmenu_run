@@ -28,11 +28,11 @@ KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
+HELP_COLOR="${HELP_COLOR:-#FFFF00}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
 TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
-USEIMAGE="${USEIMAGE:-true}"
 CACHE="${CACHE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 
@@ -79,7 +79,7 @@ path() {
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "$HELP_COLOR" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -113,8 +113,8 @@ EOF
 }
 
 print_config() {
-    [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
-    mkdir -p "$CONFDIR/spmenu/run"
+[ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
+mkdir -p "$CONFDIR/spmenu/run"
 cat << EOF > "$CONFDIR/spmenu/run/config"
 # spmenu_run default configuration file
 #
@@ -176,12 +176,12 @@ KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 STDOUT="false" # Print to stdout and exit (true/false)
 DISPLAY_DUPLICATES="false" # Display duplicates or not
 DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/desktop/help)
+HELP_COLOR="#FFFF00"
 
 # .desktop options
 DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .desktop entries
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
-USEIMAGE="true" # Enable images (true/false)
 CACHE="true" # Cache entries (true/false)
 LOGFILE="/tmp/spmenu_run.log" # Log file
 
@@ -247,7 +247,9 @@ exec_cmd() {
     esac
 }
 
-remove_arg() { args="$(printf "%s\n" "$args" | sed "s|$1||g")"; }
+remove_arg() {
+    args="$(printf "%s\n" "$args" | sed "s|$1||g")"
+}
 
 read_args() {
     function="${DEFAULT_FEATURE:-run}" # default functionality
@@ -256,7 +258,7 @@ read_args() {
     argc="$(printf "%s\n" "$@" | wc -l)"
 
     while true; do
-        i=$(($i+1))
+        i=$((i+1))
         arg="$(printf "%s\n" "$args" | sed "${i}q;d")"
         narg="$(printf "%s\n" "$args" | sed "$((i+1))q;d")"
 
@@ -348,7 +350,7 @@ prepare_dirnav() {
 }
 
 print_desktop_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "#FFFF00" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "$HELP_COLOR" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
 To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
@@ -365,9 +367,9 @@ EOF
 main_desktop() {
     print_menu() {
         if [ "$DISPLAY_DUPLICATES" != "false" ]; then
-            res="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+            menusel="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
         else
-            res="$(print_list | uniq $UNIQ_ARGS | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+            menusel="$(print_list | uniq $UNIQ_ARGS | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
         fi
     }
 
@@ -376,9 +378,17 @@ main_desktop() {
 
     # cache it, this means some speed improvements
     cache() {
+        scan # run initial scan
+
         printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
         printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
+
         [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
+
+        [ -f "$TEMPORARY_DIR/../.title" ] && rm -f "$TEMPORARY_DIR/../.title"
+        [ -f "$TEMPORARY_DIR/../.icon" ] && rm -f "$TEMPORARY_DIR/../.icon"
+        [ -f "$TEMPORARY_DIR/../.exec" ] && rm -f "$TEMPORARY_DIR/../.exec"
+        [ -f "$TEMPORARY_DIR/../.file" ] && rm -f "$TEMPORARY_DIR/../.file"
 
         # find
         entry="$(find $DESKTOP_DIR -type f)"
@@ -405,56 +415,95 @@ main_desktop() {
     print_list() {
         command -v desktop_pre_func > /dev/null && desktop_pre_func
 
-        # arrays containing entries
-        declare -a it_title
-        declare -a it_icon
-        declare -a it_exec
-        declare -a it_file
+        # should we use cached files?
+        [ -f "$TEMPORARY_DIR/../.title" ] && cfiles="true" || cfiles="false"
+        [ -f "$TEMPORARY_DIR/../.icon" ] && cfiles="true" || cfiles="false"
+        [ -f "$TEMPORARY_DIR/../.exec" ] && cfiles="true" || cfiles="false"
+        [ -f "$TEMPORARY_DIR/../.file" ] && cfiles="true" || cfiles="false"
 
         # print data from entries
-        for i in $(seq "$cached_c"); do
-            # current file
-            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+        if [ "$cfiles" = "false" ]; then
+            for i in $(seq "$cached_c"); do
+                # current file
+                cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
-            # get details to display
-            it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-            it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
-            it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
-            it_file[i]="$cur_file"
+                # get details to display
+                it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
+                it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+                it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
+                it_file[i]="$cur_file"
 
-            [ -z "${it_title[i]}" ] && continue # no title isn't worth displaying, obviously
-            command -v "${it_exec[i]}" > /dev/null || continue # why bother if we can't execute it?
+                printf "%s\n" "${it_title[i]}" >> "$TEMPORARY_DIR/../.title"
+                printf "%s\n" "${it_icon[i]}" >> "$TEMPORARY_DIR/../.icon"
+                printf "%s\n" "${it_exec[i]}" >> "$TEMPORARY_DIR/../.exec"
+                printf "%s\n" "${it_file[i]}" >> "$TEMPORARY_DIR/../.file"
+            done
 
-            # print it all
-            [ "$USEIMAGE" = "true" ] && [ ! -e "${it_icon[i]}" ] && USEIMAGE=false && reenable=1
-            [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}" || \
-                printf "%s\n" "${it_title[i]}"
-            [ "$reenable" = "1" ] && USEIMAGE=true
-        done
+            print_list "$@"
+        else # we have entries, let's populate the arrays
+            i=1
+
+            # read title
+            while read -r p; do
+                it_title[i]="$p"
+                i=$((i+1))
+            done < "$TEMPORARY_DIR/../.title"; i=1
+
+            # read icon
+            while read -r p; do
+                it_icon[i]="$p"
+                i=$((i+1))
+            done < "$TEMPORARY_DIR/../.icon"; i=1
+
+            # read executable
+            while read -r p; do
+                it_exec[i]="$p"
+                i=$((i+1))
+            done < "$TEMPORARY_DIR/../.exec"; i=1
+
+            # read file
+            while read -r p; do
+                it_file[i]="$p"
+                i=$((i+1))
+            done < "$TEMPORARY_DIR/../.file"; i=1
+
+            # finally print all of it
+            for i in "${!it_title[@]}"; do
+                if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                    printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
+                elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                    printf "%s\n" "${it_title[i]}"
+                else
+                    continue
+                fi
+            done
+        fi
     }
 
+    # execute the program
     execute_program() {
-        [ "$res" = "?" ] && print_desktop_help && main "$@"
-        command -v desktop_post_func > /dev/null && desktop_post_func "$res"
-        [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
-        for i in $(seq "$cached_c"); do
-            # find the executable matching the selected name
-            if [ "${it_title[i]}" = "${res}" ]; then
+        [ "$menusel" = "?" ] && print_desktop_help && main "$@"
+        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
+        [ -z "$menusel" ] && return 1 \
+        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+
+        # find the executable matching the selected name
+        for i in "${!it_title[@]}"; do
+            i=$((i+1))
+            if [ "${it_title[i]}" = "${menusel}" ]; then
                 exec="${it_exec[i]}"
                 printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
-
                 break;
-            else
-                exec=""
-                continue;
             fi
+
+            [ -n "$exec" ] && break;
         done
 
         # finally run the program
         if [ -n "$exec" ]; then
             /bin/sh -c "$exec"
         else
-            [ -n "$res" ] && printf "No executable found. Try clearing cache." >> "$LOGFILE"
+            printf "No executable found. Try clearing cache." >> "$LOGFILE"
         fi
 
         return 0
@@ -462,7 +511,6 @@ main_desktop() {
 
     prep
     check
-    scan
     cache
     print_menu "$@"
     execute_program "$@"
@@ -487,7 +535,14 @@ main() {
         ;;
         "fm") prepare_dirnav "$args"
         ;;
-        "desktop") main_desktop "$args"
+        "desktop")
+            # arrays containing entries
+            declare -a it_title
+            declare -a it_icon
+            declare -a it_exec
+            declare -a it_file
+
+            main_desktop "$args"
         ;;
         "help")
             print_cli_help
