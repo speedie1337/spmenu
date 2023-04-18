@@ -401,11 +401,25 @@ main_desktop() {
             else # we have entries, let's populate the arrays
                 command -v desktop_pre_func > /dev/null && desktop_pre_func
 
-                readarray -t it_title < "$TEMPORARY_DIR/../.title"
-                readarray -t it_exec < "$TEMPORARY_DIR/../.exec"
-                readarray -t it_icon < "$TEMPORARY_DIR/../.icon"
-                readarray -t it_file < "$TEMPORARY_DIR/../.file"
+                # read title
+                while read -r p; do
+                    it_title+=("$p")
+                done < "$TEMPORARY_DIR/../.title"
 
+                # read icon
+                while read -r p; do
+                    it_icon+=("$p")
+                done < "$TEMPORARY_DIR/../.icon"
+
+                # read executable
+                while read -r p; do
+                    it_exec+=("$p")
+                done < "$TEMPORARY_DIR/../.exec"
+
+                # read file
+                while read -r p; do
+                    it_file+=("$p")
+                done < "$TEMPORARY_DIR/../.file"
 
                 # finally print all of it
                 for i in "${!it_title[@]}"; do
@@ -427,21 +441,37 @@ main_desktop() {
         [ -z "$menusel" ] && return 1 \
         || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
 
-        w_array() {
-            readarray -t it_title < "$TEMPORARY_DIR/../.title"
-            readarray -t it_exec < "$TEMPORARY_DIR/../.exec"
-            readarray -t it_icon < "$TEMPORARY_DIR/../.icon"
-            readarray -t it_file < "$TEMPORARY_DIR/../.file"
+        exec_program() {
+            # read title
+            while read -r p; do
+                it_title+=("$p")
+            done < "$TEMPORARY_DIR/../.title"
+
+            # read icon
+            while read -r p; do
+                it_icon+=("$p")
+            done < "$TEMPORARY_DIR/../.icon"
+
+            # read executable
+            while read -r p; do
+                it_exec+=("$p")
+            done < "$TEMPORARY_DIR/../.exec"
+
+            # read file
+            while read -r p; do
+                it_file+=("$p")
+            done < "$TEMPORARY_DIR/../.file"
+
 
             # set exec
             [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
             for i in "${!it_title[@]}"; do
                 if [ "${it_title[i]}" = "$menusel" ]; then
                     exec="${it_exec[i]}"
-                    printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
+                    printf "Current file: '%s'\nIndex: '%s'\n" "${it_file[i]}" "${i}" >> "$LOGFILE"
                     break;
                 else
-                    printf "Executable %s is: %s" "$i" "${it_exec[i]}" >> "$LOGFILE"
+                    printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
                 fi
             done
 
@@ -453,7 +483,7 @@ main_desktop() {
             fi
         }
 
-        w_array
+        exec_program "$@"
     }
 
     prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
