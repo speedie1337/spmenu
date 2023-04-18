@@ -488,15 +488,14 @@ main_desktop() {
         || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
 
         # find the executable matching the selected name
-        for i in "${!it_title[@]}"; do
-            i=$((i+1))
+        for i in "${it_exec[@]}"; do
             if [ "${it_title[i]}" = "${menusel}" ]; then
                 exec="${it_exec[i]}"
                 printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
                 break;
-            fi
-
-            [ -n "$exec" ] && break;
+	    else
+		printf "Executable %s is: %s" "$i" "${it_exec[i]}" >> "$LOGFILE"
+	    fi
         done
 
         # finally run the program
