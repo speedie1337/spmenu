@@ -36,6 +36,11 @@ TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
 CACHE="${CACHE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 
+TITLEFILE="${TITLEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.title}"
+EXECFILE="${EXECFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.exec}"
+ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.icon}"
+FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.file}"
+
 # arrays containing entries
 declare -a it_title
 declare -a it_icon
@@ -190,6 +195,10 @@ ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 CACHE="true" # Cache entries (true/false)
 LOGFILE="/tmp/spmenu_run.log" # Log file
+TITLEFILE="\${TITLEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.title}" # File containing the different titles to display.
+EXECFILE="\${EXECFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.exec}" # File containing the different executables to run.
+ICONFILE="\${ICONFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.icon}" # File containing the paths to the icons to display.
+FILEFILE="\${FILEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.file}" # File containing the path to the .desktop entries.
 
 # file management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
@@ -374,10 +383,10 @@ main_desktop() {
     print_menu() {
         print_list() {
             # should we use cached files?
-            [ -f "$TEMPORARY_DIR/../.title" ] && cfiles="true" || cfiles="false"
-            [ -f "$TEMPORARY_DIR/../.icon" ] && cfiles="true" || cfiles="false"
-            [ -f "$TEMPORARY_DIR/../.exec" ] && cfiles="true" || cfiles="false"
-            [ -f "$TEMPORARY_DIR/../.file" ] && cfiles="true" || cfiles="false"
+            [ -f "$TITLEFILE" ] && cfiles="true" || cfiles="false"
+            [ -f "$ICONFILE" ] && cfiles="true" || cfiles="false"
+            [ -f "$EXECFILE" ] && cfiles="true" || cfiles="false"
+            [ -f "$FILEFILE" ] && cfiles="true" || cfiles="false"
 
             # print data from entries
             if [ "$cfiles" = "false" ]; then
@@ -391,10 +400,10 @@ main_desktop() {
                     it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
                     it_file[i]="$cur_file"
 
-                    printf "%s\n" "${it_title[i]}" >> "$TEMPORARY_DIR/../.title"
-                    printf "%s\n" "${it_icon[i]}" >> "$TEMPORARY_DIR/../.icon"
-                    printf "%s\n" "${it_exec[i]}" >> "$TEMPORARY_DIR/../.exec"
-                    printf "%s\n" "${it_file[i]}" >> "$TEMPORARY_DIR/../.file"
+                    printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
+                    printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
+                    printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
+                    printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
                 done
 
                 print_list "$@"
@@ -404,22 +413,22 @@ main_desktop() {
                 # read title
                 while read -r p; do
                     it_title+=("$p")
-                done < "$TEMPORARY_DIR/../.title"
+                done < "$TITLEFILE"
 
                 # read icon
                 while read -r p; do
                     it_icon+=("$p")
-                done < "$TEMPORARY_DIR/../.icon"
+                done < "$ICONFILE"
 
                 # read executable
                 while read -r p; do
                     it_exec+=("$p")
-                done < "$TEMPORARY_DIR/../.exec"
+                done < "$EXECFILE"
 
                 # read file
                 while read -r p; do
                     it_file+=("$p")
-                done < "$TEMPORARY_DIR/../.file"
+                done < "$FILEFILE"
 
                 # finally print all of it
                 for i in "${!it_title[@]}"; do
@@ -445,22 +454,22 @@ main_desktop() {
             # read title
             while read -r p; do
                 it_title+=("$p")
-            done < "$TEMPORARY_DIR/../.title"
+            done < "$TITLEFILE"
 
             # read icon
             while read -r p; do
                 it_icon+=("$p")
-            done < "$TEMPORARY_DIR/../.icon"
+            done < "$ICONFILE"
 
             # read executable
             while read -r p; do
                 it_exec+=("$p")
-            done < "$TEMPORARY_DIR/../.exec"
+            done < "$EXECFILE"
 
             # read file
             while read -r p; do
                 it_file+=("$p")
-            done < "$TEMPORARY_DIR/../.file"
+            done < "$FILEFILE"
 
 
             # set exec
@@ -498,10 +507,10 @@ main_desktop() {
 
         [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
 
-        [ -f "$TEMPORARY_DIR/../.title" ] && rm -f "$TEMPORARY_DIR/../.title"
-        [ -f "$TEMPORARY_DIR/../.icon" ] && rm -f "$TEMPORARY_DIR/../.icon"
-        [ -f "$TEMPORARY_DIR/../.exec" ] && rm -f "$TEMPORARY_DIR/../.exec"
-        [ -f "$TEMPORARY_DIR/../.file" ] && rm -f "$TEMPORARY_DIR/../.file"
+        [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
+        [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
+        [ -f "$EXECFILE" ] && rm -f "$EXECFILE"
+        [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
 
         # find
         entry="$(find $DESKTOP_DIR -type f)"
