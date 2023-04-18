@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # spmenu_run
 # Feature rich run launcher, file lister and .desktop launcher for spmenu
 
@@ -35,6 +35,12 @@ ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX
 TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
 CACHE="${CACHE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
+
+# arrays containing entries
+declare -a it_title
+declare -a it_icon
+declare -a it_exec
+declare -a it_file
 
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
@@ -366,11 +372,88 @@ EOF
 
 main_desktop() {
     print_menu() {
-        if [ "$DISPLAY_DUPLICATES" != "false" ]; then
-            menusel="$(print_list | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
-        else
-            menusel="$(print_list | uniq $UNIQ_ARGS | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
-        fi
+        print_list() {
+            # should we use cached files?
+            [ -f "$TEMPORARY_DIR/../.title" ] && cfiles="true" || cfiles="false"
+            [ -f "$TEMPORARY_DIR/../.icon" ] && cfiles="true" || cfiles="false"
+            [ -f "$TEMPORARY_DIR/../.exec" ] && cfiles="true" || cfiles="false"
+            [ -f "$TEMPORARY_DIR/../.file" ] && cfiles="true" || cfiles="false"
+
+            # print data from entries
+            if [ "$cfiles" = "false" ]; then
+                for i in $(seq "$cached_c"); do
+                    # current file
+                    cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+
+                    # get details to display
+                    it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
+                    it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+                    it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
+                    it_file[i]="$cur_file"
+
+                    printf "%s\n" "${it_title[i]}" >> "$TEMPORARY_DIR/../.title"
+                    printf "%s\n" "${it_icon[i]}" >> "$TEMPORARY_DIR/../.icon"
+                    printf "%s\n" "${it_exec[i]}" >> "$TEMPORARY_DIR/../.exec"
+                    printf "%s\n" "${it_file[i]}" >> "$TEMPORARY_DIR/../.file"
+                done
+
+                print_list "$@"
+            else # we have entries, let's populate the arrays
+                command -v desktop_pre_func > /dev/null && desktop_pre_func
+
+                readarray -t it_title < "$TEMPORARY_DIR/../.title"
+                readarray -t it_exec < "$TEMPORARY_DIR/../.exec"
+                readarray -t it_icon < "$TEMPORARY_DIR/../.icon"
+                readarray -t it_file < "$TEMPORARY_DIR/../.file"
+
+
+                # finally print all of it
+                for i in "${!it_title[@]}"; do
+                    if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                        printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
+                    elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                        printf "%s\n" "${it_title[i]}"
+                    else
+                        continue
+                    fi
+                done
+            fi | uniq $UNIQ_ARGS
+        }
+
+        menusel="$(print_list "$@" | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+
+        [ "$menusel" = "?" ] && print_desktop_help && main "$@"
+        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
+        [ -z "$menusel" ] && return 1 \
+        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+
+        w_array() {
+            readarray -t it_title < "$TEMPORARY_DIR/../.title"
+            readarray -t it_exec < "$TEMPORARY_DIR/../.exec"
+            readarray -t it_icon < "$TEMPORARY_DIR/../.icon"
+            readarray -t it_file < "$TEMPORARY_DIR/../.file"
+
+            # set exec
+            [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
+            for i in "${!it_title[@]}"; do
+                if [ "${it_title[i]}" = "$menusel" ]; then
+                    exec="${it_exec[i]}"
+                    printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
+                    break;
+                else
+                    printf "Executable %s is: %s" "$i" "${it_exec[i]}" >> "$LOGFILE"
+                fi
+            done
+
+            # finally run the program
+            if [ -n "$exec" ]; then
+                /bin/sh -c "$exec"
+            else
+                printf "No executable found. Try clearing cache." >> "$LOGFILE"
+            fi
+        }
+
+        w_array
     }
 
     prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
@@ -397,7 +480,7 @@ main_desktop() {
         # write new entries
         for i in $(seq "$entry_c"); do
             cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
-            exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g")"
+            exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
 
             # icon name
@@ -412,107 +495,10 @@ main_desktop() {
         scan
     }
 
-    print_list() {
-        command -v desktop_pre_func > /dev/null && desktop_pre_func
-
-        # should we use cached files?
-        [ -f "$TEMPORARY_DIR/../.title" ] && cfiles="true" || cfiles="false"
-        [ -f "$TEMPORARY_DIR/../.icon" ] && cfiles="true" || cfiles="false"
-        [ -f "$TEMPORARY_DIR/../.exec" ] && cfiles="true" || cfiles="false"
-        [ -f "$TEMPORARY_DIR/../.file" ] && cfiles="true" || cfiles="false"
-
-        # print data from entries
-        if [ "$cfiles" = "false" ]; then
-            for i in $(seq "$cached_c"); do
-                # current file
-                cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
-
-                # get details to display
-                it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-                it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
-                it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
-                it_file[i]="$cur_file"
-
-                printf "%s\n" "${it_title[i]}" >> "$TEMPORARY_DIR/../.title"
-                printf "%s\n" "${it_icon[i]}" >> "$TEMPORARY_DIR/../.icon"
-                printf "%s\n" "${it_exec[i]}" >> "$TEMPORARY_DIR/../.exec"
-                printf "%s\n" "${it_file[i]}" >> "$TEMPORARY_DIR/../.file"
-            done
-
-            print_list "$@"
-        else # we have entries, let's populate the arrays
-            i=1
-
-            # read title
-            while read -r p; do
-                it_title[i]="$p"
-                i=$((i+1))
-            done < "$TEMPORARY_DIR/../.title"; i=1
-
-            # read icon
-            while read -r p; do
-                it_icon[i]="$p"
-                i=$((i+1))
-            done < "$TEMPORARY_DIR/../.icon"; i=1
-
-            # read executable
-            while read -r p; do
-                it_exec[i]="$p"
-                i=$((i+1))
-            done < "$TEMPORARY_DIR/../.exec"; i=1
-
-            # read file
-            while read -r p; do
-                it_file[i]="$p"
-                i=$((i+1))
-            done < "$TEMPORARY_DIR/../.file"; i=1
-
-            # finally print all of it
-            for i in "${!it_title[@]}"; do
-                if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-                    printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
-                elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-                    printf "%s\n" "${it_title[i]}"
-                else
-                    continue
-                fi
-            done
-        fi
-    }
-
-    # execute the program
-    execute_program() {
-        [ "$menusel" = "?" ] && print_desktop_help && main "$@"
-        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
-        [ -z "$menusel" ] && return 1 \
-        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
-
-        # find the executable matching the selected name
-        for i in "${it_exec[@]}"; do
-            if [ "${it_title[i]}" = "${menusel}" ]; then
-                exec="${it_exec[i]}"
-                printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
-                break;
-	    else
-		printf "Executable %s is: %s" "$i" "${it_exec[i]}" >> "$LOGFILE"
-	    fi
-        done
-
-        # finally run the program
-        if [ -n "$exec" ]; then
-            /bin/sh -c "$exec"
-        else
-            printf "No executable found. Try clearing cache." >> "$LOGFILE"
-        fi
-
-        return 0
-    }
-
     prep
     check
     cache
     print_menu "$@"
-    execute_program "$@"
 }
 
 main() {
@@ -535,12 +521,6 @@ main() {
         "fm") prepare_dirnav "$args"
         ;;
         "desktop")
-            # arrays containing entries
-            declare -a it_title
-            declare -a it_icon
-            declare -a it_exec
-            declare -a it_file
-
             main_desktop "$args"
         ;;
         "help")
