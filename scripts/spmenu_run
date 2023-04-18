@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # spmenu_run
 # Feature rich run launcher, file lister and .desktop launcher for spmenu
 
@@ -404,21 +404,31 @@ main_desktop() {
 
     print_list() {
         command -v desktop_pre_func > /dev/null && desktop_pre_func
+
+        # arrays containing entries
+        declare -a it_title
+        declare -a it_icon
+        declare -a it_exec
+        declare -a it_file
+
         # print data from entries
         for i in $(seq "$cached_c"); do
             # current file
             cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
             # get details to display
-            title="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-            icon="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+            it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
+            it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+            it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
+            it_file[i]="$cur_file"
 
-            [ -z "$title" ] && continue # no title isn't worth displaying, obviously
+            [ -z "${it_title[i]}" ] && continue # no title isn't worth displaying, obviously
+            command -v "${it_exec[i]}" > /dev/null || continue # why bother if we can't execute it?
 
             # print it all
             [ "$USEIMAGE" = "true" ] && [ ! -e "$icon" ] && USEIMAGE=false && reenable=1
-            [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${icon}" "$title" || \
-                printf "%s\n" "$title"
+            [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}" || \
+                printf "%s\n" "${it_title[i]}"
             [ "$reenable" = "1" ] && USEIMAGE=true
         done
     }
@@ -428,12 +438,10 @@ main_desktop() {
         command -v desktop_post_func > /dev/null && desktop_post_func "$res"
         [ -z "$res" ] && cached_c=0 || printf "User input: %s\n" "$res" >> "$LOGFILE"
         for i in $(seq "$cached_c"); do
-            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
-
             # find the executable matching the selected name
-            if grep -q "Name:$res" "$cur_file"; then
-                exec="$(head -n 2 "$cur_file" | tail -n -1 | sed "s/Executable://g")"
-                printf "Current file: '%s'\n" "$cur_file" >> "$LOGFILE"
+            if [ "${it_title[i]}" = "${res}" ]; then
+                exec="${it_exec[i]}"
+                printf "Current file: '%s'\n" "${it_file[i]}" >> "$LOGFILE"
 
                 break;
             else
