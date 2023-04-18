@@ -426,7 +426,7 @@ main_desktop() {
             command -v "${it_exec[i]}" > /dev/null || continue # why bother if we can't execute it?
 
             # print it all
-            [ "$USEIMAGE" = "true" ] && [ ! -e "$icon" ] && USEIMAGE=false && reenable=1
+            [ "$USEIMAGE" = "true" ] && [ ! -e "${it_icon[i]}" ] && USEIMAGE=false && reenable=1
             [ "$USEIMAGE" = "true" ] && printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}" || \
                 printf "%s\n" "${it_title[i]}"
             [ "$reenable" = "1" ] && USEIMAGE=true
