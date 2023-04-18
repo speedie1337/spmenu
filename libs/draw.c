@@ -204,7 +204,6 @@ drawitem(int x, int y, int w)
 	if (lines > 0) {
 		int i = 0;
         int rx = 0;
-        int ew = 0;
 
         // draw image first
         #if USEIMAGE
@@ -219,16 +218,12 @@ drawitem(int x, int y, int w)
                 rx = x;
             }
 
-        if (!hidepowerline && (powerlinemode || powerlinecount)) {
-            ew = plw / 2;
-        }
-
 		for (item = curr; item != next; item = item->right, i++) {
 			x = drawitemtext(
 				item,
 				rx + ((i / lines) *  ((mw - rx) / columns)),
 				y + (((i % lines) + 1) * bh),
-				(mw - rx) / columns - (menumarginh + ew / 2)
+				(mw - rx) / columns - (columns == 1 ? menumarginh : 0)
 			);
         }
 
