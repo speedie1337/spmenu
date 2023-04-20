@@ -26,4 +26,5 @@ Alternatively, run `install.sh` to install all the themes instantly.
 
 ## Usage (spmenurc)
 
-Install it, and `@include` it in your spmenu.conf.
+Install it, and `@include` it in your spmenu.conf. Or if you prefer, replace
+your spmenu.conf with it.
