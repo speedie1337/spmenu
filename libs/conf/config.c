@@ -367,6 +367,7 @@ conf_init(void)
 
             // coloritems int
             config_setting_lookup_int(conf, "coloritems", &coloritems);
+            config_setting_lookup_int(conf, "sgr", &sgr);
         }
     }
 

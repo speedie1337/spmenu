@@ -83,7 +83,6 @@ spmenu.alpha_caretfgbg:     200
 spmenu.alpha_modefg:        255
 spmenu.alpha_modebg:        200
 
-
 !! Powerline
 spmenu.powerlineprompt:     1
 spmenu.powerlinecount:      1
@@ -135,6 +134,7 @@ spmenu.fast:                0
 spmenu.managed:             0
 spmenu.mon:                 -1
 spmenu.coloritems:          1
+spmenu.sgr:                 1
 
 !! Image
 spmenu.imagewidth:          200

@@ -73,7 +73,7 @@ drawitemtext(struct item *item, int x, int y, int w)
 	for (wr = 0, rd = 0; item->text[rd]; rd++) {
 		if (item->text[rd] == '' && item->text[rd + 1] == '[') {
 			size_t alen = strspn(item->text + rd + 2, "0123456789;");
-			if (item->text[rd + alen + 2] == 'm') { // last character in sequence is always 'm'
+			if (item->text[rd + alen + 2] == 'm' && sgr) { // last character in sequence is always 'm'
 				buffer[wr] = '\0';
 
                 if (!lines) {

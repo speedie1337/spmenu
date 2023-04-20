@@ -210,4 +210,5 @@ static int pango_password              = 0; /* Enable support for pango markup f
 
 /* Misc */
 static int coloritems                  = 1; /* Color items or not */
+static int sgr                         = 1; /* Support SGR sequences or not */
 static char *worddelimiters            = " "; /* Word delimiters used for keybinds that change words, " " is default. */

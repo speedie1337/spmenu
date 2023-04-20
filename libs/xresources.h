@@ -88,6 +88,7 @@ ResourcePref resources[] = {
     { "dockproperty",                INTEGER, &dockproperty },
     { "globalcolors",                INTEGER, &globalcolors },
     { "coloritems",                  INTEGER, &coloritems },
+    { "sgr",                         INTEGER, &sgr },
 	{ "menuposition",                INTEGER, &menuposition },
     { "xpos",                        INTEGER, &xpos },
     { "ypos",                        INTEGER, &ypos },
