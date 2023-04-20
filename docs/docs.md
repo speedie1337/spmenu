@@ -89,6 +89,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nci, --no-color-items`
 :   Don't color items
 
+`-sgr, --sgr`
+:   Interpret SGR sequences
+
+`-nsgr, --no-sgr`
+:   Display SGR sequences as text
+
 `-a, --alpha`
 :   Enable alpha
 

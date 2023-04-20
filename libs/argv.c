@@ -165,6 +165,10 @@ readargs(int argc, char *argv[])
 				coloritems = 1;
 		} else if (!strcmp(argv[i], "-nci") || (!strcmp(argv[i], "--no-color-items"))) {  // don't color items
 				coloritems = 0;
+        } else if (!strcmp(argv[i], "-sgr") || (!strcmp(argv[i], "--sgr"))) { // enable sgr seq support
+                sgr = 1;
+        } else if (!strcmp(argv[i], "-nsgr") || (!strcmp(argv[i], "--no-sgr"))) { // disable sgr seq support
+                sgr = 0;
         } else if (i + 1 == argc) {
                 // any of the arguments we checked first
                 if ((!strcmp(argv[i], "-xrdb")
@@ -426,6 +430,8 @@ usage(void)
           "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
           "spmenu -ci,      --color-items                               Color items\n"
           "spmenu -nci,     --no-color-items                            Don't color items\n"
+          "spmenu -sgr,     --sgr                                       Interpret SGR sequences\n"
+          "spmenu -nsgr,    --no-sgr                                    Display SGR sequences as text\n"
           "spmenu -a,       --alpha                                     Enable alpha\n"
           "spmenu -na,      --no-alpha                                  Disable alpha\n"
           "spmenu -tp,      --allow-typing                              Allow the user to type\n"
