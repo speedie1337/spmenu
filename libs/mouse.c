@@ -72,11 +72,16 @@ buttonpress(XEvent *e)
     int rarrowWidth = 0;
     int numberWidth = 0;
     int modeWidth = 0;
+    int capsWidth = 0;
 
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
     if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
+
+    if (!strcmp(capstext, ""))
+        capsWidth = 0;
 
     // if incorrect or wrong window, return
 	if (ev->window != win)
@@ -88,9 +93,11 @@ buttonpress(XEvent *e)
     // check if we clicked on the prompt or the input
     if (ev->x < x + promptw + powerlineprompt ? plw : 0) {
         click = clickprompt;
-    } else if (ev->x > mw - modeWidth - 2 * sp - 2 * borderwidth) {
+    } else if ((ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth) && !hidecaps) {
+        click = clickcaps;
+    } else if (ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth) {
         click = clickmode;
-    } else if (ev->x > mw - modeWidth - numberWidth - 2 * sp - 2 * borderwidth) {
+    } else if (ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth) {
         click = clicknumber;
     } else { // actually we clicked on the input
         w = (lines > 0 || !matches) ? mw - x : inputw;

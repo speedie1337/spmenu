@@ -125,6 +125,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-imt, --insert-mode-text text`
 :   Set insert mode text to text
 
+`-clon, --caps-lock-on-text text`
+: Set caps lock on text to text
+
+`-clof, --caps-lock-off-text text`
+: Set caps lock off text to text
+
 `-bw, --border-width width`
 :   Set width of the border to width  . 0 will disable the border
 
@@ -190,6 +196,9 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-hi, --hide-image`
 :   Hide image
+
+`-hcl, --hide-caps`
+:   Hide caps lock indicator
 
 `-sm, --show-mode`
 :   Show mode indicator

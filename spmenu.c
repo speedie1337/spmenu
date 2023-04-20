@@ -121,6 +121,7 @@ static char *embed;
 
 // keybinds
 static int numlockmask = 0;
+static int capslockstate = 0;
 
 // height of each item, menu width, menu height
 static int bh, mw, mh;

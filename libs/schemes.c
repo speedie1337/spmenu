@@ -39,6 +39,8 @@ init_appearance(void)
     alphas[SchemeNumber][ColBg] = alpha_numbg;
     alphas[SchemeMode][ColFg] = alpha_modefg;
     alphas[SchemeMode][ColBg] = alpha_modebg;
+    alphas[SchemeCaps][ColFg] = alpha_capsfg;
+    alphas[SchemeCaps][ColBg] = alpha_capsbg;
     alphas[SchemeBorder][ColBg] = alpha_border;
 
     // create color schemes from array

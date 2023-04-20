@@ -29,9 +29,11 @@ static int managed                     = 0; /* Let your window manager manage sp
 static int powerlineprompt             = 1; /* Enable powerline for the prompt */
 static int powerlinecount              = 1; /* Enable powerline for the match count */
 static int powerlinemode               = 1; /* Enable powerline for the mode indicator */
+static int powerlinecaps               = 1; /* Enable powerline for the caps lock indicator */
 static int promptpwlstyle              = 0; /* Prompt powerline style (0: >, 1: \) */
 static int matchcountpwlstyle          = 0; /* Match count powerline style (0: <, 1: /) */
 static int modepwlstyle                = 0; /* Mode indicator powerline style (0: <, 1: /) */
+static int capspwlstyle                = 0; /* Caps lock indicator powerline style (0: <, 1: /) */
 
 /* Window properties */
 static int dockproperty                = 1; /* Set _NET_WM_WINDOW_TYPE_DOCK */
@@ -48,6 +50,8 @@ static int maxcache                    = 512; /* Max image size to cache */
 static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
 static char *normtext                  = "Normal"; /* Text to display for normal mode */
 static char *instext                   = "Insert"; /* Text to display for insert mode */
+static char *capslockontext            = "Caps Lock"; /* Text to display for the caps lock indicator when caps lock is on */
+static char *capslockofftext           = ""; /* Text to display for the caps lock indicator when caps lock is off */
 
 /* Window border options */
 static int borderwidth                 = 0; /* Width of the border */
@@ -90,6 +94,7 @@ static int hidelarrow                  = 0; /* Hide left arrow (0/1) */
 static int hiderarrow                  = 0; /* Hide right arrow (0/1) */
 static int hideitem                    = 0; /* Hide item (0/1) */
 static int hideprompt                  = 0; /* Hide prompt (0/1) */
+static int hidecaps                    = 0; /* Hide caps lock indicator (0/1) */
 static int hidepowerline               = 0; /* Hide powerline (0/1) */
 static int hidecaret                   = 0; /* Hide caret (0/1) */
 static int hidehighlight               = 0; /* Hide highlight (0/1) */
@@ -149,6 +154,10 @@ static char col_caretbg[]              = "#222222"; /* Background caret color */
 static char col_modefg[]               = "#ffffff"; /* Mode text color */
 static char col_modebg[]               = "#35638A"; /* Mode background color */
 
+/* Caps lock colors */
+static char col_capsfg[]               = "#ffffff"; /* Caps lock text color */
+static char col_capsbg[]               = "#45638A"; /* Caps lock background color */
+
 /* SGR colors */
 static char col_sgr0[]                 = "#000000"; /* SGR color #0 */
 static char col_sgr1[]                 = "#7f0000"; /* SGR color #1 */
@@ -196,11 +205,14 @@ static int alpha_caretfg               = 255; /* Alpha for the caret foreground 
 static int alpha_caretbg               = 200; /* Alpha for the caret background (0-255) */
 static int alpha_modefg                = 255; /* Alpha for the mode indicator foreground (0-255) */
 static int alpha_modebg                = 200; /* Alpha for the mode indicator background (0-255) */
+static int alpha_capsfg                = 255; /* Alpha for the caps lock indicator foreground (0-255) */
+static int alpha_capsbg                = 200; /* Alpha for the caps lock indicator background (0-255) */
 
 /* Pango options */
 static int pango_item                  = 1; /* Enable support for pango markup for the items */
 static int pango_highlight             = 1; /* Enable support for pango markup for the highlighting */
 static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */
+static int pango_caps                  = 1; /* Enable support for pango markup for the caps lock indicator */
 static int pango_input                 = 1; /* Enable support for pango markup for user input */
 static int pango_leftarrow             = 0; /* Enable support for pango markup for the left arrow */
 static int pango_rightarrow            = 0; /* Enable support for pango markup for the right arrow */

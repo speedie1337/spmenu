@@ -181,6 +181,7 @@ drawitem(int x, int y, int w)
     int modeWidth = 0;
     int larrowWidth = 0;
     int rarrowWidth = 0;
+    int capsWidth = 0;
 
     // add width
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
@@ -188,6 +189,7 @@ drawitem(int x, int y, int w)
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
     if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
+    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
     // mode indicator is always going to be at the right
     if (hidemode) {
@@ -235,7 +237,7 @@ drawitem(int x, int y, int w)
         x = drawlarrow(x, y, w);
 
 		for (item = curr; item != next; item = item->right) // draw items
-            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth - menumarginh));
+            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth - capsWidth - menumarginh));
 
             w = rarrowWidth + numberWidth + modeWidth + menumarginh;
             x = drawrarrow(mw - w, y, w);
@@ -378,6 +380,33 @@ drawmode(int x, int y, int w)
      return x;
 }
 
+int
+drawcaps(int x, int y, int w)
+{
+    if (!w) return x; // not caps lock
+
+    if (!hidecaps) { // draw caps lock indicator
+        int powerlinewidth = 0;
+
+        if (!hidepowerline && powerlinecaps) {
+            powerlinewidth = plw / 2;
+        }
+
+        drw_setscheme(drw, scheme[SchemeCaps]);
+        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, capstext, 0, pango_caps ? True : False);
+
+        // draw powerline for caps lock indicator
+        if (!hidepowerline && powerlinecaps) {
+            drw_settrans(drw, scheme[SchemeCaps], hidemode ? hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber] : scheme[SchemeMode]);
+            drw_arrow(drw, x, y, plw, bh, 0, capspwlstyle);
+
+            x += plw;
+        }
+    }
+
+     return x;
+}
+
 void
 drawmenu(void)
 {
@@ -390,9 +419,14 @@ drawmenu(void)
 
     int numberWidth = 0;
     int modeWidth = 0;
+    int capsWidth = 0;
 
     // add width
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
+
+    if (!strcmp(capstext, ""))
+        capsWidth = 0;
 
     // calculate match count
     if (!hidematchcount) {
@@ -441,12 +475,17 @@ drawmenu(void)
 
     if (!hidematchcount) {
         w = numberWidth;
-        drawnumber(mw - numberWidth - modeWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+        drawnumber(mw - numberWidth - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
     }
 
     if (!hidemode) {
         w = modeWidth;
-        drawmode(mw - modeWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+        drawmode(mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+    }
+
+    if (!hidecaps) {
+        w = capsWidth;
+        drawcaps(mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
     }
 
 	drw_map(drw, win, 0, 0, mw, mh);

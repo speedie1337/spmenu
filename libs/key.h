@@ -9,3 +9,6 @@ typedef struct {
 static void updatenumlockmask(void);
 static void keypress(XEvent *e);
 static void grabkeyboard(void);
+static void getcapsstate(void);
+
+static char capstext[16] = "Caps Lock";

@@ -12,6 +12,7 @@
  * clickrarrow:  - Right arrow
  * clicknumber:  - Match count
  * clickmode:    - Mode indicator
+ * clickcaps:    - Caps lock indicator
  *
  * Button1       - Left click
  * Button2       - Middle click

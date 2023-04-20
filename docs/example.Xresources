@@ -36,6 +36,8 @@ spmenu.col_caretbg:         #222222
 spmenu.col_border:          #35638A
 spmenu.col_modefg:          #ffffff
 spmenu.col_modebg:          #35638A
+spmenu.col_capsfg:          #ffffff
+spmenu.col_capsbg:          #45638A
 spmenu.col_sgr0:            #000000
 spmenu.col_sgr1:            #7f0000
 spmenu.col_sgr2:            #007f00
@@ -82,14 +84,18 @@ spmenu.alpha_caretfgfg:     255
 spmenu.alpha_caretfgbg:     200
 spmenu.alpha_modefg:        255
 spmenu.alpha_modebg:        200
+spmenu.alpha_capsfg:        255
+spmenu.alpha_capsbg:        200
 
 !! Powerline
 spmenu.powerlineprompt:     1
 spmenu.powerlinecount:      1
 spmenu.powerlinemode:       1
+spmenu.powerlinecaps:       1
 spmenu.promptpwlstyle:      0
 spmenu.matchcountpwlstyle:  0
 spmenu.modepwlstyle:        0
+spmenu.capspwlstyle:        0
 
 !! Misc color
 spmenu.globalcolors:        1
@@ -156,6 +162,7 @@ spmenu.hideitem:            0
 spmenu.hideprompt:          0
 spmenu.hideinput:           0
 spmenu.hidepowerline:       0
+spmenu.hidecaps:            0
 spmenu.hidecaret:           0
 spmenu.hidehighlight:       0
 spmenu.hideimage:           0
@@ -168,5 +175,6 @@ spmenu.pango_leftarrow:     0
 spmenu.pango_rightarrow:    0
 spmenu.pango_numbers:       0
 spmenu.pango_mode:          0
+spmenu.pango_caps:          0
 spmenu.pango_password:      0
 spmenu.pango_highlight:     1

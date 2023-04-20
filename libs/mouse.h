@@ -16,6 +16,7 @@ enum {
     clickselitem,
     clickrarrow,
     clicknumber,
+    clickcaps,
     clickmode,
 };
 

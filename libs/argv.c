@@ -250,8 +250,12 @@ readargs(int argc, char *argv[])
             fonts[0] = argv[++i];
 		else if (!strcmp(argv[i], "-nmt") || (!strcmp(argv[i], "--normal-mode-text")))  // normal mode text
 			strcpy(normtext, argv[++i]);
-		else if (!strcmp(argv[i], "-imt") || (!strcmp(argv[i], "--insert-mode-text"))) {  // insert mode text
+		else if (!strcmp(argv[i], "-imt") || (!strcmp(argv[i], "--insert-mode-text")))  // insert mode text
 			strcpy(instext, argv[++i]);
+		else if (!strcmp(argv[i], "-clon") || (!strcmp(argv[i], "--caps-lock-on-text")))  // caps lock on text
+			strcpy(capslockontext, argv[++i]);
+		else if (!strcmp(argv[i], "-clof") || (!strcmp(argv[i], "--caps-lock-off-text"))) {  // caps lock off text
+			strcpy(capslockofftext, argv[++i]);
 
         // dmenu compatibility options
         } else if (!strcmp(argv[i], "-nb")) {  // normal background color
@@ -436,12 +440,16 @@ usage(void)
           "spmenu -na,      --no-alpha                                  Disable alpha\n"
           "spmenu -tp,      --allow-typing                              Allow the user to type\n"
           "spmenu -nt,      --no-allow-typing                           Don't allow typing, the user must select an option\n"
-		  "spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset>\n"
+          , stdout);
+
+    fputs("spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset>\n"
 		  "spmenu -y,       --y-position <y offset>                     Offset spmenu y position by <y offset>\n"
           "spmenu -n,       --preselect <line>                          Preselect <line> in the list of items\n"
 		  "spmenu -z,       --width <width>                             Width of the spmenu window\n"
           "spmenu -nmt,     --normal-mode-text <text>                   Set normal mode text to <text>\n"
           "spmenu -imt,     --insert-mode-text <text>                   Set insert mode text to <text>\n"
+          "spmenu -clon,    --caps-lock-on-text <text>                  Set caps lock on text to <text>\n"
+          "spmenu -clof,    --caps-lock-off-text <text>                 Set caps lock off text to <text>\n"
 		  "spmenu -bw,      --border-width <width>                      Set width of the border to <width>. 0 will disable the border\n"
           "spmenu -so,      --sort                                      Sort matches\n"
           "spmenu -nso,     --no-sort                                   Don't sort matches\n"
@@ -467,6 +475,7 @@ usage(void)
           "spmenu -hc,      --hide-caret, --hide-cursor                 Hide caret\n"
           "spmenu -hhl,     --hide-highlighting                         Hide highlight\n"
           "spmenu -hi,      --hide-image                                Hide image\n"
+          "spmenu -hcl,     --hide-caps                                 Hide caps lock indicator\n"
           "spmenu -sm,      --show-mode                                 Show mode indicator\n"
           "spmenu -smc,     --show-match-count                          Show match count\n"
           "spmenu -sla,     --show-left-arrow                           Show left arrow\n"

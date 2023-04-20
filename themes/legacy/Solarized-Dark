@@ -6,7 +6,7 @@ spmenu.globalcolors:       0
 spmenu.col_itemnormfg:     #eee8d5
 spmenu.col_itemnormbg:     #002b36
 spmenu.col_itemselfg:      #eee8d5
-spmenu.col_itemselbg:      #073642
+spmenu.col_itemselbg:      #dc322f
 spmenu.col_itemnormprifg:  #eee8d5
 spmenu.col_itemnormpribg:  #002b36
 spmenu.col_itemselprifg:   #eee8d5
@@ -30,6 +30,8 @@ spmenu.col_caretfg:        #eee8d5
 spmenu.col_border:         #859900
 spmenu.col_modefg:         #262626
 spmenu.col_modebg:         #859900
+spmenu.col_capsfg:         #262626
+spmenu.col_capsbg:         #2aa198
 spmenu.col_sgr0:           #073642
 spmenu.col_sgr1:           #dc322f
 spmenu.col_sgr2:           #859900

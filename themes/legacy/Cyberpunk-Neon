@@ -31,6 +31,8 @@ spmenu.col_caretfg:        #0abdc6
 spmenu.col_border:         #711c91
 spmenu.col_modefg:         #000b1e
 spmenu.col_modebg:         #d300c4
+spmenu.col_capsfg:         #000b1e
+spmenu.col_capsbg:         #1c61c2
 spmenu.col_sgr0:           #123e7c
 spmenu.col_sgr1:           #ff0000
 spmenu.col_sgr2:           #d300c4

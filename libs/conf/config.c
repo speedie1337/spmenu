@@ -120,9 +120,11 @@ conf_init(void)
             config_setting_lookup_int(conf, "promptstyle", &promptpwlstyle); // spmenu.powerline.promptstyle
             config_setting_lookup_int(conf, "matchcountstyle", &matchcountpwlstyle); // spmenu.powerline.matchcountstyle
             config_setting_lookup_int(conf, "modestyle", &modepwlstyle); // spmenu.powerline.modestyle
+            config_setting_lookup_int(conf, "capsstyle", &capspwlstyle); // spmenu.powerline.capsstyle
             config_setting_lookup_int(conf, "prompt", &powerlineprompt); // spmenu.powerline.prompt
             config_setting_lookup_int(conf, "matchcount", &powerlinecount); // spmenu.powerline.matchcount
             config_setting_lookup_int(conf, "mode", &powerlinemode); // spmenu.powerline.mode
+            config_setting_lookup_int(conf, "caps", &powerlinecaps); // spmenu.powerline.caps
         }
     }
 
@@ -152,25 +154,31 @@ conf_init(void)
             config_setting_t *conf = config_setting_get_elem(setting, i);
 
             // look up
-            config_setting_lookup_string(conf, "font", &dest); // spmenu.text.font
-            strcpy(font, strdup(dest));
+            if (config_setting_lookup_string(conf, "font", &dest)) // spmenu.text.font
+                strcpy(font, strdup(dest));
 
             config_setting_lookup_int(conf, "padding", &textpadding); // spmenu.text.padding
 
-            config_setting_lookup_string(conf, "leftarrow", &dest); // spmenu.text.leftarrow
-            leftarrow = strdup(dest);
+            if (config_setting_lookup_string(conf, "leftarrow", &dest)) // spmenu.text.leftarrow
+                leftarrow = strdup(dest);
 
-            config_setting_lookup_string(conf, "rightarrow", &dest); // spmenu.text.rightarrow
-            rightarrow = strdup(dest);
+            if (config_setting_lookup_string(conf, "rightarrow", &dest)) // spmenu.text.rightarrow
+                rightarrow = strdup(dest);
 
-            config_setting_lookup_string(conf, "password", &dest);
-            password = strdup(dest);
+            if (config_setting_lookup_string(conf, "password", &dest))
+                password = strdup(dest);
 
-            config_setting_lookup_string(conf, "prompt", &dest);
-            prompt = strdup(dest);
+            if (config_setting_lookup_string(conf, "prompt", &dest))
+                prompt = strdup(dest);
 
-            config_setting_lookup_string(conf, "input", &dest);
-            input = strdup(dest);
+            if (config_setting_lookup_string(conf, "capslockon", &dest))
+                capslockontext = strdup(dest);
+
+            if (config_setting_lookup_string(conf, "capslockoff", &dest))
+                capslockofftext = strdup(dest);
+
+            if (config_setting_lookup_string(conf, "input", &dest))
+                input = strdup(dest);
         }
     }
 
@@ -223,6 +231,9 @@ conf_init(void)
 
             config_setting_lookup_int(conf, "modefg", &alpha_modefg); // spmenu.alpha.modefg
             config_setting_lookup_int(conf, "modebg", &alpha_modebg); // spmenu.alpha.modebg
+
+            config_setting_lookup_int(conf, "capsfg", &alpha_capsfg); // spmenu.alpha.capsfg
+            config_setting_lookup_int(conf, "capsbg", &alpha_capsbg); // spmenu.alpha.capsbg
         }
     }
 
@@ -319,6 +330,13 @@ conf_init(void)
 
             if (config_setting_lookup_string(conf, "modebg", &dest))
                 strcpy(colors[SchemeMode][ColBg], strdup(dest));
+
+            // caps
+            if (config_setting_lookup_string(conf, "capsfg", &dest))
+                strcpy(colors[SchemeCaps][ColFg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "capsbg", &dest))
+                strcpy(colors[SchemeCaps][ColBg], strdup(dest));
 
             // border
             if (config_setting_lookup_string(conf, "border", &dest))
@@ -521,6 +539,7 @@ conf_init(void)
             config_setting_lookup_int(conf, "highlight", &hidehighlight); // spmenu.hide.highlight
             config_setting_lookup_int(conf, "matchcount", &hidematchcount); // spmenu.hide.matchcount
             config_setting_lookup_int(conf, "mode", &hidemode); // spmenu.hide.mode
+            config_setting_lookup_int(conf, "caps", &hidecaps); // spmenu.hide.caps
             config_setting_lookup_int(conf, "hideimage", &hideimage); // spmenu.hide.image
         }
     }
@@ -544,6 +563,7 @@ conf_init(void)
             config_setting_lookup_int(conf, "rightarrow", &pango_rightarrow); // spmenu.pango.rightarrow
             config_setting_lookup_int(conf, "numbers", &pango_numbers); // spmenu.pango.numbers
             config_setting_lookup_int(conf, "mode", &pango_mode); // spmenu.pango.mode
+            config_setting_lookup_int(conf, "caps", &pango_caps); // spmenu.pango.caps
             config_setting_lookup_int(conf, "password", &pango_password); // spmenu.pango.mode
         }
     }

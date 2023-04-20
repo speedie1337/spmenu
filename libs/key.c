@@ -69,9 +69,22 @@ grabkeyboard(void)
 	// try to grab keyboard, we may have to wait for another process to ungrab
 	for (i = 0; i < 1000; i++) {
 		if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
-		                  GrabModeAsync, CurrentTime) == GrabSuccess)
+		                  GrabModeAsync, CurrentTime) == GrabSuccess) {
+            getcapsstate();
 			return;
+        }
 		nanosleep(&ts, NULL);
 	}
 	die("cannot grab keyboard");
+}
+
+void
+getcapsstate(void)
+{
+    unsigned int cs = 0;
+
+    XkbGetIndicatorState(dpy, XkbUseCoreKbd, &cs);
+    capslockstate = (cs & 0x01) == 1;
+
+    strncpy(capstext, capslockstate ? capslockontext : capslockofftext, 15);
 }

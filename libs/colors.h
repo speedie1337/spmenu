@@ -16,6 +16,7 @@ static unsigned int alphas[][2]      = {
     [SchemeCaret]          = { 255, 200 },
     [SchemeNumber]         = { 255, 200 },
     [SchemeBorder]         = { 255, 200 },
+    [SchemeCaps]           = { 255, 200 },
 };
 
 // colorscheme array
@@ -29,6 +30,7 @@ static char *colors[SchemeLast][2] = {
 	[SchemeItemSelPri]    = { col_itemselprifg,  col_itemselpribg  },
     [SchemeInput]         = { col_inputfg,       col_inputbg,      },
 	[SchemeMenu]          = { NULL,              col_menu          },
+    [SchemeCaps]          = { col_capsfg,        col_capsbg        },
 	[SchemePrompt]        = { col_promptfg,      col_promptbg      },
     [SchemeNormHighlight] = { col_hlnormfg,      col_hlnormbg      },
     [SchemeSelHighlight]  = { col_hlselfg,       col_hlselbg       },

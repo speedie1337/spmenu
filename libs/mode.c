@@ -4,7 +4,7 @@ switchmode(const Arg *arg)
     curMode = !curMode;
     allowkeys = !curMode;
 
-    strcpy(modetext, curMode ? instext : normtext);
+    strncpy(modetext, curMode ? instext : normtext, 15);
 
     drawmenu();
 }
