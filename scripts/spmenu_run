@@ -229,7 +229,7 @@ parse() {
     sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_RUN_ARGS)"
 
     # parse
-    case "$(printf '%c' "$sout")" in
+    case "$(printf '%c' "$sout" >&2)" in
         "#") EXEC="term" ;;
         "?") EXEC="man" ;;
     esac
@@ -321,7 +321,10 @@ read_args() {
                              remove_arg "$narg"
                              MARGS="$narg"
                           ;;
-            -h|--help) remove_arg "$arg" && function=help ;;
+            -h|--help) remove_arg "$arg" && function=help
+                    ;;
+            *) printf "spmenu_run: Invalid argument: '%s'. If you meant to pass this to spmenu, use the '%s' option.\n" "$arg" "-a"
+                    ;;
         esac
 
         [ "$argc" = "$i" ] && break
