@@ -5,15 +5,8 @@ CONFDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 PREFIX="${PREFIX:-/usr}"
 
 load_profile() {
-    [ -f "${CONFDIR}/spmenu/.profile" ] && [ "$(cat "${CONFDIR}/spmenu/.profile")" = "NONE" ] && NONE=true
-
-    if [ "$NONE" = "true" ]; then
-        return
-    fi
-
-    [ -f "${CONFDIR}/spmenu/.profile" ] && \
-        PROFILE="$(cat "${CONFDIR}/spmenu/.profile")"
-
+    [ -f "${CONFDIR}/spmenu/.profile" ] && [ "$(cat "${CONFDIR}/spmenu/.profile")" = "NONE" ] && NONE=true && return
+    [ -f "${CONFDIR}/spmenu/.profile" ] && PROFILE="$(cat "${CONFDIR}/spmenu/.profile")"
     [ -f "$HOME/.spmenurc" ] && xrdb -override "$HOME/.spmenurc" # legacy config
     [ -n "$PROFILE" ] && xrdb -override "$PROFILE"
 }

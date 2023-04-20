@@ -117,15 +117,17 @@ print_cli_help() {
 cat << EOF
 spmenu_run - Run launcher for spmenu
 
-spmenu -x, --run             List entries in \$PATH.
-spmenu -f, --fm <dir>        List files and directories in <dir>.
-spmenu -d, --desktop         List .desktop entries.
-spmenu -p, --full-path       Print the full path to the file selected (-fm)
-spmenu -np, --no-full-path   Don't print the full path to the file selected (-fm)
-spmenu -h, --help            Print this help.
-spmenu -o, --stdout          Print to standard input and do not execute the selected item.
-spmenu -no, --no-stdout      Don't print to standard input, execute the selected item.
-spmenu -a, --args <args>     Pass <args> to spmenu.
+spmenu_run -x,   --run             List entries in \$PATH.
+spmenu_run -f,   --fm <dir>        List files and directories in <dir>.
+spmenu_run -d,   --desktop         List .desktop entries.
+spmenu_run -p,   --full-path       Print the full path to the file selected (-fm)
+spmenu_run -np,  --no-full-path    Don't print the full path to the file selected (-fm)
+spmenu_run -dm,  --dmenu           Run spmenu_run using dmenu instead of spmenu.
+spmenu_run -ndm, --no-dmenu        Run spmenu_run using spmenu instead of dmenu.
+spmenu_run -h,   --help            Print this help.
+spmenu_run -o,   --stdout          Print to standard input and do not execute the selected item.
+spmenu_run -no,  --no-stdout       Don't print to standard input, execute the selected item.
+spmenu_run -a,   --args <args>     Pass <args> to spmenu.
 EOF
 }
 
@@ -304,6 +306,12 @@ read_args() {
             -np|-no-full-path|--no-full-path) remove_arg "$arg"
                                        USE_FULL_PATH="false"
                                        ;;
+            -dm|-dmenu|--dmenu) remove_arg "$arg"
+                                DMENU_COMPAT="true"
+                                ;;
+            -ndm|-no-dmenu|--no-dmenu) remove_arg "$arg"
+                                DMENU_COMPAT="false"
+                                ;;
             -a|-args|--args) remove_arg "$arg"
                              if [ -z "$narg" ]; then
                                  printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER"
@@ -570,8 +578,8 @@ main() {
     RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility
-    DMENU_FM_ARGS="$MARGS"
-    DMENU_RUN_ARGS="-l 20 $MARGS"
+    DMENU_FM_ARGS="-l 20 $MARGS"
+    DMENU_RUN_ARGS="$MARGS"
     DMENU_DESKTOP_ARGS="-l 20 $MARGS"
     DMENU_HELP_ARGS="-l 20 $MARGS"
     COMPAT_LS_ARGS="--color=never"
