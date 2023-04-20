@@ -323,6 +323,8 @@ read_args() {
                           ;;
             -h|--help) remove_arg "$arg" && function=help
                     ;;
+            "") :
+                ;;
             *) printf "spmenu_run: Invalid argument: '%s'. If you meant to pass this to spmenu, use the '%s' option.\n" "$arg" "-a"
                     ;;
         esac
