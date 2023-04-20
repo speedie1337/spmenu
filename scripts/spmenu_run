@@ -29,11 +29,13 @@ DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
+DMENU_COMPAT="${DMENU_COMPAT:-false}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
 TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
 CACHE="${CACHE:-true}"
+IMAGE="${IMAGE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 
 TITLEFILE="${TITLEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.title}"
@@ -90,7 +92,11 @@ path() {
 }
 
 print_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "$HELP_COLOR" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+if [ "$DMENU_COMPAT" != "true" ]; then
+COL='\033[0;31m'
+RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+fi
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS $RUNLAUNCHER_EX_ARGS > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -101,7 +107,7 @@ To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.
 - If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
 - If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
 
-$(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
+$(printf "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
 parse "$args"
 exec_cmd "$args"
@@ -172,6 +178,7 @@ RUNLAUNCHER_RUN_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the 
 RUNLAUNCHER_DESKTOP_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the .desktop launcher
 RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
 RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
+DMENU_COMPAT="false" # Enable dmenu compatibility (true/false)
 
 # sorting
 SORT_BY_NUMBER="true" # Sort by numbers
@@ -194,6 +201,7 @@ DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .deskto
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 CACHE="true" # Cache entries (true/false)
+IMAGE="true" # Display images (true/false)
 LOGFILE="/tmp/spmenu_run.log" # Log file
 TITLEFILE="\${TITLEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.title}" # File containing the different titles to display.
 EXECFILE="\${EXECFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.exec}" # File containing the different executables to run.
@@ -240,10 +248,12 @@ exec_cmd() {
     [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
     command -v run_post_func > /dev/null && run_post_func "$sout"
 
+    # when there's no read_man func, call this one instead
     read_nman() {
         $TERMINAL -e man "$1"
     }
 
+    # execute it
     case "$EXEC" in
         "shell") printf "%s" "$sout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
@@ -258,7 +268,7 @@ exec_cmd() {
                    read_nman "$exec"
                    return
                fi
-               ;;
+        ;;
     esac
 }
 
@@ -365,7 +375,11 @@ prepare_dirnav() {
 }
 
 print_desktop_help() {
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS --lines 20 --columns 1 --normal --sgr1 "$HELP_COLOR" --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count > /dev/null
+if [ "$DMENU_COMPAT" != "true" ]; then
+COL='\033[0;31m'
+RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+fi
+cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS $RUNLAUNCHER_EX_ARGS > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
 To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
@@ -375,7 +389,7 @@ If you make changes to .desktop files (not new entries, modified old entries), y
 
 - Type in '?' to show this help screen at any time.
 
-$(printf '\033[0;31m')Note: This may also be displayed if you deleted your spmenu configuration directory.
+$(printf "$COL")Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
 }
 
@@ -383,13 +397,22 @@ main_desktop() {
     print_menu() {
         print_list() {
             # should we use cached files?
-            [ -f "$TITLEFILE" ] && cfiles="true" || cfiles="false"
-            [ -f "$ICONFILE" ] && cfiles="true" || cfiles="false"
-            [ -f "$EXECFILE" ] && cfiles="true" || cfiles="false"
-            [ -f "$FILEFILE" ] && cfiles="true" || cfiles="false"
+            if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ]; then
+                cfiles=true
+            else
+                cfiles=false
+            fi
+
+            # write to log file
+            [ "$cfiles" = "false" ] && \
+                printf "Writing cache files because none exist.\nTitle file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
 
             # print data from entries
             if [ "$cfiles" = "false" ]; then
+                entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
+                cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
+                cached="$(find $TEMPORARY_DIR -type f)";
+
                 for i in $(seq "$cached_c"); do
                     # current file
                     cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
@@ -417,6 +440,7 @@ main_desktop() {
 
                 # read icon
                 while read -r p; do
+                    [ "$IMAGE" != "true" ] && continue
                     it_icon+=("$p")
                 done < "$ICONFILE"
 
@@ -432,7 +456,7 @@ main_desktop() {
 
                 # finally print all of it
                 for i in "${!it_title[@]}"; do
-                    if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                    if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
                         printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
                     elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
                         printf "%s\n" "${it_title[i]}"
@@ -456,28 +480,16 @@ main_desktop() {
                 it_title+=("$p")
             done < "$TITLEFILE"
 
-            # read icon
-            while read -r p; do
-                it_icon+=("$p")
-            done < "$ICONFILE"
-
             # read executable
             while read -r p; do
                 it_exec+=("$p")
             done < "$EXECFILE"
-
-            # read file
-            while read -r p; do
-                it_file+=("$p")
-            done < "$FILEFILE"
-
 
             # set exec
             [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
             for i in "${!it_title[@]}"; do
                 if [ "${it_title[i]}" = "$menusel" ]; then
                     exec="${it_exec[i]}"
-                    printf "Current file: '%s'\nIndex: '%s'\n" "${it_file[i]}" "${i}" >> "$LOGFILE"
                     break;
                 else
                     printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
@@ -495,12 +507,16 @@ main_desktop() {
         exec_program "$@"
     }
 
-    prep() { mkdir -p "$TEMPORARY_DIR"; rm -f "$LOGFILE"; touch "$LOGFILE"; }
-    scan() { entry_c="$(find "$DESKTOP_DIR" -type f | wc -l)"; cached_c="$(find "$TEMPORARY_DIR" -type f | wc -l)"; cached="$(find "$TEMPORARY_DIR" -type f)"; }
+    prep() {
+        mkdir -p "$TEMPORARY_DIR"
+        rm -f "$LOGFILE"
+        touch "$LOGFILE"
+    }
 
     # cache it, this means some speed improvements
     cache() {
-        scan # run initial scan
+        entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
+        cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
 
         printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
         printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
@@ -530,8 +546,10 @@ main_desktop() {
             printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$TEMPORARY_DIR/$(basename "$cur_file").entry"
         done
 
-        # run scan() again
-        scan
+        # scan
+        entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
+        cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
+        cached="$(find $TEMPORARY_DIR -type f)";
     }
 
     prep
@@ -550,6 +568,23 @@ main() {
     RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
     RUNLAUNCHER_DESKTOP_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
+
+    # dmenu compatibility
+    DMENU_FM_ARGS="$MARGS"
+    DMENU_RUN_ARGS="-l 20 $MARGS"
+    DMENU_DESKTOP_ARGS="-l 20 $MARGS"
+    DMENU_HELP_ARGS="-l 20 $MARGS"
+    COMPAT_LS_ARGS="--color=never"
+
+    if [ "$DMENU_COMPAT" != "false" ]; then
+        IMAGE="false"
+        RUNLAUNCHER="dmenu"
+        RUNLAUNCHER_FM_ARGS="$DMENU_FM_ARGS"
+        RUNLAUNCHER_RUN_ARGS="$DMENU_RUN_ARGS"
+        RUNLAUNCHER_DESKTOP_ARGS="$DMENU_DESKTOP_ARGS"
+        RUNLAUNCHER_HELP_ARGS="$DMENU_HELP_ARGS"
+        LS_ARGS="$COMPAT_LS_ARGS"
+    fi
 
     # $PATH listing
     case "$function" in
