@@ -52,7 +52,6 @@ keypress(XEvent *e)
                 allowkeys = !allowkeys;
             }
 
-            calcoffsets();
             drawmenu();
         }
     }

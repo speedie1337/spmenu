@@ -25,7 +25,6 @@ setimagesize(int width, int height)
         return;
     }
 
-    calcoffsets();
     drawmenu();
 }
 
@@ -330,7 +329,9 @@ void
 jumptoindex(unsigned int index) {
 	unsigned int i;
 	sel = curr = matches;
+
 	calcoffsets();
+
 	for (i = 1; i < index; ++i) {
 		if(sel && sel->right && (sel = sel->right) == next) {
 			curr = next;
@@ -430,7 +431,6 @@ resizetoimageheight(int imageheight)
         return;
     }
 
-	//XResizeWindow(dpy, win, mw - 2 * sp - borderwidth, mh);
     XMoveResizeWindow(dpy, win, x, y, mw - 2 * sp - borderwidth, mh);
 	drw_resize(drw, mw - 2 * sp - borderwidth, mh);
 
@@ -445,7 +445,6 @@ resizetoimageheight(int imageheight)
 		jumptoindex(i);
 	}
 
-    calcoffsets();
 	drawmenu();
 }
 #endif
