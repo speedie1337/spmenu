@@ -46,6 +46,8 @@ codebase easier to understand and make changes to. Also note that this is
   - Width of the prompt text, this is going to be the same as `TEXTW(prompt)`.
 - `inputw`
   - Width of the input text.
+- `fh`
+  - Font height. Used to calculate the height of the cursor. See `drawcaret()`.
 - `menuposition`
   - Integer the user is meant to configure. If it's set to `0`, spmenu will be
   put on the bottom of the screen. If it's set to `1` it will be put on the
@@ -89,3 +91,77 @@ codebase easier to understand and make changes to. Also note that this is
 - `curpos`
   - Cursor/caret position. When text is added to the input, the width of that text
   is added to this.
+
+## Drawable abstraction functions
+
+Most of these are in `libs/sl/draw.c` and `libs/sl/draw.h`.
+
+- `drw_create(Display *dpy, int screen, Window win, unsigned int w,
+unsigned int h, Visual *visual, unsigned int depth, Colormap cmap);`
+  - This function creates a drawable from `Display *dpy`, `Drw`. Think of
+  it as a canvas.
+- `drw_resize(Drw *drw, unsigned int w, unsigned int h)`
+  - This function resizes the drawable to the dimensions passed as
+  arguments (`w`, `h`).
+- `drw_free(Drw *drw);`
+  - This function will free the drawable from memory. It is *usually* called in
+  cleanup functions like `cleanup()` so most of the time you don't need to use this.
+
+## Font abstraction functions
+
+Most of these are in `libs/sl/draw.c` and `libs/sl/draw.h`.
+NOTE: These will differ slightly depending on if Pango is enabled or not.
+
+- `drw_font_create(Drw* drw, char *font[], size_t fontcount);`
+  - This function will return a font libXft can use.
+- `drw_font_free(Fnt *set);`
+  - This function will free the font from memory.
+- `drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup);`
+  - This function returns the smallest value out of the passed argument `n`
+  and the length of the text drawn. The text is not actually drawn though.
+- `drw_font_getwidth(Drw *drw, const char *text, Bool markup);`
+  - This function returns the width of drawn text. The text is not actually
+  drawn though.
+- `drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned
+  int *w, unsigned int *h, Bool markup);`
+  - This function returns the length of the text with the used font.
+
+## Colorscheme abstraction functions
+
+- `drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha);`
+  - This function allocates space for a color.
+- `drw_scm_create(Drw *drw, char *clrnames[], unsigned int alphas[],
+size_t clrcount);`
+  - This function returns a color scheme from an array of colors and alpha.
+
+## Cursor abstraction functions
+
+- `drw_cur_create(Drw *drw, int shape);`
+  - This function creates and returns a cursor.
+- `drw_cur_free(Drw *drw, Cur *cursor);`
+  - This function will free the cursor from memory.
+
+## Drawable context functions
+
+- ~~`drw_setfont(Drw *drw, Fnt *set);`
+  - Sets the font.
+  - NOTE: Applies only if Pango is disabled.~~
+  - Removed, no longer necessary.
+- `drw_setscheme(Drw *drw, Clr *scm);`
+  - Sets the color scheme to `*scm` created by `drw_scm_create()`
+
+## Drawing functions
+
+- `drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled
+, int invert);`
+  - Draws a simple rectangle. Used in other functions to create more useful
+  shapes, such as a cursor.
+- `drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned
+int lpad, const char *text, int invert, Bool markup);`
+  - Draws text on the drawable using the font created. `const char *text`
+  contains the text itself.
+
+## Map functions
+
+- `drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);`
+  - Maps the drawable. (makes it visible)

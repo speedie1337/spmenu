@@ -128,7 +128,7 @@ xfont_create(Drw *drw, const char *fontname)
 	PangoFontMetrics *metrics;
 
 	if (!fontname) {
-		die("no font specified.");
+		die("spmenu: no font specified.");
 	}
 
 	font = ecalloc(1, sizeof(Fnt));
@@ -189,11 +189,11 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		}
 	} else if (fontpattern) {
 		if (!(xfont = XftFontOpenPattern(drw->dpy, fontpattern))) {
-			fprintf(stderr, "error, cannot load font from pattern.\n");
+			fprintf(stderr, "spmenu: cannot load font from pattern.\n");
 			return NULL;
 		}
 	} else {
-		die("no font specified.");
+		die("spmenu: no font specified.");
 	}
 
 	font = ecalloc(1, sizeof(Fnt));
@@ -261,7 +261,7 @@ drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha)
 
 	if (!XftColorAllocName(drw->dpy, drw->visual, drw->cmap,
 	                       clrname, dest))
-		die("error, cannot allocate color '%s'", clrname);
+		die("spmenu: cannot allocate color '%s'", clrname);
 
 	dest->pixel = (dest->pixel & 0x00ffffffU) | (alpha << 24);
 }
@@ -493,7 +493,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 
 			if (!drw->font->pattern) {
 				/* Refer to the comment in xfont_create for more information. */
-				die("the first font in the cache must be loaded from a font string.");
+				die("spmenu: the first font in the cache must be loaded from a font string.");
 			}
 
 			fcpattern = FcPatternDuplicate(drw->font->pattern);
@@ -562,7 +562,7 @@ drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w,
 	else
 		pango_layout_set_text(font->layout, text, len);
 	pango_layout_get_extents(font->layout, 0, &r);
-	if(markup) /* clear markup attributes */
+	if(markup) // clear markup attributes
 		pango_layout_set_attributes(font->layout, NULL);
     #else
     XftTextExtentsUtf8(font->dpy, font->xfont, (XftChar8 *)text, len, &ext);
