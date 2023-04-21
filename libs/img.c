@@ -91,19 +91,20 @@ drawimage(void)
         rotateimage();
         flipimage();
 
-        int leftmargin = imagegaps;
-        int wtr = 0;
-        int wta = 0;
-        int xta = 0;
+        int leftmargin = imagegaps; // gaps between image and menu
+        int wtr = 0; // remove from w
+        int wta = 0; // add to w
+        int xta = 0; // add to x
 
-        if (hideprompt && hideinput && hidemode && hidematchcount) {
+        if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
             wtr = bh;
         } else {
-            wta = bh + menumarginv;
+            wta = bh;
         }
 
         // margin
         xta += menumarginh;
+        wta += menumarginv;
 
        	if (mh != bh + height + imagegaps * 2 - wtr) { // menu height cannot be smaller than image height
 		    resizetoimageheight(height);

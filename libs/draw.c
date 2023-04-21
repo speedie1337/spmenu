@@ -299,7 +299,7 @@ drawinput(int x, int y, int w)
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
-	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && !hideprompt) {
+	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && !hideprompt && cursorstate) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0);
 	}
@@ -445,7 +445,7 @@ drawmenu(void)
     calcoffsets();
 
     // why have an empty line?
-    if ((hideprompt && hideinput && hidemode && hidematchcount
+    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps
         #if USEIMAGE
         ) && (!image || hideimage)) {
         #else

@@ -21,11 +21,7 @@ eventloop(void)
                 noimg = 0;
                 #endif
                 break;
-            case MotionNotify:
-                motionevent(&ev.xbutton);
-                #if USEIMAGE
-                noimg = 0;
-                #endif
+            case MotionNotify: // currently does nothing
                 break;
             case Expose:
                 if (ev.xexpose.count == 0)

@@ -132,6 +132,7 @@ static int plw = 0;
 static int lrpad; // sum of left and right padding
 static int vp;    // vertical padding for bar
 static int sp;    // side padding for bar
+static int cursorstate = 0; // cursor state
 static size_t cursor;
 static struct item *items = NULL, *backup_items;
 static struct item *matches, *matchend;
