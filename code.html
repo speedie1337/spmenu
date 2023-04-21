@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>spmenu documentation 0.4.1</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">spmenu documentation 0.4.1</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#code-documentation" id="toc-code-documentation">Code
+documentation</a>
+<ul>
+<li><a href="#position-and-widthheight-variables"
+id="toc-position-and-widthheight-variables">Position and width/height
+variables</a></li>
+<li><a href="#drawable-abstraction-functions"
+id="toc-drawable-abstraction-functions">Drawable abstraction
+functions</a></li>
+<li><a href="#font-abstraction-functions"
+id="toc-font-abstraction-functions">Font abstraction functions</a></li>
+<li><a href="#colorscheme-abstraction-functions"
+id="toc-colorscheme-abstraction-functions">Colorscheme abstraction
+functions</a></li>
+<li><a href="#cursor-abstraction-functions"
+id="toc-cursor-abstraction-functions">Cursor abstraction
+functions</a></li>
+<li><a href="#drawable-context-functions"
+id="toc-drawable-context-functions">Drawable context functions</a></li>
+<li><a href="#drawing-functions" id="toc-drawing-functions">Drawing
+functions</a></li>
+<li><a href="#map-functions" id="toc-map-functions">Map
+functions</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="code-documentation">Code documentation</h1>
+<p>Some of spmenu’s code documented. If you want to hack on the project,
+this should be useful. Note that these may be renamed in the future to
+make the codebase easier to understand and make changes to. Also note
+that this is <strong>definitely not</strong> a complete list.</p>
+<h2 id="position-and-widthheight-variables">Position and width/height
+variables</h2>
+<ul>
+<li><code>bh</code>
+<ul>
+<li>Menu height divided by lines gets you <code>bh</code>. The name
+comes from dwm’s <code>bh</code> meaning ‘bar height’. This is the
+height of each item in the list.</li>
+</ul></li>
+<li><code>mh</code>
+<ul>
+<li>Menu height (or height of the window)</li>
+<li>Use <code>drw_resize()</code> and <code>XResizeWindow()</code> to
+adjust this.</li>
+</ul></li>
+<li><code>mw</code>
+<ul>
+<li>Menu width (or width of the window)</li>
+<li>Use <code>drw_resize()</code> and <code>XResizeWindow()</code> to
+adjust this.</li>
+<li><code>2 * borderwidth</code> is removed from <code>mw</code> (2*
+because we have two sides)</li>
+<li><code>2 * sp</code> is removed from <code>mw</code> (2* because we
+have two sides)</li>
+</ul></li>
+<li><code>x</code>
+<ul>
+<li>X position, functions like <code>drw_text</code> use this.</li>
+<li>If you set this in bar drawing functions, you must apply the same to
+<code>buttonpress()</code>, otherwise clicks will be offset.</li>
+</ul></li>
+<li><code>y</code>
+<ul>
+<li>Y position, functions like <code>drw_text</code> use this.</li>
+<li>If you set this in bar drawing functions, you must apply the same to
+<code>buttonpress()</code>, otherwise clicks will be offset.</li>
+</ul></li>
+<li><code>ev-&gt;x</code>
+<ul>
+<li>X position where you clicked. This is used in the
+<code>buttonpress()</code> function to check where you clicked.</li>
+</ul></li>
+<li><code>ev-&gt;y</code>
+<ul>
+<li>Y position where you clicked. This is used in the
+<code>buttonpress()</code> function to check where you clicked.</li>
+</ul></li>
+<li><code>w</code>
+<ul>
+<li>Width of something, this is passed to <code>drw_text()</code> for
+example, but you may override this.</li>
+</ul></li>
+<li><code>plw</code>
+<ul>
+<li>This is the width of the powerline arrow. It must be added on in the
+<code>buttonpress()</code> and draw functions.</li>
+</ul></li>
+<li><code>vp</code>
+<ul>
+<li>Vertical padding, this is initially added on in the
+<code>create_window()</code> function.</li>
+</ul></li>
+<li><code>sp</code>
+<ul>
+<li>Horizontal padding, this is initially added on in the
+<code>create_window()</code> function.</li>
+</ul></li>
+<li><code>promptw</code>
+<ul>
+<li>Width of the prompt text, this is going to be the same as
+<code>TEXTW(prompt)</code>.</li>
+</ul></li>
+<li><code>inputw</code>
+<ul>
+<li>Width of the input text.</li>
+</ul></li>
+<li><code>fh</code>
+<ul>
+<li>Font height. Used to calculate the height of the cursor. See
+<code>drawcaret()</code>.</li>
+</ul></li>
+<li><code>menuposition</code>
+<ul>
+<li>Integer the user is meant to configure. If it’s set to
+<code>0</code>, spmenu will be put on the bottom of the screen. If it’s
+set to <code>1</code> it will be put on the top of the screen. If it’s
+<code>2</code> it will be put in the center of the screen.</li>
+</ul></li>
+<li><code>wa.width</code>
+<ul>
+<li>Window width, <code>wa</code> is
+<code>XWindowAttributes</code>.</li>
+</ul></li>
+<li><code>wa.height</code>
+<ul>
+<li>Window height, <code>wa</code> is
+<code>XWindowAttributes</code>.</li>
+</ul></li>
+<li><code>imageheight</code>
+<ul>
+<li>Image height, This is <strong>not</strong> the height of the image,
+it is the height that the image will be scaled to fit.</li>
+</ul></li>
+<li><code>imagewidth</code>
+<ul>
+<li>Image width, This is <strong>not</strong> the width of the image, it
+is the width that the image will be scaled to fit.</li>
+</ul></li>
+<li><code>imagegaps</code>
+<ul>
+<li>Image gaps, this is extra space added around the image.</li>
+</ul></li>
+<li><code>imageh</code>
+<ul>
+<li>Usually the same as <code>imageheight</code>. This is what
+<code>imageheight</code> is initially set to.</li>
+</ul></li>
+<li><code>imagew</code>
+<ul>
+<li>Usually the same as <code>imagewidth</code>. This is what
+<code>imagewidth</code> is initially set to.</li>
+</ul></li>
+<li><code>imageg</code>
+<ul>
+<li>Usually the same as <code>imagegaps</code>. This is what
+<code>imagegaps</code> is initially set to.</li>
+</ul></li>
+<li><code>longestedge</code>
+<ul>
+<li>As the name implies, it is the longest (highest value) of
+<code>imageheight</code> and <code>imagewidth</code>.</li>
+</ul></li>
+<li><code>numberWidth</code>
+<ul>
+<li>Integer set in some functions, it is simply
+<code>TEXTW(numbers)</code> if the match count isn’t hidden.</li>
+</ul></li>
+<li><code>modeWidth</code>
+<ul>
+<li>Integer set in some functions, it is simply
+<code>TEXTW(modetext)</code> if the mode indicator isn’t hidden.</li>
+</ul></li>
+<li><code>larrowWidth</code>
+<ul>
+<li>Integer set in some functions, it is simply
+<code>TEXTW(leftarrow)</code> if the left arrow isn’t hidden.</li>
+</ul></li>
+<li><code>rarrowWidth</code>
+<ul>
+<li>Integer set in some functions, it is simply
+<code>TEXTW(rightarrow)</code> if the right arrow isn’t hidden.</li>
+</ul></li>
+<li><code>powerlinewidth</code>
+<ul>
+<li>Integer set in some functions, it is simply <code>plw / 2</code> if
+powerlines are enabled.</li>
+</ul></li>
+<li><code>curpos</code>
+<ul>
+<li>Cursor/caret position. When text is added to the input, the width of
+that text is added to this.</li>
+</ul></li>
+</ul>
+<h2 id="drawable-abstraction-functions">Drawable abstraction
+functions</h2>
+<p>Most of these are in <code>libs/sl/draw.c</code> and
+<code>libs/sl/draw.h</code>.</p>
+<ul>
+<li><code>drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap);</code>
+<ul>
+<li>This function creates a drawable from <code>Display *dpy</code>,
+<code>Drw</code>. Think of it as a canvas.</li>
+</ul></li>
+<li><code>drw_resize(Drw *drw, unsigned int w, unsigned int h)</code>
+<ul>
+<li>This function resizes the drawable to the dimensions passed as
+arguments (<code>w</code>, <code>h</code>).</li>
+</ul></li>
+<li><code>drw_free(Drw *drw);</code>
+<ul>
+<li>This function will free the drawable from memory. It is
+<em>usually</em> called in cleanup functions like <code>cleanup()</code>
+so most of the time you don’t need to use this.</li>
+</ul></li>
+</ul>
+<h2 id="font-abstraction-functions">Font abstraction functions</h2>
+<p>Most of these are in <code>libs/sl/draw.c</code> and
+<code>libs/sl/draw.h</code>. NOTE: These will differ slightly depending
+on if Pango is enabled or not.</p>
+<ul>
+<li><code>drw_font_create(Drw* drw, char *font[], size_t fontcount);</code>
+<ul>
+<li>This function will return a font libXft can use.</li>
+</ul></li>
+<li><code>drw_font_free(Fnt *set);</code>
+<ul>
+<li>This function will free the font from memory.</li>
+</ul></li>
+<li><code>drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup);</code>
+<ul>
+<li>This function returns the smallest value out of the passed argument
+<code>n</code> and the length of the text drawn. The text is not
+actually drawn though.</li>
+</ul></li>
+<li><code>drw_font_getwidth(Drw *drw, const char *text, Bool markup);</code>
+<ul>
+<li>This function returns the width of drawn text. The text is not
+actually drawn though.</li>
+</ul></li>
+<li><code>drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned   int *w, unsigned int *h, Bool markup);</code>
+<ul>
+<li>This function returns the length of the text with the used
+font.</li>
+</ul></li>
+</ul>
+<h2 id="colorscheme-abstraction-functions">Colorscheme abstraction
+functions</h2>
+<ul>
+<li><code>drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha);</code>
+<ul>
+<li>This function allocates space for a color.</li>
+</ul></li>
+<li><code>drw_scm_create(Drw *drw, char *clrnames[], unsigned int alphas[], size_t clrcount);</code>
+<ul>
+<li>This function returns a color scheme from an array of colors and
+alpha.</li>
+</ul></li>
+</ul>
+<h2 id="cursor-abstraction-functions">Cursor abstraction functions</h2>
+<ul>
+<li><code>drw_cur_create(Drw *drw, int shape);</code>
+<ul>
+<li>This function creates and returns a cursor.</li>
+</ul></li>
+<li><code>drw_cur_free(Drw *drw, Cur *cursor);</code>
+<ul>
+<li>This function will free the cursor from memory.</li>
+</ul></li>
+</ul>
+<h2 id="drawable-context-functions">Drawable context functions</h2>
+<ul>
+<li>~~<code>drw_setfont(Drw *drw, Fnt *set);</code>
+<ul>
+<li>Sets the font.</li>
+<li>NOTE: Applies only if Pango is disabled.~~</li>
+<li>Removed, no longer necessary.</li>
+</ul></li>
+<li><code>drw_setscheme(Drw *drw, Clr *scm);</code>
+<ul>
+<li>Sets the color scheme to <code>*scm</code> created by
+<code>drw_scm_create()</code></li>
+</ul></li>
+</ul>
+<h2 id="drawing-functions">Drawing functions</h2>
+<ul>
+<li><code>drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled , int invert);</code>
+<ul>
+<li>Draws a simple rectangle. Used in other functions to create more
+useful shapes, such as a cursor.</li>
+</ul></li>
+<li><code>drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup);</code>
+<ul>
+<li>Draws text on the drawable using the font created.
+<code>const char *text</code> contains the text itself.</li>
+</ul></li>
+</ul>
+<h2 id="map-functions">Map functions</h2>
+<ul>
+<li><code>drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);</code>
+<ul>
+<li>Maps the drawable. (makes it visible)</li>
+</ul></li>
+</ul>
+</body>
+</html>

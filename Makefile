@@ -92,6 +92,7 @@ man:
 	grep -v docs/preview.png docs/docs.md >> .man.md
 	pandoc --standalone --to man .man.md -o spmenu.1
 	rm -f .man.md
+	scripts/make/generate-code-docs.sh docs/code-docs.md code.html
 
 pkg_arch: dist
 	command -v makepkg > /dev/null || exit 1
