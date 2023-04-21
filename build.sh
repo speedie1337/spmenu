@@ -1,20 +1,21 @@
 #!/bin/bash
-[ -z "$CC" ] && CC=gcc
-[ -z "$PREFIX" ] && PREFIX="/usr"
-[ -z "$DESTDIR" ] && DESTDIR=""
-[ -z "$INCDIR" ] && INCDIR="/usr/include"
-[ -z "$OPT" ] && OPT="-O2"
+PREFIX="${PREFIX:-/usr}"
+DESTDIR="${DESTDIR:-}"
+INCDIR="${INCDIR:-/usr/include}"
+cc="${cc:-${CC:-gcc}}"
+opt="${opt:-${OPT:--O2}}"
+warn="${warn:-true}"
 
 check_dist() {
-    [ -f "/etc/pacman.conf" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
-    [ -f "/System/Library/CoreServices/SystemVersion.plist" ] && printf "hint: detected a Mac. Please report any issues you find as it is untested.\n" && mac=true
+    [ -f "/etc/pacman.conf" ] && [ "$warn" != "false" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
+    [ -f "/System/Library/CoreServices/SystemVersion.plist" ] && [ "$warn" != "false" ] && printf "hint: detected a Mac. Please report any issues you find as it is untested.\n" && mac=true
     uname -a | grep -q OpenBSD && printf "hint: detected OpenBSD. Please report any issues you find as it is untested.\n" && openbsd=true
 }
 
 check() {
     [ ! -x "$(command -v ldconfig)" ] && printf "ldconfig not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
     [ ! -x "$(command -v make)" ] && printf "make not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
-    [ ! -x "$(command -v $CC)" ] && printf "%s not found in %s. Please make sure your system is set up properly." "$CC" "\$PATH"
+    [ ! -x "$(command -v "$cc")" ] && printf "%s not found in %s. Please make sure your system is set up properly." "$cc" "\$PATH"
     [ -n "$(ldconfig -p | grep Imlib2)" ] && printf "Imlib2 found\n" && imlib2=true || imlib2=false
     [ -n "$(ldconfig -p | grep libXft)" ] && printf "libXft found\n" && xft=true || xft=false
     [ -n "$(ldconfig -p | grep libX11)" ] && printf "libX11 found\n" && x11=true || x11=false
@@ -105,10 +106,10 @@ build() {
     [ "$GEN_MANUAL" != "false" ] && make man
 
     make \
-        CC="$CC" \
+        CC="$cc" \
         PREFIX="$PREFIX" \
         DISTDIR="$DISTDIR" \
-        OPT="$OPT" \
+        OPT="$opt" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
         IMLIB2LIBS="$imlib2libs" \
@@ -129,9 +130,9 @@ build() {
 
 install() {
     make install \
-        CC="$CC" \
+        CC="$cc" \
         PREFIX="$PREFIX" \
-        OPT="$OPT" \
+        OPT="$opt" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
         IMLIB2LIBS="$imlib2libs" \
@@ -150,7 +151,7 @@ install() {
         X11INC="$X11INC"
 }
 
-[ "$1" = "--no-install" ]    && INSTALL=false
+[ "$1" = "--no-install" ] && INSTALL=false
 
 check_dist
 check
