@@ -143,10 +143,6 @@ size_t clrcount);`
 
 ## Drawable context functions
 
-- ~~`drw_setfont(Drw *drw, Fnt *set);`
-  - Sets the font.
-  - NOTE: Applies only if Pango is disabled.~~
-  - Removed, no longer necessary.
 - `drw_setscheme(Drw *drw, Clr *scm);`
   - Sets the color scheme to `*scm` created by `drw_scm_create()`
 
@@ -165,3 +161,11 @@ int lpad, const char *text, int invert, Bool markup);`
 
 - `drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);`
   - Maps the drawable. (makes it visible)
+
+## Removed functions
+
+Various functions that have been removed for some reason.
+
+- `drw_setfont(Drw *drw, Fnt *set);`
+  - Sets the font.
+  - NOTE: Applies only if Pango is disabled.

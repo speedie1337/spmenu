@@ -193,6 +193,8 @@ id="toc-drawable-context-functions">Drawable context functions</a></li>
 functions</a></li>
 <li><a href="#map-functions" id="toc-map-functions">Map
 functions</a></li>
+<li><a href="#removed-functions" id="toc-removed-functions">Removed
+functions</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -442,12 +444,6 @@ alpha.</li>
 </ul>
 <h2 id="drawable-context-functions">Drawable context functions</h2>
 <ul>
-<li>~~<code>drw_setfont(Drw *drw, Fnt *set);</code>
-<ul>
-<li>Sets the font.</li>
-<li>NOTE: Applies only if Pango is disabled.~~</li>
-<li>Removed, no longer necessary.</li>
-</ul></li>
 <li><code>drw_setscheme(Drw *drw, Clr *scm);</code>
 <ul>
 <li>Sets the color scheme to <code>*scm</code> created by
@@ -472,6 +468,15 @@ useful shapes, such as a cursor.</li>
 <li><code>drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);</code>
 <ul>
 <li>Maps the drawable. (makes it visible)</li>
+</ul></li>
+</ul>
+<h2 id="removed-functions">Removed functions</h2>
+<p>Various functions that have been removed for some reason.</p>
+<ul>
+<li><code>drw_setfont(Drw *drw, Fnt *set);</code>
+<ul>
+<li>Sets the font.</li>
+<li>NOTE: Applies only if Pango is disabled.</li>
 </ul></li>
 </ul>
 </body>
