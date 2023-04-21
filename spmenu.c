@@ -304,7 +304,7 @@ calcoffsets(void)
         if (!strcmp(capstext, ""))
             capsWidth = 0;
 
-		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + 2 * borderwidth);
+		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + 2 * borderwidth + menumarginv);
     }
 
 	// calculate which items will begin the next page
