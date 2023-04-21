@@ -110,17 +110,17 @@ drawimage(void)
 	    }
 
         // render image
-        if (!imageposition) { // top mode = 0
+        if (!imageposition && image) { // top mode = 0
             if (height > width)
                 width = height;
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, wta+imagegaps);
-        } else if (imageposition == 1) { // bottom mode = 1
+        } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, mh-height-imagegaps);
-        } else if (imageposition == 2) { // center mode = 2
+        } else if (imageposition == 2 && image) { // center mode = 2
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
-        } else {
+        } else if (image) { // top center
             int minh = MIN(height, mh-bh-imagegaps*2);
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+imagegaps);
         }
@@ -316,9 +316,9 @@ loadimagecache(const char *file, int *width, int *height)
 
     if (!generatecache) return;
 
-	imlib_image_set_format("png");
+    if (image) imlib_image_set_format("png");
 
-    if (buf && generatecache) {
+    if (buf && generatecache && image) {
         createifnexist_rec(buf);
         imlib_save_image(buf);
         free(buf);
