@@ -36,9 +36,9 @@ spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 clean:
 	rm -f spmenu spmenu-$(VERSION).tar.gz spmenu-$(VERSION).PKGBUILD *.o *zst*
 
-dist: clean
+dist: clean docs
 	mkdir -p spmenu-$(VERSION)
-	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ PKGBUILD build.sh spmenu-$(VERSION)
+	cp -rf LICENSE Makefile *.h *.mk *.c *.pdf scripts/ docs/ libs/ PKGBUILD build.sh spmenu-$(VERSION)
 	[ -f buildconf ] && cp buildconf spmenu-$(VERSION) || :
 	[ -f spmenu.1 ] && cp spmenu.1 spmenu-$(VERSION) || :
 	tar -cf spmenu-$(VERSION).tar spmenu-$(VERSION)
@@ -81,6 +81,7 @@ help:
 	@echo install_arch: Uses the PKGBUILD to install spmenu using pacman.
 	@echo dist:         Creates a release for spmenu.
 	@echo clean:        Removes objects and tarballs.
+	@echo docs:         Generate full documentation for spmenu
 	@echo man:          Generate man page for spmenu
 	@echo compat:       Installs compatibility with dmenu. WARNING: This will overwrite dmenu and dmenu_run
 	@echo commit:       Commit to the repository
@@ -91,8 +92,15 @@ man:
 	printf "%% spmenu(1) $(VERSION) | fancy dynamic menu\n" > .man.md
 	grep -v docs/preview.png docs/docs.md >> .man.md
 	pandoc --standalone --to man .man.md -o spmenu.1
+	pandoc --standalone .man.md -o spmenu.html
 	rm -f .man.md
-	scripts/make/generate-code-docs.sh docs/code-docs.md code.html
+
+docs: man
+	command -v weasyprint ] || exit 1
+	scripts/make/generate-code-docs.sh docs/code-docs.md code.html || exit 1
+	weasyprint code.html code.pdf || exit 1
+	weasyprint README.html README.pdf || exit 1
+	weasyprint spmenu.html spmenu.pdf || exit 1
 
 pkg_arch: dist
 	command -v makepkg > /dev/null || exit 1
@@ -112,10 +120,9 @@ install_arch: dist
 	rm -rf src/ pkg/ *.tar.gz
 	cp PKGBUILD spmenu-$(VERSION).PKGBUILD; mv PKGBUILD.orig PKGBUILD
 
-commit: man
+commit: docs
 	command -v git > /dev/null || exit 1
 	git add *
 	git commit -a || :
-	git remote | xargs -L1 git push --all
 
-.PHONY: all options clean dist install install_arch uninstall pkg_arch help man commit
+.PHONY: all options clean dist install install_arch uninstall pkg_arch help man docs commit

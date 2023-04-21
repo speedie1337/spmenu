@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>spmenu(1) 0.4.1 | fancy dynamic menu</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">spmenu(1) 0.4.1 | fancy dynamic menu</h1>
+</header>
+<h1 id="spmenu">spmenu</h1>
+<p>spmenu is a program for X11 that reads standard input and allows the
+user to select items separated by a newline. It is a fork of <a
+href="https://tools.suckless.org/dmenu">suckless’s dmenu</a> which is a
+good more minimal alternative to spmenu.</p>
+<p>What makes spmenu different from all the dmenu forks is that spmenu
+has features like color support, Vim-like modes, image support, proper
+mouse/keybind configuration, and more.</p>
+<p>It should be noted that most of these features may be disabled by the
+user, either during compile time or through configuration.</p>
+<h1 id="usage">Usage</h1>
+<p>On runtime, spmenu reads from standard input (stdin). spmenu items
+are separated by a newline (<code>\n</code>). When (by default) Enter is
+pressed, the selected item will be piped to stdout.</p>
+<p>This allows things like
+<code>printf "Apple\nOrange\nPear\n" | spmenu</code>. This command will
+spawn an spmenu window with three items, ‘Apple’, ‘Orange’ and ‘Pear’.
+This can be used in shell scripts to create interactive menus.</p>
+<p>On top of this, you can specify arguments to change the behavior of
+spmenu. See a list below for a list.</p>
+<h1 id="arguments">Arguments</h1>
+<p>You may use long, descriptive arguments or the shorter arguments.</p>
+<dl>
+<dt><code>-mh, --lineheight height</code></dt>
+<dd>
+Set spmenu line height to height
+</dd>
+<dt><code>-mw, --min-width width</code></dt>
+<dd>
+Set minimum width to width
+</dd>
+<dt><code>-g, --columns grid</code></dt>
+<dd>
+Set the number of grids to grid
+</dd>
+<dt><code>-gc, --generate-cache</code></dt>
+<dd>
+Generate image cache
+</dd>
+<dt><code>-ngc, --no-generate-cache</code></dt>
+<dd>
+Don’t generate image cache
+</dd>
+<dt><code>-mc, --max-cache size</code></dt>
+<dd>
+Set max image cache size to size
+</dd>
+<dt><code>-rw, --relative-width</code></dt>
+<dd>
+Enable relative input width
+</dd>
+<dt><code>-nrw, --no-relative-width</code></dt>
+<dd>
+Disable relative input width
+</dd>
+<dt><code>-f, --fast</code></dt>
+<dd>
+Grabs keyboard before reading stdin
+</dd>
+<dt><code>-F, --fuzzy</code></dt>
+<dd>
+Enable fuzzy matching
+</dd>
+<dt><code>-NF, --no-fuzzy</code></dt>
+<dd>
+Disable fuzzy matching
+</dd>
+<dt><code>-P, --password</code></dt>
+<dd>
+Hide characters
+</dd>
+<dt><code>-nP, --no-password</code></dt>
+<dd>
+Don’t hide characters
+</dd>
+<dt><code>-p, --prompt text</code></dt>
+<dd>
+Set spmenu prompt text to text
+</dd>
+<dt><code>-It, --input text</code></dt>
+<dd>
+Set initial input text to text
+</dd>
+<dt><code>-ip, --indent</code></dt>
+<dd>
+Indent items to prompt width
+</dd>
+<dt><code>-nip, --no-indent</code></dt>
+<dd>
+Don’t indent items to prompt width
+</dd>
+<dt><code>-ci, --color-items</code></dt>
+<dd>
+Color items
+</dd>
+<dt><code>-nci, --no-color-items</code></dt>
+<dd>
+Don’t color items
+</dd>
+<dt><code>-sgr, --sgr</code></dt>
+<dd>
+Interpret SGR sequences
+</dd>
+<dt><code>-nsgr, --no-sgr</code></dt>
+<dd>
+Display SGR sequences as text
+</dd>
+<dt><code>-a, --alpha</code></dt>
+<dd>
+Enable alpha
+</dd>
+<dt><code>-na, --no-alpha</code></dt>
+<dd>
+Disable alpha
+</dd>
+<dt><code>-tp, --allow-typing</code></dt>
+<dd>
+Allow the user to type
+</dd>
+<dt><code>-nt, --no-allow-typing</code></dt>
+<dd>
+Don’t allow typing, the user must select an option
+</dd>
+<dt><code>-x, --x-position x offset</code></dt>
+<dd>
+Offset spmenu x position by x offset
+</dd>
+<dt><code>-y, --y-position y offset</code></dt>
+<dd>
+Offset spmenu y position by y offset
+</dd>
+<dt><code>-n, --preselect line</code></dt>
+<dd>
+Preselect line line in the list of items
+</dd>
+<dt><code>-z, --width width</code></dt>
+<dd>
+Width of the spmenu window
+</dd>
+<dt><code>-nmt, --normal-mode-text text</code></dt>
+<dd>
+Set normal mode text to text
+</dd>
+<dt><code>-imt, --insert-mode-text text</code></dt>
+<dd>
+Set insert mode text to text
+</dd>
+<dt><code>-clon, --caps-lock-on-text text</code></dt>
+<dd>
+Set caps lock on text to text
+</dd>
+<dt><code>-clof, --caps-lock-off-text text</code></dt>
+<dd>
+Set caps lock off text to text
+</dd>
+<dt><code>-bw, --border-width width</code></dt>
+<dd>
+Set width of the border to width . 0 will disable the border
+</dd>
+<dt><code>-so, --sort</code></dt>
+<dd>
+Sort matches
+</dd>
+<dt><code>-nso, --no-sort</code></dt>
+<dd>
+Don’t sort matches
+</dd>
+<dt><code>-pri, --priority pri1,pri2,pri3</code></dt>
+<dd>
+Specify a list of items that take priority
+</dd>
+<dt><code>-s, --case-sensitive</code></dt>
+<dd>
+Use case-sensitive matching
+</dd>
+<dt><code>-ns, --case-insensitive</code></dt>
+<dd>
+Use case-insensitive matching
+</dd>
+<dt><code>-nm, --normal</code></dt>
+<dd>
+Start spmenu in normal mode
+</dd>
+<dt><code>-im, --insert</code></dt>
+<dd>
+Start spmenu in insert mode
+</dd>
+<dt><code>-t, --top</code></dt>
+<dd>
+Position spmenu at the top of the screen
+</dd>
+<dt><code>-b, --bottom</code></dt>
+<dd>
+Position spmenu at the bottom of the screen
+</dd>
+<dt><code>-c, --center</code></dt>
+<dd>
+Position spmenu at the center of the screen
+</dd>
+<dt><code>-hm, --hide-mode</code></dt>
+<dd>
+Hide mode indicator
+</dd>
+<dt><code>-hit, --hide-item</code></dt>
+<dd>
+Hide items
+</dd>
+<dt><code>-hmc, --hide-match-count</code></dt>
+<dd>
+Hide match count
+</dd>
+<dt><code>-hla, --hide-left-arrow</code></dt>
+<dd>
+Hide left arrow
+</dd>
+<dt><code>-hra, --hide-right-arrow</code></dt>
+<dd>
+Hide right arrow
+</dd>
+<dt><code>-hpr, --hide-prompt</code></dt>
+<dd>
+Hide prompt
+</dd>
+<dt><code>-hip, --hide-input</code></dt>
+<dd>
+Hide input
+</dd>
+<dt><code>-hpl, --hide-powerline</code></dt>
+<dd>
+Hide powerline
+</dd>
+<dt><code>-hc, --hide-caret, --hide-cursor</code></dt>
+<dd>
+Hide caret
+</dd>
+<dt><code>-hhl, --hide-highlighting</code></dt>
+<dd>
+Hide highlight
+</dd>
+<dt><code>-hi, --hide-image</code></dt>
+<dd>
+Hide image
+</dd>
+<dt><code>-hcl, --hide-caps</code></dt>
+<dd>
+Hide caps lock indicator
+</dd>
+<dt><code>-sm, --show-mode</code></dt>
+<dd>
+Show mode indicator
+</dd>
+<dt><code>-sit, --show-item</code></dt>
+<dd>
+Show items
+</dd>
+<dt><code>-smc, --show-match-count</code></dt>
+<dd>
+Show match count
+</dd>
+<dt><code>-sla, --show-left-arrow</code></dt>
+<dd>
+Show left arrow
+</dd>
+<dt><code>-sra, --show-right-arrow</code></dt>
+<dd>
+Show right arrow
+</dd>
+<dt><code>-spr, --show-prompt</code></dt>
+<dd>
+Show prompt
+</dd>
+<dt><code>-sin, --show-input</code></dt>
+<dd>
+Show input
+</dd>
+<dt><code>-spl, --show-powerline</code></dt>
+<dd>
+Show powerline
+</dd>
+<dt><code>-sc, --show-caret, --show-cursor</code></dt>
+<dd>
+Show caret
+</dd>
+<dt><code>-shl, --show-highlighting</code></dt>
+<dd>
+Show highlight
+</dd>
+<dt><code>-si, --show-image</code></dt>
+<dd>
+Show image
+</dd>
+<dt><code>-xrdb, --xrdb</code></dt>
+<dd>
+Load .Xresources on runtime
+</dd>
+<dt><code>-nxrdb, --no-xrdb</code></dt>
+<dd>
+Don’t load .Xresources on runtime
+</dd>
+<dt><code>-gbc, --global-colors</code></dt>
+<dd>
+Recognize global colors (such as *.color1) on runtime
+</dd>
+<dt><code>-ngbc, --no-global-colors</code></dt>
+<dd>
+Don’t recognize global colors (such as *.color1) on runtime
+</dd>
+<dt><code>-m, --monitor monitor</code></dt>
+<dd>
+Specify a monitor to run spmenu on
+</dd>
+<dt><code>-w, --embed window id</code></dt>
+<dd>
+Embed spmenu inside window id
+</dd>
+<dt><code>-H, --hist-file hist file</code></dt>
+<dd>
+Specify a path to save the history to
+</dd>
+<dt><code>-ig, --image-gaps gaps</code></dt>
+<dd>
+Set image gaps to gaps
+</dd>
+<dt><code>-txp, --text-padding padding</code></dt>
+<dd>
+Set text padding to padding
+</dd>
+<dt><code>-vem, --vertical-margin margin</code></dt>
+<dd>
+Set the vertical margin
+</dd>
+<dt><code>-hem, --horizontal-margin margin</code></dt>
+<dd>
+Set the horizontal margin
+</dd>
+<dt><code>-lp, --vertical-padding padding</code></dt>
+<dd>
+Set the vertical padding
+</dd>
+<dt><code>-hp, --horizontal-padding padding</code></dt>
+<dd>
+Set the horizontal padding
+</dd>
+<dt><code>-la, --left-arrow-symbol symbol</code></dt>
+<dd>
+Set the left arrow to symbol
+</dd>
+<dt><code>-ra, --right-arrow-symbol symbol</code></dt>
+<dd>
+Set the right arrow to symbol
+</dd>
+<dt><code>-is, --image-size size</code></dt>
+<dd>
+Image size
+</dd>
+<dt><code>-it, --image-top</code></dt>
+<dd>
+Position the image at the top
+</dd>
+<dt><code>-ib, --image-bottom</code></dt>
+<dd>
+Position the image at the bottom
+</dd>
+<dt><code>-ic, --image-center</code></dt>
+<dd>
+Position the image in the center
+</dd>
+<dt><code>-itc, --image-topcenter</code></dt>
+<dd>
+Position the image in the top center
+</dd>
+<dt><code>-wm, --managed, --x11-client</code></dt>
+<dd>
+Spawn spmenu as a window manager controlled client/window. Useful for
+testing
+</dd>
+<dt><code>-nwm, --unmanaged</code></dt>
+<dd>
+Don’t spawn spmenu as a window manager controlled client/window. Useful
+for testing
+</dd>
+<dt><code>-cf, --config-file file</code></dt>
+<dd>
+Set config file to load to file
+</dd>
+<dt><code>-lcfg, --load-config</code></dt>
+<dd>
+Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenurc or
+~/.config/spmenu/spmenurc)
+</dd>
+<dt><code>-ncfg, --no-load-config</code></dt>
+<dd>
+Don’t load spmenu configuration (~/.config/spmenu/spmenu.conf,
+~/.spmenurc or ~/.config/spmenu/spmenurc)
+</dd>
+<dt><code>-v, --version</code></dt>
+<dd>
+Print spmenu version to stdout
+</dd>
+<dt><code>-fn, --font font</code></dt>
+<dd>
+Set the spmenu font to font
+</dd>
+<dt><code>-nif, --normal-item-foreground color</code></dt>
+<dd>
+Set the normal item foreground color
+</dd>
+<dt><code>-nib, --normal-item-background color</code></dt>
+<dd>
+Set the normal item background color
+</dd>
+<dt><code>-sif, --selected-item-foreground color</code></dt>
+<dd>
+Set the selected item foreground color
+</dd>
+<dt><code>-sib, --selected-item-background color</code></dt>
+<dd>
+Set the selected item background color
+</dd>
+<dt><code>-npf, --normal-item-priority-foreground color</code></dt>
+<dd>
+Set the normal item (high priority) foreground color
+</dd>
+<dt><code>-npb, --normal-item-priority-background color</code></dt>
+<dd>
+Set the normal item (high priority) background color
+</dd>
+<dt><code>-spf, --selected-item-priority-foreground color</code></dt>
+<dd>
+Set the selected item (high priority) foreground color
+</dd>
+<dt><code>-spb, --selected-item-priority-background color</code></dt>
+<dd>
+Set the selected item (high priority) background color
+</dd>
+<dt><code>-pfg, --prompt-foreground color</code></dt>
+<dd>
+Set the prompt foreground color
+</dd>
+<dt><code>-pbg, --prompt-background color</code></dt>
+<dd>
+Set the prompt background color
+</dd>
+<dt><code>-ifg, --input-foreground color</code></dt>
+<dd>
+Set input foreground color
+</dd>
+<dt><code>-ibg, --input-background color</code></dt>
+<dd>
+Set input background color
+</dd>
+<dt><code>-mnbg, --menu-background color</code></dt>
+<dd>
+Set the menu background color
+</dd>
+<dt><code>-nhf, --normal-highlight-foreground color</code></dt>
+<dd>
+Set the normal highlight foreground color
+</dd>
+<dt><code>-nhb, --normal-highlight-background color</code></dt>
+<dd>
+Set the normal highlight background color
+</dd>
+<dt><code>-shf, --selected-highlight-foreground color</code></dt>
+<dd>
+Set the selected highlight foreground color
+</dd>
+<dt><code>-shb, --selected-highlight-background color</code></dt>
+<dd>
+Set the selected highlight background color
+</dd>
+<dt><code>-nfg, --number-foreground color</code></dt>
+<dd>
+Set the foreground color for the match count
+</dd>
+<dt><code>-nbg, --number-background color</code></dt>
+<dd>
+Set the background color for the match count
+</dd>
+<dt><code>-mfg, --mode-foreground color</code></dt>
+<dd>
+Set the foreground color for the mode indicator
+</dd>
+<dt><code>-mbg, --mode-background color</code></dt>
+<dd>
+Set the background color for the mode indicator
+</dd>
+<dt><code>-laf, --left-arrow-foreground color</code></dt>
+<dd>
+Set the left arrow foreground color
+</dd>
+<dt><code>-raf, --right-arrow-foreground color</code></dt>
+<dd>
+Set the right arrow foreground color
+</dd>
+<dt><code>-lab, --left-arrow-background color</code></dt>
+<dd>
+Set the left arrow background color
+</dd>
+<dt><code>-rab, --right-arrow-background color</code></dt>
+<dd>
+Set the right arrow background color
+</dd>
+<dt><code>-cfc, --caret-foreground color</code></dt>
+<dd>
+Set the caret foreground color
+</dd>
+<dt><code>-cbc, --caret-background color</code></dt>
+<dd>
+Set the caret background color
+</dd>
+<dt><code>-bc, --border-background color</code></dt>
+<dd>
+Set the border color
+</dd>
+<dt><code>-sgr0, --sgr0 color</code></dt>
+<dd>
+Set the SGR 0 color
+</dd>
+<dt><code>-sgr1, --sgr1 color</code></dt>
+<dd>
+Set the SGR 1 color
+</dd>
+<dt><code>-sgr2, --sgr2 color</code></dt>
+<dd>
+Set the SGR 2 color
+</dd>
+<dt><code>-sgr3, --sgr3 color</code></dt>
+<dd>
+Set the SGR 3 color
+</dd>
+<dt><code>-sgr4, --sgr4 color</code></dt>
+<dd>
+Set the SGR 4 color
+</dd>
+<dt><code>-sgr5, --sgr5 color</code></dt>
+<dd>
+Set the SGR 5 color
+</dd>
+<dt><code>-sgr6, --sgr6 color</code></dt>
+<dd>
+Set the SGR 6 color
+</dd>
+<dt><code>-sgr7, --sgr7 color</code></dt>
+<dd>
+Set the SGR 7 color
+</dd>
+<dt><code>-sgr8, --sgr8 color</code></dt>
+<dd>
+Set the SGR 8 color
+</dd>
+<dt><code>-sgr9, --sgr9 color</code></dt>
+<dd>
+Set the SGR 9 color
+</dd>
+<dt><code>-sgr10, --sgr10 color</code></dt>
+<dd>
+Set the SGR 10 color
+</dd>
+<dt><code>-sgr11, --sgr11 color</code></dt>
+<dd>
+Set the SGR 11 color
+</dd>
+<dt><code>-sgr12, --sgr12 color</code></dt>
+<dd>
+Set the SGR 12 color
+</dd>
+<dt><code>-sgr13, --sgr13 color</code></dt>
+<dd>
+Set the SGR 13 color
+</dd>
+<dt><code>-sgr14, --sgr14 color</code></dt>
+<dd>
+Set the SGR 14 color
+</dd>
+<dt><code>-sgr15, --sgr15 color</code></dt>
+<dd>
+Set the SGR 15 color
+</dd>
+</dl>
+<p>dmenu compatibility can be achieved using these arguments:</p>
+<dl>
+<dt><code>-S</code></dt>
+<dd>
+Don’t sort matches
+</dd>
+<dt><code>-i</code></dt>
+<dd>
+Use case-insensitive matching
+</dd>
+<dt><code>-nb color</code></dt>
+<dd>
+Set the normal background color
+</dd>
+<dt><code>-nf color</code></dt>
+<dd>
+Set the normal foreground color
+</dd>
+<dt><code>-sb color</code></dt>
+<dd>
+Set the selected background color
+</dd>
+<dt><code>-sf color</code></dt>
+<dd>
+Set the selected foreground color
+</dd>
+</dl>
+<h1 id="keybinds">Keybinds</h1>
+<p>See <code>keybinds.h</code> for a list.</p>
+<h1 id="modes">Modes</h1>
+<p>One of the features that separate spmenu from dmenu is spmenu’s
+different modes. As of version 0.2, there are two modes. Normal mode and
+Insert mode. These modes are of course similar to Vim.</p>
+<p>Normal mode is the mode spmenu starts in unless a mode argument is
+specified. In normal mode, all keys perform some action, but you cannot
+type any actual text to filter items. This mode is used for navigation,
+as well as quickly selecting an item.</p>
+<p>Insert mode is entered through (by default) pressing <code>i</code>
+in normal mode. In this mode, most keybinds do nothing. When you are in
+insert mode, you filter items by typing text into the field. Once you’re
+done with insert mode, you can press Escape to enter normal mode
+again.</p>
+<h1 id="p-option">-p option</h1>
+<p>spmenu has a -p option, which stands for prompt. It allows you to
+specify text to display next to the item list. It is displayed on the
+left side of the spmenu window. It should be noted that the prompt is
+purely visual though.</p>
+<h1 id="images">Images</h1>
+<p>spmenu supports drawing images. This image is placed on the left side
+of the menu window. To use an image, pipe
+<code>IMG:/path/to/image</code> to spmenu. If you want you can specify
+arguments like usual. Note that you should add a Tab (<code>\t</code>)
+character after the path to the image file. Otherwise the text after
+will be interpreted as part of the filename and the image will not be
+drawn.</p>
+<p>Any text after the Tab character will be interpreted as a regular
+item. In practice, drawing an image might look like this:</p>
+<p><code>printf "IMG:/path/to/image\tLook at that image, isn't it awesome?\n" | spmenu</code></p>
+<p>There are also a few image related arguments, such as:</p>
+<p><code>-is</code>, <code>-ig</code>, <code>-it</code>,
+<code>-ib</code>, <code>-ic</code>, <code>-itc</code> and
+<code>-gc</code>.</p>
+<p>NOTE: Vector images (such as .svg) can be displayed too.</p>
+<h1 id="colored-text">Colored text</h1>
+<p>spmenu supports colored text through SGR sequences. This is the same
+colors that you might already be using in your shell scripts. This means
+you can pipe practically any colored shell script straight into spmenu,
+no need to filter the output or anything.</p>
+<p>Not only does it support colored text, but it also supports colored
+backgrounds. This allows something similar to the emoji highlight patch,
+except even more useful. Example:
+<code>printf "\033[0;44m😀\033[0m Emoji highlighting\n" | spmenu --columns 1</code></p>
+<p>For 256 color support to work, you must add to the array. See
+<code>libs/color.h</code> if you want this.</p>
+<p>See ‘SGR sequences’ for more information.</p>
+<h1 id="sgr-sequences">SGR sequences</h1>
+<p>A basic supported SGR sequence looks like this:
+<code>\033[X;YZm</code></p>
+<p>Here, X specifies if you want normal or bright colors. Y specifies if
+you want background or foreground. Z specifies the color number.</p>
+<p>Foreground colors: <code>30</code> through <code>37</code> Background
+colors: <code>40</code> through <code>47</code> Reset:
+<code>0</code></p>
+<p>NOTE: <code>;</code> is a separator, and in this example it separates
+the color number and normal/bright. \033 may also be written as
+<code>^]</code> or simply <code>ESC</code>. The separator may be omitted
+for some sequences, such as <code>\033[0m</code> which resets the
+colorscheme.</p>
+<p>spmenu supports most color sequences, although not true color by
+default (unless -sgr arguments are used).</p>
+<p>There are a few arguments, you can override SGR colors on-the-fly
+using the <code>-sgrX</code> arguments. See ‘Arguments’ for more
+information.</p>
+<p>Just as a tip, you can pipe your colored spmenu output to
+<code>sed -e 's/\x1b\[[0-9;]*m//g'</code>. This will clear the SGR
+sequences from the output. This is useful when you want to check what
+the output actually is.</p>
+<h1 id="pango-markup">Pango markup</h1>
+<p>If spmenu was compiled with Pango enabled (default), you should be
+able to utilize Pango markup in every part of spmenu. That is, the mode
+indicator, items, input, prompt, etc.</p>
+<p>Pango markup allows you to style text similar to an HTML document. It
+also provides the <code>&lt;span&gt;</code> tag, which can be used to do
+surprisingly complex things.</p>
+<p>There are many convenient tags as well which can be used to avoid
+using a <code>&lt;span&gt;</code> tag, such as:</p>
+<dl>
+<dt><code>&lt;b&gt;</code></dt>
+<dd>
+<strong>Bold</strong> text (<code>&lt;b&gt;Bold&lt;/b&gt;</code>)
+</dd>
+<dt><code>&lt;i&gt;</code></dt>
+<dd>
+<em>Italic</em> text (<code>&lt;i&gt;Italic&lt;/i&gt;</code>)
+</dd>
+<dt><code>&lt;s&gt;</code></dt>
+<dd>
+Strikethrough text (<code>&lt;s&gt;Strikethrough&lt;/s&gt;</code>)
+</dd>
+<dt><code>&lt;u&gt;</code></dt>
+<dd>
+Underline text (<code>&lt;u&gt;Underline&lt;/u&gt;</code>)
+</dd>
+<dt><code>&lt;sub&gt;</code></dt>
+<dd>
+Subscript (<code>&lt;sub&gt;Subscript&lt;/sub&gt;</code>)
+</dd>
+<dt><code>&lt;sup&gt;</code></dt>
+<dd>
+Superscript (<code>&lt;sup&gt;Supscript&lt;/sup&gt;</code>)
+</dd>
+<dt><code>&lt;tt&gt;</code></dt>
+<dd>
+Monospace font
+(<code>&lt;tt&gt;Monospaced font is used here&lt;/tt&gt;</code>)
+</dd>
+<dt><code>&lt;small&gt;</code></dt>
+<dd>
+Small text
+(<code>&lt;small&gt;text is so small here&lt;/small&gt;</code>)
+</dd>
+<dt><code>&lt;big&gt;</code></dt>
+<dd>
+Big text (<code>&lt;big&gt;text is so big here&lt;/big&gt;</code>)
+</dd>
+</dl>
+<p>Note that Pango markup is NOT escaped, and is piped to stdout.
+Therefore you need to parse it manually. Doing so with <code>sed</code>
+is very easy. For example:
+<code>... | spmenu ... | sed 's/&lt;big&gt;//g; s/&lt;/big&gt;//g'</code></p>
+<p>See <a href="https://docs.gtk.org/Pango/pango_markup.html">this
+page</a> for more information.</p>
+<h1 id="configuration">Configuration</h1>
+<p>Unlike dmenu, spmenu has a configuration file which can be edited by
+hand. It is located in ~/.config/spmenu/spmenu.conf, but you can
+override this by exporting <code>$XDG_CONFIG_HOME</code>.</p>
+<p>When spmenu is installed, it copies a sample configuration to
+/usr/share/spmenu/spmenu.conf. You can copy this to your
+<code>.config/spmenu</code> directory. This configuration file is loaded
+on startup.</p>
+<p>You can also include other configuration files in the configuration
+file using <code>@include "path/to/config"</code>.</p>
+<h1 id="xresources">.Xresources</h1>
+<p>spmenu also has .Xresources (xrdb) support built in. It reads the
+xrdb (.Xresources database) on runtime. You may disable it by passing
+-nxrdb, or enable it by padding -xrdb. You can also set this in the
+regular config file.</p>
+<p>spmenu loads <code>~/.config/spmenu/spmenurc</code> or alternatively
+if you’re old fashioned, <code>~/.spmenurc</code> on startup. This
+requires that <code>xrdb</code> is available on your operating system.
+Of course, you don’t NEED to use them, as you can just
+<code>xrdb -override</code> any .Xresources file you want.</p>
+<p>You can also use wildcards (such as <code>*</code>) to achieve a
+global colorscheme. Programs like <code>pywal</code> do this to apply
+universal colorschemes.</p>
+<h1 id="profiles">Profiles</h1>
+<p>spmenu supports profiles. Profiles are like configuration files (See
+<code>Configuration</code>) that can be switched between quickly using a
+keybind.</p>
+<p>Pressing (by default) Ctrl+Shift+p will list out profiles, and also
+allow you to add/remove existing profiles. Selecting a profile will
+switch to that profile. The selected profile will now be loaded on
+startup just like the spmenurc until another profile is selected.</p>
+<p>Selecting ‘Add’ allows you to create a new profile. When a new
+profile is created it is going to use the spmenu defaults (copied from
+<code>/usr/share/spmenu/example.Xresources</code>). Profiles are going
+to be in <code>~/.config/spmenu/profiles/</code> and the current profile
+is in <code>~/.config/spmenu/.profile</code>. The profile can simply be
+edited using any text editor and be configured in .Xresources
+syntax.</p>
+<p>Selecting <code>Remove</code> will allow you to pick a profile which
+will be permanently removed. Selecting <code>Default</code> will simply
+load <code>spmenurc</code> and nothing else on startup, as if this
+feature did not exist.</p>
+<p>Not only can profiles be used to configure color schemes and fonts,
+allowing you to swap color schemes quickly, but also any other options
+you may want.</p>
+<p>Note that any profiles are applied ON TOP of the current loaded
+profile, meaning if any options are missing from the selected profile,
+the setting in the profile used before will be used in place.</p>
+<p>There are a few color schemes for spmenu included in the repository,
+see the <code>themes/</code> directory. Feel free to copy those to your
+profile directory.</p>
+<h1 id="run-launcher">Run launcher</h1>
+<p>spmenu includes a shell script called spmenu_run. It lists executable
+programs in $PATH and displays them to the user in a list. Not only that
+but it shows recently run programs first in the list.</p>
+<p>spmenu_run will interpret any arguments as spmenu arguments and pass
+them to spmenu. Therefore <code>spmenu_run --prompt 'Run:'</code> will
+set the prompt to <code>Run:</code>. While it is similar to dmenu_run
+(and achieves the same goal), this version has some extra features.</p>
+<p>The selected option is piped to /bin/sh (by default). Unlike
+dmenu_run, spmenu_run has some cool features. For example:</p>
+<ul>
+<li>Prepending <code>#</code> will spawn it in a terminal instead of
+just a shell.</li>
+<li>Prepending <code>?</code> will run the command in a function, most
+of the time used to display the man page.</li>
+<li>Prepending <code>magnet</code> will open a magnet link in
+$TORRENT</li>
+<li>Prepending <code>www</code> will open a page in $BROWSER</li>
+</ul>
+<p>Most of the time you don’t need to prepend <code>www</code> though,
+for example typing in <code>https://gnu.org</code> will open gnu.org in
+$BROWSER even without the prefix. Same goes for magnet links.</p>
+<p>You can also configure the run launcher through editing
+<code>~/.config/spmenu/run/config</code> which is configured in shell
+syntax.</p>
+<h1 id="spmenu_desktop">spmenu_desktop</h1>
+<p>In addition to the aforementioned <code>spmenu_run</code>, the spmenu
+package also provides <code>spmenu_desktop</code> which instead of
+reading $PATH only lists out .desktop entries.</p>
+<p>Unlike the regular run launcher though, spmenu_desktop supports
+displaying an icon for entries that use one.</p>
+<p>It can be configured through editing
+<code>~/.config/spmenu/desktop/config</code>. The configuration file can
+also be moved by setting <code>${XDG_CONFIG_HOME}</code>.</p>
+<h1 id="spmenu-commands">spmenu commands</h1>
+<p>spmenu has a few special commands. These work similar to the images.
+For example to list the version, in addition to the
+<code>--version</code> argument you can also simply run
+<code>printf 'spmenu:version' | spmenu</code>. There are a few of
+these.</p>
+<dl>
+<dt><code>spmenu:version</code></dt>
+<dd>
+Print the spmenu version
+</dd>
+<dt><code>spmenu:license</code></dt>
+<dd>
+Print the spmenu license
+</dd>
+<dt><code>spmenu:test</code></dt>
+<dd>
+Print a test script for spmenu which tests various features. Report any
+weird issues you may have.
+</dd>
+</dl>
+<h1 id="license">License</h1>
+<p>spmenu is licensed under the MIT license because that’s the original
+suckless license. See the included LICENSE file for more
+information.</p>
+<h1 id="reporting-issues">Reporting issues</h1>
+<p>Please report issues on the <a
+href="https://codeberg.org/speedie/speediegq">Codeberg repository</a> or
+alternatively email me.</p>
+</body>
+</html>
