@@ -221,7 +221,7 @@ drawitem(int x, int y, int w)
 				item,
 				rx + ((i / lines) *  ((mw - rx) / columns)),
 				y + (((i % lines) + 1) * bh),
-				(mw - rx) / columns - (columns == 1 ? menumarginh : 0)
+				(mw - rx) / columns
 			);
         }
 
