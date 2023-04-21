@@ -48,7 +48,7 @@ fuzzymatch(void)
 	if (number_of_matches) {
 		// initialize array with matches
 		if (!(fuzzymatches = realloc(fuzzymatches, number_of_matches * sizeof(struct item*))))
-			die("cannot realloc %u bytes:", number_of_matches * sizeof(struct item*));
+			die("spmenu: cannot realloc %u bytes:", number_of_matches * sizeof(struct item*));
 		for (i = 0, it = matches; it && i < number_of_matches; i++, it = it->right) {
 			fuzzymatches[i] = it;
 		}
@@ -103,7 +103,7 @@ match(void)
 	// separate input text into tokens to be matched individually
 	for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
 		if (++tokc > tokn && !(tokv = realloc(tokv, ++tokn * sizeof *tokv)))
-			die("cannot realloc %u bytes:", tokn * sizeof *tokv);
+			die("spmenu: cannot realloc %u bytes:", tokn * sizeof *tokv);
 	len = tokc ? strlen(tokv[0]) : 0;
 
     matches = lhpprefix = lprefix = lsubstr = matchend = hpprefixend = prefixend = substrend = NULL;

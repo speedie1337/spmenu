@@ -8,10 +8,10 @@ tokenize(char *source, const char *delim, int *llen)
 	while (token) {
 		if (listlength + 1 >= list_size) {
 			if (!(list = realloc(list, (list_size += 8) * sizeof(*list))))
-				die("Unable to realloc %zu bytes\n", list_size * sizeof(*list));
+				die("spmenu: unable to realloc %zu bytes\n", list_size * sizeof(*list));
 		}
 		if (!(list[listlength] = strdup(token)))
-			die("Unable to strdup %zu bytes\n", strlen(token) + 1);
+			die("spmenu: unable to strdup %zu bytes\n", strlen(token) + 1);
 		token = strtok(NULL, delim);
 		listlength++;
 	}

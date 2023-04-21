@@ -19,12 +19,12 @@ readstdin(void)
       	if (i + 1 >= itemsiz) {
 			itemsiz += 256;
 			if (!(items = realloc(items, itemsiz * sizeof(*items))))
-				die("cannot realloc %zu bytes:", itemsiz * sizeof(*items));
+				die("spmenu: cannot realloc %zu bytes:", itemsiz * sizeof(*items));
 		}
 		if ((p = strchr(buf, '\n')))
 			*p = '\0';
 		if (!(items[i].text = strdup(buf)))
-			die("cannot strdup %u bytes:", strlen(buf) + 1);
+			die("spmenu: cannot strdup %u bytes:", strlen(buf) + 1);
         items[i].hp = arrayhas(hpitems, hplength, items[i].text);
 		drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
 		if (tmpmax > inputw) {
@@ -80,12 +80,14 @@ readstdin(void)
 
             // spmenu:version
             if (!strncmp("version", items[i].ex, strlen("version"))) {
-                die("spmenu version %s", VERSION);
+                fprintf(stdout, "spmenu version %s", VERSION);
+                exit(0);
             }
 
             // spmenu:license
             if (!strncmp("license", items[i].ex, strlen("license"))) {
-                die("spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
+                fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
+                exit(0);
             }
 
             // spmenu:test

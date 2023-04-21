@@ -362,20 +362,20 @@ savehistory(char *input)
 
 	fp = fopen(histfile, "w");
 	if (!fp) {
-		die("failed to open %s", histfile);
+		die("spmenu: failed to open %s", histfile);
 	}
 	for (i = histsz < maxhist ? 0 : histsz - maxhist; i < histsz; i++) {
 		if (0 >= fprintf(fp, "%s\n", history[i])) {
-			die("failed to write to %s", histfile);
+			die("spmenu: failed to write to %s", histfile);
 		}
 	}
 	if (histsz == 0 || histdup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
 		if (0 >= fputs(input, fp)) {
-			die("failed to write to %s", histfile);
+			die("spmenu: failed to write to %s", histfile);
 		}
 	}
 	if (fclose(fp)) {
-		die("failed to close file %s", histfile);
+		die("spmenu: failed to close file %s", histfile);
 	}
 
 out:
