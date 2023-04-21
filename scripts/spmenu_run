@@ -49,6 +49,21 @@ declare -a it_icon
 declare -a it_exec
 declare -a it_file
 
+# arrays containing arguments
+declare -a rl_fm
+declare -a rl_run
+declare -a rl_desktop
+declare -a rl_help
+declare -a rl_ex
+declare -a ls_args
+declare -a sort_args
+declare -a uniq_args
+
+# directories
+declare -a tmpdir
+declare -a desktopdir
+declare -a icondir
+
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
     if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
@@ -60,7 +75,10 @@ check() {
 path() {
     [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
     [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
-    SORTARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
+    SORT_ARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
+
+    read -ra uniq_args <<< "${UNIQ_ARGS}"
+    read -ra sort_args <<< "${SORT_ARGS}"
 
     [ -z "$HIDDEN_KEYWORDS" ] && HIDDEN_KEYWORDS="NULL_ENTRY"
 
@@ -75,9 +93,9 @@ path() {
         }
 
         if [ "$SORT_BY_RECENT" != "false" ]; then
-            print | awk '/^(-|l)/ { print $6, $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $6, $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
         else
-            print | awk '/^(-|l)/ { print $7 }' | sort $SORTARGS | cut -d' ' -f 2 2>&1
+            print | awk '/^(-|l)/ { print $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
         fi
     }
 
@@ -85,7 +103,7 @@ path() {
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then
         print_menu
     else
-        print_menu | uniq $UNIQ_ARGS
+        print_menu | uniq "${uniq_args[@]}"
     fi
 
     command -v run_pre_func && run_pre_func
@@ -95,8 +113,9 @@ print_help() {
 if [ "$DMENU_COMPAT" != "true" ]; then
 COL='\033[0;31m'
 RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
 fi
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS $RUNLAUNCHER_EX_ARGS > /dev/null
+cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -107,10 +126,8 @@ To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.
 - If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
 - If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
 
-$(printf "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
+$(printf "%b" "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
-parse "$args"
-exec_cmd "$args"
 }
 
 print_cli_help() {
@@ -160,7 +177,7 @@ cat << EOF > "$CONFDIR/spmenu/run/config"
 #   rm -f /tmp/spmenu_entryhist; printf "\$1\n" >> /tmp/spmenu_entryhist
 # }
 #
-# You can use anything POSIX compliant shells support, as well as programs available on the system.
+# You can use anything POSIX compliant shells and Bash support, as well as programs available on the system.
 
 # misc software
 TERMINAL="\${TERMINAL:-st -e}" # Terminal commands are spawned in
@@ -226,7 +243,7 @@ EOF
 }
 
 parse() {
-    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER $RUNLAUNCHER_RUN_ARGS)"
+    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}")"
 
     # parse
     case "$(printf '%c' "$sout" >&2)" in
@@ -237,7 +254,7 @@ parse() {
     case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
-        "?") print_help "$@" && main && return ;;
+        "?") print_help "$@" && parse && exec_cmd ;;
     esac
 
     # check for keywords
@@ -250,7 +267,7 @@ exec_cmd() {
     [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
     command -v run_post_func > /dev/null && run_post_func "$sout"
 
-    # when there's no read_man func, call this one instead
+    # when there's no read_man func because the user is retarded and removed it, this basic function will be called instead
     read_nman() {
         $TERMINAL -e man "$1"
     }
@@ -313,10 +330,7 @@ read_args() {
                                 DMENU_COMPAT="false"
                                 ;;
             -a|-args|--args) remove_arg "$arg"
-                             if [ -z "$narg" ]; then
-                                 printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER"
-                                 exit 1
-                             fi
+                             [ -z "$narg" ] && printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER" && exit 1
 
                              remove_arg "$narg"
                              MARGS="$narg"
@@ -361,16 +375,17 @@ prepare_dirnav() {
     [ ! -d "$dir" ] && return 1
     cd "$dir" || printf "Invalid directory.. somehow\n"
 
+    # TODO: read line by line so we can append/prepend whatever we want
     listing() {
         command -v fm_pre_list_func > /dev/null && fm_pre_list_func
-        ls $LS_ARGS # this allows us SGR colors
+        ls "${ls_args[@]}" # this allows us SGR colors
         printf "..\n"
         command -v fm_post_list_func > /dev/null && fm_post_list_func
     }
 
     command -v fm_pre_func > /dev/null && fm_pre_func
 
-    dir="$(listing | $RUNLAUNCHER $RUNLAUNCHER_FM_ARGS | sed -e 's/\x1b\[[0-9;]*m//g')"
+    dir="$(listing | $RUNLAUNCHER "${rl_fm[@]}" | sed -e 's/\x1b\[[0-9;]*m//g')"
 
     case "$dir" in
         *)
@@ -391,8 +406,9 @@ print_desktop_help() {
 if [ "$DMENU_COMPAT" != "true" ]; then
 COL='\033[0;31m'
 RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
 fi
-cat << EOF | $RUNLAUNCHER $RUNLAUNCHER_HELP_ARGS $RUNLAUNCHER_EX_ARGS > /dev/null
+cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
 To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
@@ -402,7 +418,7 @@ If you make changes to .desktop files (not new entries, modified old entries), y
 
 - Type in '?' to show this help screen at any time.
 
-$(printf "$COL")Note: This may also be displayed if you deleted your spmenu configuration directory.
+$(printf "%b" "$COL")Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
 }
 
@@ -416,15 +432,17 @@ main_desktop() {
                 cfiles=false
             fi
 
+            read -ra uniq_args <<< "${UNIQ_ARGS}"
+
             # write to log file
             [ "$cfiles" = "false" ] && \
                 printf "Writing cache files because none exist.\nTitle file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
 
             # print data from entries
             if [ "$cfiles" = "false" ]; then
-                entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
-                cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
-                cached="$(find $TEMPORARY_DIR -type f)";
+                entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
+                cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
+                cached="$(find "${tmpdir[@]}" -type f)";
 
                 for i in $(seq "$cached_c"); do
                     # current file
@@ -477,10 +495,10 @@ main_desktop() {
                         continue
                     fi
                 done
-            fi | uniq $UNIQ_ARGS
+            fi | uniq "${uniq_args[@]}"
         }
 
-        menusel="$(print_list "$@" | $RUNLAUNCHER $RUNLAUNCHER_DESKTOP_ARGS)"
+        menusel="$(print_list "$@" | $RUNLAUNCHER "${rl_desktop[@]}")"
 
         [ "$menusel" = "?" ] && print_desktop_help && main "$@"
         command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
@@ -521,15 +539,15 @@ main_desktop() {
     }
 
     prep() {
-        mkdir -p "$TEMPORARY_DIR"
+        mkdir -p "${tmpdir[@]}"
         rm -f "$LOGFILE"
         touch "$LOGFILE"
     }
 
     # cache it, this means some speed improvements
     cache() {
-        entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
-        cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
+        entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
+        cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
 
         printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
         printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
@@ -542,8 +560,8 @@ main_desktop() {
         [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
 
         # find
-        entry="$(find $DESKTOP_DIR -type f)"
-        icons="$(find $ICON_DIR -type f)"
+        entry="$(find "${desktopdir[@]}" -type f)"
+        icons="$(find "${icondir[@]}" -type f)"
 
         # write new entries
         for i in $(seq "$entry_c"); do
@@ -553,16 +571,16 @@ main_desktop() {
 
             # icon name
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-            icon="$(printf "%s" "$icons" | grep "/$icon_name[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
+            icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
             # write the file
-            printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "$TEMPORARY_DIR/$(basename "$cur_file").entry"
+            printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[1]}/$(basename "$cur_file").entry"
         done
 
         # scan
-        entry_c="$(find $DESKTOP_DIR -type f | wc -l)"
-        cached_c="$(find $TEMPORARY_DIR -type f | wc -l)"
-        cached="$(find $TEMPORARY_DIR -type f)";
+        entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
+        cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
+        cached="$(find "${tmpdir[@]}" -type f)";
     }
 
     prep
@@ -599,6 +617,16 @@ main() {
         LS_ARGS="$COMPAT_LS_ARGS"
     fi
 
+    # read to arrays
+    read -ra rl_fm <<< "${RUNLAUNCHER_FM_ARGS}"
+    read -ra rl_run <<< "${RUNLAUNCHER_RUN_ARGS}"
+    read -ra rl_desktop <<< "${RUNLAUNCHER_DESKTOP_ARGS}"
+    read -ra rl_help <<< "${RUNLAUNCHER_HELP_ARGS}"
+    read -ra ls_args <<< "${LS_ARGS}"
+    read -ra tmpdir <<< "${TEMPORARY_DIR}"
+    read -ra desktopdir <<< "${DESKTOP_DIR}"
+    read -ra icondir <<< "${ICON_DIR}"
+
     # $PATH listing
     case "$function" in
         "run")
@@ -621,4 +649,5 @@ main() {
     esac
 }
 
+# shellcheck disable=SC2031
 main "$@"
