@@ -38,3 +38,4 @@ static void setimggaps(const Arg *arg);
 static void setlines(const Arg *arg);
 static void setcolumns(const Arg *arg);
 static void setprofile(const Arg *arg);
+static void spawn(const Arg *arg);

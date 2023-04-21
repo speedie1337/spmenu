@@ -28,5 +28,6 @@ static Mouse buttons[] = {
     { clickprompt,          0,         Button1,         clear,        {0} },
     { clickmode,            0,         Button1,         switchmode,   {0} },
     { clicknumber,          0,         Button1,         viewhist,     {0} },
+    { clickcaps,            0,         Button1,         spawn,        cmd("notify-send cuck") },
     { clickselitem,         0,         Button1,         NULL,         {0} },
 };

@@ -34,18 +34,23 @@ motionevent(XButtonEvent *ev)
 
     int larrowWidth = 0;
     int rarrowWidth = 0;
+    int numberWidth = 0;
+    int modeWidth = 0;
+    int capsWidth = 0;
 
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
+    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
 	xy = lines > 0 ? bh : inputw + promptw + larrowWidth;
     xy += menumarginv;
 	ev_xy = lines > 0 ? ev->y : ev->x;
 	for (item = curr; item && item != next; item = item->right) {
-		int wh = lines > 0 ? bh : textw_clamp(item->text, mw - xy - rarrowWidth - menumarginh);
+		int wh = lines > 0 ? bh : textw_clamp(item->text, mw - xy - rarrowWidth - menumarginh - 2 * sp - 2 * borderwidth - numberWidth - modeWidth - capsWidth);
 		if (ev_xy >= xy && ev_xy < (xy + wh)) {
 			sel = item;
-			calcoffsets();
 			drawmenu();
 			break;
 		}
@@ -66,6 +71,7 @@ buttonpress(XEvent *e)
         x = xpad = plw;
     }
 
+    // margin
     x += menumarginh;
 
     int larrowWidth = 0;
@@ -93,11 +99,11 @@ buttonpress(XEvent *e)
     // check if we clicked on the prompt or the input
     if (ev->x < x + promptw + powerlineprompt ? plw : 0) {
         click = clickprompt;
-    } else if ((ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth) && !hidecaps) {
+    } else if ((ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) {
         click = clickcaps;
-    } else if (ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth) {
+    } else if (ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) {
         click = clickmode;
-    } else if (ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth) {
+    } else if (ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) {
         click = clicknumber;
     } else { // actually we clicked on the input
         w = (lines > 0 || !matches) ? mw - x : inputw;

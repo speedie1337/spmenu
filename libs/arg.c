@@ -337,6 +337,7 @@ clearins(const Arg *arg)
 
     if (hidemode) strcpy(modetext, "");
 
+    calcoffsets();
     drawmenu();
 }
 
@@ -510,4 +511,24 @@ setprofile(const Arg *arg)
 {
     // this just runs an external shell script to set the profile
     exit(system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile > /dev/null"));
+}
+
+void
+spawn(const Arg *arg)
+{
+    struct sigaction sa;
+
+    if (fork() == 0) {
+        if (dpy)
+            close(ConnectionNumber(dpy));
+
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = 0;
+        sa.sa_handler = SIG_DFL;
+        sigaction(SIGCHLD, &sa, NULL);
+
+        setsid();
+        execvp(((char **)arg->v)[1], ((char **)arg->v)+1);
+        fprintf(stderr, "spmenu: failed to execute command '%s'", ((char **)arg->v)[0]);
+    }
 }

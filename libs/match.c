@@ -81,8 +81,6 @@ fuzzymatch(void)
 			calcoffsets();
 		}
 	}
-
-	calcoffsets();
 }
 
 void

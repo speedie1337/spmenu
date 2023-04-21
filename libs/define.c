@@ -21,3 +21,7 @@
 #define ALTR Mod3Mask
 #define SUPER Mod4Mask
 #define SUPERR Mod5Mask
+
+// for running stuff
+#define shell "/bin/sh"
+#define cmd( cmd ) {.v = (const char*[]){ shell, "-c", cmd, NULL } },

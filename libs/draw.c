@@ -191,12 +191,8 @@ drawitem(int x, int y, int w)
     if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
     if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
-    // mode indicator is always going to be at the right
-    if (hidemode) {
-        numberWidth += 2 * sp + borderwidth;
-    } else {
-        modeWidth += 2 * sp + borderwidth;
-    }
+    if (!strcmp(capstext, ""))
+        capsWidth = 0;
 
     #if USEIMAGE
     int ox = 0; // original x position
@@ -237,9 +233,18 @@ drawitem(int x, int y, int w)
         x = drawlarrow(x, y, w);
 
 		for (item = curr; item != next; item = item->right) // draw items
-            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text), mw - x - rarrowWidth - numberWidth - modeWidth - capsWidth - menumarginh));
+            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
+                        mw - x -
+                        rarrowWidth -
+                        numberWidth -
+                        modeWidth -
+                        capsWidth -
+                        menumarginh -
+                        2 * sp -
+                        2 * borderwidth
+            ));
 
-            w = rarrowWidth + numberWidth + modeWidth + menumarginh;
+            w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp + 2 * borderwidth;
             x = drawrarrow(mw - w, y, w);
 	}
 
@@ -436,6 +441,8 @@ drawmenu(void)
 
     x += menumarginh;
     y += menumarginv;
+
+    calcoffsets();
 
     // why have an empty line?
     if ((hideprompt && hideinput && hidemode && hidematchcount

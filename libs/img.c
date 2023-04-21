@@ -25,6 +25,7 @@ setimagesize(int width, int height)
         return;
     }
 
+    calcoffsets();
     drawmenu();
 }
 
@@ -429,9 +430,9 @@ resizetoimageheight(int imageheight)
         return;
     }
 
-	//XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
-    XMoveResizeWindow(dpy, win, x, y, mw - 2 * sp - 2 * borderwidth, mh);
-	drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
+	//XResizeWindow(dpy, win, mw - 2 * sp - borderwidth, mh);
+    XMoveResizeWindow(dpy, win, x, y, mw - 2 * sp - borderwidth, mh);
+	drw_resize(drw, mw - 2 * sp - borderwidth, mh);
 
 	if (olines != lines) {
        	struct item *item;
@@ -444,6 +445,7 @@ resizetoimageheight(int imageheight)
 		jumptoindex(i);
 	}
 
+    calcoffsets();
 	drawmenu();
 }
 #endif

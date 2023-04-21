@@ -293,13 +293,18 @@ calcoffsets(void)
         int modeWidth = 0;
         int larrowWidth = 0;
         int rarrowWidth = 0;
+        int capsWidth = 0;
 
         if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
         if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
         if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
         if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+        if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
-		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth);
+        if (!strcmp(capstext, ""))
+            capsWidth = 0;
+
+		n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + 2 * borderwidth);
     }
 
 	// calculate which items will begin the next page
