@@ -532,3 +532,10 @@ spawn(const Arg *arg)
         fprintf(stderr, "spmenu: failed to execute command '%s'", ((char **)arg->v)[0]);
     }
 }
+
+void
+togglehighlight(const Arg *arg)
+{
+    hidehighlight = !hidehighlight;
+    drawmenu();
+}

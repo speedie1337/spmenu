@@ -88,6 +88,7 @@ static Key keys[] = {
 	{ 0,       CONTROL|ALT|SHIFT,            XK_h,         setcolumns,      {.i = +5 } },
 	{ 0,       CONTROL|ALT|SHIFT,            XK_l,         setcolumns,      {.i = -5 } },
     { 0,       CONTROL,                      XK_k,         restoresel,      {0} },
+    { 0,       0,                            XK_u,         togglehighlight, {0} },
     { 0,       CONTROL|SHIFT,                XK_h,         viewhist,        {0} },
     { 0,       0,                            XK_d,         clear,           {0} },
     { 0,       0,                            XK_c,         clearins,        {0} },

@@ -39,3 +39,4 @@ static void setlines(const Arg *arg);
 static void setcolumns(const Arg *arg);
 static void setprofile(const Arg *arg);
 static void spawn(const Arg *arg);
+static void togglehighlight(const Arg *arg);
