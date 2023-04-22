@@ -207,7 +207,7 @@ readargs(int argc, char *argv[])
 			maxcache = atoi(argv[++i]);
 		} else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
 			lines = atoi(argv[++i]);
-		} else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight"))) { // line height
+		} else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight")) || (!strcmp(argv[i], "--line-height"))) { // line height
 	        lineheight += atoi(argv[++i]);
 			if (columns == 0) columns = 1;
 		} else if (!strcmp(argv[i], "-mw") || (!strcmp(argv[i], "--min-width"))) { // line height
@@ -415,7 +415,7 @@ usage(void)
 	fputs("spmenu: fancy dynamic menu\n\n"
 		  "- Arguments -\n"
 		  "spmenu -l,       --lines <line>                              Set line count to stdin\n"
-		  "spmenu -mh,      --lineheight <height>                       Set spmenu line height to <height>\n"
+		  "spmenu -mh,      --line-height <height>                      Set spmenu line height to <height>\n"
           "spmenu -mw,      --min-width <width>                         Set minimum width to <width>\n"
 		  "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
           "spmenu -gc,      --generate-cache                            Generate image cache\n"

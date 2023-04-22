@@ -32,7 +32,7 @@ Arguments
 
 You may use long, descriptive arguments or the shorter arguments.
 
-`-mh, --lineheight height`
+`-mh, --line-height height`
 :   Set spmenu line height to height
 
 `-mw, --min-width width`
