@@ -36,9 +36,9 @@ spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
 clean:
 	rm -f spmenu spmenu-$(VERSION).tar.gz spmenu-$(VERSION).PKGBUILD *.o *zst*
 
-dist: clean docs
+dist: clean man
 	mkdir -p spmenu-$(VERSION)
-	cp -rf LICENSE Makefile *.h *.mk *.c *.pdf scripts/ docs/ libs/ PKGBUILD build.sh spmenu-$(VERSION)
+	cp -rf LICENSE Makefile *.h *.mk *.c scripts/ docs/ libs/ PKGBUILD build.sh spmenu-$(VERSION)
 	[ -f buildconf ] && cp buildconf spmenu-$(VERSION) || :
 	[ -f spmenu.1 ] && cp spmenu.1 spmenu-$(VERSION) || :
 	tar -cf spmenu-$(VERSION).tar spmenu-$(VERSION)
@@ -96,7 +96,7 @@ man:
 	rm -f .man.md
 
 docs: man
-	command -v weasyprint ] || exit 1
+	command -v weasyprint || exit 1
 	scripts/make/generate-code-docs.sh docs/code-docs.md code.html || exit 1
 	weasyprint code.html code.pdf || exit 1
 	weasyprint README.html README.pdf || exit 1
