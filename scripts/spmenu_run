@@ -112,7 +112,7 @@ path() {
 print_help() {
 if [ "$DMENU_COMPAT" != "true" ]; then
 COL='\033[0;31m'
-RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
 read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
 fi
 cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
@@ -405,7 +405,7 @@ prepare_dirnav() {
 print_desktop_help() {
 if [ "$DMENU_COMPAT" != "true" ]; then
 COL='\033[0;31m'
-RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --hide-caps --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
 read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
 fi
 cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null

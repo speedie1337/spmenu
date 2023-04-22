@@ -516,21 +516,8 @@ setprofile(const Arg *arg)
 void
 spawn(const Arg *arg)
 {
-    struct sigaction sa;
-
-    if (fork() == 0) {
-        if (dpy)
-            close(ConnectionNumber(dpy));
-
-        sigemptyset(&sa.sa_mask);
-        sa.sa_flags = 0;
-        sa.sa_handler = SIG_DFL;
-        sigaction(SIGCHLD, &sa, NULL);
-
-        setsid();
-        execvp(((char **)arg->v)[1], ((char **)arg->v)+1);
+    if (!system(arg->v))
         fprintf(stderr, "spmenu: failed to execute command '%s'", ((char **)arg->v)[0]);
-    }
 }
 
 void

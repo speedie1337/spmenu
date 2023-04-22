@@ -157,6 +157,10 @@ readargs(int argc, char *argv[])
 				hideimage = 1;
 		} else if (!strcmp(argv[i], "-si") || (!strcmp(argv[i], "--show-image"))) {  // show image
 				hideimage = 0;
+		} else if (!strcmp(argv[i], "-hcl") || (!strcmp(argv[i], "--hide-caps"))) {  // hide caps
+				hidecaps = 1;
+		} else if (!strcmp(argv[i], "-scl") || (!strcmp(argv[i], "--show-caps"))) {  // hide caps
+				hidecaps = 0;
 		} else if (!strcmp(argv[i], "-ip") || (!strcmp(argv[i], "--indent"))) {  // indent to prompt width
 				indentitems = 1;
 		} else if (!strcmp(argv[i], "-nip") || (!strcmp(argv[i], "--no-indent"))) {  // don't indent to prompt width
@@ -487,6 +491,7 @@ usage(void)
           "spmenu -sc,      --show-caret, --show-cursor                 Show caret\n"
           "spmenu -shl,     --show-highlighting                         Show highlight\n"
           "spmenu -si,      --show-image                                Show image\n"
+          "spmenu -scl,     --show-caps                                 Show caps lock indicator\n"
           "spmenu -xrdb,    --xrdb                                      Load .Xresources on runtime\n"
           "spmenu -nxrdb,   --no-xrdb                                   Don't load .Xresources on runtime\n"
           "spmenu -gbc,     --global-colors                             Recognize global colors (such as *.color1) on runtime\n"

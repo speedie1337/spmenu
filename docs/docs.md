@@ -233,6 +233,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-si, --show-image`
 :   Show image
 
+`-scl, --show-caps`
+:   Show caps lock indicator
+
 `-xrdb, --xrdb`
 :   Load .Xresources on runtime
 
