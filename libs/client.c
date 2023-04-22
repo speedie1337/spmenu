@@ -60,8 +60,8 @@ resizeclient(void)
     XineramaScreenInfo *info;
 	Window pw;
     unsigned int du;
-    #endif
     Window w, dw, *dws;
+    #endif
     XWindowAttributes wa;
     struct item *item;
     int itemCount = 0;
@@ -126,6 +126,9 @@ resizeclient(void)
 	} else
     #endif
 	{
+        if (!XGetWindowAttributes(dpy, parentwin, &wa))
+			die("spmenu: could not get embedding window attributes: 0x%lx",
+			    parentwin); // die because unable to get attributes for the parent window
 		if (menuposition == 2) { // centered
 			mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
 			x = (wa.width  - mw) / 2;
