@@ -50,7 +50,7 @@ static Key keys[] = {
     { -1,      CONTROL,                      XK_Right,     moveword,        {.i = +1 } },
     { -1,      0,                            XK_Left,      movecursor,      {.i = -1 } },
     { -1,      0,                            XK_Right,     movecursor,      {.i = +1 } },
-    { -1,      CONTROL|SHIFT,                XK_p,         setprofile,      {0} },
+    { -1,      CONTROL|SHIFT,                XK_p,         spawn,           {.c = "spmenu_profile --spmenu-set-profile" } },
 
 	/* normal mode */
 	{ 0,       0,                            XK_i,         switchmode,      {0} },

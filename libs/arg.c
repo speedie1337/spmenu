@@ -507,17 +507,12 @@ setcolumns(const Arg *arg)
 }
 
 void
-setprofile(const Arg *arg)
-{
-    // this just runs an external shell script to set the profile
-    exit(system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile > /dev/null"));
-}
-
-void
 spawn(const Arg *arg)
 {
-    if (!system(arg->v))
-        fprintf(stderr, "spmenu: failed to execute command '%s'", ((char **)arg->v)[0]);
+    if (!system(arg->c))
+        die("spmenu: failed to execute command '%s'", arg->c);
+    else
+        exit(0);
 }
 
 void
