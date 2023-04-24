@@ -10,8 +10,7 @@ it, and lets the user choose an option and sends the
 selected option to standard output.
 
 In addition to this, it also serves as a run launcher through the included
-shell script `spmenu_run`. Alternatively you may use `spmenu_desktop` which
-lists .desktop entries instead of $PATH.
+shell script `spmenu_run`, which handles both $PATH listing and .desktop entries.
 
 It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.site/speedwm).
 
