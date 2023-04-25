@@ -608,12 +608,15 @@ conf_init(void)
                 }
             }
 
-            for (int j = 0; j < LENGTH(fl); j++) {
-                if (!strcmp(fl[j].function, strdup(dest))) {
-                    ckeys[i].func = fl[j].func;
-                    ckeys[i].arg = fl[j].arg;
+            config_setting_lookup_string(conf, "argument", &dest);
+
+            for (int j = 0; j < LENGTH(al); j++) {
+                if (!strcmp(al[j].argument, strdup(dest))) {
+                    ckeys[i].arg = al[j].arg;
                 }
             }
+
+            config_setting_lookup_int(conf, "ignoreglobalkeys", &ignoreglobalkeys);
         }
     }
 
