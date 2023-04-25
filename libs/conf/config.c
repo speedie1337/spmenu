@@ -55,7 +55,7 @@ conf_init(void)
     // attempt to read config file to cfg
     if (!config_read_file(&cfg, cfgfile)) {
          // invalid configuration, but let's try to read it anyway
-         ;
+         fprintf(stdout, "spmenu: Invalid configuration.\n");
     }
 
     // load options spmenu.window
@@ -617,6 +617,62 @@ conf_init(void)
             }
 
             config_setting_lookup_int(conf, "ignoreglobalkeys", &ignoreglobalkeys);
+        }
+    }
+
+        // load options spmenu.keys
+    setting = config_lookup(&cfg, "spmenu.mouse");
+    if (setting != NULL) {
+        unsigned int i = 0;
+
+        conflength = config_setting_length(setting);
+
+        for (i = 0; i < conflength; ++i) {
+            config_setting_t *conf = config_setting_get_elem(setting, i);
+
+            // look up
+            config_setting_lookup_string(conf, "click", &dest);
+
+            for (int j = 0; j < LENGTH(ctp); j++) {
+                if (!strcmp(ctp[j].tclick, strdup(dest))) {
+                    cbuttons[i].click = ctp[j].click;
+                }
+            }
+
+            // look up
+            config_setting_lookup_string(conf, "modifier", &dest);
+
+            for (int j = 0; j < LENGTH(ml); j++) {
+                if (!strcmp(ml[j].mod, strdup(dest))) {
+                    cbuttons[i].mask = ml[j].modifier;
+                }
+            }
+
+            config_setting_lookup_string(conf, "button", &dest);
+
+            for (int j = 0; j < LENGTH(btp); j++) {
+                if (!strcmp(btp[j].click, strdup(dest))) {
+                    cbuttons[i].button = btp[j].button;
+                }
+            }
+
+            config_setting_lookup_string(conf, "function", &dest);
+
+            for (int j = 0; j < LENGTH(fl); j++) {
+                if (!strcmp(fl[j].function, strdup(dest))) {
+                    cbuttons[i].func = fl[j].func;
+                }
+            }
+
+            config_setting_lookup_string(conf, "argument", &dest);
+
+            for (int j = 0; j < LENGTH(al); j++) {
+                if (!strcmp(al[j].argument, strdup(dest))) {
+                    cbuttons[i].arg = al[j].arg;
+                }
+            }
+
+            config_setting_lookup_int(conf, "ignoreglobalmouse", &ignoreglobalmouse);
         }
     }
 

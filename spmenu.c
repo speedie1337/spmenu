@@ -177,6 +177,8 @@ static int isrtl = 0;
 
 static int ignoreconfkeys = 0; // can be set globally if you don't want to override keybinds with config file keys
 static int ignoreglobalkeys = 0; // should be set in the config file, if 1, the Keys keys array is ignored
+static int ignoreconfmouse = 0; // same for mouse
+static int ignoreglobalmouse = 0; // same for mouse
 
 // X11 properties
 static Atom clip, utf8, types, dock;

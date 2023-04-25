@@ -74,6 +74,14 @@ buttonpress(XEvent *e)
                         click = clickitem;
                     }
                 }
+                for (i = 0; i < LENGTH(cbuttons); i++) {
+                    if (cbuttons[i].click == clickselitem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                        puts(item->text);
+                        exit(0);
+                    } else if (cbuttons[i].click == clickitem) {
+                        click = clickitem;
+                    }
+                }
 			}
 		}
 	} else if (matches) { // a single line, meaning it could be arrows too, so we check that here
@@ -99,6 +107,14 @@ buttonpress(XEvent *e)
                         click = clickitem;
                     }
                 }
+                for (i = 0; i < LENGTH(cbuttons); i++) {
+                    if (cbuttons[i].click == clickselitem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                        puts(item->text);
+                        exit(0);
+                    } else if (cbuttons[i].click == clickitem) {
+                        click = clickitem;
+                    }
+                }
 
 			}
 		}
@@ -111,8 +127,18 @@ buttonpress(XEvent *e)
     }
 
     // go through mouse button array and run function
-    for (i = 0; i < LENGTH(buttons); i++)
+    for (i = 0; i < LENGTH(buttons); i++) {
+        if (ignoreglobalmouse) break;
         if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
         && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
             buttons[i].func(&buttons[i].arg);
+    }
+
+    // go through mouse config array and run function
+    for (i = 0; i < LENGTH(cbuttons); i++) {
+        if (ignoreconfmouse) break;
+        if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button
+        && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state))
+            cbuttons[i].func(&cbuttons[i].arg);
+    }
 }
