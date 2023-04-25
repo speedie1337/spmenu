@@ -20,8 +20,9 @@
 .PP
 spmenu is a program for X11 that reads standard input and allows the
 user to select items separated by a newline.
-It is a fork of suckless\[cq]s dmenu (https://tools.suckless.org/dmenu)
-which is a good more minimal alternative to spmenu.
+It\[cq]s a fork of suckless\[cq]s
+dmenu (https://tools.suckless.org/dmenu) which is a good more minimal
+alternative to spmenu.
 .PP
 What makes spmenu different from all the dmenu forks is that spmenu has
 features like color support, Vim-like modes, image support, proper
@@ -29,7 +30,7 @@ mouse/keybind configuration, and more.
 .PP
 It should be noted that most of these features may be disabled by the
 user, either during compile time or through configuration.
-.SH Usage
+.SS Usage
 .PP
 On runtime, spmenu reads from standard input (stdin).
 spmenu items are separated by a newline (\f[V]\[rs]n\f[R]).
@@ -45,7 +46,7 @@ This can be used in shell scripts to create interactive menus.
 On top of this, you can specify arguments to change the behavior of
 spmenu.
 See a list below for a list.
-.SH Arguments
+.SS Arguments
 .PP
 You may use long, descriptive arguments or the shorter arguments.
 .TP
@@ -490,10 +491,17 @@ Set the selected background color
 .TP
 \f[V]-sf color\f[R]
 Set the selected foreground color
-.SH Keybinds
+.SS Keybinds
 .PP
-See \f[V]keybinds.h\f[R] for a list.
-.SH Modes
+You can set keybinds through the config file.
+A default config file is available after installing spmenu.
+This configuration file has identical keybindings to the default
+hardcoded keybinds.
+.PP
+By default, the configuration file will ignore all hardcoded keybindings
+to prevent keybind conflicts, but if you do not like this behaviour you
+can simply set \f[V]ignoreglobalkeys = 1\f[R].
+.SS Modes
 .PP
 One of the features that separate spmenu from dmenu is spmenu\[cq]s
 different modes.
@@ -514,13 +522,13 @@ When you are in insert mode, you filter items by typing text into the
 field.
 Once you\[cq]re done with insert mode, you can press Escape to enter
 normal mode again.
-.SH -p option
+.SS -p option
 .PP
 spmenu has a -p option, which stands for prompt.
 It allows you to specify text to display next to the item list.
 It is displayed on the left side of the spmenu window.
 It should be noted that the prompt is purely visual though.
-.SH Images
+.SS Images
 .PP
 spmenu supports drawing images.
 This image is placed on the left side of the menu window.
@@ -542,7 +550,7 @@ There are also a few image related arguments, such as:
 \f[V]-ic\f[R], \f[V]-itc\f[R] and \f[V]-gc\f[R].
 .PP
 NOTE: Vector images (such as .svg) can be displayed too.
-.SH Colored text
+.SS Colored text
 .PP
 spmenu supports colored text through SGR sequences.
 This is the same colors that you might already be using in your shell
@@ -561,7 +569,7 @@ For 256 color support to work, you must add to the array.
 See \f[V]libs/color.h\f[R] if you want this.
 .PP
 See `SGR sequences' for more information.
-.SH SGR sequences
+.SS SGR sequences
 .PP
 A basic supported SGR sequence looks like this: \f[V]\[rs]033[X;YZm\f[R]
 .PP
@@ -590,7 +598,7 @@ Just as a tip, you can pipe your colored spmenu output to
 \f[V]sed -e \[aq]s/\[rs]x1b\[rs][[0-9;]*m//g\[aq]\f[R].
 This will clear the SGR sequences from the output.
 This is useful when you want to check what the output actually is.
-.SH Pango markup
+.SS Pango markup
 .PP
 If spmenu was compiled with Pango enabled (default), you should be able
 to utilize Pango markup in every part of spmenu.
@@ -638,7 +646,7 @@ For example:
 .PP
 See this page (https://docs.gtk.org/Pango/pango_markup.html) for more
 information.
-.SH Configuration
+.SS Configuration
 .PP
 Unlike dmenu, spmenu has a configuration file which can be edited by
 hand.
@@ -652,7 +660,7 @@ This configuration file is loaded on startup.
 .PP
 You can also include other configuration files in the configuration file
 using \f[V]\[at]include \[dq]path/to/config\[dq]\f[R].
-.SH .Xresources
+.SS .Xresources
 .PP
 spmenu also has .Xresources (xrdb) support built in.
 It reads the xrdb (.Xresources database) on runtime.
@@ -668,7 +676,7 @@ Of course, you don\[cq]t NEED to use them, as you can just
 You can also use wildcards (such as \f[V]*\f[R]) to achieve a global
 colorscheme.
 Programs like \f[V]pywal\f[R] do this to apply universal colorschemes.
-.SH Profiles
+.SS Profiles
 .PP
 spmenu supports profiles.
 Profiles are like configuration files (See \f[V]Configuration\f[R]) that
@@ -704,7 +712,7 @@ setting in the profile used before will be used in place.
 There are a few color schemes for spmenu included in the repository, see
 the \f[V]themes/\f[R] directory.
 Feel free to copy those to your profile directory.
-.SH Run launcher
+.SS Run launcher
 .PP
 spmenu includes a shell script called spmenu_run.
 It lists executable programs in $PATH and displays them to the user in a
@@ -740,7 +748,7 @@ Same goes for magnet links.
 You can also configure the run launcher through editing
 \f[V]\[ti]/.config/spmenu/run/config\f[R] which is configured in shell
 syntax.
-.SH spmenu_desktop
+.SS spmenu_desktop
 .PP
 In addition to the aforementioned \f[V]spmenu_run\f[R], the spmenu
 package also provides \f[V]spmenu_desktop\f[R] which instead of reading
@@ -753,7 +761,7 @@ It can be configured through editing
 \f[V]\[ti]/.config/spmenu/desktop/config\f[R].
 The configuration file can also be moved by setting
 \f[V]${XDG_CONFIG_HOME}\f[R].
-.SH spmenu commands
+.SS spmenu commands
 .PP
 spmenu has a few special commands.
 These work similar to the images.
@@ -771,12 +779,12 @@ Print the spmenu license
 \f[V]spmenu:test\f[R]
 Print a test script for spmenu which tests various features.
 Report any weird issues you may have.
-.SH License
+.SS License
 .PP
 spmenu is licensed under the MIT license because that\[cq]s the original
 suckless license.
 See the included LICENSE file for more information.
-.SH Reporting issues
+.SS Reporting issues
 .PP
 Please report issues on the Codeberg
 repository (https://codeberg.org/speedie/speediegq) or alternatively

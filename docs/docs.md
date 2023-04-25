@@ -2,7 +2,7 @@ spmenu
 ======
 
 spmenu is a program for X11 that reads standard input and allows the user to
-select items separated by a newline. It is a fork of
+select items separated by a newline. It's a fork of
 [suckless's dmenu](https://tools.suckless.org/dmenu) which is a good more
 minimal alternative to spmenu.
 
@@ -13,8 +13,7 @@ proper mouse/keybind configuration, and more.
 It should be noted that most of these features may be disabled by the user, either
 during compile time or through configuration.
 
-Usage
-=====
+## Usage
 
 On runtime, spmenu reads from standard input (stdin). spmenu items are
 separated by a newline (`\n`). When (by default) Enter is pressed, the selected
@@ -27,8 +26,7 @@ This can be used in shell scripts to create interactive menus.
 On top of this, you can specify arguments to change the behavior of spmenu.
 See a list below for a list.
 
-Arguments
-=========
+## Arguments
 
 You may use long, descriptive arguments or the shorter arguments.
 
@@ -470,13 +468,17 @@ dmenu compatibility can be achieved using these arguments:
 `-sf color`
 :    Set the selected foreground color
 
-Keybinds
-========
+## Keybinds
 
-See `keybinds.h` for a list.
+You can set keybinds through the config file. A default config file is available
+after installing spmenu. This configuration file has identical keybindings to the
+default hardcoded keybinds.
 
-Modes
-=====
+By default, the configuration file will ignore all hardcoded keybindings to
+prevent keybind conflicts, but if you do not like this behaviour you can
+simply set `ignoreglobalkeys = 1`.
+
+## Modes
 
 One of the features that separate spmenu from dmenu is spmenu's different
 modes. As of version 0.2, there are two modes. Normal mode and Insert mode.
@@ -492,15 +494,13 @@ this mode, most keybinds do nothing. When you are in insert mode, you
 filter items by typing text into the field. Once you're done
 with insert mode, you can press Escape to enter normal mode again.
 
--p option
-=========
+## -p option
 
 spmenu has a -p option, which stands for prompt. It allows you to specify
 text to display next to the item list. It is displayed on the left side of the
 spmenu window. It should be noted that the prompt is purely visual though.
 
-Images
-======
+## Images
 
 spmenu supports drawing images. This image is placed on the left side of
 the menu window. To use an image, pipe `IMG:/path/to/image` to spmenu.
@@ -519,8 +519,7 @@ There are also a few image related arguments, such as:
 
 NOTE: Vector images (such as .svg) can be displayed too.
 
-Colored text
-============
+## Colored text
 
 spmenu supports colored text through SGR sequences. This is the same colors
 that you might already be using in your shell scripts. This means you can
@@ -536,8 +535,7 @@ if you want this.
 
 See 'SGR sequences' for more information.
 
-SGR sequences
-=============
+## SGR sequences
 
 A basic supported SGR sequence looks like this: `\033[X;YZm`
 
@@ -563,8 +561,7 @@ Just as a tip, you can pipe your colored spmenu output to
 `sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from
 the output. This is useful when you want to check what the output actually is.
 
-Pango markup
-============
+## Pango markup
 
 If spmenu was compiled with Pango enabled (default), you should be able to
 utilize Pango markup in every part of spmenu. That is, the mode indicator,
@@ -609,8 +606,7 @@ need to parse it manually. Doing so with `sed` is very easy. For example:
 
 See [this page](https://docs.gtk.org/Pango/pango_markup.html) for more information.
 
-Configuration
-=============
+## Configuration
 
 Unlike dmenu, spmenu has a configuration file which can be edited by hand. It
 is located in ~/.config/spmenu/spmenu.conf, but you can override this by
@@ -623,8 +619,7 @@ This configuration file is loaded on startup.
 You can also include other configuration files in the configuration file using
 `@include "path/to/config"`.
 
-.Xresources
-=============
+## .Xresources
 
 spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
 (.Xresources database) on runtime. You may disable it by passing -nxrdb,
@@ -638,8 +633,7 @@ as you can just `xrdb -override` any .Xresources file you want.
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.
 
-Profiles
-========
+## Profiles
 
 spmenu supports profiles. Profiles are like configuration
 files (See `Configuration`) that can be switched between quickly using a keybind.
@@ -669,8 +663,7 @@ the profile used before will be used in place.
 There are a few color schemes for spmenu included in the repository, see
 the `themes/` directory. Feel free to copy those to your profile directory.
 
-Run launcher
-============
+## Run launcher
 
 spmenu includes a shell script called spmenu_run. It lists executable programs
 in $PATH and displays them to the user in a list. Not only that but it shows
@@ -697,8 +690,7 @@ without the prefix. Same goes for magnet links.
 You can also configure the run launcher through editing
 `~/.config/spmenu/run/config` which is configured in shell syntax.
 
-spmenu_desktop
-==============
+## spmenu_desktop
 
 In addition to the aforementioned `spmenu_run`, the spmenu package also provides
 `spmenu_desktop` which instead of reading $PATH only lists out .desktop entries.
@@ -709,8 +701,7 @@ icon for entries that use one.
 It can be configured through editing `~/.config/spmenu/desktop/config`. The
 configuration file can also be moved by setting `${XDG_CONFIG_HOME}`.
 
-spmenu commands
-===============
+## spmenu commands
 
 spmenu has a few special commands. These work similar to the images. For example
 to list the version, in addition to the `--version` argument you can also simply
@@ -726,14 +717,12 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 :    Print a test script for spmenu which tests various features. Report any
 weird issues you may have.
 
-License
-=======
+## License
 
 spmenu is licensed under the MIT license because that's the original suckless
 license. See the included LICENSE file for more information.
 
-Reporting issues
-================
+## Reporting issues
 
 Please report issues on the
 [Codeberg repository](https://codeberg.org/speedie/speediegq) or alternatively

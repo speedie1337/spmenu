@@ -19,7 +19,7 @@ It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [
 This build of spmenu has some features written for this build.
 Of course if you want, this is free software so you can use it in your own build.
 
-- Proper configuration file support
+- Proper configuration file, including keybinds.
 - dwm-like key/mouse bind array (See keybinds.h and mouse.h)
 - Vim-like modes, including indicator.
 - The ability to move around items with keybinds.
@@ -126,7 +126,6 @@ Pull requests would be greatly appreciated for any of these issues!
 
 ### General
 
-- Config file: Add mouse/keybind configuration
 - Image support: Stop using OpenSSL for caching images, mostly because MD5()
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
@@ -152,7 +151,7 @@ like you will be unable to use spmenu in its current state.
 Silencing this would be a good idea.
 - Image support: Images take a long time to load sometimes, particularly when
 items are selected using the cursor so what we really need is a way to
-skip over images after a set time limit
+skip over images after a set time limit.
 
 ## Scripts
 

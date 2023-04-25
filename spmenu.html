@@ -170,7 +170,7 @@
 </header>
 <h1 id="spmenu">spmenu</h1>
 <p>spmenu is a program for X11 that reads standard input and allows the
-user to select items separated by a newline. It is a fork of <a
+user to select items separated by a newline. It’s a fork of <a
 href="https://tools.suckless.org/dmenu">suckless’s dmenu</a> which is a
 good more minimal alternative to spmenu.</p>
 <p>What makes spmenu different from all the dmenu forks is that spmenu
@@ -178,7 +178,7 @@ has features like color support, Vim-like modes, image support, proper
 mouse/keybind configuration, and more.</p>
 <p>It should be noted that most of these features may be disabled by the
 user, either during compile time or through configuration.</p>
-<h1 id="usage">Usage</h1>
+<h2 id="usage">Usage</h2>
 <p>On runtime, spmenu reads from standard input (stdin). spmenu items
 are separated by a newline (<code>\n</code>). When (by default) Enter is
 pressed, the selected item will be piped to stdout.</p>
@@ -188,7 +188,7 @@ spawn an spmenu window with three items, ‘Apple’, ‘Orange’ and ‘Pear�
 This can be used in shell scripts to create interactive menus.</p>
 <p>On top of this, you can specify arguments to change the behavior of
 spmenu. See a list below for a list.</p>
-<h1 id="arguments">Arguments</h1>
+<h2 id="arguments">Arguments</h2>
 <p>You may use long, descriptive arguments or the shorter arguments.</p>
 <dl>
 <dt><code>-mh, --line-height height</code></dt>
@@ -779,9 +779,14 @@ Set the selected background color
 Set the selected foreground color
 </dd>
 </dl>
-<h1 id="keybinds">Keybinds</h1>
-<p>See <code>keybinds.h</code> for a list.</p>
-<h1 id="modes">Modes</h1>
+<h2 id="keybinds">Keybinds</h2>
+<p>You can set keybinds through the config file. A default config file
+is available after installing spmenu. This configuration file has
+identical keybindings to the default hardcoded keybinds.</p>
+<p>By default, the configuration file will ignore all hardcoded
+keybindings to prevent keybind conflicts, but if you do not like this
+behaviour you can simply set <code>ignoreglobalkeys = 1</code>.</p>
+<h2 id="modes">Modes</h2>
 <p>One of the features that separate spmenu from dmenu is spmenu’s
 different modes. As of version 0.2, there are two modes. Normal mode and
 Insert mode. These modes are of course similar to Vim.</p>
@@ -794,12 +799,12 @@ in normal mode. In this mode, most keybinds do nothing. When you are in
 insert mode, you filter items by typing text into the field. Once you’re
 done with insert mode, you can press Escape to enter normal mode
 again.</p>
-<h1 id="p-option">-p option</h1>
+<h2 id="p-option">-p option</h2>
 <p>spmenu has a -p option, which stands for prompt. It allows you to
 specify text to display next to the item list. It is displayed on the
 left side of the spmenu window. It should be noted that the prompt is
 purely visual though.</p>
-<h1 id="images">Images</h1>
+<h2 id="images">Images</h2>
 <p>spmenu supports drawing images. This image is placed on the left side
 of the menu window. To use an image, pipe
 <code>IMG:/path/to/image</code> to spmenu. If you want you can specify
@@ -815,7 +820,7 @@ item. In practice, drawing an image might look like this:</p>
 <code>-ib</code>, <code>-ic</code>, <code>-itc</code> and
 <code>-gc</code>.</p>
 <p>NOTE: Vector images (such as .svg) can be displayed too.</p>
-<h1 id="colored-text">Colored text</h1>
+<h2 id="colored-text">Colored text</h2>
 <p>spmenu supports colored text through SGR sequences. This is the same
 colors that you might already be using in your shell scripts. This means
 you can pipe practically any colored shell script straight into spmenu,
@@ -827,7 +832,7 @@ except even more useful. Example:
 <p>For 256 color support to work, you must add to the array. See
 <code>libs/color.h</code> if you want this.</p>
 <p>See ‘SGR sequences’ for more information.</p>
-<h1 id="sgr-sequences">SGR sequences</h1>
+<h2 id="sgr-sequences">SGR sequences</h2>
 <p>A basic supported SGR sequence looks like this:
 <code>\033[X;YZm</code></p>
 <p>Here, X specifies if you want normal or bright colors. Y specifies if
@@ -849,7 +854,7 @@ information.</p>
 <code>sed -e 's/\x1b\[[0-9;]*m//g'</code>. This will clear the SGR
 sequences from the output. This is useful when you want to check what
 the output actually is.</p>
-<h1 id="pango-markup">Pango markup</h1>
+<h2 id="pango-markup">Pango markup</h2>
 <p>If spmenu was compiled with Pango enabled (default), you should be
 able to utilize Pango markup in every part of spmenu. That is, the mode
 indicator, items, input, prompt, etc.</p>
@@ -904,7 +909,7 @@ is very easy. For example:
 <code>... | spmenu ... | sed 's/&lt;big&gt;//g; s/&lt;/big&gt;//g'</code></p>
 <p>See <a href="https://docs.gtk.org/Pango/pango_markup.html">this
 page</a> for more information.</p>
-<h1 id="configuration">Configuration</h1>
+<h2 id="configuration">Configuration</h2>
 <p>Unlike dmenu, spmenu has a configuration file which can be edited by
 hand. It is located in ~/.config/spmenu/spmenu.conf, but you can
 override this by exporting <code>$XDG_CONFIG_HOME</code>.</p>
@@ -914,7 +919,7 @@ override this by exporting <code>$XDG_CONFIG_HOME</code>.</p>
 on startup.</p>
 <p>You can also include other configuration files in the configuration
 file using <code>@include "path/to/config"</code>.</p>
-<h1 id="xresources">.Xresources</h1>
+<h2 id="xresources">.Xresources</h2>
 <p>spmenu also has .Xresources (xrdb) support built in. It reads the
 xrdb (.Xresources database) on runtime. You may disable it by passing
 -nxrdb, or enable it by padding -xrdb. You can also set this in the
@@ -927,7 +932,7 @@ Of course, you don’t NEED to use them, as you can just
 <p>You can also use wildcards (such as <code>*</code>) to achieve a
 global colorscheme. Programs like <code>pywal</code> do this to apply
 universal colorschemes.</p>
-<h1 id="profiles">Profiles</h1>
+<h2 id="profiles">Profiles</h2>
 <p>spmenu supports profiles. Profiles are like configuration files (See
 <code>Configuration</code>) that can be switched between quickly using a
 keybind.</p>
@@ -955,7 +960,7 @@ the setting in the profile used before will be used in place.</p>
 <p>There are a few color schemes for spmenu included in the repository,
 see the <code>themes/</code> directory. Feel free to copy those to your
 profile directory.</p>
-<h1 id="run-launcher">Run launcher</h1>
+<h2 id="run-launcher">Run launcher</h2>
 <p>spmenu includes a shell script called spmenu_run. It lists executable
 programs in $PATH and displays them to the user in a list. Not only that
 but it shows recently run programs first in the list.</p>
@@ -980,7 +985,7 @@ $BROWSER even without the prefix. Same goes for magnet links.</p>
 <p>You can also configure the run launcher through editing
 <code>~/.config/spmenu/run/config</code> which is configured in shell
 syntax.</p>
-<h1 id="spmenu_desktop">spmenu_desktop</h1>
+<h2 id="spmenu_desktop">spmenu_desktop</h2>
 <p>In addition to the aforementioned <code>spmenu_run</code>, the spmenu
 package also provides <code>spmenu_desktop</code> which instead of
 reading $PATH only lists out .desktop entries.</p>
@@ -989,7 +994,7 @@ displaying an icon for entries that use one.</p>
 <p>It can be configured through editing
 <code>~/.config/spmenu/desktop/config</code>. The configuration file can
 also be moved by setting <code>${XDG_CONFIG_HOME}</code>.</p>
-<h1 id="spmenu-commands">spmenu commands</h1>
+<h2 id="spmenu-commands">spmenu commands</h2>
 <p>spmenu has a few special commands. These work similar to the images.
 For example to list the version, in addition to the
 <code>--version</code> argument you can also simply run
@@ -1010,11 +1015,11 @@ Print a test script for spmenu which tests various features. Report any
 weird issues you may have.
 </dd>
 </dl>
-<h1 id="license">License</h1>
+<h2 id="license">License</h2>
 <p>spmenu is licensed under the MIT license because that’s the original
 suckless license. See the included LICENSE file for more
 information.</p>
-<h1 id="reporting-issues">Reporting issues</h1>
+<h2 id="reporting-issues">Reporting issues</h2>
 <p>Please report issues on the <a
 href="https://codeberg.org/speedie/speediegq">Codeberg repository</a> or
 alternatively email me.</p>
