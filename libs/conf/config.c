@@ -568,6 +568,55 @@ conf_init(void)
         }
     }
 
+    // load options spmenu.keys
+    setting = config_lookup(&cfg, "spmenu.keys");
+    if (setting != NULL) {
+        unsigned int i = 0;
+        int nmode = 0;
+
+        conflength = config_setting_length(setting);
+
+        for (i = 0; i < conflength; ++i) {
+            config_setting_t *conf = config_setting_get_elem(setting, i);
+
+            // look up
+            config_setting_lookup_string(conf, "modifier", &dest);
+
+            for (int j = 0; j < LENGTH(ml); j++) {
+                if (!strcmp(ml[j].mod, strdup(dest))) {
+                    ckeys[i].mod = ml[j].modifier;
+                }
+            }
+
+            if (config_setting_lookup_int(conf, "mode", &nmode)) {
+                ckeys[i].mode = nmode;
+            }
+
+            config_setting_lookup_string(conf, "key", &dest);
+
+            for (int j = 0; j < LENGTH(kl); j++) {
+                if (!strcmp(kl[j].key, strdup(dest))) {
+                    ckeys[i].keysym = kl[j].keysym;
+                }
+            }
+
+            config_setting_lookup_string(conf, "function", &dest);
+
+            for (int j = 0; j < LENGTH(fl); j++) {
+                if (!strcmp(fl[j].function, strdup(dest))) {
+                    ckeys[i].func = fl[j].func;
+                }
+            }
+
+            for (int j = 0; j < LENGTH(fl); j++) {
+                if (!strcmp(fl[j].function, strdup(dest))) {
+                    ckeys[i].func = fl[j].func;
+                    ckeys[i].arg = fl[j].arg;
+                }
+            }
+        }
+    }
+
     // we're done here
     config_destroy(&cfg);
     return;

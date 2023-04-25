@@ -33,12 +33,27 @@ keypress(XEvent *e)
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
         for (i = 0; i < LENGTH(keys); i++) {
+            if (ignoreglobalkeys) break;
             if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func) {
                 if ((keys[i].mode && curMode) || keys[i].mode == -1) {
                     keys[i].func(&(keys[i].arg));
                     return;
                 } else if (!keys[i].mode && !curMode) {
                     keys[i].func(&(keys[i].arg));
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        for (i = 0; i < LENGTH(ckeys); i++) {
+            if (ignoreconfkeys) break;
+            if (keysym == ckeys[i].keysym && CLEANMASK(ckeys[i].mod) == CLEANMASK(ev->state) && ckeys[i].func) {
+                if ((ckeys[i].mode && curMode) || ckeys[i].mode == -1) {
+                    ckeys[i].func(&(ckeys[i].arg));
+                    return;
+                } else if (!ckeys[i].mode && !curMode) {
+                    ckeys[i].func(&(ckeys[i].arg));
                 } else {
                     continue;
                 }

@@ -1,5 +1,5 @@
 void
-switchmode(const Arg *arg)
+switchmode(Arg *arg)
 {
     curMode = !curMode;
     allowkeys = !curMode;

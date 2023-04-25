@@ -1,5 +1,5 @@
 void
-moveleft(const Arg *arg)
+moveleft(Arg *arg)
 {
     struct item *tmpsel;
     int i, offscreen = 0;
@@ -37,7 +37,7 @@ moveleft(const Arg *arg)
 }
 
 void
-moveright(const Arg *arg)
+moveright(Arg *arg)
 {
     struct item *tmpsel;
     int i, offscreen = 0;
@@ -74,7 +74,7 @@ moveright(const Arg *arg)
 }
 
 void
-movedown(const Arg *arg)
+movedown(Arg *arg)
 {
 
     int argu = arg->i ? arg->i : 1;
@@ -90,7 +90,7 @@ movedown(const Arg *arg)
 }
 
 void
-moveup(const Arg *arg)
+moveup(Arg *arg)
 {
     int argu = arg->i ? arg->i : 1;
 
@@ -105,7 +105,7 @@ moveup(const Arg *arg)
 }
 
 void
-complete(const Arg *arg)
+complete(Arg *arg)
 {
     if (hideitem) return;
 	strncpy(text, sel->clntext, sizeof text - 1);
@@ -116,7 +116,7 @@ complete(const Arg *arg)
 }
 
 void
-movenext(const Arg *arg)
+movenext(Arg *arg)
 {
 	if (!next)
 		return;
@@ -127,7 +127,7 @@ movenext(const Arg *arg)
 }
 
 void
-moveprev(const Arg *arg)
+moveprev(Arg *arg)
 {
     if (!prev)
         return;
@@ -138,7 +138,7 @@ moveprev(const Arg *arg)
 }
 
 void
-movestart(const Arg *arg)
+movestart(Arg *arg)
 {
   	if (sel == matches) {
 		cursor = 0;
@@ -152,7 +152,7 @@ movestart(const Arg *arg)
 }
 
 void
-moveend(const Arg *arg)
+moveend(Arg *arg)
 {
     if (text[cursor] != '\0') {
 		cursor = strlen(text);
@@ -175,7 +175,7 @@ moveend(const Arg *arg)
 }
 
 void
-paste(const Arg *arg)
+paste(Arg *arg)
 {
     int clipboard;
 
@@ -191,7 +191,7 @@ paste(const Arg *arg)
 }
 
 void
-viewhist(const Arg *arg)
+viewhist(Arg *arg)
 {
     int i;
 
@@ -219,7 +219,7 @@ viewhist(const Arg *arg)
 }
 
 void
-deleteword(const Arg *arg)
+deleteword(Arg *arg)
 {
     if (cursor == 0) return;
 
@@ -233,7 +233,7 @@ deleteword(const Arg *arg)
 }
 
 void
-moveword(const Arg *arg)
+moveword(Arg *arg)
 {
     if (arg->i < 0) { // move cursor to the start of the word
 		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
@@ -253,7 +253,7 @@ moveword(const Arg *arg)
 }
 
 void
-movecursor(const Arg *arg)
+movecursor(Arg *arg)
 {
     if (arg->i < 0) {
 		if (cursor > 0) {
@@ -269,7 +269,7 @@ movecursor(const Arg *arg)
 }
 
 void
-backspace(const Arg *arg)
+backspace(Arg *arg)
 {
     if (cursor == 0)
         return;
@@ -279,7 +279,7 @@ backspace(const Arg *arg)
 }
 
 void
-selectitem(const Arg *arg)
+selectitem(Arg *arg)
 {
     char *selection;
 
@@ -300,14 +300,14 @@ selectitem(const Arg *arg)
 }
 
 void
-navhistory(const Arg *arg)
+navhistory(Arg *arg)
 {
     navigatehistfile(arg->i);
     drawmenu();
 }
 
 void
-restoresel(const Arg *arg)
+restoresel(Arg *arg)
 {
     text[cursor] = '\0';
     match();
@@ -315,14 +315,14 @@ restoresel(const Arg *arg)
 }
 
 void
-clear(const Arg *arg)
+clear(Arg *arg)
 {
     insert(NULL, 0 - cursor);
     drawmenu();
 }
 
 void
-clearins(const Arg *arg)
+clearins(Arg *arg)
 {
     insert(NULL, 0 - cursor);
 
@@ -342,7 +342,7 @@ clearins(const Arg *arg)
 }
 
 void
-quit(const Arg *arg)
+quit(Arg *arg)
 {
 	cleanup();
 	exit(1);
@@ -386,7 +386,7 @@ out:
 }
 
 void
-setimgsize(const Arg *arg)
+setimgsize(Arg *arg)
 {
     #if USEIMAGE
     setimagesize(imagewidth + arg->i, imageheight + arg->i);
@@ -394,7 +394,7 @@ setimgsize(const Arg *arg)
 }
 
 void
-flipimg(const Arg *arg)
+flipimg(Arg *arg)
 {
     #if USEIMAGE
 
@@ -408,7 +408,7 @@ flipimg(const Arg *arg)
 }
 
 void
-setimgpos(const Arg *arg)
+setimgpos(Arg *arg)
 {
     #if USEIMAGE
     if (!image || hideimage) return;
@@ -424,7 +424,7 @@ setimgpos(const Arg *arg)
 }
 
 void
-setimggaps(const Arg *arg)
+setimggaps(Arg *arg)
 {
     #if USEIMAGE
     imagegaps += arg->i;
@@ -443,7 +443,7 @@ setimggaps(const Arg *arg)
 }
 
 void
-rotateimg(const Arg *arg)
+rotateimg(Arg *arg)
 {
     #if USEIMAGE
 
@@ -456,7 +456,7 @@ rotateimg(const Arg *arg)
 }
 
 void
-toggleimg(const Arg *arg)
+toggleimg(Arg *arg)
 {
     #if USEIMAGE
 
@@ -468,7 +468,7 @@ toggleimg(const Arg *arg)
 }
 
 void
-defaultimg(const Arg *arg)
+defaultimg(Arg *arg)
 {
     #if USEIMAGE
 
@@ -485,7 +485,7 @@ defaultimg(const Arg *arg)
 }
 
 void
-setlines(const Arg *arg)
+setlines(Arg *arg)
 {
     lines += arg->i;
     if (lines < 0) lines = 0;
@@ -496,7 +496,7 @@ setlines(const Arg *arg)
 }
 
 void
-setcolumns(const Arg *arg)
+setcolumns(Arg *arg)
 {
     columns += arg->i;
     if (columns < 1) columns = 1;
@@ -507,7 +507,7 @@ setcolumns(const Arg *arg)
 }
 
 void
-spawn(const Arg *arg)
+spawn(Arg *arg)
 {
     if (!system(arg->c))
         die("spmenu: failed to execute command '%s'", arg->c);
@@ -516,7 +516,7 @@ spawn(const Arg *arg)
 }
 
 void
-togglehighlight(const Arg *arg)
+togglehighlight(Arg *arg)
 {
     hidehighlight = !hidehighlight;
     drawmenu();
