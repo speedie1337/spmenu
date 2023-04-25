@@ -31,17 +31,11 @@ typedef struct {
 } ClickType;
 
 static ButtonType btp[] = {
-    { "button1",      Button1 },
-    { "button2",      Button2 },
-    { "button3",      Button3 },
-    { "button4",      Button4 },
-    { "button5",      Button5 },
-
-    { "left-click",   Button1 },
-    { "middle-click", Button2 },
-    { "right-click",  Button3 },
-    { "scroll-up",    Button4 },
-    { "scroll-down",  Button5 },
+    { "Left Click",   Button1 },
+    { "Middle Click", Button2 },
+    { "Right Click",  Button3 },
+    { "Scroll Up",    Button4 },
+    { "Scroll Down",  Button5 },
 };
 
 static ClickType ctp[] = {
