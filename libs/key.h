@@ -6,6 +6,7 @@ typedef struct {
 	Arg arg;
 } Key;
 
+#if USECONFIG
 typedef struct {
     char *key;
     KeySym keysym;
@@ -509,6 +510,7 @@ static KeyList kl[] = {
     { "Next",       XK_Next },
     { "Prior",      XK_Prior },
 };
+#endif
 
 static void updatenumlockmask(void);
 static void keypress(XEvent *e);

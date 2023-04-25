@@ -20,6 +20,7 @@ typedef struct {
 	Arg arg;
 } Mouse;
 
+#if USECONFIG
 typedef struct {
     char *click;
     unsigned int button;
@@ -50,6 +51,7 @@ static ClickType ctp[] = {
     { "clickcaps",    clickcaps },
     { "clickmode",    clickmode },
 };
+#endif
 
 static Mouse cbuttons[256];
 static void buttonpress(XEvent *e);

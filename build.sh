@@ -31,7 +31,6 @@ check() {
 
 loadconf() {
     [ -x "buildconf" ] && source buildconf
-    [ -x "buildconf_script" ] && source buildconf_script
 
     # mandatory deps
     [ "$freetype" = "false" ] && printf "Freetype not found. Install it.\n" && exit 1
