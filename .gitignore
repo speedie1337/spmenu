@@ -2,7 +2,4 @@
 *.o
 *zst*
 *sig*
-a.out
 spmenu
-README.md.html
-configurable.h
