@@ -521,3 +521,12 @@ togglehighlight(Arg *arg)
     hidehighlight = !hidehighlight;
     drawmenu();
 }
+
+void
+setprofile(Arg *arg)
+{
+    if (!system("spmenu_profile --spmenu-set-profile"))
+        die("spmenu: failed to run profile menu\n");
+    else
+        exit(0);
+}

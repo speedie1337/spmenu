@@ -11,3 +11,4 @@ libconfig=true
 cc=gcc
 opt=-O2
 warn=true
+install=true

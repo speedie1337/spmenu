@@ -136,7 +136,6 @@ static ArgList al[] = {
     { "98",         {.i = 98 } },
     { "99",         {.i = 99 } },
     { "100",        {.i = 100 } },
-
     { "+0",         {.i = +0 } },
     { "+1",         {.i = +1 } },
     { "+2",         {.i = +2 } },
@@ -238,7 +237,6 @@ static ArgList al[] = {
     { "+98",        {.i = +98 } },
     { "+99",        {.i = +99 } },
     { "+100",       {.i = +100 } },
-
     { "-0",         {.i = -0 } },
     { "-1",         {.i = -1 } },
     { "-2",         {.i = -2 } },
@@ -340,7 +338,6 @@ static ArgList al[] = {
     { "-98",        {.i = -98 } },
     { "-99",        {.i = -99 } },
     { "-100",       {.i = -100 } },
-    { "setprofile", {.c = "spmenu_profile --spmenu-set-profile" } },
 };
 
 static FuncList fl[] = {
@@ -383,8 +380,9 @@ static FuncList fl[] = {
     { "setlines",       setlines },
     { "setcolumns",     setcolumns },
     { "togglehighlight",togglehighlight },
-    { "setprofile",     spawn },
+    { "setprofile",     setprofile },
     { "switchmode",     switchmode },
+    { "spawn",          spawn },
 };
 
 // list of modifiers that can be used in the config file

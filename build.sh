@@ -2,6 +2,7 @@
 PREFIX="${PREFIX:-/usr}"
 DESTDIR="${DESTDIR:-}"
 INCDIR="${INCDIR:-/usr/include}"
+makebin="${makebin:-$(command -v make)}"
 cc="${cc:-${CC:-gcc}}"
 opt="${opt:-${OPT:--O2}}"
 warn="${warn:-true}"
@@ -13,6 +14,7 @@ check_dist() {
 }
 
 check() {
+    if [ "$mac" != "true" ]; then
     [ ! -x "$(command -v ldconfig)" ] && printf "ldconfig not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
     [ ! -x "$(command -v make)" ] && printf "make not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
     [ ! -x "$(command -v "$cc")" ] && printf "%s not found in %s. Please make sure your system is set up properly." "$cc" "\$PATH"
@@ -27,6 +29,10 @@ check() {
     [ -n "$(ldconfig -p | grep fribidi)" ] && printf "fribidi found\n" && fribidi=true || fribidi=false
     [ -n "$(ldconfig -p | grep freetype)" ] && printf "freetype found\n" && freetype=true || freetype=false
     [ -n "$(ldconfig -p | grep libconfig)" ] && printf "libconfig found\n" && libconfig=true || libconfig=false
+    else
+    makebin="gnumake"
+    GEN_MANUAL="false"
+    fi
 }
 
 loadconf() {
@@ -101,10 +107,10 @@ build() {
         bdtoggle=""
     fi
 
-    make clean
-    [ "$GEN_MANUAL" != "false" ] && make man
+    $makebin clean
+    [ "$GEN_MANUAL" != "false" ] && $makebin man
 
-    make \
+    $makebin \
         CC="$cc" \
         PREFIX="$PREFIX" \
         DISTDIR="$DISTDIR" \
@@ -128,7 +134,13 @@ build() {
 }
 
 install() {
-    make install \
+    if [ "$mac" = "true" ]; then
+        RULE="install_mac"
+    else
+        RULE="install"
+    fi
+
+    $makebin $RULE \
         CC="$cc" \
         PREFIX="$PREFIX" \
         OPT="$opt" \
@@ -150,7 +162,7 @@ install() {
         X11INC="$X11INC"
 }
 
-[ "$1" = "--no-install" ] && INSTALL=false
+[ "$1" = "--no-install" ] && install=false
 
 check_dist
 check

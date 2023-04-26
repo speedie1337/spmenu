@@ -63,6 +63,22 @@ install: spmenu
 	rm -f *.o
 	rm -f spmenu
 
+install_mac: spmenu
+	rm -rf $(DESTDIR)$(PREFIX)/share/spmenu/
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	mkdir -p $(DESTDIR)$(PREFIX)/share/spmenu
+	cp -r docs/* $(DESTDIR)$(PREFIX)/share/spmenu/
+	echo "$(VERSION)" > $(DESTDIR)$(PREFIX)/share/spmenu/version
+	echo "$(CC)" > $(DESTDIR)$(PREFIX)/share/spmenu/cc
+	echo "$(CFLAGS)" > $(DESTDIR)$(PREFIX)/share/spmenu/cflags
+	echo "$$(date "+%D %T")" > $(DESTDIR)$(PREFIX)/share/spmenu/compile-date
+	cp -r spmenu scripts/spmenu* $(DESTDIR)$(PREFIX)/bin
+	[ -f spmenu.1 ] && mkdir -p $(DESTDIR)$(MANPREFIX)/man1 || :
+	[ -f spmenu.1 ] && cp spmenu.1 $(DESTDIR)$(MANPREFIX)/man1/spmenu.1 || :
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/spmenu*
+	rm -f *.o
+	rm -f spmenu
+
 compat:
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu_run
@@ -77,6 +93,7 @@ help:
 	@echo spmenu Makefile help
 	@echo
 	@echo install:      Installs spmenu. You may need to run this as root.
+	@echo install_mac:  Installs spmenu on a Mac. You may need to run this as root.
 	@echo uninstall:    Uninstalls spmenu. You may need to run this as root.
 	@echo install_arch: Uses the PKGBUILD to install spmenu using pacman.
 	@echo dist:         Creates a release for spmenu.
@@ -126,4 +143,4 @@ commit: docs
 	git add *
 	git commit -a || :
 
-.PHONY: all options clean dist install install_arch uninstall pkg_arch help man docs commit
+.PHONY: all options clean dist install install_mac install_arch uninstall pkg_arch help man docs commit
