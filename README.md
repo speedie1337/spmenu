@@ -89,7 +89,7 @@ disabled if you don't want this by:
     - build.sh: Setting `libconfig=false` in `buildconf`.
     - Makefile: Editing `toggle.mk` and commenting out a few lines.
 
-## Installation (GNU/Linux, \*BSD, macOS/OS X/Mac OS X)
+## Installation (GNU/Linux, \*BSD)
 
 `emerge dev-vcs/git # Install dev-vcs/git using your favorite package manager`
 
@@ -101,6 +101,14 @@ disabled if you don't want this by:
 
 Report any issues with the build.sh script. There's also a Makefile which
 you can use but it may require editing host.mk and toggle.mk manually.
+
+## Installation (macOS/OS X/Mac OS X)
+
+Follow 'Installation (GNU/Linux, \*BSD)' for the most part. macOS requires
+some minor changes though.
+
+See [this wiki article](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS)
+for more information.
 
 ## Installation (Gentoo GNU/Linux)
 
