@@ -64,6 +64,18 @@ declare -a tmpdir
 declare -a desktopdir
 declare -a icondir
 
+# TODO: mac support
+fail_mac() {
+[ -f "/usr/local/share/spmenu/allowusageonmac" ] && return
+cat << EOF
+spmenu_run currently does not support macOS due to the outdated Bash version.
+See https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS for more information.
+
+If you wish to ignore this warning anyway, touch /usr/local/share/spmenu/allowusageonmac.
+EOF
+exit 1
+}
+
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
     if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
@@ -590,6 +602,7 @@ main_desktop() {
 }
 
 main() {
+    [ -d "/System/Library/Extensions" ] && fail_mac "$@"
     print_config
     read_args "$@"
     check "$args"
