@@ -1,11 +1,11 @@
 # buildconf
 #
 # This is the default configuration used to build spmenu. The build.sh script reads it.
-imlib2=false
-pango=false
-pangoxft=false
+imlib2=true
+pango=true
+pangoxft=true
 xinerama=true
-openssl=false
+openssl=true
 fribidi=true
 libconfig=true
 cc=gcc
