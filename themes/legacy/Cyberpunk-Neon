@@ -1,4 +1,4 @@
-! Cyberpunk-Neon  scheme for spmenu
+! Cyberpunk-Neon colorscheme for spmenu
 
 ! We must disable global s first, because otherwise we can use Pywal to override.
 ! If you want that, then you may set this to 1.
