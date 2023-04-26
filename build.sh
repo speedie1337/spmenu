@@ -32,6 +32,7 @@ check() {
     else
     makebin="gnumake"
     GEN_MANUAL="false"
+    PREFIX="/usr/local"
     fi
 }
 
