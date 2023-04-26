@@ -514,7 +514,7 @@ print_desktop_list() {
                 continue
             fi
         done
-    fi | uniq "${uniq_args[@]}"
+    fi
 }
 
 exec_program() {
@@ -553,7 +553,7 @@ print_desktop_menu() {
     check_desktop
     cache_desktop
 
-    menusel="$(print_desktop_list | $RUNLAUNCHER "${rl_desktop[@]}")"
+    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | $RUNLAUNCHER "${rl_desktop[@]}")"
 
     [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
     command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
