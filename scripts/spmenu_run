@@ -79,7 +79,15 @@ exit 1
 check() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
     if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
-        print_help "$@"
+        print_help
+        touch "$CONFDIR/spmenu/run/.first_run"
+    fi
+}
+
+check_desktop() {
+    [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
+    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
+        print_desktop_help
         touch "$CONFDIR/spmenu/run/.first_run"
     fi
 }
@@ -434,172 +442,169 @@ $(printf "%b" "$COL")Note: This may also be displayed if you deleted your spmenu
 EOF
 }
 
-main_desktop() {
-    print_menu() {
-        print_list() {
-            # should we use cached files?
-            if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ]; then
-                cfiles=true
-            else
-                cfiles=false
-            fi
+print_desktop_list() {
+    # should we use cached files?
+    if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ]; then
+        cfiles=true
+    else
+        cfiles=false
+    fi
 
-            read -ra uniq_args <<< "${UNIQ_ARGS}"
+    read -ra uniq_args <<< "${UNIQ_ARGS}"
 
-            # write to log file
-            [ "$cfiles" = "false" ] && \
-                printf "Writing cache files because none exist.\nTitle file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
+    # write to log file
+    [ "$cfiles" = "false" ] && \
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
 
-            # print data from entries
-            if [ "$cfiles" = "false" ]; then
-                entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
-                cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
-                cached="$(find "${tmpdir[@]}" -type f)";
-
-                for i in $(seq "$cached_c"); do
-                    # current file
-                    [ -z "$cached" ] && continue;
-                    cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
-
-                    # get details to display
-                    it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-                    it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
-                    it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
-                    it_file[i]="$cur_file"
-
-                    printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
-                    printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
-                    printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
-                    printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
-                done
-
-                print_list "$@"
-            else # we have entries, let's populate the arrays
-                command -v desktop_pre_func > /dev/null && desktop_pre_func
-
-                # read title
-                while read -r p; do
-                    it_title+=("$p")
-                done < "$TITLEFILE"
-
-                # read icon
-                while read -r p; do
-                    [ "$IMAGE" != "true" ] && continue
-                    it_icon+=("$p")
-                done < "$ICONFILE"
-
-                # read executable
-                while read -r p; do
-                    it_exec+=("$p")
-                done < "$EXECFILE"
-
-                # read file
-                while read -r p; do
-                    it_file+=("$p")
-                done < "$FILEFILE"
-
-                # finally print all of it
-                for i in "${!it_title[@]}"; do
-                    if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
-                        printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
-                    elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-                        printf "%s\n" "${it_title[i]}"
-                    else
-                        continue
-                    fi
-                done
-            fi | uniq "${uniq_args[@]}"
-        }
-
-        menusel="$(print_list "$@" | $RUNLAUNCHER "${rl_desktop[@]}")"
-
-        [ "$menusel" = "?" ] && print_desktop_help && main "$@"
-        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
-        [ -z "$menusel" ] && return 1 \
-        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
-
-        exec_program() {
-            # read title
-            while read -r p; do
-                it_title+=("$p")
-            done < "$TITLEFILE"
-
-            # read executable
-            while read -r p; do
-                it_exec+=("$p")
-            done < "$EXECFILE"
-
-            # set exec
-            [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
-            for i in "${!it_title[@]}"; do
-                if [ "${it_title[i]}" = "$menusel" ]; then
-                    exec="${it_exec[i]}"
-                    break;
-                else
-                    printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
-                fi
-            done
-
-            # finally run the program
-            if [ -n "$exec" ]; then
-                /bin/sh -c "$exec"
-            else
-                printf "No executable found. Try clearing cache." >> "$LOGFILE"
-            fi
-        }
-
-        exec_program "$@"
-    }
-
-    prep() {
-        mkdir -p "${tmpdir[@]}"
-        rm -f "$LOGFILE"
-        touch "$LOGFILE"
-    }
-
-    # cache it, this means some speed improvements
-    cache() {
-        entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
-        cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
-
-        printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
-        printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
-
-        [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
-
-        [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
-        [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
-        [ -f "$EXECFILE" ] && rm -f "$EXECFILE"
-        [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
-
-        # find
-        entry="$(find "${desktopdir[@]}" -type f)"
-        icons="$(find "${icondir[@]}" -type f)"
-
-        # write new entries
-        for i in $(seq "$entry_c"); do
-            cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
-            exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
-            name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
-
-            # icon name
-            icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-            icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
-
-            # write the file
-            printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[@]}/$(basename "$cur_file").entry"
-        done
-
-        # scan
+    # print data from entries
+    if [ "$cfiles" = "false" ]; then
         entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
         cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
         cached="$(find "${tmpdir[@]}" -type f)";
-    }
 
-    prep
-    check
-    cache
-    print_menu "$@"
+        for i in $(seq "$cached_c"); do
+            # current file
+            [ -z "$cached" ] && continue;
+            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+
+            # get details to display
+            it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
+            it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
+            it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
+            it_file[i]="$cur_file"
+
+            printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
+            printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
+            printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
+            printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
+        done
+
+        print_desktop_list
+    else # we have entries, let's populate the arrays
+        command -v desktop_pre_func > /dev/null && desktop_pre_func
+
+        # read title
+        while read -r p; do
+            it_title+=("$p")
+        done < "$TITLEFILE"
+
+        # read icon
+        while read -r p; do
+            [ "$IMAGE" != "true" ] && continue
+            it_icon+=("$p")
+        done < "$ICONFILE"
+
+        # read executable
+        while read -r p; do
+            it_exec+=("$p")
+        done < "$EXECFILE"
+
+        # read file
+        while read -r p; do
+            it_file+=("$p")
+        done < "$FILEFILE"
+
+        # finally print all of it
+        for i in "${!it_title[@]}"; do
+            if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
+                printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
+            elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+                printf "%s\n" "${it_title[i]}"
+            else
+                continue
+            fi
+        done
+    fi | uniq "${uniq_args[@]}"
+}
+
+exec_program() {
+    # read title
+    while read -r p; do
+        it_title+=("$p")
+    done < "$TITLEFILE"
+
+    # read executable
+    while read -r p; do
+        it_exec+=("$p")
+    done < "$EXECFILE"
+
+    # set exec
+    [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
+    for i in "${!it_title[@]}"; do
+        if [ "${it_title[i]}" = "$menusel" ]; then
+            exec="${it_exec[i]}"
+            break;
+        else
+            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
+        fi
+    done
+
+    # finally run the program
+    if [ -n "$exec" ]; then
+        /bin/sh -c "$exec"
+    else
+        printf "No executable found. Try clearing cache." >> "$LOGFILE"
+    fi
+}
+
+
+print_desktop_menu() {
+    prep_desktop
+    check_desktop
+    cache_desktop
+
+    menusel="$(print_desktop_list | $RUNLAUNCHER "${rl_desktop[@]}")"
+
+    [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
+    command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
+    [ -z "$menusel" ] && return 1 \
+    || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+
+    exec_program "$@"
+}
+
+prep_desktop() {
+    mkdir -p "${tmpdir[@]}"
+    rm -f "$LOGFILE"
+    touch "$LOGFILE"
+}
+
+cache_desktop() {
+    entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
+    cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
+
+    printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
+    printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
+
+    [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
+
+    [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
+    [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
+    [ -f "$EXECFILE" ] && rm -f "$EXECFILE"
+    [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
+
+    # find
+    entry="$(find "${desktopdir[@]}" -type f)"
+    icons="$(find "${icondir[@]}" -type f)"
+
+    # write new entries
+    for i in $(seq "$entry_c"); do
+        cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+        exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
+        name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+
+        # icon name
+        icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
+        icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
+
+        # write the file
+        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[@]}/$(basename "$cur_file").entry"
+    done
+
+    # scan
+    entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
+    cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
+    cached="$(find "${tmpdir[@]}" -type f)";
 }
 
 main() {
@@ -650,7 +655,7 @@ main() {
         "fm") prepare_dirnav "$args"
         ;;
         "desktop")
-            main_desktop "$args"
+            print_desktop_menu "$args"
         ;;
         "help")
             print_cli_help
