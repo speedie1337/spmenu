@@ -599,7 +599,7 @@ cache_desktop() {
         icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
         # write the file
-        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[@]}/$(basename "$cur_file").entry"
+        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[*]}/$(basename "$cur_file").entry"
     done
 
     # scan
