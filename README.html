@@ -181,10 +181,7 @@ listing and .desktop entries.</p>
 <p>It is designed to integrate well with my <a
 href="https://dwm.suckless.org">dwm</a> fork, <a
 href="https://git.speedie.site/speedwm">speedwm</a>.</p>
-<h2 id="special-features">Special features</h2>
-<p>This build of spmenu has some features written for this build. Of
-course if you want, this is free software so you can use it in your own
-build.</p>
+<h2 id="improvements-over-dmenu">Improvements over dmenu</h2>
 <ul>
 <li>Proper configuration file, including keybinds.</li>
 <li>dwm-like key/mouse bind array (See keybinds.h and mouse.h)</li>
@@ -209,26 +206,8 @@ repository</a></li>
 <li>Rewritten arguments, old arguments still work though.</li>
 <li>Hiding each part of the menu.</li>
 </ul>
-<p>..and more!</p>
-<h2 id="other-features">Other features</h2>
-<p>Note: This is an incomplete list, it’s just here to give you an idea
-of what this build has to offer.</p>
-<ul>
-<li>Pango markup support</li>
-<li>Alpha transparency</li>
-<li>Pywal/.Xresources support</li>
-<li>Grid</li>
-<li>Colored Emoji/Font support</li>
-<li>Highlighting</li>
-<li>Right-to-left language support</li>
-<li>Case-insensitive by default</li>
-<li>Padding; useful with patched dwm with barpadding or speedwm.</li>
-<li>Fuzzy-finding</li>
-<li>Preselect support</li>
-<li>Line-height</li>
-<li>History support</li>
-<li>Customizable bar height</li>
-</ul>
+<p>..and more! Note that spmenu is still <strong>compatible</strong>
+with dmenu. Just pass the original arguments.</p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>libX11</li>
@@ -306,8 +285,15 @@ which you can use but it may require editing host.mk and toggle.mk
 manually.</p>
 <h2 id="installation-macosos-xmac-os-x">Installation (macOS/OS X/Mac OS
 X)</h2>
+<p>NOTE: Adds Xquartz as a dependency. I highly recommend you use
+Homebrew to install all the dependencies.</p>
 <p>Follow ‘Installation (GNU/Linux, *BSD)’ for the most part. macOS
-requires some minor changes though.</p>
+requires some minor changes though, such as disabling pango, pangoxft,
+imlib2, and openssl. It is not possible to compile spmenu with these as
+of now, unless you’re a developer.</p>
+<p>PREFIX must also be set to /usr/local instead of the default /usr if
+you’re using macOS Catalina or newer, because Apple made /usr
+read-only.</p>
 <p>See <a
 href="https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS">this
 wiki article</a> for more information.</p>
@@ -373,17 +359,5 @@ in mind, feel free to pull request and put your scripts here!</p>
 <h2 id="license">License</h2>
 <p>spmenu is licensed under the MIT license. See the included LICENSE
 file for more information!</p>
-<h2 id="screenshots">Screenshots</h2>
-<p>If you do something cool with spmenu, feel free to add yours
-here!</p>
-<p><img
-src="https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/preview.png"
-alt="image" /> <img
-src="https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/spmenu-iron.png"
-alt="image" /> <img
-src="https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/spmenu-gruvbox.png"
-alt="image" /> <img
-src="https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/colorscheme3.png"
-alt="image" /></p>
 </body>
 </html>

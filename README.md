@@ -14,10 +14,7 @@ shell script `spmenu_run`, which handles both $PATH listing and .desktop entries
 
 It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.site/speedwm).
 
-## Special features
-
-This build of spmenu has some features written for this build.
-Of course if you want, this is free software so you can use it in your own build.
+## Improvements over dmenu
 
 - Proper configuration file, including keybinds.
 - dwm-like key/mouse bind array (See keybinds.h and mouse.h)
@@ -35,27 +32,8 @@ Of course if you want, this is free software so you can use it in your own build
 - Rewritten arguments, old arguments still work though.
 - Hiding each part of the menu.
 
-..and more!
-
-## Other features
-
-Note: This is an incomplete list, it's just here to give you an idea of what
-this build has to offer.
-
-- Pango markup support
-- Alpha transparency
-- Pywal/.Xresources support
-- Grid
-- Colored Emoji/Font support
-- Highlighting
-- Right-to-left language support
-- Case-insensitive by default
-- Padding; useful with patched dwm with barpadding or speedwm.
-- Fuzzy-finding
-- Preselect support
-- Line-height
-- History support
-- Customizable bar height
+..and more! Note that spmenu is still **compatible** with dmenu.
+Just pass the original arguments.
 
 ## Dependencies
 
@@ -104,8 +82,16 @@ you can use but it may require editing host.mk and toggle.mk manually.
 
 ## Installation (macOS/OS X/Mac OS X)
 
+NOTE: Adds Xquartz as a dependency. I highly recommend you use Homebrew
+to install all the dependencies.
+
 Follow 'Installation (GNU/Linux, \*BSD)' for the most part. macOS requires
-some minor changes though.
+some minor changes though, such as disabling pango, pangoxft, imlib2, and
+openssl. It is not possible to compile spmenu with these as of now, unless
+you're a developer.
+
+PREFIX must also be set to /usr/local instead of the default /usr
+if you're using macOS Catalina or newer, because Apple made /usr read-only.
 
 See [this wiki article](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS)
 for more information.
@@ -176,12 +162,3 @@ See the included `man` page.
 
 spmenu is licensed under the MIT license. See the included LICENSE file for
 more information!
-
-## Screenshots
-
-If you do something cool with spmenu, feel free to add yours here!
-
-![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/preview.png)
-![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/spmenu-iron.png)
-![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/spmenu-gruvbox.png)
-![image](https://codeberg.org/speedie/spmenu-screenshots/raw/branch/master/colorscheme3.png)
