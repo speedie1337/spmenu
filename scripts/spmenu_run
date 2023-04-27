@@ -576,7 +576,7 @@ cache_desktop() {
     printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
     printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
 
-    [ "$cached_c" = "$entry_c" ] && return # we don't need to cache anything, it's already done
+    [ "$cached_c" = "$entry_c" ] || [ "$cached_c" -gt "$entry_c" ] && return # we don't need to cache anything, it's already done
 
     [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
     [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
@@ -586,6 +586,7 @@ cache_desktop() {
     # find
     entry="$(find "${desktopdir[@]}" -type f)"
     icons="$(find "${icondir[@]}" -type f)"
+    rm -rf "${tmpdir[@]}"; mkdir -p "${tmpdir[@]}"
 
     # write new entries
     for i in $(seq "$entry_c"); do
