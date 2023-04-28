@@ -276,8 +276,14 @@ parse() {
     case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
-        "?") print_help "$@" && parse && exec_cmd ;;
+        "?") ;;
     esac
+
+    if [ "$sout" = "?" ]; then
+        print_help "$@"
+        parse
+        exec_cmd
+    fi
 
     printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
