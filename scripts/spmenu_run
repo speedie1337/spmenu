@@ -26,9 +26,11 @@ UNIQ_ARGS="${UNIQ_ARGS:-}"
 HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
+DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-true}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
+DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
@@ -41,6 +43,7 @@ LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 TITLEFILE="${TITLEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.title}"
 EXECFILE="${EXECFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.exec}"
 ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.icon}"
+DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}.desc}"
 FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.file}"
 
 # arrays containing entries
@@ -48,6 +51,7 @@ declare -a it_title
 declare -a it_icon
 declare -a it_exec
 declare -a it_file
+declare -a it_desc
 
 # arrays containing arguments
 declare -a rl_fm
@@ -244,8 +248,11 @@ ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 CACHE="true" # Cache entries (true/false)
 IMAGE="true" # Display images (true/false)
+DISPLAY_DESCRIPTION="true" # Display description (true/false)"
+DESCRIPTION_COLOR="#999888" # Description text color
 LOGFILE="/tmp/spmenu_run.log" # Log file
 TITLEFILE="\${TITLEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.title}" # File containing the different titles to display.
+DESCFILE="\${DESCFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.desc}" # File containing the description to display
 EXECFILE="\${EXECFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.exec}" # File containing the different executables to run.
 ICONFILE="\${ICONFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.icon}" # File containing the paths to the icons to display.
 FILEFILE="\${FILEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.file}" # File containing the path to the .desktop entries.
@@ -467,7 +474,7 @@ EOF
 
 print_desktop_list() {
     # should we use cached files?
-    if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ]; then
+    if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ] && [ -e "$DESCFILE" ]; then
         cfiles=true
     else
         cfiles=false
@@ -477,7 +484,7 @@ print_desktop_list() {
 
     # write to log file
     [ "$cfiles" = "false" ] && \
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
 
     # print data from entries
     if [ "$cfiles" = "false" ]; then
@@ -491,13 +498,15 @@ print_desktop_list() {
             cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
             # get details to display
-            it_title[i]="$(head -n 1 "$cur_file" | sed "s/Name://g")"
-            it_icon[i]="$(tail -n 1 "$cur_file" | sed "s/Icon://g")"
-            it_exec[i]="$(head -n 2 "$cur_file" | tail -n 1 | sed "s/Executable://g")"
+            it_title[i]="$(sed "1q;d" "$cur_file" | sed "s/Name://g")"
+            it_desc[i]="$(sed "2q;d" "$cur_file" | sed "s/Description://g")"
+            it_icon[i]="$(sed "4q;d" "$cur_file" | sed "s/Icon://g")"
+            it_exec[i]="$(sed "3q;d" "$cur_file" | sed "s/Executable://g")"
             it_file[i]="$cur_file"
 
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
             printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
+            printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
             printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
         done
@@ -527,14 +536,25 @@ print_desktop_list() {
             it_file+=("$p")
         done < "$FILEFILE"
 
+        # read description
+        while read -r p; do
+            it_desc+=("$p")
+        done < "$DESCFILE"
+
         # finally print all of it
         for i in "${!it_title[@]}"; do
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
-                printf "%s\t%s\n" "IMG:${it_icon[i]}" "${it_title[i]}"
+                printf "%s\t%s" "IMG:${it_icon[i]}" "${it_title[i]}"
             elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-                printf "%s\n" "${it_title[i]}"
+                printf "%s" "${it_title[i]}"
             else
                 continue
+            fi
+
+            if [ -z "${it_desc[i]}" ] || [ "$DISPLAY_DESCRIPTION" = "false" ]; then
+                printf "\n"
+            else
+                printf " - \033[0;31m%s\n" "${it_desc[i]}"
             fi
         done
     fi
@@ -576,12 +596,15 @@ print_desktop_menu() {
     check_desktop
     cache_desktop
 
-    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | $RUNLAUNCHER "${rl_desktop[@]}")"
+    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | $RUNLAUNCHER -sgr1 $DESCRIPTION_COLOR "${rl_desktop[@]}")"
 
     [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
     command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
     [ -z "$menusel" ] && return 1 \
     || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+
+    # this must now be the title only
+    menusel="$(printf "%s" "$menusel" | awk '{ print $1 }')"
 
     exec_program "$@"
 }
@@ -605,6 +628,7 @@ cache_desktop() {
     [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
     [ -f "$EXECFILE" ] && rm -f "$EXECFILE"
     [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
+    [ -f "$DESCFILE" ] && rm -f "$DESCFILE"
 
     # find
     entry="$(find "${desktopdir[@]}" -type f)"
@@ -616,13 +640,14 @@ cache_desktop() {
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
         exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+        desc="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
 
         # icon name
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
         icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
         # write the file
-        printf "%s\n%s\n%s\n" "Name:$name" "Executable:$exec" "Icon:$icon" > "${tmpdir[*]}/$(basename "$cur_file").entry"
+        printf "%s\n%s\n%s\n%s\n" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" > "${tmpdir[*]}/$(basename "$cur_file").entry"
     done
 
     # scan
@@ -633,7 +658,7 @@ cache_desktop() {
 
 clear_cache() {
     rm -rf "${tmpdir[@]}"
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}"
 }
 
 main() {
