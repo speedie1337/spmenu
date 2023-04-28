@@ -266,16 +266,20 @@ parse() {
     sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}")"
 
     # parse
-    case "$(printf '%c' "$sout" >&2)" in
+    case "${sout:0:1}" in
         "#") EXEC="term" ;;
         "?") EXEC="man" ;;
     esac
+
+    printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
 
     case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
         "magnet") EXEC=torrent ;;
         "www") EXEC=web ;;
         "?") print_help "$@" && parse && exec_cmd ;;
     esac
+
+    printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
     # check for keywords
     printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
@@ -610,6 +614,7 @@ cache_desktop() {
 
 main() {
     [ -d "/System/Library/Extensions" ] && fail_mac "$@"
+    rm -f "$LOGFILE"
     print_config
     read_args "$@"
     check "$args"
