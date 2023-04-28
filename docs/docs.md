@@ -656,8 +656,8 @@ else on startup, as if this feature did not exist.
 Not only can profiles be used to configure color schemes and fonts, allowing you
 to swap color schemes quickly, but also any other options you may want.
 
-Note that any profiles are applied ON TOP of the current loaded profile, meaning if
-any options are missing from the selected profile, the setting in
+Note that any profiles are applied ON TOP of the current loaded profile,
+meaning if any options are missing from the selected profile, the setting in
 the profile used before will be used in place.
 
 There are a few color schemes for spmenu included in the repository, see
@@ -665,14 +665,9 @@ the `themes/` directory. Feel free to copy those to your profile directory.
 
 ## Run launcher
 
-spmenu includes a shell script called spmenu_run. It lists executable programs
-in $PATH and displays them to the user in a list. Not only that but it shows
-recently run programs first in the list.
-
-spmenu_run will interpret any arguments as spmenu arguments and pass them to
-spmenu. Therefore `spmenu_run --prompt 'Run:'` will set the prompt to `Run:`.
-While it is similar to dmenu_run (and achieves the same goal), this
-version has some extra features.
+spmenu includes a powerful Bash script called spmenu_run. It lists
+executable programs in $PATH and displays them to the user in a list.
+Not only that but it optionally shows recently run programs first in the list.
 
 The selected option is piped to /bin/sh (by default). Unlike dmenu_run,
 spmenu_run has some cool features. For example:
@@ -690,15 +685,11 @@ without the prefix. Same goes for magnet links.
 You can also configure the run launcher through editing
 `~/.config/spmenu/run/config` which is configured in shell syntax.
 
-## spmenu_desktop
+In addition to the $PATH listing, spmenu_run also allows listing out
+and displaying .desktop entries. It does this in style, too by displaying
+the program icon.
 
-In addition to the aforementioned `spmenu_run`, the spmenu package also provides
-`spmenu_desktop` which instead of reading $PATH only lists out .desktop entries.
-
-Unlike the regular run launcher though, spmenu_desktop supports displaying an
-icon for entries that use one.
-
-It can be configured through editing `~/.config/spmenu/desktop/config`. The
+It can be configured through editing `~/.config/spmenu/run/config`. The
 configuration file can also be moved by setting `${XDG_CONFIG_HOME}`.
 
 ## spmenu commands
@@ -725,5 +716,5 @@ license. See the included LICENSE file for more information.
 ## Reporting issues
 
 Please report issues on the
-[Codeberg repository](https://codeberg.org/speedie/speediegq) or alternatively
+[Codeberg repository](https://codeberg.org/speedie/spmenu) or alternatively
 email me.

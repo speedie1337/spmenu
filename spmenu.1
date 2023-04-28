@@ -714,17 +714,11 @@ the \f[V]themes/\f[R] directory.
 Feel free to copy those to your profile directory.
 .SS Run launcher
 .PP
-spmenu includes a shell script called spmenu_run.
+spmenu includes a powerful Bash script called spmenu_run.
 It lists executable programs in $PATH and displays them to the user in a
 list.
-Not only that but it shows recently run programs first in the list.
-.PP
-spmenu_run will interpret any arguments as spmenu arguments and pass
-them to spmenu.
-Therefore \f[V]spmenu_run --prompt \[aq]Run:\[aq]\f[R] will set the
-prompt to \f[V]Run:\f[R].
-While it is similar to dmenu_run (and achieves the same goal), this
-version has some extra features.
+Not only that but it optionally shows recently run programs first in the
+list.
 .PP
 The selected option is piped to /bin/sh (by default).
 Unlike dmenu_run, spmenu_run has some cool features.
@@ -748,17 +742,13 @@ Same goes for magnet links.
 You can also configure the run launcher through editing
 \f[V]\[ti]/.config/spmenu/run/config\f[R] which is configured in shell
 syntax.
-.SS spmenu_desktop
 .PP
-In addition to the aforementioned \f[V]spmenu_run\f[R], the spmenu
-package also provides \f[V]spmenu_desktop\f[R] which instead of reading
-$PATH only lists out .desktop entries.
-.PP
-Unlike the regular run launcher though, spmenu_desktop supports
-displaying an icon for entries that use one.
+In addition to the $PATH listing, spmenu_run also allows listing out and
+displaying .desktop entries.
+It does this in style, too by displaying the program icon.
 .PP
 It can be configured through editing
-\f[V]\[ti]/.config/spmenu/desktop/config\f[R].
+\f[V]\[ti]/.config/spmenu/run/config\f[R].
 The configuration file can also be moved by setting
 \f[V]${XDG_CONFIG_HOME}\f[R].
 .SS spmenu commands
@@ -787,5 +777,5 @@ See the included LICENSE file for more information.
 .SS Reporting issues
 .PP
 Please report issues on the Codeberg
-repository (https://codeberg.org/speedie/speediegq) or alternatively
-email me.
+repository (https://codeberg.org/speedie/spmenu) or alternatively email
+me.

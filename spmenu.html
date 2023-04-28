@@ -961,13 +961,10 @@ the setting in the profile used before will be used in place.</p>
 see the <code>themes/</code> directory. Feel free to copy those to your
 profile directory.</p>
 <h2 id="run-launcher">Run launcher</h2>
-<p>spmenu includes a shell script called spmenu_run. It lists executable
-programs in $PATH and displays them to the user in a list. Not only that
-but it shows recently run programs first in the list.</p>
-<p>spmenu_run will interpret any arguments as spmenu arguments and pass
-them to spmenu. Therefore <code>spmenu_run --prompt 'Run:'</code> will
-set the prompt to <code>Run:</code>. While it is similar to dmenu_run
-(and achieves the same goal), this version has some extra features.</p>
+<p>spmenu includes a powerful Bash script called spmenu_run. It lists
+executable programs in $PATH and displays them to the user in a list.
+Not only that but it optionally shows recently run programs first in the
+list.</p>
 <p>The selected option is piped to /bin/sh (by default). Unlike
 dmenu_run, spmenu_run has some cool features. For example:</p>
 <ul>
@@ -985,14 +982,11 @@ $BROWSER even without the prefix. Same goes for magnet links.</p>
 <p>You can also configure the run launcher through editing
 <code>~/.config/spmenu/run/config</code> which is configured in shell
 syntax.</p>
-<h2 id="spmenu_desktop">spmenu_desktop</h2>
-<p>In addition to the aforementioned <code>spmenu_run</code>, the spmenu
-package also provides <code>spmenu_desktop</code> which instead of
-reading $PATH only lists out .desktop entries.</p>
-<p>Unlike the regular run launcher though, spmenu_desktop supports
-displaying an icon for entries that use one.</p>
+<p>In addition to the $PATH listing, spmenu_run also allows listing out
+and displaying .desktop entries. It does this in style, too by
+displaying the program icon.</p>
 <p>It can be configured through editing
-<code>~/.config/spmenu/desktop/config</code>. The configuration file can
+<code>~/.config/spmenu/run/config</code>. The configuration file can
 also be moved by setting <code>${XDG_CONFIG_HOME}</code>.</p>
 <h2 id="spmenu-commands">spmenu commands</h2>
 <p>spmenu has a few special commands. These work similar to the images.
@@ -1021,7 +1015,7 @@ suckless license. See the included LICENSE file for more
 information.</p>
 <h2 id="reporting-issues">Reporting issues</h2>
 <p>Please report issues on the <a
-href="https://codeberg.org/speedie/speediegq">Codeberg repository</a> or
+href="https://codeberg.org/speedie/spmenu">Codeberg repository</a> or
 alternatively email me.</p>
 </body>
 </html>

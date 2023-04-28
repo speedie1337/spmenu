@@ -187,6 +187,8 @@ cat << EOF > "$CONFDIR/spmenu/run/config"
 # 'fm_post_func' after spawning spmenu, selected item passed as an argument.
 # 'fm_pre_list_func' right before listing out files.
 # 'fm_post_list_func' right after listing out files.
+# 'fm_dir_func' before changing directory to the selected directory.
+# 'fm_line_func' for each line in ls output, the line is passed as an argument, including SGR colors.
 # 'read_man' when reading a man page, selected item passed as an argument.
 #
 # You may create those functions below.
@@ -408,8 +410,14 @@ prepare_dirnav() {
     # TODO: read line by line so we can append/prepend whatever we want
     listing() {
         command -v fm_pre_list_func > /dev/null && fm_pre_list_func
-        ls "${ls_args[@]}" # this allows us SGR colors
-        printf "..\n"
+        ls "${ls_args[@]}" > /tmp/spmenu_ls_list # this allows us SGR colors
+        printf "..\n" >> /tmp/spmenu_ls_list
+
+        while read -r l; do
+            command -v fm_line_func > /dev/null && fm_line_func "$l"
+            printf "%s\n" "$l"
+        done < "/tmp/spmenu_ls_list"; rm -f /tmp/spmenu_ls_list
+
         command -v fm_post_list_func > /dev/null && fm_post_list_func
     }
 
@@ -421,6 +429,7 @@ prepare_dirnav() {
         *)
             if [ -d "$dir" ]; then
                 dir="$(pwd)/$dir"
+                command -v fm_dir_func > /dev/null && fm_dir_func "$dir"
                 prepare_dirnav
             elif [ -f "$dir" ]; then
                 exec_file "$dir" && return 0
