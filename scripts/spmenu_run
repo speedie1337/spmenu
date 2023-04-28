@@ -418,7 +418,7 @@ prepare_dirnav() {
         printf "..\n" >> /tmp/spmenu_ls_list
 
         while read -r l; do
-            command -v fm_line_func > /dev/null && fm_line_func "$l"
+            command -v fm_line_func > /dev/null && fm_line_func "$(pwd)/$l"
             printf "%s\n" "$l"
         done < "/tmp/spmenu_ls_list"; rm -f /tmp/spmenu_ls_list
 
