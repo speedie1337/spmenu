@@ -604,7 +604,7 @@ print_desktop_menu() {
     || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
 
     # this must now be the title only
-    menusel="$(printf "%s" "$menusel" | awk '{ print $1 }')"
+    menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
 
     exec_program "$@"
 }
