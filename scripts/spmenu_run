@@ -159,6 +159,7 @@ spmenu_run -f,   --fm <dir>        List files and directories in <dir>.
 spmenu_run -d,   --desktop         List .desktop entries.
 spmenu_run -p,   --full-path       Print the full path to the file selected (-fm)
 spmenu_run -np,  --no-full-path    Don't print the full path to the file selected (-fm)
+spmenu_run -cc,  --clear-cache     Clear cache, useful if you just installed/uninstalled a program.
 spmenu_run -dm,  --dmenu           Run spmenu_run using dmenu instead of spmenu.
 spmenu_run -ndm, --no-dmenu        Run spmenu_run using spmenu instead of dmenu.
 spmenu_run -h,   --help            Print this help.
@@ -346,6 +347,9 @@ read_args() {
                          [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                          function=fm
                          ;;
+            -c|-cc|--clear-cache) remove_arg "$arg"
+                                  clearcache="true"
+                                  ;;
             -d|-desktop|--desktop) remove_arg "$arg"
                                    function=desktop
                                   ;;
@@ -627,6 +631,11 @@ cache_desktop() {
     cached="$(find "${tmpdir[@]}" -type f)";
 }
 
+clear_cache() {
+    rm -rf "${tmpdir[@]}"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}"
+}
+
 main() {
     [ -d "/System/Library/Extensions" ] && fail_mac "$@"
     rm -f "$LOGFILE"
@@ -666,6 +675,9 @@ main() {
     read -ra tmpdir <<< "${TEMPORARY_DIR}"
     read -ra desktopdir <<< "${DESKTOP_DIR}"
     read -ra icondir <<< "${ICON_DIR}"
+
+    # clear cache
+    [ "$clearcache" = "true" ] && clear_cache
 
     # $PATH listing
     case "$function" in
