@@ -51,8 +51,6 @@ flipimage(void)
 void
 rotateimage(void)
 {
-    if (!image) return;
-
     rotation %= 4;
     imlib_image_orientate(rotation);
 }
@@ -186,6 +184,8 @@ createifnexist_rec(const char *dir)
 void
 loadimage(const char *file, int *width, int *height)
 {
+    if (!file) return;
+
 	image = imlib_load_image(file);
 
 	if (!image)
@@ -212,7 +212,7 @@ scaleimage(int *width, int *height)
 	new_width = *width * aspect;
 	new_height = *height * aspect;
 
-	if (new_width == *width && new_height == *height)
+	if ((new_width == *width && new_height == *height) || (!image))
         return;
 
 	image = imlib_create_cropped_scaled_image(0,0,*width,*height,new_width,new_height);
