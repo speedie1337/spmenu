@@ -23,12 +23,6 @@ typedef struct {
 } ArgList;
 
 typedef struct {
-    char *modif;
-    char *key;
-    char *func;
-} ConfKeys;
-
-typedef struct {
     char *function;
     void (*func)(Arg *);
 } FuncList;
