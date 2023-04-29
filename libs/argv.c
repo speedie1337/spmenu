@@ -504,7 +504,7 @@ usage(void)
 		  "spmenu -lp,      --vertical-padding <padding>                Set the vertical padding\n"
 		  "spmenu -hp,      --horizontal-padding <padding>              Set the horizontal padding\n"
           "spmenu -vem,     --vertical-margin <margin>                  Set the vertical margin\n"
-          "spmenu -hem,     --horizontal-margin <margin>                Set the horizontal margin\n"
+          "spmenu -hom,     --horizontal-margin <margin>                Set the horizontal margin\n"
           "spmenu -la,      --left-arrow-symbol <symbol>                Set the left arrow to <symbol>\n"
           "spmenu -ra,      --right-arrow-symbol <symbol>               Set the right arrow to <symbol>\n"
           "spmenu -is,      --image-size <size>                         Image size\n"

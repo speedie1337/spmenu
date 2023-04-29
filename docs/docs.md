@@ -264,7 +264,7 @@ You may use long, descriptive arguments or the shorter arguments.
 `-vem, --vertical-margin margin`
 :   Set the vertical margin
 
-`-hem, --horizontal-margin margin`
+`-hom, --horizontal-margin margin`
 :   Set the horizontal margin
 
 `-lp, --vertical-padding padding`
