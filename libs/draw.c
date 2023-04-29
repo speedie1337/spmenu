@@ -280,7 +280,7 @@ drawinput(int x, int y, int w)
     // draw input
 	drw_setscheme(drw, scheme[SchemeInput]);
 
-	if (passwd && !hideprompt) {
+	if (passwd) {
 	    censort = ecalloc(1, sizeof(text));
 
         for (int i = 0; i < strlen(text); i++)
@@ -292,14 +292,14 @@ drawinput(int x, int y, int w)
 	    curpos = TEXTW(censort) - TEXTW(&text[cursor]);
 
         free(censort);
-	} else if (!passwd && !hideprompt) {
+	} else if (!passwd) {
         apply_fribidi(text);
         drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
 
 	    curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
-	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && !hideprompt && cursorstate) {
+	if ((curpos += lrpad / 2 - 1) < w && !hidecaret && cursorstate) {
 		drw_setscheme(drw, scheme[SchemeCaret]);
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0);
 	}
@@ -473,7 +473,6 @@ drawmenu(void)
         w = (lines > 0 || !matches) ? mw - x : inputw;
         x = drawinput(x, y, w);
     }
-
 
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
