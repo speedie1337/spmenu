@@ -109,7 +109,7 @@ build() {
     fi
 
     $makebin clean
-    [ "$GEN_MANUAL" != "false" ] && $makebin man
+    [ "$GEN_MANUAL" != "false" ] && [ -x "$(command -v pandoc)" ] && $makebin man
 
     $makebin \
         CC="$cc" \
