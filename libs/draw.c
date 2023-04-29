@@ -118,11 +118,11 @@ drawitemtext(struct item *item, int x, int y, int w)
 					} else if (nextchar == 22) {
 						fg &= ~8;
 						scm[0] = textclrs[fg];
+                    } else if (nextchar == 38) {
+						bgfg = 2;
 					} else if (nextchar >= 30 && nextchar <= 37) {
 						fg = nextchar % 10 | (fg & 8);
 						scm[0] = textclrs[fg];
-                    } else if (nextchar == 38) {
-						bgfg = 2;
 					} else if (nextchar >= 40 && nextchar <= 47) {
 						bg = nextchar % 10;
 						scm[1] = textclrs[bg];

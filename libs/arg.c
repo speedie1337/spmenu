@@ -328,14 +328,7 @@ clearins(Arg *arg)
 
     curMode = 1;
     allowkeys = 0;
-
-    if (!curMode) {
-        strcpy(modetext, normtext);
-    } else {
-        strcpy(modetext, instext);
-    }
-
-    if (hidemode) strcpy(modetext, "");
+    strncpy(modetext, instext, 15);
 
     calcoffsets();
     drawmenu();

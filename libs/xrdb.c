@@ -13,6 +13,7 @@ resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
 	snprintf(fullname, sizeof(fullname), "%s.%s", "spmenu", name);
 	fullname[sizeof(fullname) - 1] = '\0';
 	XrmGetResource(db, fullname, "*", &type, &ret);
+    if (!xresources) return;
 	if (!(ret.addr == NULL || strncmp("String", type, 64))) {
 		switch (rtype) { // type
             case STRING:
@@ -37,7 +38,7 @@ load_xresources(void)
 	ResourcePref *p;
 	display = XOpenDisplay(NULL);
 	resm = XResourceManagerString(display);
-	if (!resm)
+	if (!resm || !xresources)
 		return;
 	db = XrmGetStringDatabase(resm);
 
