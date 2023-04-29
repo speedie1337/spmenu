@@ -10,7 +10,8 @@ it, and lets the user choose an option and sends the
 selected option to standard output.
 
 In addition to this, it also serves as a run launcher through the included
-shell script `spmenu_run`, which handles both $PATH listing and .desktop entries.
+shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
+and file listing.
 
 It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.site/speedwm).
 
@@ -69,13 +70,13 @@ disabled if you don't want this by:
 
 ## Installation (GNU/Linux, \*BSD)
 
-`emerge dev-vcs/git # Install dev-vcs/git using your favorite package manager`
+`emerge dev-vcs/git`, `pacman -S git`, `apt-get install git`
 
 `git clone https://git.speedie.site/spmenu`
 
 `cd spmenu/`
 
-`./build.sh # Run as root.`
+`./build.sh # Run as root. Install any missing dependencies.`
 
 Report any issues with the build.sh script. There's also a Makefile which
 you can use but it may require editing host.mk and toggle.mk manually.
@@ -124,18 +125,25 @@ Pull requests would be greatly appreciated for any of these issues!
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
 - Image support: Ability to display icons, similar to rofi
-- Matching: Add support for contextual completions similar to xprompt
 - Text drawing: Use cairo for text drawing over Xft.
+- Lines: Rofi-like newlines in the same entry
+  - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
+  for each added line.
+- Matching: Add support for contextual completions similar to xprompt
 - Matching: FIFO, used to dynamically refresh entries.
+- Matching: Regex matching
+  - Probably use some minimal public domain library for this, I'd
+like to avoid adding more external dependencies unless it's a
+common dependency most people already have.
 
 ### Unlikely, but maybe at some point in the distant future
 
 - Wayland: Wayland support, but only if it doesn't require writing any extra
-code which as of now seems unlikely.
+code which as of now seems unlikely, or if someone makes a patch.
   - Before this can even be done, replace Xft with cairo,
-  deal with keybinds in some Wayland compatible way, and
-  figure out a way to preserve X11 compatibility as I do
-  not want to use Wayland anyway.
+  deal with keybinds in some Wayland compatible way, remove .Xresources
+  usage and figure out a way to preserve X11 compatibility as I do
+  not want to use Wayland as of now.
   - You can just use XWayland anyway if you happen to use Wayland, so it's not
 like you will be unable to use spmenu in its current state.
 
@@ -162,3 +170,8 @@ See the included `man` page.
 
 spmenu is licensed under the MIT license. See the included LICENSE file for
 more information!
+
+## Wiki
+
+spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
+documentation. Contributions to the wiki are appreciated!

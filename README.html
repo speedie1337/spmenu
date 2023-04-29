@@ -177,7 +177,7 @@ input, parses it, and lets the user choose an option and sends the
 selected option to standard output.</p>
 <p>In addition to this, it also serves as a run launcher through the
 included shell script <code>spmenu_run</code>, which handles both $PATH
-listing and .desktop entries.</p>
+listing, .desktop entries and file listing.</p>
 <p>It is designed to integrate well with my <a
 href="https://dwm.suckless.org">dwm</a> fork, <a
 href="https://git.speedie.site/speedwm">speedwm</a>.</p>
@@ -276,10 +276,11 @@ lines.</li>
 </ul></li>
 </ul>
 <h2 id="installation-gnulinux-bsd">Installation (GNU/Linux, *BSD)</h2>
-<p><code>emerge dev-vcs/git # Install dev-vcs/git using your favorite package manager</code></p>
+<p><code>emerge dev-vcs/git</code>, <code>pacman -S git</code>,
+<code>apt-get install git</code></p>
 <p><code>git clone https://git.speedie.site/spmenu</code></p>
 <p><code>cd spmenu/</code></p>
-<p><code>./build.sh # Run as root.</code></p>
+<p><code>./build.sh # Run as root. Install any missing dependencies.</code></p>
 <p>Report any issues with the build.sh script. There’s also a Makefile
 which you can use but it may require editing host.mk and toggle.mk
 manually.</p>
@@ -321,21 +322,33 @@ issues!</p>
 MD5() is deprecated as of OpenSSL 3.0, but this would also make it very
 easy to have LibreSSL compatibility.</li>
 <li>Image support: Ability to display icons, similar to rofi</li>
+<li>Text drawing: Use cairo for text drawing over Xft.</li>
+<li>Lines: Rofi-like newlines in the same entry
+<ul>
+<li>Just need to <code>XMoveResizeWindow()</code> as well as
+<code>mh += bh</code> and <code>y += bh</code> for each added line.</li>
+</ul></li>
 <li>Matching: Add support for contextual completions similar to
 xprompt</li>
-<li>Text drawing: Use cairo for text drawing over Xft.</li>
 <li>Matching: FIFO, used to dynamically refresh entries.</li>
+<li>Matching: Regex matching
+<ul>
+<li>Probably use some minimal public domain library for this, I’d like
+to avoid adding more external dependencies unless it’s a common
+dependency most people already have.</li>
+</ul></li>
 </ul>
 <h3
 id="unlikely-but-maybe-at-some-point-in-the-distant-future">Unlikely,
 but maybe at some point in the distant future</h3>
 <ul>
 <li>Wayland: Wayland support, but only if it doesn’t require writing any
-extra code which as of now seems unlikely.
+extra code which as of now seems unlikely, or if someone makes a patch.
 <ul>
 <li>Before this can even be done, replace Xft with cairo, deal with
-keybinds in some Wayland compatible way, and figure out a way to
-preserve X11 compatibility as I do not want to use Wayland anyway.</li>
+keybinds in some Wayland compatible way, remove .Xresources usage and
+figure out a way to preserve X11 compatibility as I do not want to use
+Wayland as of now.</li>
 <li>You can just use XWayland anyway if you happen to use Wayland, so
 it’s not like you will be unable to use spmenu in its current
 state.</li>
@@ -359,5 +372,8 @@ in mind, feel free to pull request and put your scripts here!</p>
 <h2 id="license">License</h2>
 <p>spmenu is licensed under the MIT license. See the included LICENSE
 file for more information!</p>
+<h2 id="wiki">Wiki</h2>
+<p>spmenu has <a href="https://spmenu.speedie.site">a wiki</a> for more
+extensive documentation. Contributions to the wiki are appreciated!</p>
 </body>
 </html>
