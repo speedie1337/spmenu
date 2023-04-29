@@ -3,24 +3,17 @@ readargs(int argc, char *argv[])
 {
     int i = 0;
     int j = 0;
+    int k = 0;
 
     int profilecmd = 0;
 
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked
     // priority: internal -> config -> xresources -> arguments
     for (j = 1; j < argc; j++) {
-		if (!strcmp(argv[j], "-xrdb") || (!strcmp(argv[j], "--xrdb"))) {
-			xresources = 1;
-        } else if (!strcmp(argv[j], "-nxrdb") || (!strcmp(argv[j], "--no-xrdb"))) {
-			xresources = 0;
-        } else if (!strcmp(argv[j], "-lcfg") || (!strcmp(argv[j], "--load-config"))) {
+        if (!strcmp(argv[j], "-lcfg") || (!strcmp(argv[j], "--load-config"))) {
 			loadconfig = 1;
         } else if (!strcmp(argv[j], "-ncfg") || (!strcmp(argv[j], "--no-load-config"))) {
 			loadconfig = 0;
-        } else if (!strcmp(argv[j], "-gbc") || (!strcmp(argv[j], "--global-colors"))) {
-			globalcolors = 1;
-        } else if (!strcmp(argv[j], "-ngbc") || (!strcmp(argv[j], "--no-global-colors"))) {
-			globalcolors = 0;
         #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
@@ -36,6 +29,18 @@ readargs(int argc, char *argv[])
     #if USECONFIG
     conf_init();
     #endif
+
+    for (k = 1; k < argc; k++) {
+		if (!strcmp(argv[k], "-xrdb") || (!strcmp(argv[k], "--xrdb"))) {
+			xresources = 1;
+        } else if (!strcmp(argv[k], "-nxrdb") || (!strcmp(argv[k], "--no-xrdb"))) {
+			xresources = 0;
+        } else if (!strcmp(argv[k], "-gbc") || (!strcmp(argv[k], "--global-colors"))) {
+			globalcolors = 1;
+        } else if (!strcmp(argv[k], "-ngbc") || (!strcmp(argv[k], "--no-global-colors"))) {
+			globalcolors = 0;
+        }
+    }
 
     // init/read xrdb
     if (xresources) {
