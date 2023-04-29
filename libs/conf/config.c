@@ -47,8 +47,6 @@ conf_init(void)
 
     // init config
     config_t cfg;
-    config_setting_t *setting;
-    int conflength = 0;
 
     config_init(&cfg);
 
@@ -59,25 +57,19 @@ conf_init(void)
     }
 
     // load options spmenu.window
-    setting = config_lookup(&cfg, "spmenu.window");
-    if (setting != NULL) {
-        unsigned int i = 0;
+    config_setting_t *window_setting = config_lookup(&cfg, "spmenu.window");
+    if (window_setting != NULL) {
+        // look up window entries
+        for (unsigned int i = 0; i < config_setting_length(window_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(window_setting, i);
 
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
-
-            // look up
             config_setting_lookup_int(conf, "position", &menuposition); // spmenu.window.menuposition
-
             config_setting_lookup_int(conf, "paddingv", &menupaddingv); // spmenu.window.paddingv
             config_setting_lookup_int(conf, "paddingh", &menupaddingh); // spmenu.window.paddingh
             config_setting_lookup_int(conf, "padding-vertical", &menupaddingv); // spmenu.window.padding-vertical
             config_setting_lookup_int(conf, "padding-horizontal", &menupaddingh); // spmenu.window.padding-horizontal
             config_setting_lookup_int(conf, "margin-vertical", &menumarginv); // spmenu.window.margin-vertical
             config_setting_lookup_int(conf, "margin-horizontal", &menumarginh); // spmenu.window.margin-horizontal
-
             config_setting_lookup_int(conf, "x", &xpos); // spmenu.window.x
             config_setting_lookup_int(conf, "y", &xpos); // spmenu.window.y
             config_setting_lookup_int(conf, "width", &menuwidth); // spmenu.window.width
@@ -89,14 +81,10 @@ conf_init(void)
     }
 
     // load options spmenu.properties
-    setting = config_lookup(&cfg, "spmenu.properties");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *prop_setting = config_lookup(&cfg, "spmenu.properties");
+    if (prop_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(prop_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(prop_setting, i);
 
             // look up
             config_setting_lookup_string(conf, "class", &dest); // spmenu.properties.class
@@ -107,14 +95,10 @@ conf_init(void)
     }
 
     // load options spmenu.powerline
-    setting = config_lookup(&cfg, "spmenu.powerline");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *pwl_setting = config_lookup(&cfg, "spmenu.powerline");
+    if (pwl_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(pwl_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(pwl_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "promptstyle", &promptpwlstyle); // spmenu.powerline.promptstyle
@@ -129,29 +113,20 @@ conf_init(void)
     }
 
     // load options spmenu.center
-    setting = config_lookup(&cfg, "spmenu.center");
-    if (setting != NULL) {
-        unsigned int i = 0;
+    config_setting_t *center_setting = config_lookup(&cfg, "spmenu.center");
+    if (center_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(center_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(center_setting, i);
 
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
-
-            // look up
             config_setting_lookup_int(conf, "width", &minwidth); // spmenu.center.width
         }
     }
 
     // load options spmenu.text
-    setting = config_lookup(&cfg, "spmenu.text");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *text_setting = config_lookup(&cfg, "spmenu.text");
+    if (text_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(text_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(text_setting, i);
 
             // look up
             if (config_setting_lookup_string(conf, "font", &dest)) // spmenu.text.font
@@ -183,14 +158,10 @@ conf_init(void)
     }
 
     // load options spmenu.alpha
-    setting = config_lookup(&cfg, "spmenu.alpha");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *alpha_setting = config_lookup(&cfg, "spmenu.alpha");
+    if (alpha_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(alpha_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(alpha_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "itemnormfg", &alpha_itemnormfg); // spmenu.alpha.itemnormfg
@@ -238,14 +209,10 @@ conf_init(void)
     }
 
     // load options spmenu.color
-    setting = config_lookup(&cfg, "spmenu.color");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *color_setting = config_lookup(&cfg, "spmenu.color");
+    if (color_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(color_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(color_setting, i);
 
             // items
             if (config_setting_lookup_string(conf, "itemnormfg", &dest))
@@ -390,14 +357,10 @@ conf_init(void)
     }
 
     // load options spmenu.image
-    setting = config_lookup(&cfg, "spmenu.image");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *img_setting = config_lookup(&cfg, "spmenu.image");
+    if (img_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(img_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(img_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "width", &imagewidth); // spmenu.image.width
@@ -410,14 +373,10 @@ conf_init(void)
     }
 
     // load options spmenu.xrdb
-    setting = config_lookup(&cfg, "spmenu.xrdb");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *xrdb_setting = config_lookup(&cfg, "spmenu.xrdb");
+    if (xrdb_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(xrdb_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(xrdb_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.xrdb.global
@@ -426,14 +385,10 @@ conf_init(void)
     }
 
     // load options spmenu.input
-    setting = config_lookup(&cfg, "spmenu.input");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *input_setting = config_lookup(&cfg, "spmenu.input");
+    if (input_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(input_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(input_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "fast", &fast); // spmenu.input.fast
@@ -443,14 +398,10 @@ conf_init(void)
     }
 
     // load options spmenu.mode
-    setting = config_lookup(&cfg, "spmenu.mode");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *mode_setting = config_lookup(&cfg, "spmenu.mode");
+    if (mode_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(mode_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(mode_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "default", &mode); // spmenu.mode.default
@@ -464,14 +415,10 @@ conf_init(void)
     }
 
     // load options spmenu.match
-    setting = config_lookup(&cfg, "spmenu.match");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *match_setting = config_lookup(&cfg, "spmenu.match");
+    if (match_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(match_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(match_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "sort", &sortmatches); // spmenu.match.sort
@@ -485,14 +432,10 @@ conf_init(void)
     }
 
     // load options spmenu.line
-    setting = config_lookup(&cfg, "spmenu.line");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *line_setting = config_lookup(&cfg, "spmenu.line");
+    if (line_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(line_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(line_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "height", &lineheight); // spmenu.line.height
@@ -503,14 +446,10 @@ conf_init(void)
     }
 
     // load options spmenu.history
-    setting = config_lookup(&cfg, "spmenu.history");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *hist_setting = config_lookup(&cfg, "spmenu.history");
+    if (hist_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(hist_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(hist_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "max", &maxhist); // spmenu.history.max
@@ -519,14 +458,10 @@ conf_init(void)
     }
 
     // load options spmenu.hide
-    setting = config_lookup(&cfg, "spmenu.hide");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *hide_setting = config_lookup(&cfg, "spmenu.hide");
+    if (hide_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(hide_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(hide_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "input", &hideinput); // spmenu.hide.input
@@ -545,14 +480,10 @@ conf_init(void)
     }
 
     // load options spmenu.pango
-    setting = config_lookup(&cfg, "spmenu.pango");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    config_setting_t *pango_setting = config_lookup(&cfg, "spmenu.pango");
+    if (pango_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(pango_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(pango_setting, i);
 
             // look up
             config_setting_lookup_int(conf, "item", &pango_item); // spmenu.pango.input
@@ -569,15 +500,12 @@ conf_init(void)
     }
 
     // load options spmenu.keys
-    setting = config_lookup(&cfg, "spmenu.keys");
-    if (setting != NULL) {
-        unsigned int i = 0;
+    config_setting_t *key_setting = config_lookup(&cfg, "spmenu.keys");
+    if (key_setting != NULL) {
         int nmode = 0;
 
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+        for (unsigned int i = 0; i < config_setting_length(key_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(key_setting, i);
 
             // look up
             config_setting_lookup_string(conf, "modifier", &dest);
@@ -620,15 +548,11 @@ conf_init(void)
         }
     }
 
-        // load options spmenu.keys
-    setting = config_lookup(&cfg, "spmenu.mouse");
-    if (setting != NULL) {
-        unsigned int i = 0;
-
-        conflength = config_setting_length(setting);
-
-        for (i = 0; i < conflength; ++i) {
-            config_setting_t *conf = config_setting_get_elem(setting, i);
+    // load options spmenu.keys
+    config_setting_t *mouse_setting = config_lookup(&cfg, "spmenu.mouse");
+    if (mouse_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(mouse_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(mouse_setting, i);
 
             // look up
             config_setting_lookup_string(conf, "click", &dest);
