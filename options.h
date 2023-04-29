@@ -14,7 +14,7 @@ static int mon                         = -1; /* Monitor to run spmenu on */
 
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
-static int menuposition                = 1; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
+static int menuposition                = 2; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
 static int menupaddingv				   = 0; /* Vertical padding inside the menu (in pixels) */
 static int menupaddingh				   = 0; /* Horizontal padding inside the menu (in pixels) */
 static int menuwidth                   = 0; /* spmenu width when setting X/Y position */

@@ -120,7 +120,7 @@ spmenu.sortmatches:         1
 spmenu.casesensitive:       0
 
 !! Menu
-spmenu.menuposition:        1
+spmenu.menuposition:        2
 spmenu.menupaddingv:        0
 spmenu.menupaddingh:        0
 spmenu.menuwidth:           0
