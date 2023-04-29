@@ -12,3 +12,13 @@ cc=gcc
 opt=-O2
 warn=true
 install=true
+
+# mac
+if [ -d "/System/Library/Extensions" ]; then
+    imlib2=false
+    pango=false
+    pangoxft=false
+    openssl=false
+    prefix=/usr/local
+    makebin=gnumake
+fi
