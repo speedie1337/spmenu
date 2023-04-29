@@ -565,9 +565,6 @@ more useful.
 Example:
 \f[V]printf \[dq]\[rs]033[0;44m😀\[rs]033[0m Emoji highlighting\[rs]n\[dq] | spmenu --columns 1\f[R]
 .PP
-For 256 color support to work, you must add to the array.
-See \f[V]libs/color.h\f[R] if you want this.
-.PP
 See `SGR sequences' for more information.
 .SS SGR sequences
 .PP
@@ -598,6 +595,9 @@ Just as a tip, you can pipe your colored spmenu output to
 \f[V]sed -e \[aq]s/\[rs]x1b\[rs][[0-9;]*m//g\[aq]\f[R].
 This will clear the SGR sequences from the output.
 This is useful when you want to check what the output actually is.
+.PP
+256 color sequences are also supported, but due to the complexity
+involved they will not be covered in this man page.
 .SS Pango markup
 .PP
 If spmenu was compiled with Pango enabled (default), you should be able

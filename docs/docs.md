@@ -530,9 +530,6 @@ Not only does it support colored text, but it also supports colored backgrounds.
 This allows something similar to the emoji highlight patch, except even more useful.
 Example: `printf "\033[0;44m😀\033[0m Emoji highlighting\n" | spmenu --columns 1`
 
-For 256 color support to work, you must add to the array. See `libs/color.h`
-if you want this.
-
 See 'SGR sequences' for more information.
 
 ## SGR sequences
@@ -560,6 +557,9 @@ using the `-sgrX` arguments. See 'Arguments' for more information.
 Just as a tip, you can pipe your colored spmenu output to
 `sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from
 the output. This is useful when you want to check what the output actually is.
+
+256 color sequences are also supported, but due to the complexity involved they
+will not be covered in this man page.
 
 ## Pango markup
 

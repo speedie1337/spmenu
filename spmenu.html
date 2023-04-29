@@ -829,8 +829,6 @@ no need to filter the output or anything.</p>
 backgrounds. This allows something similar to the emoji highlight patch,
 except even more useful. Example:
 <code>printf "\033[0;44m😀\033[0m Emoji highlighting\n" | spmenu --columns 1</code></p>
-<p>For 256 color support to work, you must add to the array. See
-<code>libs/color.h</code> if you want this.</p>
 <p>See ‘SGR sequences’ for more information.</p>
 <h2 id="sgr-sequences">SGR sequences</h2>
 <p>A basic supported SGR sequence looks like this:
@@ -854,6 +852,8 @@ information.</p>
 <code>sed -e 's/\x1b\[[0-9;]*m//g'</code>. This will clear the SGR
 sequences from the output. This is useful when you want to check what
 the output actually is.</p>
+<p>256 color sequences are also supported, but due to the complexity
+involved they will not be covered in this man page.</p>
 <h2 id="pango-markup">Pango markup</h2>
 <p>If spmenu was compiled with Pango enabled (default), you should be
 able to utilize Pango markup in every part of spmenu. That is, the mode
