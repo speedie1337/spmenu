@@ -15,12 +15,9 @@
 #define MAXITEMLENGTH         1024
 
 // user friendly names for all the modifiers we're using, but there are many more
-#define CONTROL ControlMask
-#define SHIFT ShiftMask
-#define ALT Mod1Mask
-#define ALTR Mod3Mask
-#define SUPER Mod4Mask
-#define SUPERR Mod5Mask
-
-// for running stuff
-#define shell "/bin/sh"
+#define Ctrl ControlMask
+#define Shift ShiftMask
+#define Alt Mod1Mask
+#define AltGr Mod3Mask
+#define Super Mod4Mask
+#define ShiftGr Mod5Mask
