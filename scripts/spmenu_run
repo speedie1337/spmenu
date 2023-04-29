@@ -554,7 +554,8 @@ print_desktop_list() {
             if [ -z "${it_desc[i]}" ] || [ "$DISPLAY_DESCRIPTION" = "false" ]; then
                 printf "\n"
             else
-                printf " - \033[0;31m%s\n" "${it_desc[i]}"
+                [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
+                printf " - %b%s\n" "${COL}" "${it_desc[i]}"
             fi
         done
     fi
@@ -596,7 +597,7 @@ print_desktop_menu() {
     check_desktop
     cache_desktop
 
-    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | $RUNLAUNCHER -sgr1 $DESCRIPTION_COLOR "${rl_desktop[@]}")"
+    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | $RUNLAUNCHER "${rl_desktop[@]}")"
 
     [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
     command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
@@ -671,7 +672,7 @@ main() {
     # some run launcher args
     RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
-    RUNLAUNCHER_DESKTOP_ARGS="--lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
+    RUNLAUNCHER_DESKTOP_ARGS="-sgr1 $DESCRIPTION_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility
