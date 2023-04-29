@@ -24,7 +24,7 @@ create_window(int x, int y, int w, int h)
         PointerMotionMask; // we need pointer for selecting entries using the mouse
 
     // create client
-    win = XCreateWindow(dpy, parentwin, x, y, w, h, borderwidth,
+    win = XCreateWindow(dpy, root, x, y, w, h, borderwidth,
                         depth, InputOutput, visual,
                         CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
 
