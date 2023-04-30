@@ -1,5 +1,5 @@
 void
-drawhighlights(struct item *item, int x, int y, int w)
+drawhighlights(struct item *item, int x, int y, int w, int p)
 {
 	int i, indent;
 	char *highlight;
@@ -27,7 +27,7 @@ drawhighlights(struct item *item, int x, int y, int w)
 			highlight[1] = '\0';
 			drw_text(
 				drw,
-				x + indent + (lrpad / 2),
+				x + indent + (p),
 				y,
 				MIN(w - indent - lrpad, TEXTW(highlight) - lrpad),
 				bh, 0, highlight, 0, pango_highlight ? True : False);
@@ -179,7 +179,7 @@ drawitemtext(struct item *item, int x, int y, int w)
     // now draw any non-colored text
     apply_fribidi(buffer);
 	int r = drw_text(drw, x, y, w, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
-    if (!hidehighlight && !skiphighlight) drawhighlights(item, x, y, w);
+    if (!hidehighlight && !skiphighlight) drawhighlights(item, x, y, w, leftpadding);
 
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
     item->clntext = malloc(sizeof(buffer));
