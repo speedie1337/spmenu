@@ -482,6 +482,12 @@ print_desktop_list() {
 
     read -ra uniq_args <<< "${UNIQ_ARGS}"
 
+    it_title=()
+    it_desc=()
+    it_icon=()
+    it_exec=()
+    it_file=()
+
     # write to log file
     [ "$cfiles" = "false" ] && \
         printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
@@ -491,6 +497,8 @@ print_desktop_list() {
         entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
         cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
         cached="$(find "${tmpdir[@]}" -type f)";
+
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE"
 
         for i in $(seq "$cached_c"); do
             # current file
