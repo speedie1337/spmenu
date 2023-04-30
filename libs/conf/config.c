@@ -133,6 +133,9 @@ conf_init(void)
                 strcpy(font, strdup(dest));
 
             config_setting_lookup_int(conf, "padding", &textpadding); // spmenu.text.padding
+            config_setting_lookup_int(conf, "normitempadding", &normitempadding); // spmenu.text.normitempadding
+            config_setting_lookup_int(conf, "selitempadding", &selitempadding); // spmenu.text.selitempadding
+            config_setting_lookup_int(conf, "priitempadding", &priitempadding); // spmenu.text.priitempadding
 
             if (config_setting_lookup_string(conf, "leftarrow", &dest)) // spmenu.text.leftarrow
                 leftarrow = strdup(dest);

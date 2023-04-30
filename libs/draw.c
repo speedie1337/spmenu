@@ -50,18 +50,34 @@ drawitemtext(struct item *item, int x, int y, int w)
     int bgfg = 0; // both
     int ignore = 0; // ignore colors
     int skiphighlight = 0; // skip highlighting
+    int selitem = 0;
+    int priitem = 0;
 
     // memcpy the correct scheme
     if (item == sel) {
         memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
+        selitem = 1;
 
-        if (item->hp)
+        if (item->hp) {
             memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
+            priitem = 1;
+        }
     } else {
         memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
 
-        if (item->hp)
+        if (item->hp) {
             memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
+            priitem = 1;
+        }
+    }
+
+    // apply extra padding
+    if ((selitem && !priitem) && lines) {
+        leftpadding += selitempadding;
+    } else if (priitem && lines) {
+        leftpadding += priitempadding;
+    } else if (lines) {
+        leftpadding += normitempadding;
     }
 
     // don't color
