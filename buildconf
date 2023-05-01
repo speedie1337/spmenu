@@ -1,24 +1,27 @@
-# buildconf
+# spmenu buildconf
+# See LICENSE file for copyright and license details.
 #
 # This is the default configuration used to build spmenu. The build.sh script reads it.
-imlib2=true
-pango=true
-pangoxft=true
-xinerama=true
-openssl=true
-fribidi=true
-libconfig=true
-cc=gcc
-opt=-O2
-warn=true
-install=true
 
-# mac
+# basic options
+imlib2=true # enable imlib2, used for images. you must also enable openssl if this is set to true
+pango=true # enable pango, for markup
+pangoxft=true # enable pangoxft, for markup
+xinerama=true # enable multi monitor support
+openssl=true # enable support for openssl, used to calculate MD5
+fribidi=true # enable support for right to left languages
+libconfig=true # enable configuration and themes
+cc=gcc # compiler and linker
+opt=-O2 # level of optimization
+warn=true # warn about OS quirks
+install=true # automatically install, if set to false an install will not be performed
+
+# macOS/OS X/Mac OS X
 if [ -d "/System/Library/Extensions" ]; then
-    imlib2=false
-    pango=false
-    pangoxft=false
-    openssl=false
-    prefix=/usr/local
-    makebin=gnumake
+    imlib2=false # currently unsupported on mac due to the use of pkg-config
+    pango=false # currently unsupported on mac due to the use of pkg-config
+    pangoxft=false # currently unsupported on mac due to the use of pkg-config
+    openssl=false # currently unsupported on mac due to the use of pkg-config
+    prefix=/usr/local # as of 10.15 catalina we can no longer write to /usr/bin and /usr/share
+    makebin=gnumake # on mac, the binary for GNU make is gnumake
 fi
