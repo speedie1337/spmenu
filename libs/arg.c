@@ -518,7 +518,7 @@ togglehighlight(Arg *arg)
 void
 setprofile(Arg *arg)
 {
-    if (!system("spmenu_profile --spmenu-set-profile"))
+    if (!system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile"))
         die("spmenu: failed to run profile menu\n");
     else
         exit(0);
