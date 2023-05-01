@@ -376,7 +376,7 @@ conf_init(void)
         }
     }
 
-    // load options spmenu.xrdb
+    // load options spmenu.file
     config_setting_t *file_setting = config_lookup(&cfg, "spmenu.file");
     if (file_setting != NULL) {
         for (unsigned int i = 0; i < config_setting_length(file_setting); ++i) {
@@ -553,7 +553,7 @@ conf_init(void)
         }
     }
 
-    // load options spmenu.keys
+    // load options spmenu.mouse
     config_setting_t *mouse_setting = config_lookup(&cfg, "spmenu.mouse");
     if (mouse_setting != NULL) {
         for (unsigned int i = 0; i < config_setting_length(mouse_setting); ++i) {

@@ -421,6 +421,16 @@ theme_load(void)
         }
     }
 
+    config_setting_t *file_setting = config_lookup(&cfg, "theme.file");
+    if (file_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(file_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(file_setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
+        }
+    }
+
     // we're done here
     config_destroy(&cfg);
     return;

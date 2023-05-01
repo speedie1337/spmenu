@@ -1,4 +1,5 @@
 #!/bin/bash
+# spmenu build script
 PREFIX="${PREFIX:-/usr}"
 DESTDIR="${DESTDIR:-}"
 INCDIR="${INCDIR:-/usr/include}"
