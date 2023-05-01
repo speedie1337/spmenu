@@ -115,7 +115,7 @@ build() {
     $makebin \
         CC="$cc" \
         PREFIX="$PREFIX" \
-        DISTDIR="$DISTDIR" \
+        DESTDIR="$DESTDIR" \
         OPT="$opt" \
         XINERAMALIBS="$xineramalib" \
         XINERAMATOGGLE="$xineramatoggle" \
