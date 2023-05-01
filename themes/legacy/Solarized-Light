@@ -1,50 +1,51 @@
-! Solarized-Dark colorscheme for spmenu
+! Solarized-Light colorscheme for spmenu
 
 ! We must disable global colors first, because otherwise we can use Pywal to override.
 ! If you want that, then you may set this to 1.
 spmenu.globalcolors:       0
-spmenu.col_itemnormfg:     #eee8d5
-spmenu.col_itemnormbg:     #002b36
-spmenu.col_itemselfg:      #eee8d5
+
+spmenu.col_itemnormfg:     #657b83
+spmenu.col_itemnormbg:     #fdf6e3
+spmenu.col_itemselfg:      #657b83
 spmenu.col_itemselbg:      #dc322f
-spmenu.col_itemnormprifg:  #eee8d5
-spmenu.col_itemnormpribg:  #002b36
-spmenu.col_itemselprifg:   #eee8d5
+spmenu.col_itemnormprifg:  #657b83
+spmenu.col_itemnormpribg:  #fdf6e3
+spmenu.col_itemselprifg:   #657b83
 spmenu.col_itemselpribg:   #586e75
-spmenu.col_menu:           #002b36
+spmenu.col_menu:           #fdf6e3
 spmenu.col_promptfg:       #262626
 spmenu.col_promptbg:       #b58900
 spmenu.col_larrowfg:       #2aa198
 spmenu.col_rarrowfg:       #2aa198
-spmenu.col_larrowbg:       #002b36
-spmenu.col_rarrowbg:       #002b36
-spmenu.col_inputfg:        #eee8d5
-spmenu.col_inputbg:        #002b36
+spmenu.col_larrowbg:       #fdf6e3
+spmenu.col_rarrowbg:       #fdf6e3
+spmenu.col_inputfg:        #657b83
+spmenu.col_inputbg:        #fdf6e3
 spmenu.col_numfg:          #262626
 spmenu.col_numbg:          #cb4b16
 spmenu.col_normhlfg:       #268bd2
-spmenu.col_normhlbg:       #002b36
+spmenu.col_normhlbg:       #fdf6e3
 spmenu.col_selhlfg:        #ffffd7
 spmenu.col_selhlbg:        #262626
-spmenu.col_caretfg:        #eee8d5
+spmenu.col_caretfg:        #657b83
 spmenu.col_border:         #859900
 spmenu.col_modefg:         #262626
 spmenu.col_modebg:         #859900
 spmenu.col_capsfg:         #262626
 spmenu.col_capsbg:         #2aa198
-spmenu.col_sgr0:           #073642
+spmenu.col_sgr0:           #eee8d5
 spmenu.col_sgr1:           #dc322f
 spmenu.col_sgr2:           #859900
 spmenu.col_sgr3:           #b58900
 spmenu.col_sgr4:           #268bd2
 spmenu.col_sgr5:           #d33682
 spmenu.col_sgr6:           #2aa198
-spmenu.col_sgr7:           #eee8d5
-spmenu.col_sgr8:           #002b36
+spmenu.col_sgr7:           #073642
+spmenu.col_sgr8:           #fdf6e3
 spmenu.col_sgr9:           #cb4b16
-spmenu.col_sgr10:          #586e75
-spmenu.col_sgr11:          #657b83
-spmenu.col_sgr12:          #839496
+spmenu.col_sgr10:          #93a1a1
+spmenu.col_sgr11:          #839496
+spmenu.col_sgr12:          #657b83
 spmenu.col_sgr13:          #6c71c4
-spmenu.col_sgr14:          #93a1a1
-spmenu.col_sgr15:          #fdf6e3
+spmenu.col_sgr14:          #586e75
+spmenu.col_sgr15:          #002b36

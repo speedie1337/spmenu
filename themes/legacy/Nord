@@ -1,6 +1,6 @@
 ! Nord colorscheme for spmenu
 
-! We must disable global s first, because otherwise we can use Pywal to override.
+! We must disable global colors first, because otherwise we can use Pywal to override.
 ! If you want that, then you may set this to 1.
 spmenu.globalcolors:       0
 
@@ -31,8 +31,8 @@ spmenu.col_caretfg:        #d8dee9
 spmenu.col_border:         #5e81ac
 spmenu.col_modefg:         #2e3440
 spmenu.col_modebg:         #81a1c1
-spmenu.col_capsfg:         #d8dee9
-spmenu.col_capsbg:         #8fbcbb
+spmenu.col_capsfg:         #2e3440
+spmenu.col_capsbg:         #ebcb8b
 spmenu.col_sgr0:           #3b4252
 spmenu.col_sgr1:           #bf616a
 spmenu.col_sgr2:           #a3be8c
