@@ -223,7 +223,7 @@ drawitem(int x, int y, int w)
         #if USEIMAGE
         if (!hideimage && longestedge != 0) {
             rx = ox;
-            rx += (imagegaps * 2) + imagewidth + menumarginh;
+            rx += MAX((imagegaps * 2) + imagewidth + menumarginh, indentitems ? x : 0);
         } else
         #endif
             if (!indentitems) {
