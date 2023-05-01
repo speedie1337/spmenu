@@ -304,11 +304,19 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Set config file to load to file
 
 `-lcfg, --load-config`
-:   Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenurc or ~/.config/spmenu/spmenurc)
+:   Load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)
 
 `-ncfg, --no-load-config`
-:   Don't load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenurc
-or ~/.config/spmenu/spmenurc)
+:   Don't load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)
+
+`-tm, --theme theme`
+:   Load theme 'theme' on runtime.
+
+`-ltm, --load-theme`
+:   Load theme
+
+`-nltm, --no-load-theme`
+:   Don't load theme
 
 `-v, --version`
 :   Print spmenu version to stdout

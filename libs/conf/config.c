@@ -1,4 +1,5 @@
 #include <libconfig.h>
+#include "../theme/theme.c"
 
 void
 conf_init(void)
@@ -376,14 +377,15 @@ conf_init(void)
     }
 
     // load options spmenu.xrdb
-    config_setting_t *xrdb_setting = config_lookup(&cfg, "spmenu.xrdb");
-    if (xrdb_setting != NULL) {
-        for (unsigned int i = 0; i < config_setting_length(xrdb_setting); ++i) {
-            config_setting_t *conf = config_setting_get_elem(xrdb_setting, i);
+    config_setting_t *file_setting = config_lookup(&cfg, "spmenu.file");
+    if (file_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(file_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(file_setting, i);
 
             // look up
-            config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.xrdb.global
-            config_setting_lookup_int(conf, "xresources", &xresources); // spmenu.xrdb.xresources
+            config_setting_lookup_int(conf, "theme", &loadtheme); // spmenu.file.theme
+            config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
+            config_setting_lookup_int(conf, "xresources", &xresources); // spmenu.file.xresources
         }
     }
 
@@ -605,5 +607,6 @@ conf_init(void)
 
     // we're done here
     config_destroy(&cfg);
+    if (loadtheme) theme_load();
     return;
 }

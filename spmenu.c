@@ -163,9 +163,12 @@ static int imageh = 0;
 static int imageg = 0;
 #endif
 
+// config file
 #if USECONFIG
-static int cconf = 0; // custom config path
-static char *argconf = NULL;
+static int cconf = 0; // use custom config path?
+static int ctheme = 0; // use custom theme path?
+static char *argconf = NULL; // arg config path
+static char *argtheme = NULL; // arg theme path
 #endif
 
 // set an integer to 1 if we have rtl enabled, this saves a lot of lines and duplicate code

@@ -14,11 +14,22 @@ readargs(int argc, char *argv[])
 			loadconfig = 1;
         } else if (!strcmp(argv[j], "-ncfg") || (!strcmp(argv[j], "--no-load-config"))) {
 			loadconfig = 0;
+        } else if (!strcmp(argv[j], "-ltm") || (!strcmp(argv[j], "--load-theme"))) {
+			loadtheme = 1;
+        } else if (!strcmp(argv[j], "-nltm") || (!strcmp(argv[j], "--no-load-theme"))) {
+			loadtheme = 0;
         #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
                 cconf = 1;
                 argconf = argv[++j];
+            } else {
+                die("This argument requires a second argument.\n");
+            }
+        } else if (!strcmp(argv[j], "-tm") || (!strcmp(argv[j], "--theme"))) { // specify a theme
+            if (argv[j+1]) {
+                ctheme = 1;
+                argtheme = argv[++j];
             } else {
                 die("This argument requires a second argument.\n");
             }
@@ -188,6 +199,10 @@ readargs(int argc, char *argv[])
                     || !strcmp(argv[i], "-ncfg")
                     || !strcmp(argv[i], "--load-config")
                     || !strcmp(argv[i], "--no-load-config")
+                    || !strcmp(argv[i], "-ltm")
+                    || !strcmp(argv[i], "-nltm")
+                    || !strcmp(argv[i], "--load-theme")
+                    || !strcmp(argv[i], "--no-load-theme")
                     || !strcmp(argv[i], "-gbc")
                     || !strcmp(argv[i], "-ngbc")
                     || !strcmp(argv[i], "--global-colors")
@@ -196,6 +211,9 @@ readargs(int argc, char *argv[])
                     || !strcmp(argv[i], "-cf")
                     || !strcmp(argv[i], "--config-file")
                     || (argconf && !strcmp(argv[i], argconf))
+                    || !strcmp(argv[i], "-tm")
+                    || !strcmp(argv[i], "--theme")
+                    || (argtheme && !strcmp(argv[i], argtheme))
                     #endif
                 ))
                     continue;
@@ -387,6 +405,10 @@ readargs(int argc, char *argv[])
                 || !strcmp(argv[i], "-ncfg")
                 || !strcmp(argv[i], "--load-config")
                 || !strcmp(argv[i], "--no-load-config")
+                || !strcmp(argv[i], "-ltm")
+                || !strcmp(argv[i], "-nltm")
+                || !strcmp(argv[i], "--load-theme")
+                || !strcmp(argv[i], "--no-load-theme")
                 || !strcmp(argv[i], "-gbc")
                 || !strcmp(argv[i], "-ngbc")
                 || !strcmp(argv[i], "--global-colors")
@@ -395,6 +417,9 @@ readargs(int argc, char *argv[])
                 || !strcmp(argv[i], "-cf")
                 || !strcmp(argv[i], "--config-file")
                 || (argconf && !strcmp(argv[i], argconf))
+                || !strcmp(argv[i], "-tm")
+                || !strcmp(argv[i], "--theme")
+                || (argtheme && !strcmp(argv[i], argtheme))
                 #endif
             ))
                 continue;
@@ -523,8 +548,11 @@ usage(void)
     fputs("spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
           "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
-          "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenu or ~/.config/spmenu/spmenurc)\n"
-          "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.config/spmenu/spmenu.conf, ~/.spmenu or ~/.config/spmenu/spmenurc)\n"
+          "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)\n"
+          "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)\n"
+          "spmenu -tm,      --theme <theme>                             Load theme <theme>\n"
+          "spmenu -ltm,     --load-theme                                Load theme\n"
+          "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
           "spmenu -v,       --version                                   Print spmenu version to stdout\n"
           "\n", stdout);
 
