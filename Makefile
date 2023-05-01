@@ -113,12 +113,8 @@ man:
 	rm -f .man.md
 
 docs: man
-	command -v weasyprint || exit 1
 	scripts/make/generate-code-docs.sh docs/code-docs.md code.html || exit 1
 	pandoc --standalone README.md -o README.html
-	weasyprint code.html code.pdf || exit 1
-	weasyprint README.html README.pdf || exit 1
-	weasyprint spmenu.html spmenu.pdf || exit 1
 
 pkg_arch: dist
 	command -v makepkg > /dev/null || exit 1
