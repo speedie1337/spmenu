@@ -631,45 +631,30 @@ You can also include other configuration files in the configuration file using
 
 spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
 (.Xresources database) on runtime. You may disable it by passing -nxrdb,
-or enable it by padding -xrdb. You can also set this in the regular config file.
-
-spmenu loads `~/.config/spmenu/spmenurc` or alternatively if you're
-old fashioned, `~/.spmenurc` on startup. This requires that `xrdb` is
-available on your operating system. Of course, you don't NEED to use them,
-as you can just `xrdb -override` any .Xresources file you want.
+or enable it by padding -xrdb. You can also set this in the config file.
 
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.
 
-## Profiles
+## Themes
 
-spmenu supports profiles. Profiles are like configuration
-files (See `Configuration`) that can be switched between quickly using a keybind.
+You could just `@include` themes from the aforementioned `spmenu.conf`, but
+it's kind of inconvenient. For this reason, spmenu reads `.theme.conf`
+and `.config/spmenu/theme.conf` on startup as well. To apply a basic theme,
+you simply replace theme.conf with the theme you want to use.
 
-Pressing (by default) Ctrl+Shift+p will list out profiles, and also
-allow you to add/remove existing profiles. Selecting a profile will switch
-to that profile. The selected profile will now be loaded on startup just
-like the spmenurc until another profile is selected.
+`themes/` in the [Git repository](https://git.speedie.site/spmenu) contains
+a bunch of themes written for spmenu, and you can use them as a template
+when making your own themes.
 
-Selecting 'Add' allows you to create a new profile. When a new profile is
-created it is going to use the spmenu defaults (copied from `/usr/share/spmenu/example.Xresources`).
-Profiles are going to be in `~/.config/spmenu/profiles/` and the current profile
-is in `~/.config/spmenu/.profile`. The profile can simply be edited using
-any text editor and be configured in .Xresources syntax.
+Do however note that the theme file is **not** the same as the config file.
+There are quite a lot of differences, and many options are not available.
+This is by design, as these options should be set by the user, not the theme.
 
-Selecting `Remove` will allow you to pick a profile which will be permanently
-removed. Selecting `Default` will simply load `spmenurc` and nothing
-else on startup, as if this feature did not exist.
-
-Not only can profiles be used to configure color schemes and fonts, allowing you
-to swap color schemes quickly, but also any other options you may want.
-
-Note that any profiles are applied ON TOP of the current loaded profile,
-meaning if any options are missing from the selected profile, the setting in
-the profile used before will be used in place.
-
-There are a few color schemes for spmenu included in the repository, see
-the `themes/` directory. Feel free to copy those to your profile directory.
+This is not very convenient if you have many themes because you constantly
+have to replace your theme file, so theme managers exist to make this a
+bit easier. [spmenuify](https://git.speedie.site/spmenuify) is the official
+theme manager, but you could use another one or write your own.
 
 ## Run launcher
 
