@@ -5,8 +5,6 @@ readargs(int argc, char *argv[])
     int j = 0;
     int k = 0;
 
-    int profilecmd = 0;
-
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked
     // priority: internal -> config -> xresources -> arguments
     for (j = 1; j < argc; j++) {
@@ -56,14 +54,7 @@ readargs(int argc, char *argv[])
     // init/read xrdb
     if (xresources) {
         XrmInitialize();
-
-        // also load config/profile if .Xresources
-        if (loadconfig) {
-            profilecmd = system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-load-default-profile > /dev/null");
-        }
-
-        if (!profilecmd||profilecmd) // load .Xresources, profilecmd is only here to avoid an annoying gcc warning
-            load_xresources();
+        load_xresources();
     }
 
     // no arguments
