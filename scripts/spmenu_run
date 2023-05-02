@@ -647,6 +647,11 @@ cache_desktop() {
     # write new entries
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+
+        if [ -x "$(command -v desktop-file-validate)" ]; then
+            desktop-file-validate "$cur_file" > /dev/null || continue
+        fi
+
         exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
         desc="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
