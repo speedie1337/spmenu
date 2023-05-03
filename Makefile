@@ -13,7 +13,7 @@ LDFLAGS  = $(LIBS)
 INCS = -I$(X11INC) -I$(FREETYPEINC) -I$(BDINC) `pkg-config --cflags $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF) $(LIBCONFIGCONF)`
 LIBS = -L$(X11LIB) $(X11LIBS) $(XINERAMALIBS) $(FREETYPELIBS) $(XRENDERLIBS) -lm `pkg-config --libs $(XFTCONF) $(PANGOCONF) $(PANGOXFTCONF) $(OPENSSLCONF) $(LIBCONFIGCONF)` $(BDLIBS) $(IMLIB2LIBS)
 
-SRC = libs/sl/draw.c spmenu.c libs/sl/main.c
+SRC = libs/libdrw/draw.c spmenu.c libs/sl/main.c
 OBJ = $(SRC:.c=.o)
 
 all: options spmenu
@@ -28,9 +28,9 @@ options:
 	$(CC) -c $(CFLAGS) -g $<
 
 
-$(OBJ): options.h libs/sl/draw.h
+$(OBJ): options.h libs/libdrw/draw.h
 
-spmenu: spmenu.o libs/sl/draw.o libs/sl/main.o
+spmenu: spmenu.o libs/libdrw/draw.o libs/sl/main.o
 	$(CC) -o $@ spmenu.o draw.o main.o $(LDFLAGS)
 
 clean:

@@ -17,7 +17,7 @@
 #endif
 
 #include "draw.h"
-#include "main.h"
+#include "../sl/main.h"
 
 #if !USEPANGO
 #define UTF_INVALID 0xFFFD
