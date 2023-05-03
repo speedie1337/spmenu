@@ -341,8 +341,16 @@ drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int
 }
 
 int
+xerrordummy(Display *dpy, XErrorEvent *ee)
+{
+	return 0;
+}
+
+int
 drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup)
 {
+    XSetErrorHandler(xerrordummy);
+
     #if USEPANGO // pango
 	char buf[1024];
 	int ty;
@@ -523,8 +531,12 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	if (d)
 		XftDrawDestroy(d);
 
+    XSync(drw->dpy, False);
+
 	return x + (render ? w : 0);
     #endif
+
+    XSync(drw->dpy, False);
 }
 
 void
