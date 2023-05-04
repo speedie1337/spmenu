@@ -135,6 +135,7 @@ have LibreSSL compatibility.
   - Probably use some minimal public domain library for this, I'd
 like to avoid adding more external dependencies unless it's a
 common dependency most people already have.
+- X11: Move from Xlib to libXcb
 
 ### Unlikely, but maybe at some point in the distant future
 

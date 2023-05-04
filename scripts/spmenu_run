@@ -32,6 +32,7 @@ USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
 DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
+AUTOREFRESH="${AUTOREFRESH:-false}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
@@ -43,7 +44,7 @@ LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 TITLEFILE="${TITLEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.title}"
 EXECFILE="${EXECFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.exec}"
 ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.icon}"
-DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}.desc}"
+DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.desc}"
 FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.file}"
 
 # arrays containing entries
@@ -247,6 +248,7 @@ DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .deskto
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 CACHE="true" # Cache entries (true/false)
+AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 IMAGE="true" # Display images (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
 DESCRIPTION_COLOR="#999888" # Description text color
@@ -474,7 +476,7 @@ EOF
 
 print_desktop_list() {
     # should we use cached files?
-    if [ -e "$TITLEFILE" ] && [ -e "$ICONFILE" ] && [ -e "$EXECFILE" ] && [ -e "$FILEFILE" ] && [ -e "$DESCFILE" ]; then
+    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ]; then
         cfiles=true
     else
         cfiles=false
@@ -488,12 +490,10 @@ print_desktop_list() {
     it_exec=()
     it_file=()
 
-    # write to log file
-    [ "$cfiles" = "false" ] && \
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
-
     # print data from entries
     if [ "$cfiles" = "false" ]; then
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
+
         entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
         cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
         cached="$(find "${tmpdir[@]}" -type f)";
@@ -631,7 +631,11 @@ cache_desktop() {
     printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
     printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
 
-    [ "$cached_c" = "$entry_c" ] || [ "$cached_c" -gt "$entry_c" ] && return # we don't need to cache anything, it's already done
+    if [ "$AUTOREFRESH" = "true" ]; then
+        if [ "$cached_c" = "$entry_c" ] || [ "$cached_c" -gt "$entry_c" ]; then
+            return
+        fi
+    fi
 
     [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
     [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
