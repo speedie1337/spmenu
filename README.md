@@ -158,10 +158,9 @@ skip over images after a set time limit.
 
 ## Scripts
 
-This build of spmenu should work with all spmenu/dmenu scripts.
-[Here](https://git.speedie.site/speedwm-extras) are a few I've written/use.
-If your scripts are useful enough, and written with spmenu in mind, feel free
-to pull request and put your scripts here!
+There's a page dedicated to user scripts
+[over on the wiki](https://spmenu.speedie.site/index.php/User+scripts). Feel
+free to contribute and try scripts on there.
 
 ## More information
 
