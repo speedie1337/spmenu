@@ -1,6 +1,4 @@
-void
-theme_load(void)
-{
+void theme_load(void) {
     char *xdg_conf;
     char *theme = NULL;
     char *home = NULL;

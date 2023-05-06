@@ -158,6 +158,7 @@ ResourcePref resources[] = {
     { "pango_highlight",             INTEGER, &pango_highlight },
 };
 
+// global colors
 ResourcePref cols[] = {
 	{ "color10",                     STRING,  &col_caretfg },
     { "color0",                      STRING,  &col_caretbg },

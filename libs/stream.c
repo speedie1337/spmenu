@@ -1,6 +1,4 @@
-void
-readstdin(void)
-{
+void readstdin(void) {
 	char buf[sizeof text], *p;
 	size_t i, imax = 0, itemsiz = 0;
 	unsigned int tmpmax = 0;

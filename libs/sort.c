@@ -1,6 +1,4 @@
-char **
-tokenize(char *source, const char *delim, int *llen)
-{
+char ** tokenize(char *source, const char *delim, int *llen) {
 	int listlength = 0, list_size = 0;
 	char **list = NULL, *token;
 
@@ -20,9 +18,7 @@ tokenize(char *source, const char *delim, int *llen)
 	return list;
 }
 
-int
-arrayhas(char **list, int length, char *item)
-{
+int arrayhas(char **list, int length, char *item) {
 	int i;
 
 	for (i = 0; i < length; i++) {

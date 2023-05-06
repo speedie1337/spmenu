@@ -6,9 +6,7 @@
 
 #include "main.h"
 
-void *
-ecalloc(size_t nmemb, size_t size)
-{
+void * ecalloc(size_t nmemb, size_t size) {
 	void *p;
 
 	if (!(p = calloc(nmemb, size)))
@@ -16,8 +14,7 @@ ecalloc(size_t nmemb, size_t size)
 	return p;
 }
 
-void
-die(const char *fmt, ...) {
+void die(const char *fmt, ...) {
 	va_list ap;
 
 	va_start(ap, fmt);

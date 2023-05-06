@@ -1,12 +1,8 @@
-char
-sixd_to_8bit(int x)
-{
+char sixd_to_8bit(int x) {
 	return x == 0 ? 0 : 0x37 + 0x28 * x;
 }
 
-void
-init_appearance(void)
-{
+void init_appearance(void) {
     int i, j;
 
     char cbuf[8];

@@ -94,6 +94,11 @@
 // include macros and other defines
 #include "libs/define.c"
 
+// mode
+static char modetext[16] = "Insert"; // default mode text
+static int curMode = 1; // 0 is command mode
+static int allowkeys = 1; // whether or not to interpret a keypress as an insertion
+
 // various headers
 #include "libs/libdrw/draw.h"
 #include "libs/sl/main.h"
@@ -101,7 +106,6 @@
 #include "libs/stream.h"
 #include "libs/schemes.h"
 #include "libs/arg.h"
-#include "libs/mode.h"
 #include "libs/xrdb.h"
 #include "libs/key.h"
 #include "libs/mouse.h"
@@ -208,6 +212,8 @@ static void navigatehistfile(int dir);
 static void grabfocus(void);
 static void pastesel(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
+static void xinitvisual(void);
+static void setupdisplay(void);
 static int max_textw(void);
 static size_t nextrune(int inc);
 
@@ -248,7 +254,6 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/argv.h"
 #include "libs/argv.c"
 #include "libs/xrdb.c"
-#include "libs/mode.c"
 #include "libs/client.h"
 #include "libs/client.c"
 #include "libs/match.h"
@@ -257,9 +262,7 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/arg.c"
 #include "libs/stream.c"
 
-void
-appenditem(struct item *item, struct item **list, struct item **last)
-{
+void appenditem(struct item *item, struct item **list, struct item **last) {
 	if (*last)
 		(*last)->right = item;
 	else
@@ -270,9 +273,7 @@ appenditem(struct item *item, struct item **list, struct item **last)
 	*last = item;
 }
 
-void
-recalculatenumbers(void)
-{
+void recalculatenumbers(void) {
 	unsigned int numer = 0, denom = 0;
 	struct item *item;
 	if (matchend) {
@@ -290,9 +291,7 @@ recalculatenumbers(void)
 	snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
 }
 
-void
-calcoffsets(void)
-{
+void calcoffsets(void) {
 	int i, n;
 
 	if (lines > 0)
@@ -327,9 +326,7 @@ calcoffsets(void)
 			break;
 }
 
-int
-max_textw(void)
-{
+int max_textw(void) {
 	int len = 0;
 
 	for (struct item *item = items; item && item->text; item++)
@@ -338,9 +335,7 @@ max_textw(void)
 	return len;
 }
 
-void
-cleanup(void)
-{
+void cleanup(void) {
 	size_t i;
 
     #if USEIMAGE
@@ -363,9 +358,7 @@ cleanup(void)
 	XCloseDisplay(dpy);
 }
 
-char *
-cistrstr(const char *h, const char *n)
-{
+char * cistrstr(const char *h, const char *n) {
 	size_t i;
 
 	if (!n[0])
@@ -382,9 +375,7 @@ cistrstr(const char *h, const char *n)
 	return NULL;
 }
 
-void
-grabfocus(void)
-{
+void grabfocus(void) {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 10000000  };
 	Window focuswin;
 	int i, revertwin;
@@ -419,9 +410,7 @@ grabfocus(void)
 	die("spmenu: cannot grab focus"); // not possible to grab focus, abort immediately
 }
 
-void
-insert(const char *str, ssize_t n)
-{
+void insert(const char *str, ssize_t n) {
 	if (strlen(text) + n > sizeof text - 1)
 		return;
 
@@ -437,9 +426,7 @@ insert(const char *str, ssize_t n)
 	match();
 }
 
-size_t
-nextrune(int inc)
-{
+size_t nextrune(int inc) {
 	ssize_t n;
 
 	// return location of next utf8 rune in the given direction (+1 or -1)
@@ -448,9 +435,7 @@ nextrune(int inc)
 	    return n;
 }
 
-void
-pastesel(void)
-{
+void pastesel(void) {
 	char *p, *q;
 	int di;
 	unsigned long dl;
@@ -468,9 +453,7 @@ pastesel(void)
 	drawmenu();
 }
 
-void
-xinitvisual()
-{
+void xinitvisual(void) {
 	XVisualInfo *infos;
 	XRenderPictFormat *fmt;
 	int nitems;
@@ -510,9 +493,7 @@ xinitvisual()
 	}
 }
 
-void
-setupdisplay(void)
-{
+void setupdisplay(void) {
 	int x, y, i;
     #if USEXINERAMA
     int j, di;
@@ -679,9 +660,7 @@ setupdisplay(void)
 	drawmenu();
 }
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	XWindowAttributes wa;
 
     readargs(argc, argv); // start by reading arguments

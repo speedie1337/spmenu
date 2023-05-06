@@ -1,6 +1,4 @@
-void
-buttonpress(XEvent *e)
-{
+void buttonpress(XEvent *e) {
 	struct item *item;
 	XButtonPressedEvent *ev = &e->xbutton;
 	int x = 0, y = 0, h = bh, w, item_num = 0;

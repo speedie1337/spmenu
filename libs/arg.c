@@ -1,6 +1,4 @@
-void
-moveleft(Arg *arg)
-{
+void moveleft(Arg *arg) {
     struct item *tmpsel;
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
@@ -36,9 +34,7 @@ moveleft(Arg *arg)
 	}
 }
 
-void
-moveright(Arg *arg)
-{
+void moveright(Arg *arg) {
     struct item *tmpsel;
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
@@ -73,10 +69,7 @@ moveright(Arg *arg)
 	}
 }
 
-void
-movedown(Arg *arg)
-{
-
+void movedown(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     for (int j = 0; j < argu; j++) {
@@ -89,9 +82,7 @@ movedown(Arg *arg)
 	drawmenu();
 }
 
-void
-moveup(Arg *arg)
-{
+void moveup(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     for (int j = 0; j < argu; j++) {
@@ -104,20 +95,18 @@ moveup(Arg *arg)
     drawmenu();
 }
 
-void
-complete(Arg *arg)
-{
+void complete(Arg *arg) {
     if (hideitem) return;
+
 	strncpy(text, sel->clntext, sizeof text - 1);
 	text[sizeof text - 1] = '\0';
 	cursor = strlen(text);
+
 	match();
     drawmenu();
 }
 
-void
-movenext(Arg *arg)
-{
+void movenext(Arg *arg) {
 	if (!next)
 		return;
 
@@ -126,9 +115,7 @@ movenext(Arg *arg)
     drawmenu();
 }
 
-void
-moveprev(Arg *arg)
-{
+void moveprev(Arg *arg) {
     if (!prev)
         return;
 
@@ -137,9 +124,7 @@ moveprev(Arg *arg)
     drawmenu();
 }
 
-void
-movestart(Arg *arg)
-{
+void movestart(Arg *arg) {
   	if (sel == matches) {
 		cursor = 0;
         drawmenu();
@@ -151,9 +136,7 @@ movestart(Arg *arg)
     drawmenu();
 }
 
-void
-moveend(Arg *arg)
-{
+void moveend(Arg *arg) {
     if (text[cursor] != '\0') {
 		cursor = strlen(text);
         drawmenu();
@@ -174,9 +157,7 @@ moveend(Arg *arg)
     drawmenu();
 }
 
-void
-paste(Arg *arg)
-{
+void paste(Arg *arg) {
     int clipboard;
 
     if (arg->i == 1) {
@@ -190,9 +171,7 @@ paste(Arg *arg)
 
 }
 
-void
-viewhist(Arg *arg)
-{
+void viewhist(Arg *arg) {
     int i;
 
     if (histfile) {
@@ -218,9 +197,7 @@ viewhist(Arg *arg)
     drawmenu();
 }
 
-void
-deleteword(Arg *arg)
-{
+void deleteword(Arg *arg) {
     if (cursor == 0) return;
 
 	while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
@@ -232,9 +209,7 @@ deleteword(Arg *arg)
     drawmenu();
 }
 
-void
-moveword(Arg *arg)
-{
+void moveword(Arg *arg) {
     if (arg->i < 0) { // move cursor to the start of the word
 		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
 			cursor = nextrune(-1);
@@ -252,9 +227,7 @@ moveword(Arg *arg)
     drawmenu();
 }
 
-void
-movecursor(Arg *arg)
-{
+void movecursor(Arg *arg) {
     if (arg->i < 0) {
 		if (cursor > 0) {
 			cursor = nextrune(-1);
@@ -268,9 +241,7 @@ movecursor(Arg *arg)
     drawmenu();
 }
 
-void
-backspace(Arg *arg)
-{
+void backspace(Arg *arg) {
     if (cursor == 0)
         return;
 
@@ -278,9 +249,7 @@ backspace(Arg *arg)
     drawmenu();
 }
 
-void
-selectitem(Arg *arg)
-{
+void selectitem(Arg *arg) {
     char *selection;
 
     if (sel && arg->i && !hideitem) {
@@ -299,31 +268,23 @@ selectitem(Arg *arg)
 	exit(0);
 }
 
-void
-navhistory(Arg *arg)
-{
+void navhistory(Arg *arg) {
     navigatehistfile(arg->i);
     drawmenu();
 }
 
-void
-restoresel(Arg *arg)
-{
+void restoresel(Arg *arg) {
     text[cursor] = '\0';
     match();
     drawmenu();
 }
 
-void
-clear(Arg *arg)
-{
+void clear(Arg *arg) {
     insert(NULL, 0 - cursor);
     drawmenu();
 }
 
-void
-clearins(Arg *arg)
-{
+void clearins(Arg *arg) {
     insert(NULL, 0 - cursor);
 
     curMode = 1;
@@ -334,16 +295,12 @@ clearins(Arg *arg)
     drawmenu();
 }
 
-void
-quit(Arg *arg)
-{
+void quit(Arg *arg) {
 	cleanup();
-	exit(1);
+	exit(0);
 }
 
-void
-savehistory(char *input)
-{
+void savehistory(char *input) {
 	unsigned int i;
 	FILE *fp;
 
@@ -378,17 +335,13 @@ out:
 	free(history);
 }
 
-void
-setimgsize(Arg *arg)
-{
+void setimgsize(Arg *arg) {
     #if USEIMAGE
     setimagesize(imagewidth + arg->i, imageheight + arg->i);
     #endif
 }
 
-void
-flipimg(Arg *arg)
-{
+void flipimg(Arg *arg) {
     #if USEIMAGE
 
     if (!image) return;
@@ -400,9 +353,7 @@ flipimg(Arg *arg)
     #endif
 }
 
-void
-setimgpos(Arg *arg)
-{
+void setimgpos(Arg *arg) {
     #if USEIMAGE
     if (!image || hideimage) return;
 
@@ -416,9 +367,7 @@ setimgpos(Arg *arg)
     #endif
 }
 
-void
-setimggaps(Arg *arg)
-{
+void setimggaps(Arg *arg) {
     #if USEIMAGE
     imagegaps += arg->i;
 
@@ -435,9 +384,7 @@ setimggaps(Arg *arg)
     #endif
 }
 
-void
-rotateimg(Arg *arg)
-{
+void rotateimg(Arg *arg) {
     #if USEIMAGE
 
     if (!image || hideimage) return;
@@ -448,9 +395,7 @@ rotateimg(Arg *arg)
     #endif
 }
 
-void
-toggleimg(Arg *arg)
-{
+void toggleimg(Arg *arg) {
     #if USEIMAGE
 
     hideimage = !hideimage;
@@ -460,9 +405,7 @@ toggleimg(Arg *arg)
     #endif
 }
 
-void
-defaultimg(Arg *arg)
-{
+void defaultimg(Arg *arg) {
     #if USEIMAGE
 
     if (hideimage || !image) return;
@@ -477,9 +420,7 @@ defaultimg(Arg *arg)
     #endif
 }
 
-void
-setlines(Arg *arg)
-{
+void setlines(Arg *arg) {
     lines += arg->i;
     if (lines < 0) lines = 0;
 
@@ -488,9 +429,7 @@ setlines(Arg *arg)
     drawmenu();
 }
 
-void
-setcolumns(Arg *arg)
-{
+void setcolumns(Arg *arg) {
     columns += arg->i;
     if (columns < 1) columns = 1;
 
@@ -499,27 +438,31 @@ setcolumns(Arg *arg)
     drawmenu();
 }
 
-void
-spawn(Arg *arg)
-{
+void spawn(Arg *arg) {
     if (!system(arg->c))
         die("spmenu: failed to execute command '%s'", arg->c);
     else
         exit(0);
 }
 
-void
-togglehighlight(Arg *arg)
-{
+void togglehighlight(Arg *arg) {
     hidehighlight = !hidehighlight;
     drawmenu();
 }
 
-void
-setprofile(Arg *arg)
-{
-    if (!system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile"))
+void setprofile(Arg *arg) {
+    if (!system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile")) {
         die("spmenu: failed to run profile menu\n");
-    else
+    } else {
         exit(0);
+    }
+}
+
+void switchmode(Arg *arg) {
+    curMode = !curMode;
+    allowkeys = !curMode;
+
+    strncpy(modetext, curMode ? instext : normtext, 15);
+
+    drawmenu();
 }

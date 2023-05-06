@@ -1,22 +1,22 @@
 // alpha array
-static unsigned int alphas[][2]      = {
+static unsigned int alphas[][2] = {
 	//                         fg   bg
-	[SchemeLArrow]         = { 255, 200 },
-	[SchemeRArrow]         = { 255, 200 },
-	[SchemeItemNorm]       = { 255, 200 },
-	[SchemeItemSel]        = { 255, 200 },
-	[SchemeItemNormPri]    = { 255, 200 },
-	[SchemeItemSelPri]     = { 255, 200 },
-	[SchemeMenu]           = { 255, 200 },
-    [SchemeInput]          = { 255, 200 },
-	[SchemePrompt]         = { 255, 200 },
-	[SchemeNormHighlight]  = { 255, 200 },
-	[SchemeSelHighlight]   = { 255, 200 },
-    [SchemeMode]           = { 255, 200 },
-    [SchemeCaret]          = { 255, 200 },
-    [SchemeNumber]         = { 255, 200 },
-    [SchemeBorder]         = { 255, 200 },
-    [SchemeCaps]           = { 255, 200 },
+	[SchemeLArrow]        = { 255, 200 },
+	[SchemeRArrow]        = { 255, 200 },
+	[SchemeItemNorm]      = { 255, 200 },
+	[SchemeItemSel]       = { 255, 200 },
+	[SchemeItemNormPri]   = { 255, 200 },
+	[SchemeItemSelPri]    = { 255, 200 },
+	[SchemeMenu]          = { 255, 200 },
+    [SchemeInput]         = { 255, 200 },
+	[SchemePrompt]        = { 255, 200 },
+	[SchemeNormHighlight] = { 255, 200 },
+	[SchemeSelHighlight]  = { 255, 200 },
+    [SchemeMode]          = { 255, 200 },
+    [SchemeCaret]         = { 255, 200 },
+    [SchemeNumber]        = { 255, 200 },
+    [SchemeBorder]        = { 255, 200 },
+    [SchemeCaps]          = { 255, 200 },
 };
 
 // colorscheme array
@@ -40,7 +40,7 @@ static char *colors[SchemeLast][2] = {
     [SchemeBorder]        = { NULL,              col_border        },
 };
 
-// sgr color array
+// sgr color array, first 16 colors are defined in the config, the rest are 256 colors
 static char *textcolors[] = {
 	col_sgr0,
 	col_sgr1,

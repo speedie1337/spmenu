@@ -1,6 +1,4 @@
-void
-fuzzymatch(void)
-{
+void fuzzymatch(void) {
 	struct item *it;
 	struct item **fuzzymatches = NULL;
     struct item *lhpprefix, *hpprefixend;
@@ -83,9 +81,7 @@ fuzzymatch(void)
 	}
 }
 
-void
-match(void)
-{
+void match(void) {
 	if (fuzzy) {
 		fuzzymatch();
 		return;
@@ -165,9 +161,7 @@ match(void)
 	calcoffsets();
 }
 
-int
-compare_distance(const void *a, const void *b)
-{
+int compare_distance(const void *a, const void *b) {
 	struct item *da = *(struct item **) a;
 	struct item *db = *(struct item **) b;
 

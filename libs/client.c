@@ -1,6 +1,4 @@
-void
-prepare_window_size(void)
-{
+void prepare_window_size(void) {
     // set horizontal and vertical padding
     sp = menupaddingh;
 	vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
@@ -8,9 +6,7 @@ prepare_window_size(void)
     return;
 }
 
-void
-create_window(int x, int y, int w, int h)
-{
+void create_window(int x, int y, int w, int h) {
     XSetWindowAttributes swa;
 
     swa.override_redirect = managed ? False : True;
@@ -32,27 +28,22 @@ create_window(int x, int y, int w, int h)
     return;
 }
 
-void
-set_window(void)
-{
+void set_window(void) {
     XClassHint ch = { class, class };
 
     // set border and class
     XSetWindowBorder(dpy, win, scheme[SchemeBorder][ColBg].pixel);
 	XSetClassHint(dpy, win, &ch);
+
     return;
 }
 
-void
-set_prop(void)
-{
+void set_prop(void) {
     if (dockproperty) XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1); // set dock property
     return;
 }
 
-void
-resizeclient(void)
-{
+void resizeclient(void) {
     int omh = mh;
     int x, y;
     #if USEXINERAMA

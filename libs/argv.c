@@ -1,6 +1,4 @@
-void
-readargs(int argc, char *argv[])
-{
+void readargs(int argc, char *argv[]) {
     int i = 0;
     int j = 0;
     int k = 0;
@@ -433,9 +431,7 @@ readargs(int argc, char *argv[])
         insert(input, strlen(input));
 }
 
-void
-usage(void)
-{
+void usage(void) {
     // print help
 	fputs("spmenu: fancy dynamic menu\n\n"
 		  "- Arguments -\n"

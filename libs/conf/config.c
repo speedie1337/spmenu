@@ -1,9 +1,7 @@
 #include <libconfig.h>
 #include "../theme/theme.c"
 
-void
-conf_init(void)
-{
+void conf_init(void) {
     char *xdg_conf;
     char *cfgfile = NULL;
     char *home = NULL;

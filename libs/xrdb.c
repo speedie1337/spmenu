@@ -1,6 +1,4 @@
-void
-resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
-{
+void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst) {
 	char *sdst = NULL;
 	int *idst = NULL;
 	float *fdst = NULL;
@@ -29,9 +27,7 @@ resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
 	}
 }
 
-void
-load_xresources(void)
-{
+void load_xresources(void) {
 	Display *display;
 	char *resm;
 	XrmDatabase db;
