@@ -515,16 +515,28 @@ static ButtonType btp[] = {
 };
 
 static ClickType ctp[] = {
-    { "clickwindow",  clickwindow },
-    { "clickprompt",  clickprompt },
-    { "clickinput",   clickinput },
-    { "clicklarrow",  clicklarrow },
-    { "clickitem",    clickitem },
-    { "clickselitem", clickselitem },
-    { "clickrarrow",  clickrarrow },
-    { "clicknumber",  clicknumber },
-    { "clickcaps",    clickcaps },
-    { "clickmode",    clickmode },
+    { "ClickWindow",  ClickWindow },
+    { "ClickPrompt",  ClickPrompt },
+    { "ClickInput",   ClickInput },
+    { "ClickLArrow",  ClickLArrow },
+    { "ClickItem",    ClickItem },
+    { "ClickSelItem", ClickSelItem },
+    { "ClickRArrow",  ClickRArrow },
+    { "ClickNumber",  ClickNumber },
+    { "ClickCaps",    ClickCaps },
+    { "ClickMode",    ClickMode },
+
+    // compatibility
+    { "clickwindow",  ClickWindow },
+    { "clickprompt",  ClickPrompt },
+    { "clickinput",   ClickInput },
+    { "clicklarrow",  ClickLArrow },
+    { "clickitem",    ClickItem },
+    { "clickselitem", ClickSelItem },
+    { "clickrarrow",  ClickRArrow },
+    { "clicknumber",  ClickNumber },
+    { "clickcaps",    ClickCaps },
+    { "clickmode",    ClickMode },
 };
 
 static void conf_init(void);

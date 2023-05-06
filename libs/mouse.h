@@ -1,15 +1,15 @@
 // clicks
 enum {
-    clickwindow,
-    clickprompt,
-    clickinput,
-    clicklarrow,
-    clickitem,
-    clickselitem,
-    clickrarrow,
-    clicknumber,
-    clickcaps,
-    clickmode,
+    ClickWindow,
+    ClickPrompt,
+    ClickInput,
+    ClickLArrow,
+    ClickItem,
+    ClickSelItem,
+    ClickRArrow,
+    ClickNumber,
+    ClickCaps,
+    ClickMode,
 };
 
 typedef struct {

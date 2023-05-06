@@ -29,17 +29,17 @@ buttonpress(XEvent *e)
     if (!strcmp(capstext, "")) capsWidth = 0; // no caps lock width for no chars
 	if (ev->window != win) return; // if incorrect or wrong window, return
 
-    click = clickwindow; // clicking anywhere, we use this and override it if we clicked on something specific
+    click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
 
     // check click position and override the value of click
     if (ev->x < x + promptw + powerlineprompt ? plw : 0) { // prompt
-        click = clickprompt;
+        click = ClickPrompt;
     } else if ((ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
-        click = clickcaps;
+        click = ClickCaps;
     } else if (ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // mode indicator
-        click = clickmode;
+        click = ClickMode;
     } else if (ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // match count
-        click = clicknumber;
+        click = ClickNumber;
     } else { // input
         w = (lines > 0 || !matches) ? mw - x : inputw;
 
@@ -47,7 +47,7 @@ buttonpress(XEvent *e)
            ((!prev || !curr->left) ? larrowWidth : 0)) ||
            (lines > 0 && ev->y >= y && ev->y <= y + h)) {
 
-            click = clickinput;
+            click = ClickInput;
         }
     }
 
@@ -64,24 +64,24 @@ buttonpress(XEvent *e)
 
 			y += h;
 
-            // clickselitem, called function doesn't matter
+            // ClickSelItem, called function doesn't matter
 			if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
-                    if (buttons[i].click == clickselitem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
                         puts(item->text);
                         exit(0);
-                    } else if (buttons[i].click == clickitem) {
-                        click = clickitem;
+                    } else if (buttons[i].click == ClickItem) {
+                        click = ClickItem;
                     }
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
                     if (ignoreconfmouse) break;
-                    if (cbuttons[i].click == clickselitem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
                         puts(item->text);
                         exit(0);
-                    } else if (cbuttons[i].click == clickitem) {
-                        click = clickitem;
+                    } else if (cbuttons[i].click == ClickItem) {
+                        click = ClickItem;
                     }
                 }
 			}
@@ -92,7 +92,7 @@ buttonpress(XEvent *e)
 		w = larrowWidth;
 		if (prev && curr->left) {
 			if (ev->x >= x && ev->x <= x + w) {
-                click = clicklarrow;
+                click = ClickLArrow;
 			}
 		}
         // item click
@@ -103,20 +103,20 @@ buttonpress(XEvent *e)
 			if (ev->x >= x && ev->x <= x + w) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
-                    if (buttons[i].click == clickselitem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
                         puts(item->text);
                         exit(0);
-                    } else if (buttons[i].click == clickitem) {
-                        click = clickitem;
+                    } else if (buttons[i].click == ClickItem) {
+                        click = ClickItem;
                     }
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
                     if (ignoreconfmouse) break;
-                    if (cbuttons[i].click == clickselitem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
                         puts(item->text);
                         exit(0);
-                    } else if (cbuttons[i].click == clickitem) {
-                        click = clickitem;
+                    } else if (cbuttons[i].click == ClickItem) {
+                        click = ClickItem;
                     }
                 }
 
@@ -126,7 +126,7 @@ buttonpress(XEvent *e)
 		w = rarrowWidth;
 		x = mw - w;
 		if (next && ev->x >= x && ev->x <= x + w) {
-            click = clickrarrow;
+            click = ClickRArrow;
 		}
     }
 
