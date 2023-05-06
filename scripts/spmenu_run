@@ -635,6 +635,10 @@ cache_desktop() {
         if [ "$cached_c" = "$entry_c" ] || [ "$cached_c" -gt "$entry_c" ]; then
             return
         fi
+    else
+        if [ "$clearcache" != "true" ] && [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ]; then
+            return;
+        fi
     fi
 
     [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
