@@ -1,4 +1,5 @@
 // This .Xresources array is read and compared to the xrdb. Simply add to the array if you need to.
+#if USEXRESOURCES
 ResourcePref resources[] = {
 	{ "font",			             STRING,  &font },
     { "col_caretfg",                 STRING,  &col_caretfg },
@@ -207,3 +208,4 @@ ResourcePref cols[] = {
 	{ "color14",                     STRING,  &col_sgr14 },
 	{ "color15",                     STRING,  &col_sgr15 },
 };
+#endif

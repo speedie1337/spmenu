@@ -29,3 +29,7 @@ OPENSSLCONF     = openssl
 # Comment these lines if you don't need it.
 LIBCONFIGTOGGLE = -DCONFIG
 LIBCONFIGCONF   = libconfig
+
+# .Xresources/xrdb support
+# Comment this line if you don't need it.
+XRDBTOGGLE      = -DXRESOURCES

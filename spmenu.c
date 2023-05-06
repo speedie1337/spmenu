@@ -57,6 +57,13 @@
 #define USECONFIG 1
 #endif
 
+// check if we should enable .Xresources support
+#ifndef XRESOURCES
+#define USEXRESOURCES 0
+#else
+#define USEXRESOURCES 1
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
@@ -83,8 +90,12 @@
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
-#include <X11/Xresource.h>
 #include <X11/Xft/Xft.h>
+
+// include xresources
+#if USEXRESOURCES
+#include <X11/Xresource.h>
+#endif
 
 // include pango used for markup
 #if USEPANGO

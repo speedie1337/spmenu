@@ -1,3 +1,4 @@
+#if USEXRESOURCES
 void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst) {
 	char *sdst = NULL;
 	int *idst = NULL;
@@ -49,3 +50,4 @@ void load_xresources(void) {
 
 	XCloseDisplay(display);
 }
+#endif

@@ -51,8 +51,12 @@ void readargs(int argc, char *argv[]) {
 
     // init/read xrdb
     if (xresources) {
+        #if USEXRESOURCES
         XrmInitialize();
         load_xresources();
+        #else
+        ; // avoids a warning
+        #endif
     }
 
     // no arguments

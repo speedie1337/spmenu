@@ -11,6 +11,7 @@ xinerama=true # enable multi monitor support
 openssl=true # enable support for openssl, used to calculate MD5
 fribidi=true # enable support for right to left languages
 libconfig=true # enable configuration and themes
+xresources=true # enable .Xresources support
 cc=gcc # compiler and linker
 opt=-O2 # level of optimization
 warn=true # warn about OS quirks

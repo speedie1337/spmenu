@@ -7,6 +7,7 @@ makebin="${makebin:-$(command -v make)}"
 cc="${cc:-${CC:-gcc}}"
 opt="${opt:-${OPT:--O2}}"
 warn="${warn:-true}"
+xresources=""
 
 check_dist() {
     [ -f "/etc/pacman.conf" ] && [ "$warn" != "false" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
@@ -98,6 +99,11 @@ build() {
         libconfigconf="libconfig"
     fi
 
+    # xresources
+    if [ "$xresources" = "true" ]; then
+        xrdbtoggle="-DXRESOURCES"
+    fi
+
     # fribidi
     if [ "$fribidi" = "true" ]; then
         bdlibs="-lfribidi"
@@ -131,6 +137,7 @@ build() {
         OPENSSLCONF="$opensslconf" \
         LIBCONFIGTOGGLE="$libconfigtoggle" \
         LIBCONFIGCONF="$libconfigconf" \
+        XRDBTOGGLE="$xrdbtoggle" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
@@ -160,6 +167,7 @@ install() {
         OPENSSLCONF="$opensslconf" \
         LIBCONFIGTOGGLE="$libconfigtoggle" \
         LIBCONFIGCONF="$libconfigconf" \
+        XRDBTOGGLE="$xrdbtoggle" \
         X11LIB="$X11LIB" \
         X11INC="$X11INC"
 }
