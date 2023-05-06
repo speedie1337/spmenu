@@ -30,6 +30,8 @@ void readstdin(void) {
 			imax = i;
 		}
 
+        items[i].index = i;
+
         // parse image markup
         #if USEIMAGE
         if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {

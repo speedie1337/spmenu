@@ -146,6 +146,7 @@ ResourcePref resources[] = {
     { "managed",                     INTEGER, &managed },
     { "mon",                         INTEGER, &mon },
     { "sortmatches",                 INTEGER, &sortmatches },
+    { "printindex",                  INTEGER, &printindex },
     { "fuzzy",                       INTEGER, &fuzzy },
     { "pango_item",                  INTEGER, &pango_item },
     { "pango_prompt",                INTEGER, &pango_prompt },

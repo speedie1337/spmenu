@@ -164,6 +164,7 @@ struct item {
     char *ex;
 	struct item *left, *right;
     int hp;
+    int index;
 	double distance;
 };
 

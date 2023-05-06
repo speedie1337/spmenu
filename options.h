@@ -225,6 +225,7 @@ static int pango_mode                  = 0; /* Enable support for pango markup f
 static int pango_password              = 0; /* Enable support for pango markup for the password text */
 
 /* Misc */
-static int coloritems                  = 1; /* Color items or not */
-static int sgr                         = 1; /* Support SGR sequences or not */
-static char *worddelimiters            = " "; /* Word delimiters used for keybinds that change words, " " is default. */
+static int printindex                  = 0; /* Print index instead of the text itself (0/1) */
+static int coloritems                  = 1; /* Color items (0/1) */
+static int sgr                         = 1; /* Support SGR sequences (0/1) */
+static char *worddelimiters            = " "; /* Word delimiters used for keybinds that change words, Space is default. */

@@ -400,6 +400,17 @@ void conf_init(void) {
         }
     }
 
+    // load options spmenu.output
+    config_setting_t *output_setting = config_lookup(&cfg, "spmenu.output");
+    if (output_setting != NULL) {
+        for (unsigned int i = 0; i < config_setting_length(output_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(output_setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "printindex", &printindex); // spmenu.output.printindex
+        }
+    }
+
     // load options spmenu.mode
     config_setting_t *mode_setting = config_lookup(&cfg, "spmenu.mode");
     if (mode_setting != NULL) {

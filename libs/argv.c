@@ -94,6 +94,10 @@ void readargs(int argc, char *argv[]) {
 		     fuzzy = 1;
         } else if (!strcmp(argv[i], "-NF") || (!strcmp(argv[i], "--no-fuzzy"))) {   // no fuzzy matching
 		     fuzzy = 0;
+        } else if (!strcmp(argv[i], "-ix") || (!strcmp(argv[i], "--print-index"))) {   // print index
+		     printindex = 1;
+        } else if (!strcmp(argv[i], "-nix") || (!strcmp(argv[i], "--no-print-index"))) {   // no print index
+		     printindex = 0;
         } else if (!strcmp(argv[i], "-s") || (!strcmp(argv[i], "--case-sensitive")) || (!strcmp(argv[i], "--sensitive"))) { // case-sensitive item matching
             casesensitive = 1;
         } else if (!strcmp(argv[i], "-ns") || (!strcmp(argv[i], "--case-insensitive")) || (!strcmp(argv[i], "--insensitive"))) { // case-insensitive item matching
@@ -448,6 +452,8 @@ void usage(void) {
           "spmenu -mc       --max-cache <size>                          Set max image cache size to <size>\n"
           "spmenu -rw,      --relative-width                            Enable relative input width\n"
           "spmenu -nrw,     --no-relative-width                         Disable relative input width\n"
+          "spmenu -ix,      --print-index                               Print index instead of actual text\n"
+          "spmenu -nix,     --no-print-index                            Don't print index instead of actual text\n"
           "spmenu -f,       --fast                                      Grabs keyboard before reading stdin\n"
 		  "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
 		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"

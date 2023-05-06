@@ -54,6 +54,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nrw, --no-relative-width`
 :   Disable relative input width
 
+`-ix, --print-index`
+:   Print index instead of actual text
+
+`-nix, --no-print-index`
+:   Don't print index instead of actual text
+
 `-f, --fast`
 :   Grabs keyboard before reading stdin
 

@@ -252,6 +252,14 @@ void backspace(Arg *arg) {
 void selectitem(Arg *arg) {
     char *selection;
 
+    // print index
+    if (printindex && sel && arg->i) {
+        fprintf(stdout, "%d\n", sel->index);
+        cleanup();
+        exit(0);
+    }
+
+    // selected item or input?
     if (sel && arg->i && !hideitem) {
         selection = sel->text;
     } else {
