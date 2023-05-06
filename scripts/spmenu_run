@@ -37,7 +37,6 @@ AUTOREFRESH="${AUTOREFRESH:-false}"
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
 TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
-CACHE="${CACHE:-true}"
 IMAGE="${IMAGE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 
@@ -247,7 +246,6 @@ HELP_COLOR="#FFFF00"
 DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .desktop entries
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
-CACHE="true" # Cache entries (true/false)
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 IMAGE="true" # Display images (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
