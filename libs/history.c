@@ -1,6 +1,4 @@
-void
-loadhistory(void)
-{
+void loadhistory(void) {
 	FILE *fp = NULL;
 	static size_t cap = 0;
 	size_t llen;
@@ -50,9 +48,7 @@ loadhistory(void)
 	}
 }
 
-void
-navigatehistfile(int dir)
-{
+void navigatehistfile(int dir) {
 	static char def[BUFSIZ];
 	char *p = NULL;
 	size_t len = 0;

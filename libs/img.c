@@ -1,7 +1,5 @@
 #if USEIMAGE
-void
-setimagesize(int width, int height)
-{
+void setimagesize(int width, int height) {
     int oih = 0;
     int oiw = 0;
 
@@ -28,9 +26,7 @@ setimagesize(int width, int height)
     drawmenu();
 }
 
-void
-flipimage(void)
-{
+void flipimage(void) {
     // flip image
     switch (flip) {
         case 1: // horizontal
@@ -48,25 +44,19 @@ flipimage(void)
     }
 }
 
-void
-rotateimage(void)
-{
+void rotateimage(void) {
     rotation %= 4;
     imlib_image_orientate(rotation);
 }
 
-void
-cleanupimage(void)
-{
+void cleanupimage(void) {
     if (image) { // free image using imlib2
         imlib_free_image();
         image = NULL;
     }
 }
 
-void
-drawimage(void)
-{
+void drawimage(void) {
     int width = 0, height = 0;
     char *limg = NULL;
 
@@ -132,9 +122,7 @@ drawimage(void)
     }
 }
 
-void
-setimageopts(void)
-{
+void setimageopts(void) {
     imlib_set_cache_size(8192 * 1024);
 	imlib_context_set_blend(1);
 	imlib_context_set_dither(1);
@@ -145,9 +133,7 @@ setimageopts(void)
 	imlib_context_set_drawable(win);
 }
 
-void
-createifnexist(const char *dir)
-{
+void createifnexist(const char *dir) {
     // exists, so return
 	if (access(dir, F_OK) == 0)
         return;
@@ -161,9 +147,7 @@ createifnexist(const char *dir)
 		fprintf(stderr, "spmenu: failed to create directory: %s\n", dir);
 }
 
-void
-createifnexist_rec(const char *dir)
-{
+void createifnexist_rec(const char *dir) {
 	char *buf, *s = (char*)dir, *bs;
 
     if(!(buf = malloc(strlen(s)+1)))
@@ -181,9 +165,7 @@ createifnexist_rec(const char *dir)
 	free(buf);
 }
 
-void
-loadimage(const char *file, int *width, int *height)
-{
+void loadimage(const char *file, int *width, int *height) {
     if (!file) return;
 
 	image = imlib_load_image(file);
@@ -197,9 +179,7 @@ loadimage(const char *file, int *width, int *height)
 	*height = imlib_image_get_height();
 }
 
-void
-scaleimage(int *width, int *height)
-{
+void scaleimage(int *width, int *height) {
 	int new_width, new_height;
 	float aspect = 1.0f;
 
@@ -230,9 +210,7 @@ scaleimage(int *width, int *height)
     return;
 }
 
-void
-loadimagecache(const char *file, int *width, int *height)
-{
+void loadimagecache(const char *file, int *width, int *height) {
 	int slen = 0, i;
 	unsigned char digest[MD5_DIGEST_LENGTH];
 	char md5[MD5_DIGEST_LENGTH*2+1];
@@ -326,8 +304,7 @@ loadimagecache(const char *file, int *width, int *height)
     }
 }
 
-void
-jumptoindex(unsigned int index) {
+void jumptoindex(unsigned int index) {
 	unsigned int i;
 	sel = curr = matches;
 
@@ -341,9 +318,7 @@ jumptoindex(unsigned int index) {
 	}
 }
 
-void
-resizetoimageheight(int imageheight)
-{
+void resizetoimageheight(int imageheight) {
 	int omh = mh, olines = lines;
 	lines = reallines;
     int wtr = 0;

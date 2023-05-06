@@ -1,6 +1,4 @@
-void
-eventloop(void)
-{
+void eventloop(void) {
 	XEvent ev;
     #if USEIMAGE
     int noimg = 0;

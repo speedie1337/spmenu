@@ -1,6 +1,4 @@
-void
-updatenumlockmask(void)
-{
+void updatenumlockmask(void) {
 	unsigned int i, j;
 	XModifierKeymap *modmap;
 
@@ -14,9 +12,7 @@ updatenumlockmask(void)
 	XFreeModifiermap(modmap);
 }
 
-void
-keypress(XEvent *e)
-{
+void keypress(XEvent *e) {
    	updatenumlockmask();
     {
         unsigned int i;
@@ -72,9 +68,7 @@ keypress(XEvent *e)
     }
 }
 
-void
-grabkeyboard(void)
-{
+void grabkeyboard(void) {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
 	int i;
 
@@ -93,9 +87,7 @@ grabkeyboard(void)
 	die("cannot grab keyboard");
 }
 
-void
-getcapsstate(void)
-{
+void getcapsstate(void) {
     unsigned int cs = 0;
 
     XkbGetIndicatorState(dpy, XkbUseCoreKbd, &cs);
