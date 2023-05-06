@@ -77,7 +77,7 @@ static int passwd                      = 0; /* Replace input with another charac
 static int sortmatches                 = 1; /* Sort matches (0/1) */
 static int casesensitive               = 0; /* Case-sensitive by default? (0/1) */
 static int preselected                 = 0; /* Which line should spmenu preselect? */
-static int accuratewidth               = 1; /* Enable accurate width. May have a performance hit if you are matching a lot of items at once */
+static int accuratewidth               = 0; /* Enable accurate width. May have a performance hit if you are matching a lot of items at once */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
 
 /* Line options */

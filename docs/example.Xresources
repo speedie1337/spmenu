@@ -132,7 +132,7 @@ spmenu.menumarginh:         0
 spmenu.xpos:                0
 spmenu.ypos:                0
 spmenu.minwidth:            1000
-spmenu.accuratewidth:       1
+spmenu.accuratewidth:       0
 spmenu.borderwidth:         0
 
 !! Properties
