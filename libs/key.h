@@ -20,4 +20,4 @@ static void grabkeyboard(void);
 static void getcapsstate(void);
 
 static Key ckeys[256];
-static char capstext[16] = "Caps Lock";
+static char capstext[16];
