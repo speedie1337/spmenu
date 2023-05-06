@@ -63,6 +63,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-f, --fast`
 :   Grabs keyboard before reading stdin
 
+`-r, --incremental`
+:   Print text every time a key is pressed
+
+`-nr, --no-incremental`
+:   Don't print text every time a key is pressed
+
 `-F, --fuzzy`
 :   Enable fuzzy matching
 

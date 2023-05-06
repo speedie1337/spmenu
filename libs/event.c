@@ -31,6 +31,11 @@ void eventloop(void) {
                     grabfocus();
                 break;
             case KeyPress: // read key array and call functions
+                if (incremental) {
+                    puts(text);
+                    fflush(stdout);
+                }
+
                 keypress(&ev);
                 break;
             case SelectionNotify: // paste selection

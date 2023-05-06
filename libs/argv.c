@@ -86,6 +86,10 @@ void readargs(int argc, char *argv[]) {
 			mode = 1;
         } else if (!strcmp(argv[i], "-f") || (!strcmp(argv[i], "--fast"))) { // grabs keyboard before reading stdin
 			fast = 1;
+        } else if (!strcmp(argv[i], "-r") || (!strcmp(argv[i], "--incremental"))) { // incremental
+			incremental = 1;
+        } else if (!strcmp(argv[i], "-nr") || (!strcmp(argv[i], "--no-incremental"))) { // no incremental
+			incremental = 0;
         } else if (!strcmp(argv[i], "-rw") || (!strcmp(argv[i], "--relative-width"))) {  // relative width
 			accuratewidth = 1;
         } else if (!strcmp(argv[i], "-nrw") || (!strcmp(argv[i], "--no-relative-width"))) {   // no relative width
@@ -455,6 +459,8 @@ void usage(void) {
           "spmenu -ix,      --print-index                               Print index instead of actual text\n"
           "spmenu -nix,     --no-print-index                            Don't print index instead of actual text\n"
           "spmenu -f,       --fast                                      Grabs keyboard before reading stdin\n"
+          "spmenu -r,       --incremental                               Print text every time a key is pressed\n"
+          "spmenu -nr,      --no-incremental                            Don't print text every time a key is pressed\n"
 		  "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
 		  "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
 		  "spmenu -P,       --password                                  Hide characters\n"

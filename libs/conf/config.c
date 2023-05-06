@@ -408,6 +408,7 @@ void conf_init(void) {
 
             // look up
             config_setting_lookup_int(conf, "printindex", &printindex); // spmenu.output.printindex
+            config_setting_lookup_int(conf, "incremental", &incremental); // spmenu.output.incremental
         }
     }
 
