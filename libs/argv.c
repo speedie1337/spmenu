@@ -276,6 +276,8 @@ void readargs(int argc, char *argv[]) {
 			input = argv[++i];
 		else if (!strcmp(argv[i], "-fn") || (!strcmp(argv[i], "--font")))  // font or font set
             fonts[0] = argv[++i];
+        else if (!strcmp(argv[i], "-lf") || (!strcmp(argv[i], "--lf"))) // list file
+            listfile = argv[++i];
 		else if (!strcmp(argv[i], "-nmt") || (!strcmp(argv[i], "--normal-mode-text")))  // normal mode text
 			strcpy(normtext, argv[++i]);
 		else if (!strcmp(argv[i], "-imt") || (!strcmp(argv[i], "--insert-mode-text")))  // insert mode text
@@ -531,7 +533,8 @@ void usage(void) {
           "spmenu -ngbc,    --no-global-colors                          Don't recognize global colors (such as *.color1) on runtime\n"
 		  "spmenu -m,       --monitor <monitor>                         Specify a monitor to run spmenu on\n"
 		  "spmenu -w,       --embed <window id>                         Embed spmenu inside <window id>\n"
-		  "spmenu -H,       --hist-file <hist file>                     Specify a path to save the history to\n"
+		  "spmenu -H,       --hist-file <hist file>                     Specify a file to save the history to\n"
+          "spmenu -lf,      --list-file <list file>                     Specify a file to load entries from\n"
           "spmenu -ig,      --image-gaps <gaps>                         Set image gaps to <gaps>\n"
           "spmenu -txp,     --text-padding <padding>                    Set text padding to <padding>\n"
 		  "spmenu -lp,      --vertical-padding <padding>                Set the vertical padding\n"

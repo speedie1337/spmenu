@@ -7,6 +7,7 @@ void eventloop(void) {
 	while (!XNextEvent(dpy, &ev)) {
 		if (XFilterEvent(&ev, None))
 			continue;
+
 		switch(ev.type) {
             case DestroyNotify:
                 if (ev.xdestroywindow.window != win)
@@ -31,6 +32,15 @@ void eventloop(void) {
                     grabfocus();
                 break;
             case KeyPress: // read key array and call functions
+                if (listfile) {
+                    readfile();
+
+                    if (listchanged) {
+                        match();
+                        drawmenu();
+                    }
+                }
+
                 if (incremental) {
                     puts(text);
                     fflush(stdout);

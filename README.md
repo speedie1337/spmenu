@@ -22,6 +22,7 @@ It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [
 - Vim-like modes, including indicator.
 - The ability to move around items with keybinds.
 - Customizable/dynamic line/column size.
+- Ability to update entries dynamically by reading from file
 - IME support
   - Was removed from suckless dmenu years ago due to issues I've resolved
 - Powerlines
@@ -130,7 +131,6 @@ have LibreSSL compatibility.
   - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
   for each added line.
 - Matching: Add support for contextual completions similar to xprompt
-- Matching: FIFO, used to dynamically refresh entries.
 - Matching: Regex matching
   - Probably use some minimal public domain library for this, I'd
 like to avoid adding more external dependencies unless it's a

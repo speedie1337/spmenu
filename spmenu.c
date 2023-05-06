@@ -149,7 +149,7 @@ static int vp;    // vertical padding for bar
 static int sp;    // side padding for bar
 static int cursorstate = 1; // cursor state
 static size_t cursor;
-static struct item *items = NULL, *backup_items;
+static struct item *items = NULL, *backup_items, *list_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
 static int screen;
@@ -229,6 +229,12 @@ static void setupdisplay(void);
 static int max_textw(void);
 static size_t nextrune(int inc);
 
+static char **list;
+static size_t listsize;
+static int listcount;
+static int olistcount;
+static int listchanged = 0;
+
 // user configuration
 #include "options.h"
 #include "keybinds.h"
@@ -256,8 +262,6 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/img.c"
 #include "libs/rtl.h"
 #include "libs/rtl.c"
-#include "libs/event.h"
-#include "libs/event.c"
 #include "libs/key.c"
 #include "libs/mouse.c"
 #include "libs/sort.c"
@@ -273,6 +277,8 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
+#include "libs/event.h"
+#include "libs/event.c"
 
 void appenditem(struct item *item, struct item **list, struct item **last) {
 	if (*last)
@@ -736,9 +742,17 @@ int main(int argc, char *argv[]) {
     // fast (-f) means we grab keyboard before reading standard input
 	if (fast && !isatty(0)) {
 		grabkeyboard();
-		readstdin();
+
+        if (!listfile)
+    		readstdin();
+        else
+            readfile();
 	} else {
-		readstdin();
+        if (listfile)
+            readfile();
+        else
+		    readstdin();
+
 		grabkeyboard();
 	}
 

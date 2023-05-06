@@ -7,7 +7,7 @@ void readstdin(void) {
     char *limg = NULL;
     #endif
 
-	if (passwd){
+	if (passwd) {
     	inputw = lines = 0;
     	return;
   	}
@@ -111,4 +111,76 @@ void readstdin(void) {
     #endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
+}
+
+void readfile(void) {
+    if (passwd){
+    	inputw = lines = 0;
+    	return;
+  	}
+
+	size_t len;
+    static size_t cap = 0;
+    char *l;
+
+    FILE *ef = fopen(listfile, "r");
+
+    if (!ef) return;
+
+    items = NULL;
+    //list = NULL;
+    listsize = 0;
+
+    for (;;) {
+        l = NULL;
+        len = 0;
+
+        if (-1 == getline(&l, &len, ef)) {
+            if (ferror(ef)) die("spmenu: failed to read file\n");
+            free(l);
+            break;
+        }
+
+        if (cap == listsize) {
+            cap += 64 * sizeof(char*);
+            list = realloc(list, cap);
+            if (!list) die("spmenu: failed to realloc memory");
+        }
+
+        strtok(l, "\n");
+        list[listsize] = l;
+        listsize++;
+    }
+
+    if (fclose(ef)) {
+        die("spmenu: failed to close file %s\n", listfile);
+    }
+
+    if (!list_items) {
+        list_items = items;
+        items = calloc(listsize + 1, sizeof(struct item));
+        if (!items) die("spmenu: cannot alloc memory\n");
+
+        int i = 0;
+
+        for (i = 0; i < listsize; i++) {
+            items[i].text = list[i];
+        }
+
+        if (i == olistcount) {
+            listcount = i;
+            listchanged = 0;
+        } else {
+            olistcount = listcount;
+            listcount = i;
+            listchanged = 1;
+        }
+    } else {
+        free(items);
+        items = list_items;
+        list_items = NULL;
+    }
+
+    //match();
+    //drawmenu();
 }

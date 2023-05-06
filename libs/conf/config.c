@@ -443,6 +443,9 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "accuratewidth", &accuratewidth); // spmenu.match.accuratewidth
             config_setting_lookup_string(conf, "delimiters", &dest); // spmenu.match.delimiters
             worddelimiters = strdup(dest);
+            if (config_setting_lookup_string(conf, "listfile", &dest)) // spmenu.match.listfile
+                if (dest && strcmp(strdup(dest), "NULL"))
+                    listfile = strdup(dest);
         }
     }
 

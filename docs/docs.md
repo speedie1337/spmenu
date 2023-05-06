@@ -265,7 +265,11 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Embed spmenu inside window id
 
 `-H, --hist-file hist file`
-:   Specify a path to save the history to
+:   Specify a file to save the history to
+
+`-lf, --list-file list file`
+:   Specify a file to load entries from
+
 
 `-ig, --image-gaps gaps`
 :   Set image gaps to gaps
