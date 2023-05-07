@@ -2,15 +2,13 @@ void readstdin(void) {
 	char buf[sizeof text], *p;
 	size_t i, imax = 0, itemsiz = 0;
 	unsigned int tmpmax = 0;
-    #if USEIMAGE
-    int w, h;
-    char *limg = NULL;
-    #endif
 
 	if (passwd) {
     	inputw = lines = 0;
     	return;
   	}
+
+    int o = 0;
 
 	// read each line from stdin and add it to the item list
 	for (i = 0; fgets(buf, sizeof buf, stdin); i++) {
@@ -32,83 +30,19 @@ void readstdin(void) {
 
         items[i].index = i;
 
-        // parse image markup
-        #if USEIMAGE
-        if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
-            if(!(items[i].image = malloc(strlen(items[i].text)+1)))
-                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
-            if(sscanf(items[i].text, "IMG:%[^\t]", items[i].image)) {
-                items[i].text += strlen("IMG:")+strlen(items[i].image)+1;
-            } else {
-                free(items[i].image);
-                items[i].image = NULL;
-            }
-        } else {
-            items[i].image = NULL;
-        }
-
-        // load image cache (or generate)
-        if (generatecache && longestedge <= 256 && items[i].image && strcmp(items[i].image, limg ? limg : "")) {
-            loadimagecache(items[i].image, &w, &h);
-        }
-
-        if(items[i].image) {
-            limg = items[i].image;
-        }
-        #else // remove the data, just for convenience
-        char *data;
-
-        if(!strncmp("IMG:", items[i].text, strlen("IMG:"))) {
-            if(!(data = malloc(strlen(items[i].text)+1)))
-                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
-            if(sscanf(items[i].text, "IMG:%[^\t]", data)) {
-                items[i].text += strlen("IMG:")+strlen(data)+1;
-            }
-        }
-        #endif
-
-
-        /* TODO: use this for something
-         * current usage is not very useful, however it's here to be used later.
-         */
-        if(!(items[i].ex = malloc(strlen(items[i].text)+1)))
-                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[i].text));
-        if (!strncmp("spmenu:", items[i].text, strlen("spmenu:"))) {
-            if (sscanf(items[i].text, "spmenu:%[^\t]", items[i].ex)) {
-                items[i].text += strlen("spmenu:")+strlen(items[i].ex)+1;
-            }
-
-            // spmenu:version
-            if (!strncmp("version", items[i].ex, strlen("version"))) {
-                fprintf(stdout, "spmenu version %s", VERSION);
-                exit(0);
-            }
-
-            // spmenu:license
-            if (!strncmp("license", items[i].ex, strlen("license"))) {
-                fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
-                exit(0);
-            }
-
-            // spmenu:test
-            if (!strncmp("test", items[i].ex, strlen("test"))) {
-                int i = system("command -v spmenu_test > /dev/null && spmenu_test");
-                if (i||!i) exit(i);
-            }
+        if (parsemarkup(i)) {
+            o = 1;
         }
 	}
 
+    if (!o) longestedge = imagegaps = 0;
+
     // clean
 	if (items) {
-        #if USEIMAGE
-        items[i].image = NULL;
-        #endif
 		items[i].text = NULL;
+        items[i].image = NULL;
     }
 
-    #if USEIMAGE
-    if (!limg) longestedge = imagegaps = 0;
-    #endif
 	inputw = items ? TEXTWM(items[imax].text) : 0;
 	lines = MIN(lines, i);
 }
@@ -128,7 +62,6 @@ void readfile(void) {
     if (!ef) return;
 
     items = NULL;
-    //list = NULL;
     listsize = 0;
 
     for (;;) {
@@ -162,10 +95,16 @@ void readfile(void) {
         if (!items) die("spmenu: cannot alloc memory\n");
 
         int i = 0;
+        int o = 0;
 
         for (i = 0; i < listsize; i++) {
             items[i].text = list[i];
+
+            if (parsemarkup(i))
+                o = 1;
         }
+
+        if (!o) longestedge = imagegaps = 0;
 
         if (i == olistcount) {
             listcount = i;
@@ -180,7 +119,81 @@ void readfile(void) {
         items = list_items;
         list_items = NULL;
     }
+}
 
-    //match();
-    //drawmenu();
+int parsemarkup(int index) {
+        #if USEIMAGE
+        int w, h;
+        char *limg = NULL;
+        #endif
+
+        // parse image markup
+        #if USEIMAGE
+        if(!strncmp("IMG:", items[index].text, strlen("IMG:"))) {
+            if(!(items[index].image = malloc(strlen(items[index].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
+            if(sscanf(items[index].text, "IMG:%[^\t]", items[index].image)) {
+                items[index].text += strlen("IMG:")+strlen(items[index].image)+1;
+            } else {
+                free(items[index].image);
+                items[index].image = NULL;
+            }
+        } else {
+            items[index].image = NULL;
+        }
+
+        // load image cache (or generate)
+        if (generatecache && longestedge <= maxcache && items[index].image && strcmp(items[index].image, limg ? limg : "")) {
+            loadimagecache(items[index].image, &w, &h);
+        }
+
+        if(items[index].image) {
+            limg = items[index].image;
+        }
+        #else // remove the data, just for convenience
+        char *data;
+
+        if(!strncmp("IMG:", items[index].text, strlen("IMG:"))) {
+            if(!(data = malloc(strlen(items[index].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
+            if(sscanf(items[index].text, "IMG:%[^\t]", data)) {
+                items[index].text += strlen("IMG:")+strlen(data)+1;
+            }
+        }
+        #endif
+
+        /* TODO: use this for something
+         * current usage is not very useful, however it's here to be used later.
+         */
+        if(!(items[index].ex = malloc(strlen(items[index].text)+1)))
+                fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
+        if (!strncmp("spmenu:", items[index].text, strlen("spmenu:"))) {
+            if (sscanf(items[index].text, "spmenu:%[^\t]", items[index].ex)) {
+                items[index].text += strlen("spmenu:")+strlen(items[index].ex)+1;
+            }
+
+            // spmenu:version
+            if (!strncmp("version", items[index].ex, strlen("version"))) {
+                fprintf(stdout, "spmenu version %s", VERSION);
+                exit(0);
+            }
+
+            // spmenu:license
+            if (!strncmp("license", items[index].ex, strlen("license"))) {
+                fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
+                exit(0);
+            }
+
+            // spmenu:test
+            if (!strncmp("test", items[index].ex, strlen("test"))) {
+                int i = system("command -v spmenu_test > /dev/null && spmenu_test");
+                if (i||!i) exit(i);
+            }
+        }
+
+        if (limg) {
+            return 1;
+        } else {
+            return 0;
+        }
 }
