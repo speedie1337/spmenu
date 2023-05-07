@@ -105,7 +105,7 @@ void readfile(void) {
         }
 
         inputw = items ? TEXTWM(items[i].text) : 0;
-	    lines = MIN(lines, i);
+	    lines = i;
 
         if (!o) longestedge = imagegaps = 0;
 
@@ -116,6 +116,8 @@ void readfile(void) {
             olistcount = listcount;
             listcount = i;
             listchanged = 1;
+
+            resizeclient();
         }
     } else {
         free(items);
