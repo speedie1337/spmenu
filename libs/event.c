@@ -32,15 +32,6 @@ void eventloop(void) {
                     grabfocus();
                 break;
             case KeyPress: // read key array and call functions
-                if (listfile) {
-                    readfile();
-
-                    if (listchanged) {
-                        match();
-                        drawmenu();
-                    }
-                }
-
                 if (incremental) {
                     puts(text);
                     fflush(stdout);
@@ -61,6 +52,15 @@ void eventloop(void) {
                 drawmenu();
                 break;
 		}
+
+        if (listfile) {
+            readfile();
+
+            if (listchanged) {
+                match();
+                drawmenu();
+            }
+        }
 
         // redraw image on X11 event
         #if USEIMAGE
