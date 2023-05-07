@@ -127,6 +127,8 @@ is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
 - Image support: Ability to display icons, similar to rofi
 - Text drawing: Use cairo for text drawing over Xft.
+- Item updating: Save item index before drawing the menu again
+- Typing: Disable insert mode completely when !type
 - Lines: Rofi-like newlines in the same entry
   - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
   for each added line.
@@ -135,10 +137,10 @@ have LibreSSL compatibility.
   - Probably use some minimal public domain library for this, I'd
 like to avoid adding more external dependencies unless it's a
 common dependency most people already have.
-- X11: Move from Xlib to libXcb
 
 ### Unlikely, but maybe at some point in the distant future
 
+- X11: Move from Xlib to libXcb
 - Wayland: Wayland support, but only if it doesn't require writing any extra
 code which as of now seems unlikely, or if someone makes a patch.
   - Before this can even be done, replace Xft with cairo,

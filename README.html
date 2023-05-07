@@ -324,6 +324,8 @@ MD5() is deprecated as of OpenSSL 3.0, but this would also make it very
 easy to have LibreSSL compatibility.</li>
 <li>Image support: Ability to display icons, similar to rofi</li>
 <li>Text drawing: Use cairo for text drawing over Xft.</li>
+<li>Item updating: Save item index before drawing the menu again</li>
+<li>Typing: Disable insert mode completely when !type</li>
 <li>Lines: Rofi-like newlines in the same entry
 <ul>
 <li>Just need to <code>XMoveResizeWindow()</code> as well as
@@ -337,12 +339,12 @@ xprompt</li>
 to avoid adding more external dependencies unless it’s a common
 dependency most people already have.</li>
 </ul></li>
-<li>X11: Move from Xlib to libXcb</li>
 </ul>
 <h3
 id="unlikely-but-maybe-at-some-point-in-the-distant-future">Unlikely,
 but maybe at some point in the distant future</h3>
 <ul>
+<li>X11: Move from Xlib to libXcb</li>
 <li>Wayland: Wayland support, but only if it doesn’t require writing any
 extra code which as of now seems unlikely, or if someone makes a patch.
 <ul>
