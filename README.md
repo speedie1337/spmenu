@@ -127,7 +127,6 @@ is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
 - Image support: Ability to display icons, similar to rofi
 - Text drawing: Use cairo for text drawing over Xft.
-- Typing: Disable insert mode completely when !type
 - Lines: Rofi-like newlines in the same entry
   - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
   for each added line.

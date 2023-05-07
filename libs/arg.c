@@ -468,9 +468,11 @@ void setprofile(Arg *arg) {
 
 void switchmode(Arg *arg) {
     curMode = !curMode;
+
+    if (!type) curMode = 0; // only normal mode allowed
+
     allowkeys = !curMode;
 
     strncpy(modetext, curMode ? instext : normtext, 15);
-
     drawmenu();
 }

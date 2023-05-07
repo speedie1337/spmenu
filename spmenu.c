@@ -688,6 +688,10 @@ int main(int argc, char *argv[]) {
     longestedge = MAX(imagewidth, imageheight);
     #endif
 
+    if (!type) {
+        mode = 0;
+    }
+
     // set default mode, must be done before the event loop or keybindings will not work
     if (mode) {
         curMode = 1;
