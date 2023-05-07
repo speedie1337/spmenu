@@ -58,6 +58,13 @@ void eventloop(void) {
 
             if (listchanged) {
                 match();
+
+                for (int i = 0; i < itemnumber; i++) {
+                    if (sel && sel->right && (sel = sel->right) == next) {
+                        curr = next;
+                    }
+                }
+
                 drawmenu();
             }
         }

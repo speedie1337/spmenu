@@ -232,6 +232,8 @@ drawitem(int x, int y, int w)
                 rx = x;
             }
 
+        int itemoverride = 1;
+
 		for (item = curr; item != next; item = item->right, i++) {
 			x = drawitemtext(
 				item,
@@ -239,6 +241,11 @@ drawitem(int x, int y, int w)
 				y + (((i % lines) + 1) * bh),
 				(mw - rx) / columns
 			);
+
+            if (item == sel && itemoverride) {
+                itemnumber = i;
+                itemoverride = 0;
+            }
         }
 
     // horizontal list
@@ -248,7 +255,10 @@ drawitem(int x, int y, int w)
         w = larrowWidth;
         x = drawlarrow(x, y, w);
 
-		for (item = curr; item != next; item = item->right) // draw items
+        itemnumber = 0;
+        int itemoverride = 1;
+
+		for (item = curr; item != next; item = item->right) { // draw items
             x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
                         mw - x -
                         rarrowWidth -
@@ -260,8 +270,17 @@ drawitem(int x, int y, int w)
                         2 * borderwidth
             ));
 
-            w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp + 2 * borderwidth;
-            x = drawrarrow(mw - w, y, w);
+            if (itemoverride) {
+                itemnumber++;
+            }
+
+            if (item == sel) {
+                itemoverride = 0;
+            }
+        }
+
+        w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp + 2 * borderwidth;
+        x = drawrarrow(mw - w, y, w);
 	}
 
     return x;
