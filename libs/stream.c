@@ -198,7 +198,7 @@ int parsemarkup(int index) {
 
             // spmenu:version
             if (!strncmp("version", items[index].ex, strlen("version"))) {
-                fprintf(stdout, "spmenu version %f", VERSION);
+                fprintf(stdout, "spmenu version %s", VERSION);
                 exit(0);
             }
 
