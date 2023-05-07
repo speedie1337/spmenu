@@ -23,9 +23,6 @@ X11LIB        = /usr/X11R6/lib
 FREETYPELIBS  = -lfontconfig -lXft
 FREETYPEINC   = $(INCDIR)/freetype2
 
-# xft
-XFTCONF       = xft
-
 # xrender
 XRENDERLIBS   = -lXrender
 
