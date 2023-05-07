@@ -33,14 +33,24 @@ void readstdin(void) {
         if (parsemarkup(i)) {
             o = 1;
         }
+
+        #if !USEIMAGE
+        if (o) {
+            ;
+        }
+        #endif
 	}
 
+    #if USEIMAGE
     if (!o) longestedge = imagegaps = 0;
+    #endif
 
     // clean
 	if (items) {
 		items[i].text = NULL;
+        #if USEIMAGE
         items[i].image = NULL;
+        #endif
     }
 
 	inputw = items ? TEXTWM(items[imax].text) : 0;
@@ -100,14 +110,23 @@ void readfile(void) {
         for (i = 0; i < listsize; i++) {
             items[i].text = list[i];
 
-            if (parsemarkup(i))
+            if (parsemarkup(i)) {
                 o = 1;
+            }
+
+            #if !USEIMAGE
+            if (o) {
+                ;
+            }
+            #endif
         }
 
         inputw = items ? TEXTWM(items[i].text) : 0;
 	    lines = i;
 
+        #if USEIMAGE
         if (!o) longestedge = imagegaps = 0;
+        #endif
 
         if (i == olistcount) {
             listcount = i;
@@ -179,7 +198,7 @@ int parsemarkup(int index) {
 
             // spmenu:version
             if (!strncmp("version", items[index].ex, strlen("version"))) {
-                fprintf(stdout, "spmenu version %s", VERSION);
+                fprintf(stdout, "spmenu version %f", VERSION);
                 exit(0);
             }
 
@@ -196,9 +215,13 @@ int parsemarkup(int index) {
             }
         }
 
+        #if USEIMAGE
         if (limg) {
             return 1;
         } else {
             return 0;
         }
+        #else
+        return 0;
+        #endif
 }

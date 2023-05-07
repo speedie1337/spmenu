@@ -62,7 +62,8 @@ void readargs(int argc, char *argv[]) {
     // no arguments
 	for (i = 1; i < argc; i++)
         if (!strcmp(argv[i], "-v") || (!strcmp(argv[i], "--version"))) {      // prints version information
-			puts("spmenu-"VERSION);
+			//puts("spmenu-"VERSION);
+            puts("spmenu-unknown");
 			exit(0);
         } else if (!strcmp(argv[i], "-h") || (!strcmp(argv[i], "--help"))) { // help
             usage();

@@ -64,6 +64,10 @@
 #define USEXRESOURCES 1
 #endif
 
+#ifndef VERSION
+#define VERSION "unknown"
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
