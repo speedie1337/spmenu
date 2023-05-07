@@ -104,6 +104,9 @@ void readfile(void) {
                 o = 1;
         }
 
+        inputw = items ? TEXTWM(items[i].text) : 0;
+	    lines = MIN(lines, i);
+
         if (!o) longestedge = imagegaps = 0;
 
         if (i == olistcount) {
