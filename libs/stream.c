@@ -72,9 +72,9 @@ void readfile(void) {
     static size_t c = 0;
     char *l;
 
-    FILE *ef = fopen(listfile, "r");
+    FILE *lf = fopen(listfile, "r");
 
-    if (!ef) return;
+    if (!lf) return;
 
     items = NULL;
     listsize = 0;
@@ -83,8 +83,8 @@ void readfile(void) {
         l = NULL;
         len = 0;
 
-        if (-1 == getline(&l, &len, ef)) {
-            if (ferror(ef)) die("spmenu: failed to read file\n");
+        if (-1 == getline(&l, &len, lf)) {
+            if (ferror(lf)) die("spmenu: failed to read file\n");
             free(l);
             break;
         }
@@ -100,7 +100,7 @@ void readfile(void) {
         listsize++;
     }
 
-    if (fclose(ef)) {
+    if (fclose(lf)) {
         die("spmenu: failed to close file %s\n", listfile);
     }
 
@@ -190,7 +190,7 @@ int parsemarkup(int index) {
         #endif
 
         /* TODO: use this for something
-         * current usage is not very useful, however it's here to be used later.
+         * current usage is not very uslful, however it's here to be used later.
          */
         if(!(items[index].ex = malloc(strlen(items[index].text)+1)))
                 fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));

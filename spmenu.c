@@ -440,7 +440,7 @@ void insert(const char *str, ssize_t n) {
 	memmove(&text[cursor + n], &text[cursor], sizeof text - cursor - MAX(n, 0));
 
     // update cursor
-	if (n > 0)
+	if (n > 0 && str && n)
 		memcpy(&text[cursor], str, n);
 
     // add to cursor position and continue matching
