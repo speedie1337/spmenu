@@ -28,7 +28,7 @@ check() {
     [ -n "$(ldconfig -p | grep freetype)" ] && printf "freetype found\n" && freetype=true || freetype=false
     [ -n "$(ldconfig -p | grep libconfig)" ] && printf "libconfig found\n" && libconfig=true || libconfig=false
     else
-    GEN_MANUAL="false"
+    gen_manual="false"
     fi
 }
 
@@ -46,7 +46,7 @@ loadconf() {
 
 build() {
     [ ! -f "meson.build" ] && printf "meson.build does not exist.\n" && exit 1
-    [ "$GEN_MANUAL" != "false" ] && [ -x "$(command -v pandoc)" ] && scripts/make/generate-docs.sh
+    [ "$gen_manual" != "false" ] && [ -x "$(command -v pandoc)" ] && scripts/make/generate-docs.sh
 
     cp -f meson.build meson.build.orig
 
