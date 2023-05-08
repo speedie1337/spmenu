@@ -7,8 +7,8 @@
  *
  * You don't need to edit spmenu.c if you aren't making big changes to the software.
  *
- * After making changes, run 'make clean install' to install and 'make' to attempt a compilation.
- * `make man` will generate a man page from 'docs/docs.md', which is a Markdown document. Run this before commiting.
+ * After making changes, run `./build.sh` to attempt to build the software.
+ * `scripts/make/generate-docs.sh` will generate a man page from 'docs/docs.md', which is a Markdown document. Run this before commiting.
  *
  * See LICENSE file for copyright and license details.
  */
