@@ -12,18 +12,7 @@ openssl=true # enable support for openssl, used to calculate MD5
 fribidi=true # enable support for right to left languages
 libconfig=true # enable configuration and themes
 xresources=true # enable .Xresources support
-cc=gcc # compiler and linker
 opt=-O2 # level of optimization
 warn=true # warn about OS quirks
 install=true # automatically install, if set to false an install will not be performed
 reconfigure=true # reconfigure using meson
-
-# macOS/OS X/Mac OS X
-if [ -d "/System/Library/Extensions" ]; then
-    imlib2=false # currently unsupported on mac due to the use of pkg-config
-    pango=false # currently unsupported on mac due to the use of pkg-config
-    pangoxft=false # currently unsupported on mac due to the use of pkg-config
-    openssl=false # currently unsupported on mac due to the use of pkg-config
-    prefix=/usr/local # as of 10.15 catalina we can no longer write to /usr/bin and /usr/share
-    makebin=gnumake # on mac, the binary for GNU make is gnumake
-fi

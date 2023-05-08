@@ -1,4 +1,4 @@
-! spmenu VERSION default configuration
+! spmenu default configuration
 !
 ! You may copy this configuration file to ~/.config/spmenu/spmenurc OR ~/.spmenurc, it will be loaded on runtime.
 ! It is .Xresources syntax. As such you may also append it to your existing .Xresources configuration, use programs like Pywal to have universal colorschemes.
