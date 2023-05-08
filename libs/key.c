@@ -1,19 +1,19 @@
 void updatenumlockmask(void) {
-	unsigned int i, j;
-	XModifierKeymap *modmap;
+    unsigned int i, j;
+    XModifierKeymap *modmap;
 
-	numlockmask = 0;
-	modmap = XGetModifierMapping(dpy);
-	for (i = 0; i < 8; i++)
-		for (j = 0; j < modmap->max_keypermod; j++)
-			if (modmap->modifiermap[i * modmap->max_keypermod + j]
-				== XKeysymToKeycode(dpy, XK_Num_Lock))
-				numlockmask = (1 << i);
-	XFreeModifiermap(modmap);
+    numlockmask = 0;
+    modmap = XGetModifierMapping(dpy);
+    for (i = 0; i < 8; i++)
+        for (j = 0; j < modmap->max_keypermod; j++)
+            if (modmap->modifiermap[i * modmap->max_keypermod + j]
+                    == XKeysymToKeycode(dpy, XK_Num_Lock))
+                numlockmask = (1 << i);
+    XFreeModifiermap(modmap);
 }
 
 void keypress(XEvent *e) {
-   	updatenumlockmask();
+    updatenumlockmask();
     {
         unsigned int i;
         KeySym keysym;
@@ -69,22 +69,22 @@ void keypress(XEvent *e) {
 }
 
 void grabkeyboard(void) {
-	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
-	int i;
+    struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
+    int i;
 
     // don't grab if embedded
-	if (embed || managed)
-		return;
-	// try to grab keyboard, we may have to wait for another process to ungrab
-	for (i = 0; i < 1000; i++) {
-		if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
-		                  GrabModeAsync, CurrentTime) == GrabSuccess) {
+    if (embed || managed)
+        return;
+    // try to grab keyboard, we may have to wait for another process to ungrab
+    for (i = 0; i < 1000; i++) {
+        if (XGrabKeyboard(dpy, DefaultRootWindow(dpy), True, GrabModeAsync,
+                    GrabModeAsync, CurrentTime) == GrabSuccess) {
             getcapsstate();
-			return;
+            return;
         }
-		nanosleep(&ts, NULL);
-	}
-	die("cannot grab keyboard");
+        nanosleep(&ts, NULL);
+    }
+    die("cannot grab keyboard");
 }
 
 void getcapsstate(void) {

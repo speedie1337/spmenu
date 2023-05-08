@@ -1,8 +1,8 @@
 typedef union {
-	int i; // integer
-	unsigned int ui; // unsigned int
-	float f; // float
-	const void *v; // void
+    int i; // integer
+    unsigned int ui; // unsigned int
+    float f; // float
+    const void *v; // void
     const char *c; // char
 } Arg;
 

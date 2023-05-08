@@ -1,14 +1,14 @@
 void eventloop(void) {
-	XEvent ev;
-    #if USEIMAGE
+    XEvent ev;
+#if USEIMAGE
     int noimg = 0;
-    #endif
+#endif
 
-	while (!XNextEvent(dpy, &ev)) {
-		if (XFilterEvent(&ev, None))
-			continue;
+    while (!XNextEvent(dpy, &ev)) {
+        if (XFilterEvent(&ev, None))
+            continue;
 
-		switch(ev.type) {
+        switch(ev.type) {
             case DestroyNotify:
                 if (ev.xdestroywindow.window != win)
                     break;
@@ -16,9 +16,9 @@ void eventloop(void) {
                 exit(1);
             case ButtonPress:
                 buttonpress(&ev);
-                #if USEIMAGE
+#if USEIMAGE
                 noimg = 0;
-                #endif
+#endif
                 break;
             case MotionNotify: // currently does nothing
                 break;
@@ -51,7 +51,7 @@ void eventloop(void) {
                 getcapsstate();
                 drawmenu();
                 break;
-		}
+        }
 
         if (listfile) {
             readfile();
@@ -70,12 +70,12 @@ void eventloop(void) {
         }
 
         // redraw image on X11 event
-        #if USEIMAGE
+#if USEIMAGE
         if (!noimg) {
             drawimage();
         } else {
             noimg = 0; // draw it next time
         }
-        #endif
-	}
+#endif
+    }
 }

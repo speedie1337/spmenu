@@ -1,20 +1,20 @@
 #if USEXRESOURCES
 void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst) {
-	char *sdst = NULL;
-	int *idst = NULL;
-	float *fdst = NULL;
-	sdst = dst;
-	idst = dst;
-	fdst = dst;
-	char fullname[256];
-	char *type;
-	XrmValue ret;
-	snprintf(fullname, sizeof(fullname), "%s.%s", "spmenu", name);
-	fullname[sizeof(fullname) - 1] = '\0';
-	XrmGetResource(db, fullname, "*", &type, &ret);
+    char *sdst = NULL;
+    int *idst = NULL;
+    float *fdst = NULL;
+    sdst = dst;
+    idst = dst;
+    fdst = dst;
+    char fullname[256];
+    char *type;
+    XrmValue ret;
+    snprintf(fullname, sizeof(fullname), "%s.%s", "spmenu", name);
+    fullname[sizeof(fullname) - 1] = '\0';
+    XrmGetResource(db, fullname, "*", &type, &ret);
     if (!xresources) return;
-	if (!(ret.addr == NULL || strncmp("String", type, 64))) {
-		switch (rtype) { // type
+    if (!(ret.addr == NULL || strncmp("String", type, 64))) {
+        switch (rtype) { // type
             case STRING:
                 strcpy(sdst, ret.addr);
                 break;
@@ -25,22 +25,22 @@ void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *d
                 *fdst = strtof(ret.addr, NULL);
                 break;
         }
-	}
+    }
 }
 
 void load_xresources(void) {
-	Display *display;
-	char *resm;
-	XrmDatabase db;
-	ResourcePref *p;
-	display = XOpenDisplay(NULL);
-	resm = XResourceManagerString(display);
-	if (!resm || !xresources)
-		return;
-	db = XrmGetStringDatabase(resm);
+    Display *display;
+    char *resm;
+    XrmDatabase db;
+    ResourcePref *p;
+    display = XOpenDisplay(NULL);
+    resm = XResourceManagerString(display);
+    if (!resm || !xresources)
+        return;
+    db = XrmGetStringDatabase(resm);
 
-	for (p = resources; p < resources + LENGTH(resources); p++)
-		resource_load(db, p->name, p->type, p->dst);
+    for (p = resources; p < resources + LENGTH(resources); p++)
+        resource_load(db, p->name, p->type, p->dst);
 
     // recognize global colors
     if (globalcolors) {
@@ -48,6 +48,6 @@ void load_xresources(void) {
             resource_load(db, p->name, p->type, p->dst);
     }
 
-	XCloseDisplay(display);
+    XCloseDisplay(display);
 }
 #endif

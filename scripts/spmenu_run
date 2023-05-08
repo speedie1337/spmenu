@@ -70,8 +70,8 @@ declare -a icondir
 
 # TODO: mac support
 fail_mac() {
-[ -f "/usr/local/share/spmenu/allowusageonmac" ] && return
-cat << EOF
+    [ -f "/usr/local/share/spmenu/allowusageonmac" ] && return
+    cat << EOF
 spmenu_run currently does not support macOS due to the outdated Bash version.
 See https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS for more information.
 
@@ -114,14 +114,14 @@ path() {
                 xargs ls -lu --time-style=+%s 2>&1 | \
                 grep -vE "$HIDDEN_KEYWORDS" | \
                 grep -E "$KEYWORDS"
-        }
+            }
 
-        if [ "$SORT_BY_RECENT" != "false" ]; then
-            print | awk '/^(-|l)/ { print $6, $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-        else
-            print | awk '/^(-|l)/ { print $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-        fi
-    }
+            if [ "$SORT_BY_RECENT" != "false" ]; then
+                print | awk '/^(-|l)/ { print $6, $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+            else
+                print | awk '/^(-|l)/ { print $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+            fi
+        }
 
     # uniq
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then
@@ -134,12 +134,12 @@ path() {
 }
 
 print_help() {
-if [ "$DMENU_COMPAT" != "true" ]; then
-COL='\033[0;31m'
-RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
-read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
-fi
-cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
+    if [ "$DMENU_COMPAT" != "true" ]; then
+        COL='\033[0;31m'
+        RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
+        read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
+    fi
+    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
 To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.Xresources to $CONFDIR/spmenu/spmenurc and edit that.
@@ -155,7 +155,7 @@ EOF
 }
 
 print_cli_help() {
-cat << EOF
+    cat << EOF
 spmenu_run - Run launcher for spmenu
 
 spmenu_run -x,   --run             List entries in \$PATH.
@@ -174,9 +174,9 @@ EOF
 }
 
 print_config() {
-[ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
-mkdir -p "$CONFDIR/spmenu/run"
-cat << EOF > "$CONFDIR/spmenu/run/config"
+    [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
+    mkdir -p "$CONFDIR/spmenu/run"
+    cat << EOF > "$CONFDIR/spmenu/run/config"
 # spmenu_run default configuration file
 #
 # This is the configuration file for the run launcher spmenu comes with.
@@ -319,15 +319,15 @@ exec_cmd() {
         "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
         "torrent") $TORRENT "$(printf "%s" "$sout" | sed "s/magnet //g")" & ;;
         "man") exec="$(printf "%s" "$sout" | sed "s/?//g")"
-               [ -x "$(command -v "$exec")" ] || return
-               if [ "$(command -v read_man)" ]; then
-                   read_man "$exec"
-                   return
-               else
-                   read_nman "$exec"
-                   return
-               fi
-        ;;
+            [ -x "$(command -v "$exec")" ] || return
+            if [ "$(command -v read_man)" ]; then
+                read_man "$exec"
+                return
+            else
+                read_nman "$exec"
+                return
+            fi
+            ;;
     esac
 }
 
@@ -351,39 +351,39 @@ read_args() {
             -o|-stdout|--stdout) remove_arg "$arg" && STDOUT=true ;;
             -no|-no-stdout) remove_arg "$arg" && STDOUT=false ;;
             -f|-fm|--fm) remove_arg "$arg"
-                         [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
-                         function=fm
-                         ;;
+                [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
+                function=fm
+                ;;
             -c|-cc|--clear-cache) remove_arg "$arg"
-                                  clearcache="true"
-                                  ;;
+                clearcache="true"
+                ;;
             -d|-desktop|--desktop) remove_arg "$arg"
-                                   function=desktop
-                                  ;;
+                function=desktop
+                ;;
             -p|-full-path|--full-path) remove_arg "$arg"
-                                       USE_FULL_PATH="true"
-                                       ;;
+                USE_FULL_PATH="true"
+                ;;
             -np|-no-full-path|--no-full-path) remove_arg "$arg"
-                                       USE_FULL_PATH="false"
-                                       ;;
+                USE_FULL_PATH="false"
+                ;;
             -dm|-dmenu|--dmenu) remove_arg "$arg"
-                                DMENU_COMPAT="true"
-                                ;;
+                DMENU_COMPAT="true"
+                ;;
             -ndm|-no-dmenu|--no-dmenu) remove_arg "$arg"
-                                DMENU_COMPAT="false"
-                                ;;
+                DMENU_COMPAT="false"
+                ;;
             -a|-args|--args) remove_arg "$arg"
-                             [ -z "$narg" ] && printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER" && exit 1
+                [ -z "$narg" ] && printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER" && exit 1
 
-                             remove_arg "$narg"
-                             MARGS="$narg"
-                          ;;
+                remove_arg "$narg"
+                MARGS="$narg"
+                ;;
             -h|--help) remove_arg "$arg" && function=help
-                    ;;
+                ;;
             "") :
                 ;;
             *) printf "spmenu_run: Invalid argument: '%s'. If you meant to pass this to spmenu, use the '%s' option.\n" "$arg" "-a"
-                    ;;
+                ;;
         esac
 
         [ "$argc" = "$i" ] && break
@@ -410,7 +410,7 @@ exec_file() {
             else
                 $GENERIC "$1"
             fi
-        ;;
+            ;;
     esac
 }
 
@@ -448,17 +448,17 @@ prepare_dirnav() {
             else
                 return 1
             fi
-        ;;
+            ;;
     esac
 }
 
 print_desktop_help() {
-if [ "$DMENU_COMPAT" != "true" ]; then
-COL='\033[0;31m'
-RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --hide-caps --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
-read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
-fi
-cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
+    if [ "$DMENU_COMPAT" != "true" ]; then
+        COL='\033[0;31m'
+        RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --hide-caps --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+        read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
+    fi
+    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
 Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
 To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
 To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
@@ -608,7 +608,7 @@ print_desktop_menu() {
     [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
     command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
     [ -z "$menusel" ] && return 1 \
-    || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
 
     # this must now be the title only
     menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
@@ -729,20 +729,20 @@ main() {
         "run")
             parse "$args"
             exec_cmd "$args"
-        ;;
+            ;;
         "fm") prepare_dirnav "$args"
-        ;;
+            ;;
         "desktop")
             print_desktop_menu "$args"
-        ;;
+            ;;
         "help")
             print_cli_help
             exit 0
-        ;;
+            ;;
         *)
             printf "Undefined function: '%s'\n" "$function"
             exit 1
-        ;;
+            ;;
     esac
 }
 

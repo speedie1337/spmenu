@@ -46,39 +46,39 @@ command -v maim > /dev/null && maim -uB > /tmp/image.png
 IMAGE="/tmp/image.png"
 
 main() {
-[ -e "$IMAGE" ] && IMAGEARG="--image-size 500 --no-generate-cache" && IMAGEPREFIX="IMG:" || IMAGE=""
+    [ -e "$IMAGE" ] && IMAGEARG="--image-size 500 --no-generate-cache" && IMAGEPREFIX="IMG:" || IMAGE=""
 
-printf "$IMAGEPREFIX$IMAGE\t${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $([ -f "${DESTDIR}${PREFIX}/share/spmenu/version" ] && cat "${DESTDIR}${PREFIX}/share/spmenu/version")\n\
-$IMAGEPREFIX$IMAGE\t${b1}\n\
-$IMAGEPREFIX$IMAGE\t${b2}\n\
-$IMAGEPREFIX$IMAGE\t${b3}\n\
-$IMAGEPREFIX$IMAGE\t${b4}\n\
-$IMAGEPREFIX$IMAGE\t${b5}\n\
-$IMAGEPREFIX$IMAGE\t${b6}\n\
-$IMAGEPREFIX$IMAGE\t${b7}\n\
-$IMAGEPREFIX$IMAGE\t${b8}\n\
-$IMAGEPREFIX$IMAGE\t${b9}\n\
-$IMAGEPREFIX$IMAGE\t${b10}\n\
-$IMAGEPREFIX$IMAGE\t${b11}\n\
-$IMAGEPREFIX$IMAGE\t${b12}\n\
-$IMAGEPREFIX$IMAGE\t${b13}\n\
-$IMAGEPREFIX$IMAGE\t${b14}\n\
-$IMAGEPREFIX$IMAGE\t${b15}\n\
-$IMAGEPREFIX$IMAGE\t${b16}\n\
-$IMAGEPREFIX$IMAGE\t${v1}q${v2}w${v3}e${v4}r${v5}t${v6}y${v7}u${v8}i${v9}o${v10}p${v11}[${v12}]${v13}a${v14}s${v15}d${v16}f\n\
-$IMAGEPREFIX$IMAGE\t<b>qwertyuiop[]asdf</b> - b\n\
-$IMAGEPREFIX$IMAGE\t<i>qwertyuiop[]asdf</i> - i\n\
-$IMAGEPREFIX$IMAGE\t<s>qwertyuiop[]asdf</s> - s\n\
-$IMAGEPREFIX$IMAGE\t<u>qwertyuiop[]asdf</u> - u\n\
-$IMAGEPREFIX$IMAGE\t<sub>qwertyuiop[]asdf - sub</sub>\n\
-$IMAGEPREFIX$IMAGE\t<sup>qwertyuiop[]asdf - sup</sup>\n\
-$IMAGEPREFIX$IMAGE\t<tt>qwertyuiop[]asdf</tt> - tt\n\
-$IMAGEPREFIX$IMAGE\t<small>qwertyuiop[]asdf</small> - small\n\
-$IMAGEPREFIX$IMAGE\t<big>qwertyuiop[]asdf</big> - big\n\
-$IMAGEPREFIX$IMAGE\t\n\
-$IMAGEPREFIX$IMAGE\tArguments will be passed to spmenu.\n\
-$IMAGEPREFIX$IMAGE\tReport any issues at the Codeberg repo.\n\
-" | spmenu --no-alpha --lines 40 $IMAGEARG "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
-}
+    printf "$IMAGEPREFIX$IMAGE\t${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $([ -f "${DESTDIR}${PREFIX}/share/spmenu/version" ] && cat "${DESTDIR}${PREFIX}/share/spmenu/version")\n\
+        $IMAGEPREFIX$IMAGE\t${b1}\n\
+        $IMAGEPREFIX$IMAGE\t${b2}\n\
+        $IMAGEPREFIX$IMAGE\t${b3}\n\
+        $IMAGEPREFIX$IMAGE\t${b4}\n\
+        $IMAGEPREFIX$IMAGE\t${b5}\n\
+        $IMAGEPREFIX$IMAGE\t${b6}\n\
+        $IMAGEPREFIX$IMAGE\t${b7}\n\
+        $IMAGEPREFIX$IMAGE\t${b8}\n\
+        $IMAGEPREFIX$IMAGE\t${b9}\n\
+        $IMAGEPREFIX$IMAGE\t${b10}\n\
+        $IMAGEPREFIX$IMAGE\t${b11}\n\
+        $IMAGEPREFIX$IMAGE\t${b12}\n\
+        $IMAGEPREFIX$IMAGE\t${b13}\n\
+        $IMAGEPREFIX$IMAGE\t${b14}\n\
+        $IMAGEPREFIX$IMAGE\t${b15}\n\
+        $IMAGEPREFIX$IMAGE\t${b16}\n\
+        $IMAGEPREFIX$IMAGE\t${v1}q${v2}w${v3}e${v4}r${v5}t${v6}y${v7}u${v8}i${v9}o${v10}p${v11}[${v12}]${v13}a${v14}s${v15}d${v16}f\n\
+        $IMAGEPREFIX$IMAGE\t<b>qwertyuiop[]asdf</b> - b\n\
+        $IMAGEPREFIX$IMAGE\t<i>qwertyuiop[]asdf</i> - i\n\
+        $IMAGEPREFIX$IMAGE\t<s>qwertyuiop[]asdf</s> - s\n\
+        $IMAGEPREFIX$IMAGE\t<u>qwertyuiop[]asdf</u> - u\n\
+        $IMAGEPREFIX$IMAGE\t<sub>qwertyuiop[]asdf - sub</sub>\n\
+        $IMAGEPREFIX$IMAGE\t<sup>qwertyuiop[]asdf - sup</sup>\n\
+        $IMAGEPREFIX$IMAGE\t<tt>qwertyuiop[]asdf</tt> - tt\n\
+        $IMAGEPREFIX$IMAGE\t<small>qwertyuiop[]asdf</small> - small\n\
+        $IMAGEPREFIX$IMAGE\t<big>qwertyuiop[]asdf</big> - big\n\
+        $IMAGEPREFIX$IMAGE\t\n\
+        $IMAGEPREFIX$IMAGE\tArguments will be passed to spmenu.\n\
+        $IMAGEPREFIX$IMAGE\tReport any issues at the Codeberg repo.\n\
+        " | spmenu --no-alpha --lines 40 $IMAGEARG "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
+    }
 
-main "$@"
+    main "$@"

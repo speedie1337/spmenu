@@ -1,9 +1,9 @@
 typedef struct {
     unsigned int mode;
-	unsigned int mod;
-	KeySym keysym;
-	void (*func)(Arg *);
-	Arg arg;
+    unsigned int mod;
+    KeySym keysym;
+    void (*func)(Arg *);
+    Arg arg;
 } Key;
 
 // user friendly names for all the modifiers we're using, but there are many more

@@ -32,11 +32,11 @@ void conf_init(void) {
             sprintf(cfgfile, "%s/%s", xdg_conf, "spmenu/spmenu.conf");
         }
     } else { // custom config path
-            if (!(cfgfile = malloc(snprintf(NULL, 0, "%s", argconf) + 1))) {
-                die("spmenu: failed to malloc cfgfile");
-            }
+        if (!(cfgfile = malloc(snprintf(NULL, 0, "%s", argconf) + 1))) {
+            die("spmenu: failed to malloc cfgfile");
+        }
 
-            sprintf(cfgfile, "%s", argconf);
+        sprintf(cfgfile, "%s", argconf);
     }
 
     // don't bother trying to load if it doesn't exist.
@@ -51,8 +51,8 @@ void conf_init(void) {
 
     // attempt to read config file to cfg
     if (!config_read_file(&cfg, cfgfile)) {
-         // invalid configuration, but let's try to read it anyway
-         fprintf(stdout, "spmenu: Invalid configuration.\n");
+        // invalid configuration, but let's try to read it anyway
+        fprintf(stdout, "spmenu: Invalid configuration.\n");
     }
 
     // load options spmenu.window

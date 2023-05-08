@@ -29,11 +29,11 @@ void theme_load(void) {
             sprintf(theme, "%s/%s", xdg_conf, "spmenu/theme.conf");
         }
     } else { // custom config path
-            if (!(theme = malloc(snprintf(NULL, 0, "%s", argtheme) + 1))) {
-                die("spmenu: failed to malloc theme");
-            }
+        if (!(theme = malloc(snprintf(NULL, 0, "%s", argtheme) + 1))) {
+            die("spmenu: failed to malloc theme");
+        }
 
-            sprintf(theme, "%s", argtheme);
+        sprintf(theme, "%s", argtheme);
     }
 
     // don't bother trying to load if it doesn't exist.
@@ -47,7 +47,7 @@ void theme_load(void) {
 
     // attempt to read theme
     if (!config_read_file(&cfg, theme)) {
-         fprintf(stdout, "spmenu: Invalid theme.\n"); // invalid configuration, but let's try to read it anyway
+        fprintf(stdout, "spmenu: Invalid theme.\n"); // invalid configuration, but let's try to read it anyway
     }
 
     // load options theme.window

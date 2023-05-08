@@ -7,36 +7,36 @@
 #endif
 
 typedef struct {
-	Cursor cursor;
+    Cursor cursor;
 } Cur;
 
 typedef struct Fnt {
-	Display *dpy;
-	unsigned int h;
-    #if USEPANGO
-	PangoLayout *layout;
-    #else
+    Display *dpy;
+    unsigned int h;
+#if USEPANGO
+    PangoLayout *layout;
+#else
     XftFont *xfont;
-	FcPattern *pattern;
-	struct Fnt *next;
-    #endif
+    FcPattern *pattern;
+    struct Fnt *next;
+#endif
 } Fnt;
 
 enum { ColFg, ColBg, ColPwl }; /* Clr scheme index */
 typedef XftColor Clr;
 
 typedef struct {
-	unsigned int w, h;
-	Display *dpy;
-	int screen;
-	Window root;
-	Visual *visual;
-	unsigned int depth;
-	Colormap cmap;
-	Drawable drawable;
-	GC gc;
-	Clr *scheme;
-	Fnt *font;
+    unsigned int w, h;
+    Display *dpy;
+    int screen;
+    Window root;
+    Visual *visual;
+    unsigned int depth;
+    Colormap cmap;
+    Drawable drawable;
+    GC gc;
+    Clr *scheme;
+    Fnt *font;
 } Drw;
 
 /* Drawable abstraction */

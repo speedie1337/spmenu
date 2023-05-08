@@ -1,66 +1,66 @@
 void loadhistory(void) {
-	FILE *fp = NULL;
-	static size_t cap = 0;
-	size_t llen;
-	char *line;
+    FILE *fp = NULL;
+    static size_t cap = 0;
+    size_t llen;
+    char *line;
 
     // no history file, give up like i do with all things in life
-	if (!histfile) {
-		return;
-	}
+    if (!histfile) {
+        return;
+    }
 
     // open history file, return if it failed
-	fp = fopen(histfile, "r");
-	if (!fp) {
+    fp = fopen(histfile, "r");
+    if (!fp) {
         fprintf(stderr, "spmenu: failed to open history file\n");
         return;
     }
 
-	for (;;) {
-		line = NULL;
-		llen = 0;
+    for (;;) {
+        line = NULL;
+        llen = 0;
 
-		if (-1 == getline(&line, &llen, fp)) {
-			if (ferror(fp)) {
-				die("spmenu: failed to read history");
-			}
+        if (-1 == getline(&line, &llen, fp)) {
+            if (ferror(fp)) {
+                die("spmenu: failed to read history");
+            }
 
-			free(line);
-			break;
-		}
+            free(line);
+            break;
+        }
 
-		if (cap == histsz) {
-			cap += 64 * sizeof(char*);
-			history = realloc(history, cap);
-			if (!history) {
-				die("spmenu: failed to realloc memory");
-			}
-		}
-		strtok(line, "\n");
-		history[histsz] = line;
-		histsz++;
-	}
+        if (cap == histsz) {
+            cap += 64 * sizeof(char*);
+            history = realloc(history, cap);
+            if (!history) {
+                die("spmenu: failed to realloc memory");
+            }
+        }
+        strtok(line, "\n");
+        history[histsz] = line;
+        histsz++;
+    }
 
-	histpos = histsz;
+    histpos = histsz;
 
-	if (fclose(fp)) {
-		die("spmenu: failed to close file %s", histfile);
-	}
+    if (fclose(fp)) {
+        die("spmenu: failed to close file %s", histfile);
+    }
 }
 
 void navigatehistfile(int dir) {
-	static char def[BUFSIZ];
-	char *p = NULL;
-	size_t len = 0;
+    static char def[BUFSIZ];
+    char *p = NULL;
+    size_t len = 0;
 
-	if (!history || histpos + 1 == 0)
-		return;
+    if (!history || histpos + 1 == 0)
+        return;
 
-	if (histsz == histpos) {
-		strncpy(def, text, sizeof(def));
-	}
+    if (histsz == histpos) {
+        strncpy(def, text, sizeof(def));
+    }
 
-	switch (dir) {
+    switch (dir) {
         case 1:
             if (histpos < histsz - 1) {
                 p = history[++histpos];
@@ -74,15 +74,15 @@ void navigatehistfile(int dir) {
                 p = history[--histpos];
             }
             break;
-	}
+    }
 
-	if (p == NULL) {
-		return;
-	}
+    if (p == NULL) {
+        return;
+    }
 
-	len = MIN(strlen(p), BUFSIZ - 1);
-	strcpy(text, p);
-	text[len] = '\0';
-	cursor = len;
-	match();
+    len = MIN(strlen(p), BUFSIZ - 1);
+    strcpy(text, p);
+    text[len] = '\0';
+    cursor = len;
+    match();
 }

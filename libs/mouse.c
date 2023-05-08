@@ -1,7 +1,7 @@
 void buttonpress(XEvent *e) {
-	struct item *item;
-	XButtonPressedEvent *ev = &e->xbutton;
-	int x = 0, y = 0, h = bh, w, item_num = 0;
+    struct item *item;
+    XButtonPressedEvent *ev = &e->xbutton;
+    int x = 0, y = 0, h = bh, w, item_num = 0;
     unsigned int i, click;
     int xpad = 0;
 
@@ -25,7 +25,7 @@ void buttonpress(XEvent *e) {
     if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
     if (!strcmp(capstext, "")) capsWidth = 0; // no caps lock width for no chars
-	if (ev->window != win) return; // if incorrect or wrong window, return
+    if (ev->window != win) return; // if incorrect or wrong window, return
 
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
 
@@ -42,28 +42,28 @@ void buttonpress(XEvent *e) {
         w = (lines > 0 || !matches) ? mw - x : inputw;
 
         if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + promptw +
-           ((!prev || !curr->left) ? larrowWidth : 0)) ||
-           (lines > 0 && ev->y >= y && ev->y <= y + h)) {
+                    ((!prev || !curr->left) ? larrowWidth : 0)) ||
+                (lines > 0 && ev->y >= y && ev->y <= y + h)) {
 
             click = ClickInput;
         }
     }
 
     // item click
-	if (lines > 0) {
-		// vertical list
-		w = mw - x;
-		for (item = curr; item != next; item = item->right) {
-			if (item_num++ == lines) {
-				item_num = 1;
-				x += w / columns;
-				y = 0;
-			}
+    if (lines > 0) {
+        // vertical list
+        w = mw - x;
+        for (item = curr; item != next; item = item->right) {
+            if (item_num++ == lines) {
+                item_num = 1;
+                x += w / columns;
+                y = 0;
+            }
 
-			y += h;
+            y += h;
 
             // ClickSelItem, called function doesn't matter
-			if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
+            if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
                     if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
@@ -82,23 +82,23 @@ void buttonpress(XEvent *e) {
                         click = ClickItem;
                     }
                 }
-			}
-		}
-	} else if (matches) { // a single line, meaning it could be arrows too, so we check that here
-		// left arrow
-		x += inputw;
-		w = larrowWidth;
-		if (prev && curr->left) {
-			if (ev->x >= x && ev->x <= x + w) {
+            }
+        }
+    } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
+                          // left arrow
+        x += inputw;
+        w = larrowWidth;
+        if (prev && curr->left) {
+            if (ev->x >= x && ev->x <= x + w) {
                 click = ClickLArrow;
-			}
-		}
+            }
+        }
         // item click
-		// horizontal list
-		for (item = curr; item != next; item = item->right) {
-			x += w;
-			w = MIN(TEXTW(item->text), mw - x - rarrowWidth);
-			if (ev->x >= x && ev->x <= x + w) {
+        // horizontal list
+        for (item = curr; item != next; item = item->right) {
+            x += w;
+            w = MIN(TEXTW(item->text), mw - x - rarrowWidth);
+            if (ev->x >= x && ev->x <= x + w) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
                     if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
@@ -118,21 +118,21 @@ void buttonpress(XEvent *e) {
                     }
                 }
 
-			}
-		}
-		// right arrow
-		w = rarrowWidth;
-		x = mw - w;
-		if (next && ev->x >= x && ev->x <= x + w) {
+            }
+        }
+        // right arrow
+        w = rarrowWidth;
+        x = mw - w;
+        if (next && ev->x >= x && ev->x <= x + w) {
             click = ClickRArrow;
-		}
+        }
     }
 
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(buttons); i++) {
         if (ignoreglobalmouse) break;
         if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
-        && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
+                && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
             buttons[i].func(&buttons[i].arg);
     }
 
@@ -140,7 +140,7 @@ void buttonpress(XEvent *e) {
     for (i = 0; i < LENGTH(cbuttons); i++) {
         if (ignoreconfmouse) break;
         if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button
-        && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state))
+                && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state))
             cbuttons[i].func(&cbuttons[i].arg);
     }
 }

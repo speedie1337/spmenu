@@ -4,34 +4,34 @@ void moveleft(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     if (columns > 1) {
-		if (!sel)
-			return;
-		tmpsel = sel;
-		for (i = 0; i < lines; i++) {
-			if (!tmpsel->left || tmpsel->left->right != tmpsel) {
-				if (offscreen)
-					drawmenu();
-				return;
-			}
-			if (tmpsel == curr)
-				offscreen = 1;
-			tmpsel = tmpsel->left;
-		}
-		sel = tmpsel;
-		if (offscreen) {
+        if (!sel)
+            return;
+        tmpsel = sel;
+        for (i = 0; i < lines; i++) {
+            if (!tmpsel->left || tmpsel->left->right != tmpsel) {
+                if (offscreen)
+                    drawmenu();
+                return;
+            }
+            if (tmpsel == curr)
+                offscreen = 1;
+            tmpsel = tmpsel->left;
+        }
+        sel = tmpsel;
+        if (offscreen) {
             for (int j = 0; j < argu; j++) {
                 curr = prev;
             }
-		}
+        }
 
-		drawmenu();
+        drawmenu();
         calcoffsets();
-	}
+    }
 
-	if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
-		cursor = nextrune(-1);
-		drawmenu();
-	}
+    if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
+        cursor = nextrune(-1);
+        drawmenu();
+    }
 }
 
 void moveright(Arg *arg) {
@@ -40,46 +40,46 @@ void moveright(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     if (columns > 1) {
-		if (!sel)
-			return;
-		tmpsel = sel;
-		for (i = 0; i < lines; i++) {
-			if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
-				if (offscreen)
-					drawmenu();
-				return;
-			}
-			tmpsel = tmpsel->right;
-			if (tmpsel == next)
-				offscreen = 1;
-		}
-		sel = tmpsel;
-		if (offscreen) {
+        if (!sel)
+            return;
+        tmpsel = sel;
+        for (i = 0; i < lines; i++) {
+            if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
+                if (offscreen)
+                    drawmenu();
+                return;
+            }
+            tmpsel = tmpsel->right;
+            if (tmpsel == next)
+                offscreen = 1;
+        }
+        sel = tmpsel;
+        if (offscreen) {
             for (int j = 0; j < argu; j++)
                 curr = next;
-            }
-			calcoffsets();
-		}
+        }
+        calcoffsets();
+    }
 
-	drawmenu();
+    drawmenu();
 
-	if (text[cursor] != '\0') {
-		cursor = nextrune(+1);
-		drawmenu();
-	}
+    if (text[cursor] != '\0') {
+        cursor = nextrune(+1);
+        drawmenu();
+    }
 }
 
 void movedown(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     for (int j = 0; j < argu; j++) {
-       	if (sel && sel->right && (sel = sel->right) == next) {
-			curr = next;
-		}
+        if (sel && sel->right && (sel = sel->right) == next) {
+            curr = next;
+        }
     }
 
     calcoffsets();
-	drawmenu();
+    drawmenu();
 }
 
 void moveup(Arg *arg) {
@@ -87,31 +87,31 @@ void moveup(Arg *arg) {
 
     for (int j = 0; j < argu; j++) {
         if (sel && sel->left && (sel = sel->left)->right == curr) {
-			curr = prev;
-		}
+            curr = prev;
+        }
     }
 
-	calcoffsets();
+    calcoffsets();
     drawmenu();
 }
 
 void complete(Arg *arg) {
     if (hideitem) return;
 
-	strncpy(text, sel->clntext, sizeof text - 1);
-	text[sizeof text - 1] = '\0';
-	cursor = strlen(text);
+    strncpy(text, sel->clntext, sizeof text - 1);
+    text[sizeof text - 1] = '\0';
+    cursor = strlen(text);
 
-	match();
+    match();
     drawmenu();
 }
 
 void movenext(Arg *arg) {
-	if (!next)
-		return;
+    if (!next)
+        return;
 
-	sel = curr = next;
-	calcoffsets();
+    sel = curr = next;
+    calcoffsets();
     drawmenu();
 }
 
@@ -125,35 +125,35 @@ void moveprev(Arg *arg) {
 }
 
 void movestart(Arg *arg) {
-  	if (sel == matches) {
-		cursor = 0;
+    if (sel == matches) {
+        cursor = 0;
         drawmenu();
         return;
-	}
+    }
 
-	sel = curr = matches;
-	calcoffsets();
+    sel = curr = matches;
+    calcoffsets();
     drawmenu();
 }
 
 void moveend(Arg *arg) {
     if (text[cursor] != '\0') {
-		cursor = strlen(text);
+        cursor = strlen(text);
         drawmenu();
         return;
-	}
+    }
 
-	if (next) {
-		curr = matchend;
-		calcoffsets();
-		curr = prev;
-		calcoffsets();
+    if (next) {
+        curr = matchend;
+        calcoffsets();
+        curr = prev;
+        calcoffsets();
 
-		while (next && (curr = curr->right))
-			calcoffsets();
-	}
+        while (next && (curr = curr->right))
+            calcoffsets();
+    }
 
-	sel = matchend;
+    sel = matchend;
     drawmenu();
 }
 
@@ -166,8 +166,8 @@ void paste(Arg *arg) {
         clipboard = clip;
     }
 
-	XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
-	return;
+    XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
+    return;
 
 }
 
@@ -175,32 +175,32 @@ void viewhist(Arg *arg) {
     int i;
 
     if (histfile) {
-		if (!backup_items) {
-			backup_items = items;
-			items = calloc(histsz + 1, sizeof(struct item));
+        if (!backup_items) {
+            backup_items = items;
+            items = calloc(histsz + 1, sizeof(struct item));
 
-			if (!items) {
-				die("spmenu: cannot allocate memory");
-			}
+            if (!items) {
+                die("spmenu: cannot allocate memory");
+            }
 
-			for (i = 0; i < histsz; i++) {
-				items[i].text = history[i];
-			}
-		} else {
-			free(items);
-			items = backup_items;
-			backup_items = NULL;
-		}
-	}
+            for (i = 0; i < histsz; i++) {
+                items[i].text = history[i];
+            }
+        } else {
+            free(items);
+            items = backup_items;
+            backup_items = NULL;
+        }
+    }
 
-	match();
+    match();
     drawmenu();
 }
 
 void deleteword(Arg *arg) {
     if (cursor == 0) return;
 
-	while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
+    while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
         insert(NULL, nextrune(-1) - cursor);
     } while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)])) {
         insert(NULL, nextrune(-1) - cursor);
@@ -211,32 +211,32 @@ void deleteword(Arg *arg) {
 
 void moveword(Arg *arg) {
     if (arg->i < 0) { // move cursor to the start of the word
-		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
-			cursor = nextrune(-1);
+        while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
+            cursor = nextrune(-1);
         } while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)])) {
-			cursor = nextrune(-1);
+            cursor = nextrune(-1);
         }
-	} else { // move cursor to the end of the word
-		while (text[cursor] && strchr(worddelimiters, text[cursor])) {
-			cursor = nextrune(+1);
+    } else { // move cursor to the end of the word
+        while (text[cursor] && strchr(worddelimiters, text[cursor])) {
+            cursor = nextrune(+1);
         } while (text[cursor] && !strchr(worddelimiters, text[cursor])) {
-			cursor = nextrune(+1);
+            cursor = nextrune(+1);
         }
-	}
+    }
 
     drawmenu();
 }
 
 void movecursor(Arg *arg) {
     if (arg->i < 0) {
-		if (cursor > 0) {
-			cursor = nextrune(-1);
+        if (cursor > 0) {
+            cursor = nextrune(-1);
         }
-	} else {
-		if (text[cursor]) {
-			cursor = nextrune(+1);
+    } else {
+        if (text[cursor]) {
+            cursor = nextrune(+1);
         }
-	}
+    }
 
     drawmenu();
 }
@@ -272,8 +272,8 @@ void selectitem(Arg *arg) {
     puts(selection);
     savehistory(selection);
 
-	cleanup();
-	exit(0);
+    cleanup();
+    exit(0);
 }
 
 void navhistory(Arg *arg) {
@@ -304,53 +304,53 @@ void clearins(Arg *arg) {
 }
 
 void quit(Arg *arg) {
-	cleanup();
-	exit(0);
+    cleanup();
+    exit(0);
 }
 
 void savehistory(char *input) {
-	unsigned int i;
-	FILE *fp;
+    unsigned int i;
+    FILE *fp;
 
-	if (!histfile ||
-	    0 == maxhist ||
-	    0 == strlen(input)) {
-		goto out;
-	}
+    if (!histfile ||
+            0 == maxhist ||
+            0 == strlen(input)) {
+        goto out;
+    }
 
-	fp = fopen(histfile, "w");
-	if (!fp) {
-		die("spmenu: failed to open %s", histfile);
-	}
-	for (i = histsz < maxhist ? 0 : histsz - maxhist; i < histsz; i++) {
-		if (0 >= fprintf(fp, "%s\n", history[i])) {
-			die("spmenu: failed to write to %s", histfile);
-		}
-	}
-	if (histsz == 0 || histdup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
-		if (0 >= fputs(input, fp)) {
-			die("spmenu: failed to write to %s", histfile);
-		}
-	}
-	if (fclose(fp)) {
-		die("spmenu: failed to close file %s", histfile);
-	}
+    fp = fopen(histfile, "w");
+    if (!fp) {
+        die("spmenu: failed to open %s", histfile);
+    }
+    for (i = histsz < maxhist ? 0 : histsz - maxhist; i < histsz; i++) {
+        if (0 >= fprintf(fp, "%s\n", history[i])) {
+            die("spmenu: failed to write to %s", histfile);
+        }
+    }
+    if (histsz == 0 || histdup || (histsz > 0 && strcmp(input, history[histsz-1]) != 0)) {
+        if (0 >= fputs(input, fp)) {
+            die("spmenu: failed to write to %s", histfile);
+        }
+    }
+    if (fclose(fp)) {
+        die("spmenu: failed to close file %s", histfile);
+    }
 
 out:
-	for (i = 0; i < histsz; i++) {
-		free(history[i]);
-	}
-	free(history);
+    for (i = 0; i < histsz; i++) {
+        free(history[i]);
+    }
+    free(history);
 }
 
 void setimgsize(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
     setimagesize(imagewidth + arg->i, imageheight + arg->i);
-    #endif
+#endif
 }
 
 void flipimg(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
 
     if (!image) return;
 
@@ -358,11 +358,11 @@ void flipimg(Arg *arg) {
 
     drawmenu();
 
-    #endif
+#endif
 }
 
 void setimgpos(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
     if (!image || hideimage) return;
 
     if (imageposition < 3) {
@@ -372,11 +372,11 @@ void setimgpos(Arg *arg) {
     }
 
     drawmenu();
-    #endif
+#endif
 }
 
 void setimggaps(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
     imagegaps += arg->i;
 
     if (!image || hideimage) return;
@@ -389,32 +389,32 @@ void setimggaps(Arg *arg) {
         imagegaps -= arg->i;
 
     drawmenu();
-    #endif
+#endif
 }
 
 void rotateimg(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
 
     if (!image || hideimage) return;
 
     rotation += arg->i ? arg->i : 1;
 
     drawmenu();
-    #endif
+#endif
 }
 
 void toggleimg(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
 
     hideimage = !hideimage;
 
     drawmenu();
 
-    #endif
+#endif
 }
 
 void defaultimg(Arg *arg) {
-    #if USEIMAGE
+#if USEIMAGE
 
     if (hideimage || !image) return;
 
@@ -425,7 +425,7 @@ void defaultimg(Arg *arg) {
     }
 
     drawmenu();
-    #endif
+#endif
 }
 
 void setlines(Arg *arg) {
