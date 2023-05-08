@@ -69,7 +69,7 @@ void readfile(void) {
   	}
 
 	size_t len;
-    static size_t cap = 0;
+    static size_t c = 0;
     char *l;
 
     FILE *ef = fopen(listfile, "r");
@@ -89,9 +89,9 @@ void readfile(void) {
             break;
         }
 
-        if (cap == listsize) {
-            cap += 64 * sizeof(char*);
-            list = realloc(list, cap);
+        if (c == listsize) {
+            c += 64 * sizeof(char*);
+            list = realloc(list, c);
             if (!list) die("spmenu: failed to realloc memory");
         }
 
