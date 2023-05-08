@@ -119,6 +119,8 @@ build() {
 install() {
     cd build/ || exit 1
     meson install
+    cd .. || exit 1
+    [ "$reconfigure" = "true" ] && rm -rf build/
 }
 
 [ "$1" = "--no-install" ] && install=false
