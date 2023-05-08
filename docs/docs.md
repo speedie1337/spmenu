@@ -713,10 +713,6 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 `spmenu:license`
 :    Print the spmenu license
 
-`spmenu:test`
-:    Print a test script for spmenu which tests various features. Report any
-weird issues you may have.
-
 ## License
 
 spmenu is licensed under the MIT license because that's the original suckless

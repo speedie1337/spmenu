@@ -207,12 +207,6 @@ int parsemarkup(int index) {
                 fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
                 exit(0);
             }
-
-            // spmenu:test
-            if (!strncmp("test", items[index].ex, strlen("test"))) {
-                int i = system("command -v spmenu_test > /dev/null && spmenu_test");
-                if (i||!i) exit(i);
-            }
         }
 
         #if USEIMAGE
