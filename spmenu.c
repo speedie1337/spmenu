@@ -237,7 +237,6 @@ static size_t nextrune(int inc);
 static char **list;
 static size_t listsize;
 static int listcount;
-static int olistcount;
 static int listchanged = 0;
 
 // user configuration

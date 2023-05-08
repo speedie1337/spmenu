@@ -133,11 +133,9 @@ void readfile(void) {
         if (!o) longestedge = imagegaps = 0;
         #endif
 
-        if (i == olistcount) {
-            listcount = i;
+        if (i == listcount) {
             listchanged = 0;
         } else {
-            olistcount = listcount;
             listcount = i;
             listchanged = 1;
 
