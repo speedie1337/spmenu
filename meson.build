@@ -28,7 +28,6 @@ project_dependencies = [
   dependency('xrender'),
   dependency('freetype2'),
   dependency('xft'),
-  dependency('fontconfig'),
   cc.find_library('m', required : false),
 ]
 
@@ -69,6 +68,8 @@ if pango and pangoxft
   project_dependencies += [ dependency('pango') ]
   project_dependencies += [ dependency('pangoxft') ]
   build_args += [ '-DPANGO' ]
+else
+  project_dependencies += [ dependency('fontconfig') ]
 endif
 
 if libconfig
