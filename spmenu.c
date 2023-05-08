@@ -216,7 +216,7 @@ static Visual *visual;
 static int depth;
 static Colormap cmap;
 static Drw *drw;
-static Clr *scheme[SchemeLast];
+static Clr **scheme;
 static Clr textclrs[256];
 
 // declare functions
@@ -368,7 +368,7 @@ void cleanup(void) {
 	XUngrabKey(dpy, AnyKey, AnyModifier, root); // ungrab keys
 
     // free color scheme
-	for (i = 0; i < SchemeLast; i++)
+	for (i = 0; i < LENGTH(colors) + 1; i++)
 		free(scheme[i]);
 
     // free high priority items

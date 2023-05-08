@@ -3,7 +3,7 @@ char sixd_to_8bit(int x) {
 }
 
 void init_appearance(void) {
-    int i, j;
+    int i = 0, j = 0;
 
     char cbuf[8];
 
@@ -40,9 +40,11 @@ void init_appearance(void) {
     alphas[SchemeBorder][ColBg] = alpha_border;
 
     // create color schemes from array
-	for (j = 0; j < SchemeLast; j++) {
-		scheme[j] = drw_scm_create(drw, colors[j], alphas[j], 2);
-    }
+    scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[i], 2);
+
+    for (i = 0; i < LENGTH(colors) && i < LENGTH(alphas); i++)
+		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], 2);
 
     for (i = 0; i < LENGTH(textcolors) && i < LENGTH(textclrs); i++)
  		drw_clr_create(drw, &textclrs[i], textcolors[i], 0);

@@ -20,7 +20,7 @@ static unsigned int alphas[][2] = {
 };
 
 // colorscheme array
-static char *colors[SchemeLast][2] = {
+static char *colors[][2] = {
 	//                        fg                 bg
 	[SchemeLArrow]        = { col_larrowfg,      col_larrowbg      },
 	[SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg      },

@@ -17,5 +17,4 @@ enum { SchemeLArrow,
        SchemeMode,
        SchemeBorder,
        SchemeCaps,
-       SchemeLast,
 };
