@@ -7,8 +7,8 @@ pkgdesc="Fancy dynamic menu, compatible with dmenu!"
 url="https://git.speedie.site/spmenu"
 arch=(i686 x86_64)
 license=(MIT)
-depends=(sh libxinerama libxft pango libx11 imlib2 fribidi libconfig gcc)
-makedepends=(git)
+depends=(sh libxinerama libxft pango libx11 imlib2 fribidi libconfig)
+makedepends=(git meson ninja pandoc)
 provides=($pkgname)
 conflicts=($pkgname)
 source=(
@@ -20,14 +20,20 @@ md5sums=(MD5SUM)
 
 build(){
   cd $pkgname-$pkgver
-  make \
-    X11INC=/usr/include/X11 \
-    X11LIB=/usr/lib/X11 \
-    CC=gcc
+  mkdir -p build/
+  meson setup --reconfigure build
+  ninja -C build
 }
 
 package() {
   cd "$pkgname-$pkgver"
-  make PREFIX=/usr DESTDIR="$pkgdir" CC=gcc install
-  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+
+  mkdir -p "$pkgdir/usr/share/spmenu"
+  install -Dm644 docs/docs.md "$pkgdir/usr/share/spmenu/"
+  install -Dm644 docs/code-docs.md "$pkgdir/usr/share/spmenu/"
+  install -Dm644 docs/example.Xresources "$pkgdir/usr/share/spmenu/"
+  install -Dm644 docs/spmenu.conf "$pkgdir/usr/share/spmenu/"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 scripts/spmenu_run "$pkgdir/usr/bin/spmenu"
+  install -Dm755 scripts/spmenu_test "$pkgdir/usr/bin/spmenu"
 }

@@ -45,29 +45,25 @@ Just pass the original arguments.
 - imlib2
   - Used for image support, can be disabled if you don't want this by:
     - build.sh: Setting `imlib2=false` in `buildconf`.
-    - Makefile: Editing `toggle.mk` and commenting out a few lines.
 - libXinerama
   - Can be disabled if you don't want/need multi-monitor support by:
     - build.sh: Setting `xinerama=false` in `buildconf`.
-    - Makefile: Editing `toggle.mk` and commenting out a few lines.
 - tcc compiler
   - You can swap it out for GCC or any other C99 compatible compiler by:
-    - Makefile: Passing `CC="gcc"` to the `make` command.
     - build.sh: Adding `CC="gcc"` to the `buildconf`.
 command if you want)
 - OpenSSL
   - Used to calculate MD5 of images if image support is enabled, can be
 disabled if you don't want this by:
     - build.sh: Setting `imlib2=false` and `openssl=false` in `buildconf`.
-    - Makefile: Editing `toggle.mk` and commenting out a few lines.
 - Pango
   - Can be disabled if you don't want/need Pango markup by:
     - build.sh: Setting `pango=false` and `pangoxft=false` in `buildconf`.
-    - Makefile: Editing `toggle.mk` and commenting out a few lines.
 - libconfig
   - Can be disabled if you don't want/need config file support by:
     - build.sh: Setting `libconfig=false` in `buildconf`.
-    - Makefile: Editing `toggle.mk` and commenting out a few lines.
+- meson
+  - Used to compile spmenu
 
 ## Installation (GNU/Linux, \*BSD)
 
@@ -79,8 +75,7 @@ disabled if you don't want this by:
 
 `./build.sh # Run as root. Install any missing dependencies.`
 
-Report any issues with the build.sh script. There's also a Makefile which
-you can use but it may require editing host.mk and toggle.mk manually.
+Report any issues with the build.sh script.
 
 ## Installation (macOS/OS X/Mac OS X)
 
@@ -110,8 +105,9 @@ If you are on Arch GNU/Linux, you can add
 [my repository](https://git.speedie.site/speedie-repository) which includes
 `spmenu` as well as other useful packages.
 
-There's also a PKGBUILD. To use it, simply `make install_arch` in the directory
-the PKGBUILD is located.
+There's also a PKGBUILD. To use it, simply run
+`scripts/make/generate-pacman-pkg.sh` in the directory the PKGBUILD is
+located. You can then `pacman -U` this package, or add it to your repository.
 
 If you wish to package spmenu for your GNU/Linux distribution, feel free to add
 it to this list.

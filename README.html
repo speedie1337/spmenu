@@ -220,8 +220,6 @@ with dmenu. Just pass the original arguments.</p>
 <ul>
 <li>build.sh: Setting <code>imlib2=false</code> in
 <code>buildconf</code>.</li>
-<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
-lines.</li>
 </ul></li>
 </ul></li>
 <li>libXinerama
@@ -230,16 +228,12 @@ lines.</li>
 <ul>
 <li>build.sh: Setting <code>xinerama=false</code> in
 <code>buildconf</code>.</li>
-<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
-lines.</li>
 </ul></li>
 </ul></li>
 <li>tcc compiler
 <ul>
 <li>You can swap it out for GCC or any other C99 compatible compiler by:
 <ul>
-<li>Makefile: Passing <code>CC="gcc"</code> to the <code>make</code>
-command.</li>
 <li>build.sh: Adding <code>CC="gcc"</code> to the
 <code>buildconf</code>. command if you want)</li>
 </ul></li>
@@ -251,8 +245,6 @@ disabled if you don’t want this by:
 <ul>
 <li>build.sh: Setting <code>imlib2=false</code> and
 <code>openssl=false</code> in <code>buildconf</code>.</li>
-<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
-lines.</li>
 </ul></li>
 </ul></li>
 <li>Pango
@@ -261,8 +253,6 @@ lines.</li>
 <ul>
 <li>build.sh: Setting <code>pango=false</code> and
 <code>pangoxft=false</code> in <code>buildconf</code>.</li>
-<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
-lines.</li>
 </ul></li>
 </ul></li>
 <li>libconfig
@@ -271,9 +261,11 @@ lines.</li>
 <ul>
 <li>build.sh: Setting <code>libconfig=false</code> in
 <code>buildconf</code>.</li>
-<li>Makefile: Editing <code>toggle.mk</code> and commenting out a few
-lines.</li>
 </ul></li>
+</ul></li>
+<li>meson
+<ul>
+<li>Used to compile spmenu</li>
 </ul></li>
 </ul>
 <h2 id="installation-gnulinux-bsd">Installation (GNU/Linux, *BSD)</h2>
@@ -282,9 +274,7 @@ lines.</li>
 <p><code>git clone https://git.speedie.site/spmenu</code></p>
 <p><code>cd spmenu/</code></p>
 <p><code>./build.sh # Run as root. Install any missing dependencies.</code></p>
-<p>Report any issues with the build.sh script. There’s also a Makefile
-which you can use but it may require editing host.mk and toggle.mk
-manually.</p>
+<p>Report any issues with the build.sh script.</p>
 <h2 id="installation-macosos-xmac-os-x">Installation (macOS/OS X/Mac OS
 X)</h2>
 <p>NOTE: Adds Xquartz as a dependency. I highly recommend you use
@@ -309,9 +299,10 @@ packages.</p>
 <p>If you are on Arch GNU/Linux, you can add <a
 href="https://git.speedie.site/speedie-repository">my repository</a>
 which includes <code>spmenu</code> as well as other useful packages.</p>
-<p>There’s also a PKGBUILD. To use it, simply
-<code>make install_arch</code> in the directory the PKGBUILD is
-located.</p>
+<p>There’s also a PKGBUILD. To use it, simply run
+<code>scripts/make/generate-pacman-pkg.sh</code> in the directory the
+PKGBUILD is located. You can then <code>pacman -U</code> this package,
+or add it to your repository.</p>
 <p>If you wish to package spmenu for your GNU/Linux distribution, feel
 free to add it to this list.</p>
 <h2 id="todo">TODO</h2>
