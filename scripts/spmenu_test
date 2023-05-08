@@ -42,8 +42,6 @@ b14='\033[1;45m'
 b15='\033[1;46m'
 b16='\033[1;47m'
 
-IMAGE="${DESTDIR}${PREFIX}/share/spmenu/preview.png"
-cp "$IMAGE" /tmp/image.png
 command -v maim > /dev/null && maim -uB > /tmp/image.png
 IMAGE="/tmp/image.png"
 
