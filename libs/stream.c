@@ -198,13 +198,13 @@ int parsemarkup(int index) {
 
             // spmenu:version
             if (!strncmp("version", items[index].ex, strlen("version"))) {
-                fprintf(stdout, "spmenu version %s", VERSION);
+                fprintf(stdout, "spmenu version %s\n", VERSION);
                 exit(0);
             }
 
             // spmenu:license
             if (!strncmp("license", items[index].ex, strlen("license"))) {
-                fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.");
+                fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.\n");
                 exit(0);
             }
         }
