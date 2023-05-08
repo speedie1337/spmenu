@@ -122,7 +122,7 @@ void readfile(void) {
         }
 
         inputw = items ? TEXTWM(items[i].text) : 0;
-	    lines = i;
+	    lines = columns == 1 ? i : MIN(i, lines); // i = number of items
 
         #if USEIMAGE
         if (!o) longestedge = imagegaps = 0;
