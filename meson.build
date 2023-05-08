@@ -84,7 +84,6 @@ project_target = executable(
   meson.project_name(),
   project_source_files, install : true,
   dependencies: project_dependencies,
-  install : true,
   c_args : build_args,
 )
 

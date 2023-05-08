@@ -116,7 +116,7 @@ build() {
 
     ninja -C build
 
-    cp -f meson.build.orig meson.build
+    mv meson.build.orig meson.build
 }
 
 install() {
