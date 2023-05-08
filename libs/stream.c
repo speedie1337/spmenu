@@ -8,6 +8,11 @@ void readstdin(void) {
     	return;
   	}
 
+    if (listfile) {
+        readfile();
+        return;
+    }
+
     int o = 0;
 
 	// read each line from stdin and add it to the item list

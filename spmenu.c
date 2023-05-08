@@ -751,17 +751,9 @@ int main(int argc, char *argv[]) {
     // fast (-f) means we grab keyboard before reading standard input
 	if (fast && !isatty(0)) {
 		grabkeyboard();
-
-        if (!listfile)
-    		readstdin();
-        else
-            readfile();
+    	readstdin();
 	} else {
-        if (listfile)
-            readfile();
-        else
-		    readstdin();
-
+		readstdin();
 		grabkeyboard();
 	}
 
