@@ -16,6 +16,7 @@ cc=gcc # compiler and linker
 opt=-O2 # level of optimization
 warn=true # warn about OS quirks
 install=true # automatically install, if set to false an install will not be performed
+reconfigure=true # reconfigure using meson
 
 # macOS/OS X/Mac OS X
 if [ -d "/System/Library/Extensions" ]; then

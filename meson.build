@@ -82,10 +82,18 @@ endif
 
 project_target = executable(
   meson.project_name(),
-  project_source_files,
+  project_source_files, install : true,
   dependencies: project_dependencies,
   install : true,
   c_args : build_args,
 )
+
+install_man('spmenu.1')
+install_data(sources : 'docs/docs.md', install_dir : 'share/spmenu')
+install_data(sources : 'docs/code-docs.md', install_dir : 'share/spmenu')
+install_data(sources : 'docs/example.Xresources', install_dir : 'share/spmenu')
+install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
+install_data(sources : 'scripts/spmenu_run', install_dir : 'bin')
+install_data(sources : 'scripts/spmenu_test', install_dir : 'bin')
 
 test('spmenu', project_target)

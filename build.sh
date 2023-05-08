@@ -7,7 +7,7 @@ makebin="${makebin:-$(command -v make)}"
 cc="${cc:-${CC:-gcc}}"
 opt="${opt:-${OPT:--O2}}"
 warn="${warn:-true}"
-xresources=""
+reconfigure="${reconfigure:-true}"
 
 check_dist() {
     [ -f "/etc/pacman.conf" ] && [ "$warn" != "false" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
@@ -18,7 +18,8 @@ check_dist() {
 check() {
     if [ "$mac" != "true" ]; then
     [ ! -x "$(command -v ldconfig)" ] && printf "ldconfig not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
-    [ ! -x "$(command -v make)" ] && printf "make not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
+    [ ! -x "$(command -v ninja)" ] && printf "ninja not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
+    [ ! -x "$(command -v meson)" ] && printf "meson not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
     [ ! -x "$(command -v "$cc")" ] && printf "%s not found in %s. Please make sure your system is set up properly." "$cc" "\$PATH"
     [ -n "$(ldconfig -p | grep Imlib2)" ] && printf "Imlib2 found\n" && imlib2=true || imlib2=false
     [ -n "$(ldconfig -p | grep libXft)" ] && printf "libXft found\n" && xft=true || xft=false
@@ -51,126 +52,76 @@ loadconf() {
 }
 
 build() {
-    # to be overriden
-    FREETYPEINC="$INCDIR/freetype2"
-    X11INC="/usr/X11R6/include"
-    X11LIB="/usr/X11R6/lib"
+    [ "$GEN_MANUAL" != "false" ] && [ -x "$(command -v pandoc)" ] && command -v gen_manual > /dev/null && gen_manual
 
-    # macOS
-    if [ "$mac" = "true" ]; then
-        INCDIR="/usr/local/include"
-        FREETYPEINC="$INCDIR/freetype2"
-        X11INC="/opt/X11/include"
-        X11LIB="/opt/X11/lib"
-    fi
+    cp -f meson.build meson.build.orig
 
-    # openbsd
-    if [ "$openbsd" = "true" ]; then
-        INCDIR="$X11INC"
-        FREETYPEINC="$INCDIR/freetype2"
-    fi
-
-    # xinerama
-    if [ "$xinerama" = "true" ]; then
-        xineramalib="-lXinerama"
-        xineramatoggle="-DXINERAMA"
-    fi
-
-    # imlib2
-    if [ "$imlib2" = "true" ]; then
-        imlib2libs="-lImlib2"
-        imlib2toggle="-DIMAGE"
-    fi
-
-    # openssl
-    if [ "$openssl" = "true" ]; then
-        opensslconf="openssl"
-    fi
-
-    # pango
-    if [ "$pango" = "true" ] && [ "$pangoxft" = "true" ]; then
-        pangoconf="pango"
-        pangoxftconf="pangoxft"
-        pangotoggle="-DPANGO"
-    fi
-
-    # libconfig
-    if [ "$libconfig" = "true" ]; then
-        libconfigtoggle="-DCONFIG"
-        libconfigconf="libconfig"
-    fi
-
-    # xresources
-    if [ "$xresources" = "true" ]; then
-        xrdbtoggle="-DXRESOURCES"
-    fi
-
-    # fribidi
-    if [ "$fribidi" = "true" ]; then
-        bdlibs="-lfribidi"
-        bdinc="$INCDIR/fribidi"
-        bdtoggle="-DRTL"
+    if [ "$libconfig" != "true" ]; then
+        libconfig_text="libconfig = false"
     else
-        bdlibs=""
-        bdinc=""
-        bdtoggle=""
+        libconfig_text="libconfig = true"
     fi
 
-    $makebin clean
-    [ "$GEN_MANUAL" != "false" ] && [ -x "$(command -v pandoc)" ] && $makebin man
+    if [ "$pango" != "true" ] || [ "$pangoxft" != "true" ]; then
+        pango_text="pango = false"
+        pangoxft_text="pangoxft = false"
+    else
+        pango_text="pango = true"
+        pangoxft_text="pangoxft = false"
+    fi
 
-    $makebin \
-        CC="$cc" \
-        PREFIX="$PREFIX" \
-        DESTDIR="$DESTDIR" \
-        OPT="$opt" \
-        XINERAMALIBS="$xineramalib" \
-        XINERAMATOGGLE="$xineramatoggle" \
-        IMLIB2LIBS="$imlib2libs" \
-        IMLIB2TOGGLE="$imlib2toggle" \
-        PANGOCONF="$pangoconf" \
-        PANGOXFTCONF="$pangoxftconf" \
-        PANGOTOGGLE="$pangotoggle" \
-        BDLIBS="$bdlibs" \
-        BDINC="$bdinc" \
-        BDTOGGLE="$bdtoggle" \
-        FREETYPEINC="$FREETYPEINC" \
-        OPENSSLCONF="$opensslconf" \
-        LIBCONFIGTOGGLE="$libconfigtoggle" \
-        LIBCONFIGCONF="$libconfigconf" \
-        XRDBTOGGLE="$xrdbtoggle" \
-        X11LIB="$X11LIB" \
-        X11INC="$X11INC"
+    if [ "$openssl" != "true" ] || [ "$imlib2" != "true" ]; then
+        imlib2_text="imlib2 = false"
+        openssl_text="openssl = false"
+    else
+        imlib2_text="imlib2 = true"
+        openssl_text="openssl = true"
+    fi
+
+    if [ "$xinerama" != "true" ]; then
+        xinerama_text="xinerama = false"
+    else
+        xinerama_text="xinerama = true"
+    fi
+
+    if [ "$fribidi" != "true" ]; then
+        fribidi_text="fribidi = false"
+    else
+        fribidi_text="fribidi = true"
+    fi
+
+    if [ "$xresources" != "true" ]; then
+        xresources_text="xresources = false"
+    else
+        xresources_text="xresources = true"
+    fi
+
+    sed -i "s/libconfig = true/$libconfig_text/" meson.build
+    sed -i "s/pango = true/$pango_text/" meson.build
+    sed -i "s/pangoxft = true/$pangoxft_text/" meson.build
+    sed -i "s/imlib2 = true/$imlib2_text/" meson.build
+    sed -i "s/openssl = true/$openssl_text/" meson.build
+    sed -i "s/xinerama = true/$xinerama_text/" meson.build
+    sed -i "s/fribidi = true/$fribidi_text/" meson.build
+    sed -i "s/xresources = true/$xresources_text/" meson.build
+    sed -i "s/opt = '-O2'/opt = '$opt'/g" meson.build
+
+    mkdir -p build/
+
+    if [ "$reconfigure" = "true" ]; then
+        meson setup --reconfigure build
+    else
+        meson setup build
+    fi
+
+    ninja -C build
+
+    cp -f meson.build.orig meson.build
 }
 
 install() {
-    if [ "$mac" = "true" ]; then
-        RULE="install_mac"
-    else
-        RULE="install"
-    fi
-
-    $makebin $RULE \
-        CC="$cc" \
-        PREFIX="$PREFIX" \
-        OPT="$opt" \
-        XINERAMALIBS="$xineramalib" \
-        XINERAMATOGGLE="$xineramatoggle" \
-        IMLIB2LIBS="$imlib2libs" \
-        IMLIB2TOGGLE="$imlib2toggle" \
-        PANGOCONF="$pangoconf" \
-        PANGOXFTCONF="$pangoxftconf" \
-        PANGOTOGGLE="$pangotoggle" \
-        BDLIBS="$bdlibs" \
-        BDINC="$bdinc" \
-        BDTOGGLE="$bdtoggle" \
-        FREETYPEINC="$FREETYPEINC" \
-        OPENSSLCONF="$opensslconf" \
-        LIBCONFIGTOGGLE="$libconfigtoggle" \
-        LIBCONFIGCONF="$libconfigconf" \
-        XRDBTOGGLE="$xrdbtoggle" \
-        X11LIB="$X11LIB" \
-        X11INC="$X11INC"
+    cd build/ || exit 1
+    meson install
 }
 
 [ "$1" = "--no-install" ] && install=false
