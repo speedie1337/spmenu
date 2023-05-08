@@ -276,7 +276,7 @@ void readargs(int argc, char *argv[]) {
 			input = argv[++i];
 		else if (!strcmp(argv[i], "-fn") || (!strcmp(argv[i], "--font")))  // font or font set
             fonts[0] = argv[++i];
-        else if (!strcmp(argv[i], "-lf") || (!strcmp(argv[i], "--lf"))) // list file
+        else if (!strcmp(argv[i], "-lf") || (!strcmp(argv[i], "--list-file"))) // list file
             listfile = argv[++i];
 		else if (!strcmp(argv[i], "-nmt") || (!strcmp(argv[i], "--normal-mode-text")))  // normal mode text
 			strcpy(normtext, argv[++i]);
