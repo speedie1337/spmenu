@@ -28,10 +28,12 @@ void moveleft(Arg *arg) {
         calcoffsets();
     }
 
+    /*
     if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
         cursor = nextrune(-1);
         drawmenu();
     }
+    */
 }
 
 void moveright(Arg *arg) {
@@ -63,10 +65,12 @@ void moveright(Arg *arg) {
 
     drawmenu();
 
+    /*
     if (text[cursor] != '\0') {
         cursor = nextrune(+1);
         drawmenu();
     }
+    */
 }
 
 void movedown(Arg *arg) {
