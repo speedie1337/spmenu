@@ -65,6 +65,7 @@ build() {
             -Dpango="$pango" \
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
+            -Dopt="$opt" \
             build
     else
         meson setup \
@@ -76,6 +77,7 @@ build() {
             -Dpango="$pango" \
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
+            -Dopt="$opt" \
             build
     fi
 
