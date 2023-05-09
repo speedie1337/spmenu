@@ -436,6 +436,9 @@ void insert(const char *str, ssize_t n) {
     if (strlen(text) + n > sizeof text - 1)
         return;
 
+    static char l[BUFSIZ] = "";
+    if (requirematch) memcpy(l, text, BUFSIZ);
+
     // move existing text out of the way, insert new text, and update cursor
     memmove(&text[cursor + n], &text[cursor], sizeof text - cursor - MAX(n, 0));
 
@@ -446,6 +449,12 @@ void insert(const char *str, ssize_t n) {
     // add to cursor position and continue matching
     cursor += n;
     match();
+
+    if (!matches && requirematch) {
+        memcpy(text, l, BUFSIZ);
+        cursor -= n;
+        match();
+    }
 }
 
 size_t nextrune(int inc) {

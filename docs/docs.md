@@ -69,6 +69,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nr, --no-incremental`
 :   Don't print text every time a key is pressed
 
+`-rm, --require-match`
+:   Require that input text matches an item
+
+`-nrm, --no-require-match`
+:   Don't require that input text matches an item
+
 `-F, --fuzzy`
 :   Enable fuzzy matching
 

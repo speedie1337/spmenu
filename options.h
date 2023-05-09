@@ -227,6 +227,7 @@ static int pango_password              = 0; /* Enable support for pango markup f
 
 /* Misc */
 static int printindex                  = 0; /* Print index instead of the text itself (0/1) */
+static int requirematch                = 0; /* Require input text to match an item (0/1) */
 static int incremental                 = 0; /* Print text every time a key is pressed (0/1) */
 static int coloritems                  = 1; /* Color items (0/1) */
 static int sgr                         = 1; /* Support SGR sequences (0/1) */

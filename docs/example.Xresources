@@ -144,6 +144,7 @@ spmenu.managed:             0
 spmenu.mon:                 -1
 spmenu.printindex:          0
 spmenu.incremental:         0
+spmenu.requirematch:        0
 spmenu.coloritems:          1
 spmenu.sgr:                 1
 

@@ -349,7 +349,11 @@ state.</li>
 <h3 id="bugs">Bugs</h3>
 <ul>
 <li>Text drawing: Pango will sometimes spit out errors for invalid
-markup. Silencing this would be a good idea.</li>
+markup. Silencing this would be a good idea.
+<ul>
+<li>Simply make sure characters are valid UTF-8 characters. Remove
+anything else in the drw_text function.</li>
+</ul></li>
 <li>Image support: Images take a long time to load sometimes,
 particularly when items are selected using the cursor so what we really
 need is a way to skip over images after a set time limit.</li>

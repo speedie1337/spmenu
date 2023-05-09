@@ -96,6 +96,7 @@ ResourcePref resources[] = {
     { "globalcolors",                INTEGER, &globalcolors },
     { "coloritems",                  INTEGER, &coloritems },
     { "sgr",                         INTEGER, &sgr },
+    { "requirematch",                INTEGER, &requirematch },
     { "menuposition",                INTEGER, &menuposition },
     { "xpos",                        INTEGER, &xpos },
     { "ypos",                        INTEGER, &ypos },
