@@ -148,6 +148,8 @@ like you will be unable to use spmenu in its current state.
 
 - Text drawing: Pango will sometimes spit out errors for invalid markup.
 Silencing this would be a good idea.
+  - Simply make sure characters are valid UTF-8 characters. Remove anything else
+  in the drw_text function.
 - Image support: Images take a long time to load sometimes, particularly when
 items are selected using the cursor so what we really need is a way to
 skip over images after a set time limit.
