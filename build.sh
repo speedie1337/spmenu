@@ -5,33 +5,9 @@ warn="${warn:-true}"
 reconfigure="${reconfigure:-true}"
 version="${version:-1.1}"
 xresources="${xresources:-true}"
+cp_build="${cp_build:-false}"
 
-check_dist() {
-    [ -f "/etc/pacman.conf" ] && [ "$warn" != "false" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
-    [ -f "/System/Library/CoreServices/SystemVersion.plist" ] && [ "$warn" != "false" ] && printf "hint: detected a Mac. Please report any issues you find as it is untested.\n" && mac=true
-    uname -a | grep -q OpenBSD && printf "hint: detected OpenBSD. Please report any issues you find as it is untested.\n" && openbsd=true
-}
-
-check() {
-    if [ "$mac" != "true" ]; then
-    [ ! -x "$(command -v ldconfig)" ] && printf "ldconfig not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
-    [ ! -x "$(command -v ninja)" ] && printf "ninja not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
-    [ ! -x "$(command -v meson)" ] && printf "meson not found in %s. Please make sure your system is set up properly." "\$PATH" && exit 1
-    [ -n "$(ldconfig -p | grep Imlib2)" ] && printf "Imlib2 found\n" && imlib2=true || imlib2=false
-    [ -n "$(ldconfig -p | grep libXft)" ] && printf "libXft found\n" && xft=true || xft=false
-    [ -n "$(ldconfig -p | grep libX11)" ] && printf "libX11 found\n" && x11=true || x11=false
-    [ -n "$(ldconfig -p | grep libXrender)" ] && printf "libXrender found\n" && xrender=true || xrender=false
-    [ -n "$(ldconfig -p | grep libpango)" ] && printf "libpango found\n" && pango=true || pango=false
-    [ -n "$(ldconfig -p | grep libpangoxft)" ] && printf "libpangoxft found\n" && pangoxft=true || pangoxft=false
-    [ -n "$(ldconfig -p | grep libxcb-xinerama)" ] && printf "libxcb-xinerama found\n" && xinerama=true || xinerama=false
-    [ -n "$(ldconfig -p | grep libgnutls-openssl)" ] && printf "openssl found\n" && openssl=true || openssl=false
-    [ -n "$(ldconfig -p | grep fribidi)" ] && printf "fribidi found\n" && fribidi=true || fribidi=false
-    [ -n "$(ldconfig -p | grep freetype)" ] && printf "freetype found\n" && freetype=true || freetype=false
-    [ -n "$(ldconfig -p | grep libconfig)" ] && printf "libconfig found\n" && libconfig=true || libconfig=false
-    else
-    gen_manual="false"
-    fi
-}
+check() { [ "$mac" != "false" ] && gen_manual="false"; }
 
 loadconf() {
     [ -x "buildconf" ] && [ ! -x "buildconf_dev" ] && source buildconf
@@ -94,9 +70,6 @@ install() {
     [ "$reconfigure" = "true" ] && rm -rf build/
 }
 
-[ "$1" = "--no-install" ] && install=false
-
-check_dist
 check
 loadconf
 build
