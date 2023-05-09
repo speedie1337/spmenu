@@ -5,16 +5,6 @@ project(
   default_options : ['warning_level=3']
 )
 
-imlib2 = true
-openssl = true
-xresources = true
-fribidi = true
-libconfig = true
-pango = true
-pangoxft = true
-xinerama = true
-opt = '-O2'
-
 cc = meson.get_compiler('c')
 
 project_source_files = [
@@ -45,26 +35,26 @@ build_args = [
   '-Wno-deprecated-declarations',
   '-Wno-unused-parameter',
   '-Wno-sign-compare',
-  opt,
+  get_option('opt'),
 ]
 
-if imlib2 and openssl
+if get_option('imlib2') and get_option('openssl')
   project_dependencies += [ dependency('imlib2') ]
   project_dependencies += [ dependency('openssl') ]
   build_args += [ '-DIMAGE' ]
 endif
 
-if fribidi
+if get_option('fribidi')
   project_dependencies += [ dependency('fribidi') ]
   build_args += [ '-DRTL' ]
 endif
 
-if xinerama
+if get_option('xinerama')
   project_dependencies += [ dependency('xinerama') ]
   build_args += [ '-DXINERAMA' ]
 endif
 
-if pango and pangoxft
+if get_option('pango') and get_option('pangoxft')
   project_dependencies += [ dependency('pango') ]
   project_dependencies += [ dependency('pangoxft') ]
   build_args += [ '-DPANGO' ]
@@ -72,12 +62,12 @@ else
   project_dependencies += [ dependency('fontconfig') ]
 endif
 
-if libconfig
+if get_option('libconfig')
   project_dependencies += [ dependency('libconfig') ]
   build_args += [ '-DCONFIG' ]
 endif
 
-if xresources
+if get_option('xresources')
   build_args += [ '-DXRESOURCES' ]
 endif
 

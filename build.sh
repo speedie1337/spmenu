@@ -4,6 +4,7 @@ opt="${opt:-${OPT:--O2}}"
 warn="${warn:-true}"
 reconfigure="${reconfigure:-true}"
 version="${version:-1.1}"
+xresources="${xresources:-true}"
 
 check_dist() {
     [ -f "/etc/pacman.conf" ] && [ "$warn" != "false" ] && printf "hint: detected Pacman. if you want you can run 'makepkg' with proper arguments to install it using pacman.\n" && pacman=true
@@ -52,62 +53,30 @@ build() {
 
     [ "$reconfigure" != "false" ] && rm -rf build/
 
-    if [ "$libconfig" != "true" ]; then
-        libconfig_text="libconfig = false"
-    else
-        libconfig_text="libconfig = true"
-    fi
-
-    if [ "$pango" != "true" ] || [ "$pangoxft" != "true" ]; then
-        pango_text="pango = false"
-        pangoxft_text="pangoxft = false"
-    else
-        pango_text="pango = true"
-        pangoxft_text="pangoxft = true"
-    fi
-
-    if [ "$openssl" != "true" ] || [ "$imlib2" != "true" ]; then
-        imlib2_text="imlib2 = false"
-        openssl_text="openssl = false"
-    else
-        imlib2_text="imlib2 = true"
-        openssl_text="openssl = true"
-    fi
-
-    if [ "$xinerama" != "true" ]; then
-        xinerama_text="xinerama = false"
-    else
-        xinerama_text="xinerama = true"
-    fi
-
-    if [ "$fribidi" != "true" ]; then
-        fribidi_text="fribidi = false"
-    else
-        fribidi_text="fribidi = true"
-    fi
-
-    if [ "$xresources" != "true" ]; then
-        xresources_text="xresources = false"
-    else
-        xresources_text="xresources = true"
-    fi
-
-    sed -i "s/libconfig = true/$libconfig_text/" meson.build
-    sed -i "s/pango = true/$pango_text/" meson.build
-    sed -i "s/pangoxft = true/$pangoxft_text/" meson.build
-    sed -i "s/imlib2 = true/$imlib2_text/" meson.build
-    sed -i "s/openssl = true/$openssl_text/" meson.build
-    sed -i "s/xinerama = true/$xinerama_text/" meson.build
-    sed -i "s/fribidi = true/$fribidi_text/" meson.build
-    sed -i "s/xresources = true/$xresources_text/" meson.build
-    sed -i "s/opt = '-O2'/opt = '$opt'/g" meson.build
-
     mkdir -p build/
 
     if [ "$reconfigure" = "true" ]; then
-        meson setup --reconfigure build
+        meson setup --reconfigure \
+            -Dxresources="$xresources" \
+            -Dfribidi="$fribidi" \
+            -Dxinerama="$xinerama" \
+            -Dimlib2="$imlib2" \
+            -Dopenssl="$openssl" \
+            -Dpango="$pango" \
+            -Dpangoxft="$pangoxft" \
+            -Dlibconfig="$libconfig" \
+            build
     else
-        meson setup build
+        meson setup \
+            -Dxresources="$xresources" \
+            -Dfribidi="$fribidi" \
+            -Dxinerama="$xinerama" \
+            -Dimlib2="$imlib2" \
+            -Dopenssl="$openssl" \
+            -Dpango="$pango" \
+            -Dpangoxft="$pangoxft" \
+            -Dlibconfig="$libconfig" \
+            build
     fi
 
     ninja -C build
