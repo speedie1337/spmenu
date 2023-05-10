@@ -550,7 +550,7 @@ print_desktop_list() {
         # finally print all of it
         for i in "${!it_title[@]}"; do
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
-                printf "%s\t%s" "IMG:${it_icon[i]}" "${it_title[i]}"
+                printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
             elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
                 printf "%s" "${it_title[i]}"
             else

@@ -847,19 +847,26 @@ purely visual though.</p>
 <h2 id="images">Images</h2>
 <p>spmenu supports drawing images. This image is placed on the left side
 of the menu window. To use an image, pipe
-<code>IMG:/path/to/image</code> to spmenu. If you want you can specify
+<code>img:///path/to/image</code> to spmenu. If you want you can specify
 arguments like usual. Note that you should add a Tab (<code>\t</code>)
 character after the path to the image file. Otherwise the text after
 will be interpreted as part of the filename and the image will not be
 drawn.</p>
 <p>Any text after the Tab character will be interpreted as a regular
 item. In practice, drawing an image might look like this:</p>
-<p><code>printf "IMG:/path/to/image\tLook at that image, isn't it awesome?\n" | spmenu</code></p>
+<p><code>printf "img:///path/to/image\tLook at that image, isn't it awesome?\n" | spmenu</code></p>
 <p>There are also a few image related arguments, such as:</p>
 <p><code>-is</code>, <code>-ig</code>, <code>-it</code>,
 <code>-ib</code>, <code>-ic</code>, <code>-itc</code> and
 <code>-gc</code>.</p>
-<p>NOTE: Vector images (such as .svg) can be displayed too.</p>
+<p>Vector images (such as .svg) can be displayed too in the same way.
+This is all done using <code>imlib2</code> so as long as imlib2 support
+it, it can be used.</p>
+<p>NOTE: Also note that older spmenu scripts may use the
+<code>IMG:</code> prefix rather than the newer <code>img://</code>
+prefix. It is recommended that you use the <code>img://</code> prefix,
+but <code>IMG:</code> may be preferred if you need compatibility with
+older spmenu versions.</p>
 <h2 id="colored-text">Colored text</h2>
 <p>spmenu supports colored text through SGR sequences. This is the same
 colors that you might already be using in your shell scripts. This means

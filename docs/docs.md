@@ -533,7 +533,7 @@ spmenu window. It should be noted that the prompt is purely visual though.
 ## Images
 
 spmenu supports drawing images. This image is placed on the left side of
-the menu window. To use an image, pipe `IMG:/path/to/image` to spmenu.
+the menu window. To use an image, pipe `img:///path/to/image` to spmenu.
 If you want you can specify arguments like usual. Note that you should add
 a Tab (`\t`) character after the path to the image file. Otherwise the text
 after will be interpreted as part of the filename and the image will not be drawn.
@@ -541,13 +541,18 @@ after will be interpreted as part of the filename and the image will not be draw
 Any text after the Tab character will be interpreted as a regular item.
 In practice, drawing an image might look like this:
 
-`printf "IMG:/path/to/image\tLook at that image, isn't it awesome?\n" | spmenu`
+`printf "img:///path/to/image\tLook at that image, isn't it awesome?\n" | spmenu`
 
 There are also a few image related arguments, such as:
 
 `-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`.
 
-NOTE: Vector images (such as .svg) can be displayed too.
+Vector images (such as .svg) can be displayed too in the same way. This is all
+done using `imlib2` so as long as imlib2 support it, it can be used.
+
+NOTE: Also note that older spmenu scripts may use the `IMG:` prefix rather than
+the newer `img://` prefix. It is recommended that you use the `img://` prefix,
+but `IMG:` may be preferred if you need compatibility with older spmenu versions.
 
 ## Colored text
 

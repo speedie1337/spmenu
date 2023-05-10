@@ -9,7 +9,7 @@ genlist() {
     for i in $(seq "$argc"); do
         arg="$(printf "%s\n" "$@" | sed -n "${i}","${i}"p)"
         [ -z "$arg" ] || [ ! -f "$arg" ] && continue
-        printf "IMG:%s\t%s\n" "$arg" "$arg"
+        printf "img://%s\t%s\n" "$arg" "$arg"
     done
 }
 

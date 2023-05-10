@@ -562,7 +562,7 @@ It should be noted that the prompt is purely visual though.
 .PP
 spmenu supports drawing images.
 This image is placed on the left side of the menu window.
-To use an image, pipe \f[V]IMG:/path/to/image\f[R] to spmenu.
+To use an image, pipe \f[V]img:///path/to/image\f[R] to spmenu.
 If you want you can specify arguments like usual.
 Note that you should add a Tab (\f[V]\[rs]t\f[R]) character after the
 path to the image file.
@@ -572,14 +572,22 @@ the image will not be drawn.
 Any text after the Tab character will be interpreted as a regular item.
 In practice, drawing an image might look like this:
 .PP
-\f[V]printf \[dq]IMG:/path/to/image\[rs]tLook at that image, isn\[aq]t it awesome?\[rs]n\[dq] | spmenu\f[R]
+\f[V]printf \[dq]img:///path/to/image\[rs]tLook at that image, isn\[aq]t it awesome?\[rs]n\[dq] | spmenu\f[R]
 .PP
 There are also a few image related arguments, such as:
 .PP
 \f[V]-is\f[R], \f[V]-ig\f[R], \f[V]-it\f[R], \f[V]-ib\f[R],
 \f[V]-ic\f[R], \f[V]-itc\f[R] and \f[V]-gc\f[R].
 .PP
-NOTE: Vector images (such as .svg) can be displayed too.
+Vector images (such as .svg) can be displayed too in the same way.
+This is all done using \f[V]imlib2\f[R] so as long as imlib2 support it,
+it can be used.
+.PP
+NOTE: Also note that older spmenu scripts may use the \f[V]IMG:\f[R]
+prefix rather than the newer \f[V]img://\f[R] prefix.
+It is recommended that you use the \f[V]img://\f[R] prefix, but
+\f[V]IMG:\f[R] may be preferred if you need compatibility with older
+spmenu versions.
 .SS Colored text
 .PP
 spmenu supports colored text through SGR sequences.
