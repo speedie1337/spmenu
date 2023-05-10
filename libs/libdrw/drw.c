@@ -318,6 +318,7 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     XftDraw *d = NULL;
     size_t i, len;
     int render = x || y || w || h;
+    char *t;
 
     if (!drw || (render && !drw->scheme) || !text || !drw->font)
         return 0;
@@ -333,18 +334,19 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     }
 
     len = strlen(text);
+    t = strdup(text);
 
     if (len) {
-        drw_font_getexts(drw->font, text, len, &ew, NULL, markup);
+        drw_font_getexts(drw->font, t, len, &ew, NULL, markup);
         /* shorten text if necessary */
-        for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, text, len, &ew, NULL, markup))
+        for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, t, len, &ew, NULL, markup))
             len--;
 
 
         if (len) {
-            memcpy(buf, text, len);
+            memcpy(buf, t, len);
             buf[len] = '\0';
-            if (len < strlen(text))
+            if (len < strlen(t))
                 for (i = len; i && i > len - 3; buf[--i] = '.')
                     ; /* NOP */
 
