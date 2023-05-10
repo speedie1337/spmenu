@@ -122,6 +122,9 @@ Pull requests would be greatly appreciated for any of these issues!
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
 - Image support: Ability to display icons, similar to rofi
+- Image support: Images take a long time to load sometimes, particularly when
+items are selected using the cursor so what we really need is a way to
+skip over images after a set time limit.
 - Text drawing: Use cairo for text drawing over Xft.
 - Lines: Rofi-like newlines in the same entry
   - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
@@ -146,13 +149,7 @@ like you will be unable to use spmenu in its current state.
 
 ### Bugs
 
-- Text drawing: Pango will sometimes spit out errors for invalid markup.
-Silencing this would be a good idea.
-  - Simply make sure characters are valid UTF-8 characters. Remove anything else
-  in the drw_text function.
-- Image support: Images take a long time to load sometimes, particularly when
-items are selected using the cursor so what we really need is a way to
-skip over images after a set time limit.
+None discovered yet! :)
 
 ## Scripts
 

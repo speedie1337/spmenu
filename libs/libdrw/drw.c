@@ -14,6 +14,7 @@
 #if USEPANGO
 #include <pango/pango.h>
 #include <pango/pangoxft.h>
+#include <iconv.h>
 #endif
 
 #include "drw.h"
@@ -65,6 +66,8 @@ static size_t utf8decode(const char *c, long *u, size_t clen) {
 
     return len;
 }
+#else
+static char *parse_utf(char *str, size_t clen);
 #endif
 
 Clr transcheme[3];
@@ -308,6 +311,29 @@ int xerrordummy(Display *dpy, XErrorEvent *ee) {
     return 0;
 }
 
+#if USEPANGO
+char *parse_utf(char *str, size_t clen) {
+    char *ostr = str;
+    char *cnstr = calloc(clen + 1, sizeof(char));
+    char *cstr = cnstr;
+    size_t olen = clen;
+
+    iconv_t cd = iconv_open("UTF-8//IGNORE", "ASCII");
+
+    if (cd == (iconv_t) - 1) {
+        die("spmenu: iconv_open failed");
+    }
+
+    if (iconv(cd, &ostr, &olen, &cstr, &clen)) {
+        ; // should be ok
+    }
+
+    iconv_close(cd);
+
+    return cnstr;
+}
+#endif
+
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup) {
     XSetErrorHandler(xerrordummy);
 
@@ -336,12 +362,13 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     len = strlen(text);
     t = strdup(text);
 
+    t = parse_utf(t, len);
+
     if (len) {
         drw_font_getexts(drw->font, t, len, &ew, NULL, markup);
         /* shorten text if necessary */
         for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, t, len, &ew, NULL, markup))
             len--;
-
 
         if (len) {
             memcpy(buf, t, len);
@@ -349,6 +376,9 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
             if (len < strlen(t))
                 for (i = len; i && i > len - 3; buf[--i] = '.')
                     ; /* NOP */
+
+            if (!strstr(buf, "</"))
+                markup = 0;
 
             if (render) {
                 ty = y + (h - drw->font->h) / 2;
@@ -523,17 +553,23 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
     if (!font || !text)
         return;
 
+    char *t = strdup(text);
+
 #if USEPANGO
+    t = parse_utf(t, len);
+
+    if (!strstr(t, "</"))
+        markup = 0;
     PangoRectangle r;
     if(markup)
-        pango_layout_set_markup(font->layout, text, len);
+        pango_layout_set_markup(font->layout, t, len);
     else
-        pango_layout_set_text(font->layout, text, len);
+        pango_layout_set_text(font->layout, t, len);
     pango_layout_get_extents(font->layout, 0, &r);
     if(markup) // clear markup attributes
         pango_layout_set_attributes(font->layout, NULL);
 #else
-    XftTextExtentsUtf8(font->dpy, font->xfont, (XftChar8 *)text, len, &ext);
+    XftTextExtentsUtf8(font->dpy, font->xfont, (XftChar8 *)t, len, &ext);
 #endif
     if (w)
 #if USEPANGO
