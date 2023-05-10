@@ -156,11 +156,13 @@ int parsemarkup(int index) {
 
     // parse image markup
 #if USEIMAGE
-    if(!strncmp("IMG:", items[index].text, strlen("IMG:"))) {
+    if (!strncmp("IMG:", items[index].text, strlen("IMG:")) || !strncmp("img://", items[index].text, strlen("img://"))) {
         if(!(items[index].image = malloc(strlen(items[index].text)+1)))
             fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
-        if(sscanf(items[index].text, "IMG:%[^\t]", items[index].image)) {
+        if (sscanf(items[index].text, "IMG:%[^\t]", items[index].image)) {
             items[index].text += strlen("IMG:")+strlen(items[index].image)+1;
+        } else if (sscanf(items[index].text, "img://%[^\t]", items[index].image)) {
+            items[index].text += strlen("img://")+strlen(items[index].image)+1;
         } else {
             free(items[index].image);
             items[index].image = NULL;
@@ -180,11 +182,13 @@ int parsemarkup(int index) {
 #else // remove the data, just for convenience
     char *data;
 
-    if(!strncmp("IMG:", items[index].text, strlen("IMG:"))) {
+    if (!strncmp("IMG:", items[index].text, strlen("IMG:")) || !strncmp("img://", items[index].text, strlen("img://"))) {
         if(!(data = malloc(strlen(items[index].text)+1)))
             fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
         if(sscanf(items[index].text, "IMG:%[^\t]", data)) {
             items[index].text += strlen("IMG:")+strlen(data)+1;
+        } else if(sscanf(items[index].text, "img://%[^\t]", data)) {
+            items[index].text += strlen("img://")+strlen(data)+1;
         }
     }
 #endif
