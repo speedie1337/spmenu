@@ -134,6 +134,9 @@ skip over images after a set time limit.
   - Probably use some minimal public domain library for this, I'd
 like to avoid adding more external dependencies unless it's a
 common dependency most people already have.
+- Deprecate: build.sh script. It's not really necessary now that we're
+using Meson for building anyway. Will probably be completely removed
+along with the `IMG:` syntax in spmenu 2.0.
 
 ### Unlikely, but maybe at some point in the distant future
 
