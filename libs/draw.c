@@ -1,6 +1,4 @@
-void
-drawhighlights(struct item *item, int x, int y, int w, int p)
-{
+void drawhighlights(struct item *item, int x, int y, int w, int p, const char *ittext) {
     int i, indent;
     char *highlight;
     char c;
@@ -8,7 +6,7 @@ drawhighlights(struct item *item, int x, int y, int w, int p)
     // limitation in order to prevent highlighting from drawing when the text isn't visible
     if (columns > 5 && lines > 1) return;
 
-    char *itemtext = item->text;
+    char *itemtext = strdup(ittext);
 
     if (!(strlen(itemtext) && strlen(text))) return;
 
@@ -38,9 +36,7 @@ drawhighlights(struct item *item, int x, int y, int w, int p)
     }
 }
 
-    int
-drawitemtext(struct item *item, int x, int y, int w)
-{
+int drawitemtext(struct item *item, int x, int y, int w) {
     char buffer[MAXITEMLENGTH]; // buffer containing item text
     Clr scm[2]; // color scheme
     int leftpadding = lrpad / 2; // padding
@@ -49,7 +45,6 @@ drawitemtext(struct item *item, int x, int y, int w)
     int bg = 0; // background
     int bgfg = 0; // both
     int ignore = 0; // ignore colors
-    int skiphighlight = 0; // skip highlighting
     int selitem = 0;
     int priitem = 0;
 
@@ -98,13 +93,13 @@ drawitemtext(struct item *item, int x, int y, int w)
 
                 apply_fribidi(buffer);
                 drw_text(drw, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+                drawhighlights(item, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, leftpadding, isrtl ? fribidi_text : buffer);
 
                 // position and width
                 x += MIN(w, TEXTW(buffer) - lrpad) + leftpadding;
                 w -= MIN(w, TEXTW(buffer) - lrpad) + leftpadding;
 
                 // no highlighting if colored text
-                skiphighlight = 1;
                 leftpadding = 0;
 
                 char *character = item->text + rd + 1; // current character
@@ -179,7 +174,7 @@ drawitemtext(struct item *item, int x, int y, int w)
     // now draw any non-colored text
     apply_fribidi(buffer);
     int r = drw_text(drw, x, y, w, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
-    if (!hidehighlight && !skiphighlight) drawhighlights(item, x, y, w, leftpadding);
+    if (!hidehighlight) drawhighlights(item, x, y, w, leftpadding, buffer);
 
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
     item->clntext = malloc(sizeof(buffer));
@@ -188,9 +183,7 @@ drawitemtext(struct item *item, int x, int y, int w)
     return r;
 }
 
-    int
-drawitem(int x, int y, int w)
-{
+int drawitem(int x, int y, int w) {
     struct item *item;
 
     int numberWidth = 0;
@@ -286,9 +279,7 @@ drawitem(int x, int y, int w)
     return x;
 }
 
-    int
-drawprompt(int x, int y, int w)
-{
+int drawprompt(int x, int y, int w) {
     if (prompt && *prompt && !hideprompt) {
         drw_setscheme(drw, scheme[SchemePrompt]);
 
@@ -305,9 +296,7 @@ drawprompt(int x, int y, int w)
     return x;
 }
 
-    int
-drawinput(int x, int y, int w)
-{
+int drawinput(int x, int y, int w) {
     char *censort; // censor text (password)
     unsigned int curpos = 0;
     int fh = drw->font->h;
@@ -342,9 +331,7 @@ drawinput(int x, int y, int w)
     return x;
 }
 
-    int
-drawlarrow(int x, int y, int w)
-{
+int drawlarrow(int x, int y, int w) {
     if (hidelarrow) return x;
 
     if (curr->left) { // draw left arrow
@@ -356,9 +343,7 @@ drawlarrow(int x, int y, int w)
     return x;
 }
 
-    int
-drawrarrow(int x, int y, int w)
-{
+int drawrarrow(int x, int y, int w) {
     if (hiderarrow) return x;
 
     if (next) { // draw right arrow
@@ -370,9 +355,7 @@ drawrarrow(int x, int y, int w)
     return x;
 }
 
-    int
-drawnumber(int x, int y, int w)
-{
+int drawnumber(int x, int y, int w) {
     if (hidematchcount) return x;
 
     int powerlinewidth = 0;
@@ -395,9 +378,7 @@ drawnumber(int x, int y, int w)
     return x;
 }
 
-    int
-drawmode(int x, int y, int w)
-{
+int drawmode(int x, int y, int w) {
     if (!hidemode) { // draw mode indicator
         int powerlinewidth = 0;
 
@@ -420,9 +401,7 @@ drawmode(int x, int y, int w)
     return x;
 }
 
-    int
-drawcaps(int x, int y, int w)
-{
+int drawcaps(int x, int y, int w) {
     if (!w) return x; // not caps lock
 
     if (!hidecaps) { // draw caps lock indicator
@@ -447,9 +426,7 @@ drawcaps(int x, int y, int w)
     return x;
 }
 
-    void
-drawmenu(void)
-{
+void drawmenu(void) {
     int x = 0, y = 0, w = 0;
     plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
 
