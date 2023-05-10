@@ -8,7 +8,7 @@ project(
 cc = meson.get_compiler('c')
 
 project_source_files = [
-  'libs/libdrw/draw.c',
+  'libs/libdrw/drw.c',
   'spmenu.c',
   'libs/sl/main.c',
 ]

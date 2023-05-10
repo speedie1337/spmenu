@@ -16,7 +16,7 @@
 #include <pango/pangoxft.h>
 #endif
 
-#include "draw.h"
+#include "drw.h"
 #include "../sl/main.h"
 
 #if !USEPANGO
