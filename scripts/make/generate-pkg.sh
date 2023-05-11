@@ -1,4 +1,5 @@
 #!/bin/sh
+[ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
 version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 
 rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*

@@ -10,6 +10,7 @@ cp_build="${cp_build:-false}"
 check() { [ "$mac" != "false" ] && gen_manual="false"; }
 
 loadconf() {
+    [ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
     [ -x "buildconf" ] && [ ! -x "buildconf_dev" ] && source buildconf
     [ -x "buildconf_dev" ] && source buildconf_dev
 

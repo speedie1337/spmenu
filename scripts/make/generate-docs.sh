@@ -1,4 +1,5 @@
 #!/bin/sh
+[ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
 version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 printf "%% spmenu(1) ${version} | fancy dynamic menu\n" > .man.md
 grep -v docs/preview.png docs/docs.md >> .man.md
