@@ -1,8 +1,6 @@
 void eventloop(void) {
     XEvent ev;
-#if USEIMAGE
     int noimg = 0;
-#endif
 
     while (!XNextEvent(dpy, &ev)) {
         if (XFilterEvent(&ev, None))
@@ -16,9 +14,7 @@ void eventloop(void) {
                 exit(1);
             case ButtonPress:
                 buttonpress(&ev);
-#if USEIMAGE
                 noimg = 0;
-#endif
                 break;
             case MotionNotify: // currently does nothing
                 break;
@@ -38,6 +34,7 @@ void eventloop(void) {
                 }
 
                 keypress(&ev);
+                noimg = 1;
                 break;
             case SelectionNotify: // paste selection
                 if (ev.xselection.property == utf8)
@@ -50,6 +47,7 @@ void eventloop(void) {
             case KeyRelease:
                 getcapsstate();
                 drawmenu();
+                noimg = 0;
                 break;
         }
 
@@ -70,12 +68,11 @@ void eventloop(void) {
         }
 
         // redraw image on X11 event
+        if (!noimg)
 #if USEIMAGE
-        if (!noimg) {
             drawimage();
-        } else {
-            noimg = 0; // draw it next time
-        }
+#else
+        ;
 #endif
     }
 }
