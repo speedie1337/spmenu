@@ -42,6 +42,7 @@ build() {
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
             -Dopt="$opt" \
+            -Dutf8="$utf8" \
             build
     else
         meson setup \
@@ -54,6 +55,7 @@ build() {
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
             -Dopt="$opt" \
+            -Dutf8="$utf8" \
             build
     fi
 

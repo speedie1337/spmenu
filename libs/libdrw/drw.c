@@ -9,6 +9,11 @@
 #define USEPANGO 0
 #else
 #define USEPANGO 1
+#ifndef UTF8
+#define USEUTF8 0
+#else
+#define USEUTF8 1
+#endif
 #endif
 
 #if USEPANGO
@@ -318,7 +323,11 @@ char *parse_utf(char *str, size_t clen) {
     char *cstr = cnstr;
     size_t olen = clen;
 
+#if USEUTF8
+    iconv_t cd = iconv_open("UTF-8//IGNORE", "UTF-8");
+#else
     iconv_t cd = iconv_open("UTF-8//IGNORE", "ASCII");
+#endif
 
     if (cd == (iconv_t) - 1) {
         die("spmenu: iconv_open failed");

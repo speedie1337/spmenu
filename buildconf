@@ -12,6 +12,7 @@ openssl=true # enable support for openssl, used to calculate MD5
 fribidi=true # enable support for right to left languages
 libconfig=true # enable configuration and themes
 xresources=true # enable .Xresources support
+utf8=true # enable UTF-8 support
 opt=-O2 # level of optimization
 warn=true # warn about OS quirks
 install=true # automatically install, if set to false an install will not be performed

@@ -71,6 +71,10 @@ if get_option('xresources')
   build_args += [ '-DXRESOURCES' ]
 endif
 
+if get_option('utf8')
+  build_args += [ '-DUTF8' ]
+endif
+
 project_target = executable(
   meson.project_name(),
   project_source_files, install : true,
