@@ -6,4 +6,5 @@ GenericName=Run launcher
 Comment=List out .desktop entries
 Exec=spmenu_run -d
 Terminal=false
+Categories=Utility;System;
 Type=Application

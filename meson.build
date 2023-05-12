@@ -90,6 +90,7 @@ install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
 install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
 install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')
 install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')
+install_data(sources : 'docs/spmenu.svg', install_dir : 'share/icons/hicolor/scalable/apps')
 install_data(sources : 'scripts/spmenu_run', install_dir : 'bin')
 install_data(sources : 'scripts/spmenu_test', install_dir : 'bin')
 

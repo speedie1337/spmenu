@@ -6,4 +6,5 @@ GenericName=Run launcher
 Comment=List out PATH entries.
 Exec=spmenu_run -x
 Terminal=false
+Categories=Utility;System;
 Type=Application
