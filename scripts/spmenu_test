@@ -71,7 +71,7 @@ l[24]=y
 l[25]=z
 
 main() {
-printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8}\n\
+printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $(spmenu -v | sed 's/spmenu-//g')\n\
 ${b1}\n\
 ${b2}\n\
 ${b3}\n\
