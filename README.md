@@ -95,6 +95,8 @@ for more information.
 
 ## Installation (Gentoo GNU/Linux)
 
+NOTE: The Gentoo overlay may be out of date. Use at your own risk!
+
 If you are on Gentoo GNU/Linux, you can add
 [my overlay](https://git.speedie.site/speedie-overlay) which includes
 `x11-misc/spmenu` as well as other useful packages.
