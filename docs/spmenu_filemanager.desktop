@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=2.0
+Name=spmenu (File manager)
+Icon=spmenu
+GenericName=Run launcher
+Comment=List out files and directories
+Exec=spmenu_run -fm
+Terminal=false
+Type=Application

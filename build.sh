@@ -6,8 +6,9 @@ reconfigure="${reconfigure:-true}"
 version="${version:-1.1}"
 xresources="${xresources:-true}"
 cp_build="${cp_build:-false}"
+prefix="${prefix:-/usr}"
 
-check() { [ "$mac" != "false" ] && gen_manual="false"; }
+check() { [ "$mac" != "false" ] && gen_manual="false" && prefix="/usr/local"; }
 
 loadconf() {
     [ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
@@ -46,6 +47,7 @@ build() {
             -Dlibconfig="$libconfig" \
             -Dopt="$opt" \
             -Dutf8="$utf8" \
+            --prefix "$prefix" \
             build
     else
         meson setup \
@@ -59,6 +61,7 @@ build() {
             -Dlibconfig="$libconfig" \
             -Dopt="$opt" \
             -Dutf8="$utf8" \
+            --prefix "$prefix" \
             build
     fi
 

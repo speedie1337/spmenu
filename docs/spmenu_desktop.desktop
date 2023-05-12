@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=2.0
+Name=spmenu (Desktop)
+Icon=spmenu
+GenericName=Run launcher
+Comment=List out .desktop entries
+Exec=spmenu_run -d
+Terminal=false
+Type=Application

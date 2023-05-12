@@ -677,7 +677,7 @@ cache_desktop() {
 }
 
 clear_cache() {
-    rm -rf "${tmpdir[@]}"
+    rm -rf "${tmpdir[*]}"
     rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}"
 }
 
