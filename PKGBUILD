@@ -1,4 +1,4 @@
-# Maintainer: speedie <speedie.alt@gmail.com>
+# Maintainer: speedie <speedie@speedie.site>
 
 pkgname=spmenu
 pkgver=VERSION
