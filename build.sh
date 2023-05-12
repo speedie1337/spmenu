@@ -32,8 +32,10 @@ build() {
 
     mkdir -p build/
 
+    [ "$static" = "true" ] && STATIC="--prefer-static"
+
     if [ "$reconfigure" = "true" ]; then
-        meson setup --reconfigure \
+        meson setup --reconfigure $STATIC \
             -Dxresources="$xresources" \
             -Dfribidi="$fribidi" \
             -Dxinerama="$xinerama" \
@@ -47,7 +49,7 @@ build() {
             build
     else
         meson setup \
-            -Dxresources="$xresources" \
+            -Dxresources="$xresources" $STATIC \
             -Dfribidi="$fribidi" \
             -Dxinerama="$xinerama" \
             -Dimlib2="$imlib2" \
