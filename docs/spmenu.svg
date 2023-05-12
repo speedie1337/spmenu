@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">
-<defs>
-</defs>
-<g transform="matrix(1 0 0 1 270.67 156.62)"  >
-<path style="stroke: rgb(34,34,34); stroke-width: 10; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-265.67, -151.62)" d="M 235.33333333333331 168.66666666666666 L 267.33850098147116 168.66666666666666 L 267.33850098147116 134.57936643368234 L 307.000096079594 134.57936643368234 L 307.000096079594 153.0030174333608 L 280.9751661813104 153.0030174333608" stroke-linecap="round" />
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1" width="384" height="384">
+
+<g transform="matrix(1 0 0 1 0 0)">
+	<g transform="matrix(4.94 0 0 4.94 179.79 184.81)">
+        <path transform="matrix(1 0 0 1 -271.17 -151.62)"  d="M235.33333 168.66667L267.3385 168.66667L267.3385 134.57936L307.0001 134.57936L307.0001 153.00302L280.97516 153.00302" stroke="#222222" stroke-width="10" fill="none" />
+	</g>
 </g>
 </svg>
