@@ -28,12 +28,5 @@ build(){
 package() {
   cd "$pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/usr/share/spmenu"
-  install -Dm644 docs/docs.md "$pkgdir/usr/share/spmenu/"
-  install -Dm644 docs/code-docs.md "$pkgdir/usr/share/spmenu/"
-  install -Dm644 docs/example.Xresources "$pkgdir/usr/share/spmenu/"
-  install -Dm644 docs/spmenu.conf "$pkgdir/usr/share/spmenu/"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  install -Dm755 scripts/spmenu_run "$pkgdir/usr/bin/spmenu"
-  install -Dm755 scripts/spmenu_test "$pkgdir/usr/bin/spmenu"
+  meson install -C build --destdir "$pkgdir"
 }
