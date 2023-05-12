@@ -371,6 +371,8 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "position", &imageposition); // spmenu.image.position
             config_setting_lookup_int(conf, "cache", &generatecache); // spmenu.image.cache
             config_setting_lookup_int(conf, "maxcache", &maxcache); // spmenu.image.maxcache
+            if (config_setting_lookup_string(conf, "cachedir", &dest)) // spmenu.image.cachedir
+                cachedir = strdup(dest);
         }
     }
 

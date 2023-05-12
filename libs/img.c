@@ -258,20 +258,28 @@ void loadimagecache(const char *file, int *width, int *height) {
             sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
 
         // path for cached thumbnail
-        if (xdg_cache)
-            slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
-        else
-            slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
+        if (!cachedir || !strcmp(cachedir, "default")) {
+            if (xdg_cache)
+                slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
+            else
+                slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
+        } else {
+            slen = snprintf(NULL, 0, "%s/%s/%s.png", cachedir, dsize, md5)+1;
+        }
 
         if(!(buf = malloc(slen))) {
             fprintf(stderr, "out of memory");
             return;
         }
 
-        if (xdg_cache)
-            sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
-        else
-            sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
+        if (!cachedir || !strcmp(cachedir, "default")) {
+            if (xdg_cache)
+                sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
+            else
+                sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
+        } else {
+                sprintf(buf, "%s/%s/%s.png", cachedir, dsize, md5);
+        }
 
         loadimage(buf, width, height);
 

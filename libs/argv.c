@@ -237,6 +237,11 @@ void readargs(int argc, char *argv[]) {
             if (lines == 0) lines = 1;
         } else if (!strcmp(argv[i], "-mc") || (!strcmp(argv[i], "--max-cache"))) { // max cache
             maxcache = atoi(argv[++i]);
+        } else if (!strcmp(argv[i], "-cd") || (!strcmp(argv[i], "--cache-dir"))) { // cache directory
+            cachedir = argv[++i];
+            if (access(cachedir, F_OK) != 0) {
+                cachedir = "default";
+            }
         } else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
             lines = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight")) || (!strcmp(argv[i], "--line-height"))) { // line height
@@ -459,7 +464,8 @@ void usage(void) {
             "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
             "spmenu -gc,      --generate-cache                            Generate image cache\n"
             "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"
-            "spmenu -mc       --max-cache <size>                          Set max image cache size to <size>\n"
+            "spmenu -mc,      --max-cache <size>                          Set max image cache size to <size>\n"
+            "spmenu -cd,      --cache-dir <dir>                           Set cache directory to <dir>\n"
             "spmenu -rw,      --relative-width                            Enable relative input width\n"
             "spmenu -nrw,     --no-relative-width                         Disable relative input width\n"
             "spmenu -ix,      --print-index                               Print index instead of actual text\n"

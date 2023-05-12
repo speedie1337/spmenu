@@ -46,6 +46,7 @@ static int imagegaps                   = 0; /* Image gaps */
 static int imageposition               = 0; /* Image position (0: Top, 1: Bottom, 2: Center, 3: Top center) */
 static int generatecache               = 1; /* Generate image cache by default */
 static int maxcache                    = 512; /* Max image size to cache */
+static char *cachedir                  = "default"; /* Cache directory. Default means spmenu will determine automatically */
 
 /* Mode options */
 static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */

@@ -48,6 +48,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-mc, --max-cache size`
 :   Set max image cache size to size
 
+`-cd, --cache-dir dir`
+: Set cache directory to dir
+
 `-rw, --relative-width`
 :   Enable relative input width
 
