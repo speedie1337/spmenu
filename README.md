@@ -1,11 +1,11 @@
-# spmenu
+![spmenu logo](docs/spmenu.svg "spmenu"){ width=25% }
 
-![image](docs/preview.png)
+spmenu
+======
 
 ## What is spmenu?
 
-spmenu is an X11 menu application based on
-[dmenu](https://tools.suckless.org/dmenu) which takes standard input, parses
+spmenu is an X11 menu application which takes standard input, parses
 it, and lets the user choose an option and sends the
 selected option to standard output.
 
@@ -13,106 +13,97 @@ In addition to this, it also serves as a run launcher through the included
 shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
 and file listing.
 
-It is designed to integrate well with my [dwm](https://dwm.suckless.org) fork, [speedwm](https://git.speedie.site/speedwm).
-
-## Improvements over dmenu
-
-- Proper configuration file, including keybinds.
-- dwm-like key/mouse bind array (See keybinds.h and mouse.h)
-- Vim-like modes, including indicator.
-- The ability to move around items with keybinds.
-- Customizable/dynamic line/column size.
-- Ability to update entries dynamically by reading from file
-- IME support
-  - Was removed from suckless dmenu years ago due to issues I've resolved
-- Powerlines
-- Web browser like keybindings.
-- 256 color support through SGR codes.
-- Image support
-  - Somewhat based on [this repository](https://github.com/Cloudef/dmenu-pango-imlib)
-- Option to block typing.
-- Rewritten arguments, old arguments still work though.
-- Hiding each part of the menu.
-
-..and more! Note that spmenu is still **compatible** with dmenu.
-Just pass the original arguments.
+While spmenu is based on dmenu, and is also fully compatible with dmenu,
+spmenu introduces many new features which can be useful in shell scripting.
+There are way too many to list, but spmenu has a
+[wiki](https://spmenu.speedie.site) which goes through features in more detail.
 
 ## Dependencies
 
 - libX11
+  - If you're using macOS, XQuartz is a dependency instead.
+  - If you're using Wayland, `xorg-xwayland` is a dependency.
 - libXrender
 - freetype
 - imlib2
-  - Used for image support, can be disabled if you don't want this by:
-    - build.sh: Setting `imlib2=false` in `buildconf`.
+  - Used for image support, can be disabled during compile time.
 - libXinerama
-  - Can be disabled if you don't want/need multi-monitor support by:
-    - build.sh: Setting `xinerama=false` in `buildconf`.
-- tcc compiler
-  - You can swap it out for GCC or any other C99 compatible compiler by:
-    - build.sh: Adding `CC="gcc"` to the `buildconf`.
-command if you want)
+  - Used for multi-monitor support, can be disabled during compile time.
 - OpenSSL
   - Used to calculate MD5 of images if image support is enabled, can be
-disabled if you don't want this by:
-    - build.sh: Setting `imlib2=false` and `openssl=false` in `buildconf`.
+disabled during compile time.
 - Pango
-  - Can be disabled if you don't want/need Pango markup by:
-    - build.sh: Setting `pango=false` and `pangoxft=false` in `buildconf`.
+  - Can be disabled if you don't want/need Pango markup during compile time.
 - libconfig
-  - Can be disabled if you don't want/need config file support by:
-    - build.sh: Setting `libconfig=false` in `buildconf`.
+  - Can be disabled if you don't want/need config file support during compile time.
 - meson
-  - Used to compile spmenu
+  - Used to compile spmenu, not optional unless you're experienced with build systems.
 
-## Installation (GNU/Linux, \*BSD)
+## Installation
 
-`emerge dev-vcs/git`, `pacman -S git`, `apt-get install git`
+- If you're using macOS you may want to consider looking at [this wiki artic
+le](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS) for more information.
+
+- If you are on Arch GNU/Linux, you can add
+[my repository](https://git.speedie.site/speedie-repository) which includes
+`spmenu` as well as other useful packages. Then simply `pacman -S spmenu`.
+
+- Or if you are on Gentoo GNU/Linux, you can add
+[my overlay](https://git.speedie.site/speedie-overlay) which includes
+`x11-misc/spmenu` as well as other useful packages. Then simply `emerge spmenu`.
+
+If you still need/want to manually compile, follow along with manual compilation.
+
+Here we're manually compiling spmenu. This is likely what you'll want to do
+if you're using any distribution but Arch or Gentoo.
+
+Git is required to clone the repository, but you can also use
+[releases](https://ls.speedie.site). Those can be unpacked
+using `tar -xpvf /path/to/spmenu-version.tar.gz`.
+
+To install Git:
+
+- Gentoo: `emerge dev-vcs/git`
+
+- Arch: `pacman -S git`
+
+- Debian: `apt-get install git`
+
+You will also need the dependencies for spmenu. You'll
+have to find those packages in your distribution repositories.
+
+To clone the repository using Git:
 
 `git clone https://git.speedie.site/spmenu`
 
 `cd spmenu/`
 
-`./build.sh # Run as root. Install any missing dependencies.`
+Configure the build by running these commands:
 
-Report any issues with the build.sh script.
+`mkdir -p build/ # Create a build/ directory, Meson will use this as the working
+directory`
 
-## Installation (macOS/OS X/Mac OS X)
+`meson setup build # This will check to make sure all dependencies are found.
+If you're recompiling you may want to pass --reconfigure as an argument`
 
-NOTE: Adds Xquartz as a dependency. I highly recommend you use Homebrew
-to install all the dependencies.
+Now, to build it run `ninja -C build`. If all went well you should have a
+binary in the `build/` directory.
 
-Follow 'Installation (GNU/Linux, \*BSD)' for the most part. macOS requires
-some minor changes though, such as disabling pango, pangoxft, imlib2, and
-openssl. It is not possible to compile spmenu with these as of now, unless
-you're a developer.
+Finally, to install it all, run:
 
-PREFIX must also be set to /usr/local instead of the default /usr
-if you're using macOS Catalina or newer, because Apple made /usr read-only.
+`meson install -C build --destdir /usr # /usr may be overriden to /usr/local
+or anything else if you use macOS or simply want another destination directory`
+
+To generate documentation, which may be necessary if you're pushing new changes
+to your Git repository, run `scripts/make/generate-docs.sh` **in the current
+directory**.
+
+To generate a tarball, run `scripts/make/generate-pkg.sh` **in the current
+directory**. If you want to generate a Pacman package, run
+`scripts/make/generate-pacman-pkg.sh` instead.
 
 See [this wiki article](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS)
 for more information.
-
-## Installation (Gentoo GNU/Linux)
-
-NOTE: The Gentoo overlay may be out of date. Use at your own risk!
-
-If you are on Gentoo GNU/Linux, you can add
-[my overlay](https://git.speedie.site/speedie-overlay) which includes
-`x11-misc/spmenu` as well as other useful packages.
-
-## Installation (Arch GNU/Linux)
-
-If you are on Arch GNU/Linux, you can add
-[my repository](https://git.speedie.site/speedie-repository) which includes
-`spmenu` as well as other useful packages.
-
-There's also a PKGBUILD. To use it, simply run
-`scripts/make/generate-pacman-pkg.sh` in the directory the PKGBUILD is
-located. You can then `pacman -U` this package, or add it to your repository.
-
-If you wish to package spmenu for your GNU/Linux distribution, feel free to add
-it to this list.
 
 ## TODO
 
@@ -133,9 +124,6 @@ have LibreSSL compatibility.
   - Probably use some minimal public domain library for this, I'd
 like to avoid adding more external dependencies unless it's a
 common dependency most people already have.
-- Deprecate: build.sh script. It's not really necessary now that we're
-using Meson for building anyway. Will probably be completely removed
-along with the `IMG:` syntax in spmenu 2.0.
 
 ### Unlikely, but maybe at some point in the distant future
 
