@@ -27,13 +27,6 @@ void moveleft(Arg *arg) {
         drawmenu();
         calcoffsets();
     }
-
-    /*
-    if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
-        cursor = nextrune(-1);
-        drawmenu();
-    }
-    */
 }
 
 void moveright(Arg *arg) {
@@ -64,13 +57,6 @@ void moveright(Arg *arg) {
     }
 
     drawmenu();
-
-    /*
-    if (text[cursor] != '\0') {
-        cursor = nextrune(+1);
-        drawmenu();
-    }
-    */
 }
 
 void movedown(Arg *arg) {
@@ -171,8 +157,8 @@ void paste(Arg *arg) {
     }
 
     XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
-    return;
 
+    return;
 }
 
 void viewhist(Arg *arg) {
