@@ -27,6 +27,7 @@ HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-true}"
+VALIDATE_ENTRIES="${VALIDATE_ENTRIES:-true}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
@@ -248,6 +249,7 @@ ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 IMAGE="true" # Display images (true/false)
+VALIDATE_ENTRIES="true" # Validate entries using desktop-file-validate (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
 DESCRIPTION_COLOR="#999888" # Description text color
 LOGFILE="/tmp/spmenu_run.log" # Log file
@@ -500,8 +502,9 @@ print_desktop_list() {
 
         for i in $(seq "$cached_c"); do
             # current file
-            [ -z "$cached" ] && continue;
-            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")" && [ ! -e "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+            #[ -z "$cached" ] && break;
+            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
+            [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
 
             # get details to display
             it_title[i]="$(sed "1q;d" "$cur_file" | sed "s/Name://g")"
@@ -515,6 +518,12 @@ print_desktop_list() {
             printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
             printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
+
+            printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
+            printf "%d. Description - %s\n" "${i}" "${it_desc[i]}" >> "$LOGFILE"
+            printf "%d. Executable - %s\n" "${i}" "${it_exec[i]}" >> "$LOGFILE"
+            printf "%d. Icon - %s\n" "${i}" "${it_icon[i]}" >> "$LOGFILE"
+            printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
         done
 
         print_desktop_list
@@ -528,7 +537,7 @@ print_desktop_list() {
 
         # read icon
         while read -r p; do
-            [ "$IMAGE" != "true" ] && continue
+            [ "$IMAGE" != "true" ] && it_icon+=("") && continue
             it_icon+=("$p")
         done < "$ICONFILE"
 
@@ -599,7 +608,6 @@ exec_program() {
 
 
 print_desktop_menu() {
-    prep_desktop
     check_desktop
     cache_desktop
 
@@ -618,8 +626,7 @@ print_desktop_menu() {
 
 prep_desktop() {
     mkdir -p "${tmpdir[@]}"
-    rm -f "$LOGFILE"
-    touch "$LOGFILE"
+    printf "spmenu_run log (%s)\nFunction: Desktop\n" "$(date "+%D %T")" > "$LOGFILE"
 }
 
 cache_desktop() {
@@ -654,7 +661,7 @@ cache_desktop() {
     for i in $(seq "$entry_c"); do
         cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
 
-        if [ -x "$(command -v desktop-file-validate)" ]; then
+        if [ -x "$(command -v desktop-file-validate)" ] && [ "$VALIDATE_ENTRIES" != "false" ]; then
             desktop-file-validate "$cur_file" > /dev/null || continue
         fi
 
@@ -668,6 +675,7 @@ cache_desktop() {
 
         # write the file
         printf "%s\n%s\n%s\n%s\n" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" > "${tmpdir[*]}/$(basename "$cur_file").entry"
+        printf "Entry %s: %s\n%s\n%s\n%s\n" "$i" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" >> "$LOGFILE"
     done
 
     # scan
@@ -733,6 +741,7 @@ main() {
         "fm") prepare_dirnav "$args"
             ;;
         "desktop")
+            prep_desktop
             print_desktop_menu "$args"
             ;;
         "help")
