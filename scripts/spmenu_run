@@ -105,7 +105,7 @@ path() {
     read -ra uniq_args <<< "${UNIQ_ARGS}"
     read -ra sort_args <<< "${SORT_ARGS}"
 
-    [ -z "$HIDDEN_KEYWORDS" ] && HIDDEN_KEYWORDS="NULL_ENTRY"
+    HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-NULL_ENTRY}"
 
     print_menu() {
         print() {
@@ -247,6 +247,8 @@ HELP_COLOR="#FFFF00"
 DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .desktop entries
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
+HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
+ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 IMAGE="true" # Display images (true/false)
 VALIDATE_ENTRIES="true" # Validate entries using desktop-file-validate (true/false)
@@ -611,7 +613,9 @@ print_desktop_menu() {
     check_desktop
     cache_desktop
 
-    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_desktop[@]}")"
+    HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
+
+    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}")"
 
     [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
     command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
