@@ -234,6 +234,7 @@ int drawitem(int x, int y, int w) {
             }
 
         int itemoverride = 1;
+        itemn = 0;
 
         for (item = curr; item != next; item = item->right, i++) {
             x = drawitemtext(
