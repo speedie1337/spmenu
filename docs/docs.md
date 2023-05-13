@@ -355,6 +355,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nib, --normal-item-background color`
 :   Set the normal item background color
 
+`-nnif, --normal-next-item-foreground color`
+:   Set the normal next item foreground color
+
+`-nnib, --normal-next-item-background color`
+:   Set the normal next item background color
+
 `-sif, --selected-item-foreground color`
 :   Set the selected item foreground color
 

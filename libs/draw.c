@@ -58,7 +58,11 @@ int drawitemtext(struct item *item, int x, int y, int w) {
             priitem = 1;
         }
     } else {
-        memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+        if (itemn) {
+            memcpy(scm, scheme[SchemeItemNorm2], sizeof(scm));
+        } else {
+            memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
+        }
 
         if (item->hp) {
             memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
@@ -76,7 +80,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     // don't color
-    if (!coloritems) memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+    if (!coloritems) memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
 
     drw_setscheme(drw, scm); // set scheme
 
@@ -146,14 +150,18 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                             if (item->hp)
                                 memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
                         } else {
-                            memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+                            if (itemn) {
+                                memcpy(scm, scheme[SchemeItemNorm2], sizeof(scm));
+                            } else {
+                                memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
+                            }
 
                             if (item->hp)
                                 memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
                         }
 
                         // don't color
-                        if (!coloritems) memcpy(scm, scheme[SchemeItemNorm], sizeof(scm));
+                        if (!coloritems) memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
                     }
                 }
 
@@ -239,6 +247,8 @@ int drawitem(int x, int y, int w) {
                 itemnumber = i;
                 itemoverride = 0;
             }
+
+            itemn = !itemn;
         }
 
         // horizontal list

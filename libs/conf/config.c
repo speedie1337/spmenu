@@ -168,6 +168,13 @@ void conf_init(void) {
             // look up
             config_setting_lookup_int(conf, "itemnormfg", &alpha_itemnormfg); // spmenu.alpha.itemnormfg
             config_setting_lookup_int(conf, "itemnormbg", &alpha_itemnormbg); // spmenu.alpha.itemnormbg
+
+            if (!config_setting_lookup_int(conf, "itemnormfg2", &alpha_itemnormfg2)) // spmenu.alpha.itemnormfg2
+                config_setting_lookup_int(conf, "itemnormfg", &alpha_itemnormfg2);
+
+            if (!config_setting_lookup_int(conf, "itemnormbg2", &alpha_itemnormbg2)) // spmenu.alpha.itemnormbg2
+                config_setting_lookup_int(conf, "itemnormbg", &alpha_itemnormbg2);
+
             config_setting_lookup_int(conf, "itemselfg", &alpha_itemselfg); // spmenu.alpha.itemselfg
             config_setting_lookup_int(conf, "itemselbg", &alpha_itemselbg); // spmenu.alpha.itemselbg
 
@@ -218,10 +225,20 @@ void conf_init(void) {
 
             // items
             if (config_setting_lookup_string(conf, "itemnormfg", &dest))
-                strcpy(colors[SchemeItemNorm][ColFg], strdup(dest));
+                strcpy(colors[SchemeItemNorm1][ColFg], strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemnormbg", &dest))
-                strcpy(colors[SchemeItemNorm][ColBg], strdup(dest));
+                strcpy(colors[SchemeItemNorm1][ColBg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemnormfg2", &dest))
+                strcpy(colors[SchemeItemNorm2][ColFg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemnormfg", &dest))
+                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemnormbg2", &dest))
+                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemnormbg", &dest))
+                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemselfg", &dest))
                 strcpy(colors[SchemeItemSel][ColFg], strdup(dest));

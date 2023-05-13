@@ -113,6 +113,8 @@ static int hideimage                   = 0; /* Hide image (0/1) */
  * Item colors */
 static char col_itemnormfg[]           = "#bbbbbb"; /* Normal foreground item color */
 static char col_itemnormbg[]           = "#222222"; /* Normal background item color */
+static char col_itemnormfg2[]          = "#bbbbbb"; /* Normal foreground item colors for the next item */
+static char col_itemnormbg2[]          = "#bbbbbb"; /* Normal background item colors for the next item */
 static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
 static char col_itemselbg[]            = "#35638A"; /* Selected background item color */
 static char col_itemnormprifg[]        = "#bbbbbb"; /* Normal foreground item (high priority) color */
@@ -185,6 +187,8 @@ static char col_sgr15[]                = "#ffffff"; /* SGR color #15 */
 /* Alpha options */
 static int alpha_itemnormfg            = 255; /* Alpha for normal item foreground (0-255) */
 static int alpha_itemnormbg            = 200; /* Alpha for normal item background (0-255) */
+static int alpha_itemnormfg2           = 255; /* Alpha for next normal item foreground (0-255) */
+static int alpha_itemnormbg2           = 200; /* Alpha for next normal item background (0-255) */
 static int alpha_itemselfg             = 255; /* Alpha for selected item foreground (0-255) */
 static int alpha_itemselbg             = 200; /* Alpha for selected item background (0-255) */
 static int alpha_itemnormprifg         = 255; /* alpha for normal priority item foreground (0-255) */

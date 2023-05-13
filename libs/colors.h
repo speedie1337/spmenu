@@ -3,7 +3,8 @@ static unsigned int alphas[][2] = {
     //                         fg   bg
     [SchemeLArrow]        = { 255, 200 },
     [SchemeRArrow]        = { 255, 200 },
-    [SchemeItemNorm]      = { 255, 200 },
+    [SchemeItemNorm1]     = { 255, 200 },
+    [SchemeItemNorm2]     = { 255, 200 },
     [SchemeItemSel]       = { 255, 200 },
     [SchemeItemNormPri]   = { 255, 200 },
     [SchemeItemSelPri]    = { 255, 200 },
@@ -24,7 +25,8 @@ static char *colors[][2] = {
     //                        fg                 bg
     [SchemeLArrow]        = { col_larrowfg,      col_larrowbg      },
     [SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg      },
-    [SchemeItemNorm]      = { col_itemnormfg,    col_itemnormbg    },
+    [SchemeItemNorm1]     = { col_itemnormfg,    col_itemnormbg    },
+    [SchemeItemNorm2]     = { col_itemnormfg2,   col_itemnormbg2   },
     [SchemeItemSel]       = { col_itemselfg,     col_itemselbg     },
     [SchemeItemNormPri]   = { col_itemnormprifg, col_itemnormpribg },
     [SchemeItemSelPri]    = { col_itemselprifg,  col_itemselpribg  },

@@ -298,12 +298,14 @@ void readargs(int argc, char *argv[]) {
 
             // dmenu compatibility options
         } else if (!strcmp(argv[i], "-nb")) {  // normal background color
-            colors[SchemeItemNorm][ColBg] = argv[++i];
+            colors[SchemeItemNorm1][ColBg] = argv[++i];
+            colors[SchemeItemNorm2][ColBg] = argv[++i];
             colors[SchemeMenu][ColBg] = argv[++i];
             colors[SchemeInput][ColBg] = argv[++i];
             colors[SchemePrompt][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-nf")) {  // normal foreground color
-            colors[SchemeItemNorm][ColFg] = argv[++i];
+            colors[SchemeItemNorm1][ColFg] = argv[++i];
+            colors[SchemeItemNorm2][ColFg] = argv[++i];
             colors[SchemeMenu][ColFg] = argv[++i];
             colors[SchemeInput][ColFg] = argv[++i];
             colors[SchemePrompt][ColFg] = argv[++i];
@@ -334,9 +336,13 @@ void readargs(int argc, char *argv[]) {
 
             // spmenu colors
         } else if (!strcmp(argv[i], "-nif") || (!strcmp(argv[i], "--normal-item-foreground"))) { // normal item foreground color
-            colors[SchemeItemNorm][ColFg] = argv[++i];
+            colors[SchemeItemNorm1][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-nib") || (!strcmp(argv[i], "--normal-item-background"))) { // normal item background color
-            colors[SchemeItemNorm][ColBg] = argv[++i];
+            colors[SchemeItemNorm1][ColBg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nnif") || (!strcmp(argv[i], "--normal-next-item-foreground"))) { // normal next item foreground color
+            colors[SchemeItemNorm2][ColFg] = argv[++i];
+        } else if (!strcmp(argv[i], "-nnib") || (!strcmp(argv[i], "--normal-next-item-background"))) { // normal next item background color
+            colors[SchemeItemNorm2][ColBg] = argv[++i];
         } else if (!strcmp(argv[i], "-sif") || (!strcmp(argv[i], "--selected-item-foreground"))) { // selected item foreground color
             colors[SchemeItemSel][ColFg] = argv[++i];
         } else if (!strcmp(argv[i], "-sib") || (!strcmp(argv[i], "--selected-item-background"))) { // selected item background color
@@ -579,6 +585,8 @@ void usage(void) {
             "spmenu -fn,      --font  <font>                              Set the spmenu font to <font>\n"
             "spmenu -nif,     --normal-item-foreground <color>            Set the normal item foreground color\n"
             "spmenu -nib,     --normal-item-background <color>            Set the normal item background color\n"
+            "spmenu -nnif,    --normal-next-item-foreground <color>       Set the normal next item foreground color\n"
+            "spmenu -nnib,    --normal-next-item-background <color>       Set the normal next item background color\n"
             "spmenu -sif,     --selected-item-foreground <color>          Set the selected item foreground color\n"
             "spmenu -sib,     --selected-item-background <color>          Set the selected item background color\n"
             "spmenu -npf,     --normal-item-priority-foreground <color>   Set the normal item (high priority) foreground color\n"

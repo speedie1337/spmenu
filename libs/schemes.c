@@ -12,8 +12,10 @@ void init_appearance(void) {
     alphas[SchemeLArrow][ColBg] = alpha_larrowbg;
     alphas[SchemeRArrow][ColFg] = alpha_rarrowfg;
     alphas[SchemeRArrow][ColBg] = alpha_rarrowbg;
-    alphas[SchemeItemNorm][ColFg] = alpha_itemnormfg;
-    alphas[SchemeItemNorm][ColBg] = alpha_itemnormbg;
+    alphas[SchemeItemNorm1][ColFg] = alpha_itemnormfg;
+    alphas[SchemeItemNorm1][ColBg] = alpha_itemnormbg;
+    alphas[SchemeItemNorm2][ColFg] = alpha_itemnormfg2;
+    alphas[SchemeItemNorm2][ColBg] = alpha_itemnormbg2;
     alphas[SchemeItemSel][ColFg] = alpha_itemselfg;
     alphas[SchemeItemSel][ColBg] = alpha_itemselbg;
     alphas[SchemeItemNormPri][ColFg] = alpha_itemnormprifg;

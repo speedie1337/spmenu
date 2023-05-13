@@ -13,6 +13,8 @@ spmenu.priitempadding:      0
 !! Colors
 spmenu.col_itemnormfg:      #bbbbbb
 spmenu.col_itemnormbg:      #222222
+spmenu.col_itemnormfg2:     #bbbbbb
+spmenu.col_itemnormbg2:     #222222
 spmenu.col_itemselfg:       #eeeeee
 spmenu.col_itemselbg:       #35638A
 spmenu.col_itemnormprifg:   #bbbbbb
@@ -61,6 +63,8 @@ spmenu.col_sgr15:           #ffffff
 !! Alpha
 spmenu.alpha_itemnormfg:    255
 spmenu.alpha_itemnormbg:    200
+spmenu.alpha_itemnormfg2:   255
+spmenu.alpha_itemnormbg2:   200
 spmenu.alpha_itemselfg:     255
 spmenu.alpha_itemselbg:     200
 spmenu.alpha_itemnormprifg: 255
