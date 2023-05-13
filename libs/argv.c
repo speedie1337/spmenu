@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 void readargs(int argc, char *argv[]) {
     int i = 0;
     int j = 0;

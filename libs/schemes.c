@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 char sixd_to_8bit(int x) {
     return x == 0 ? 0 : 0x37 + 0x28 * x;
 }

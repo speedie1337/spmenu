@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 #if USEXRESOURCES
 enum resource_type {
     STRING = 0,

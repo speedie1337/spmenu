@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 void drawhighlights(struct item *item, int x, int y, int w, int p, const char *ittext) {
     int i, indent;
     char *highlight;

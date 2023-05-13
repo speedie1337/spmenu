@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 #if USEXRESOURCES
 void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst) {
     char *sdst = NULL;

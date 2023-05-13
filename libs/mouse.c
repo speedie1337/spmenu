@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void buttonpress(XEvent *e) {
     struct item *item;
     XButtonPressedEvent *ev = &e->xbutton;

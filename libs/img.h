@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 #if USEIMAGE
 #include <errno.h>
 #include <pwd.h>

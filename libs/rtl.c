@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 #if USERTL
 void apply_fribidi(char *str) {
     FriBidiStrIndex len = strlen(str);

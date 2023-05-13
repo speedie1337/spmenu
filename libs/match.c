@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void fuzzymatch(void) {
     struct item *it;
     struct item **fuzzymatches = NULL;

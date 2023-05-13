@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 typedef union {
     int i; // integer
     unsigned int ui; // unsigned int

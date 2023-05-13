@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 char ** tokenize(char *source, const char *delim, int *llen) {
     int listlength = 0, list_size = 0;
     char **list = NULL, *token;

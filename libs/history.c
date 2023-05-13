@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void loadhistory(void) {
     FILE *fp = NULL;
     static size_t cap = 0;

@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 #if USEIMAGE
 void setimagesize(int width, int height) {
     int oih = 0;

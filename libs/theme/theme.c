@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void theme_load(void) {
     char *xdg_conf;
     char *theme = NULL;

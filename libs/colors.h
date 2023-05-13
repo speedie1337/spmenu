@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 // alpha array
 static unsigned int alphas[][2] = {
     //                         fg   bg

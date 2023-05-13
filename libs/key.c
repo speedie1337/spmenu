@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void updatenumlockmask(void) {
     unsigned int i, j;
     XModifierKeymap *modmap;

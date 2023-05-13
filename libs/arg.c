@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 void moveleft(Arg *arg) {
     struct item *tmpsel;
     int i, offscreen = 0;

@@ -1,6 +1,8 @@
 /* Mouse bindings
  * These are all your hardcoded mouse bindings. It is recommended you set these in ~/.config/spmenu/spmenu.conf though.
+ *
  * See https://spmenu.speedie.site/index.php/mouse.h+documentation for more information.
+ * See LICENSE file for copyright and license details.
  */
 
 static Mouse buttons[] = {

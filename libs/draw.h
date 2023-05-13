@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 // declare functions
 static void drawmenu(void);
 static int drawprompt(int x, int y, int w);
