@@ -488,31 +488,32 @@ void drawmenu(void) {
         }
 #endif
 
-        if (!hideprompt) {
+        if (!hideprompt && !fullscreen) {
             w = promptw;
             x = drawprompt(x, y, w);
         }
-        if (!hideinput) {
+
+        if (!hideinput && !fullscreen) {
             w = (lines > 0 || !matches) ? mw - x : inputw;
             x = drawinput(x, y, w);
         }
 
-        if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+        if (!hidemode && !fullscreen) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
         // draw the items, this function also calls drawrarrow() and drawlarrow()
         if (!hideitem) drawitem(x, y, w);
 
-        if (!hidematchcount) {
+        if (!hidematchcount && !fullscreen) {
             w = numberWidth;
             drawnumber(mw - numberWidth - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
         }
 
-        if (!hidemode) {
+        if (!hidemode && !fullscreen) {
             w = modeWidth;
             drawmode(mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
         }
 
-        if (!hidecaps) {
+        if (!hidecaps && !fullscreen) {
             w = capsWidth;
             drawcaps(mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
         }

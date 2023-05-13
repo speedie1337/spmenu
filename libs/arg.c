@@ -403,6 +403,25 @@ void toggleimg(Arg *arg) {
 #endif
 }
 
+void togglefullimg(Arg *arg) {
+#if USEIMAGE
+    fullscreen = image ? !fullscreen : 0;
+
+    if (fullscreen) {
+        ow = imagewidth;
+        oh = imageheight;
+
+        imagewidth = mw;
+        imageheight = mh;
+    } else {
+        imagewidth = ow;
+        imageheight = oh;
+    }
+
+    drawmenu();
+#endif
+}
+
 void defaultimg(Arg *arg) {
 #if USEIMAGE
 
@@ -419,6 +438,7 @@ void defaultimg(Arg *arg) {
 }
 
 void setlines(Arg *arg) {
+    if (fullscreen) return;
     lines += arg->i;
     if (lines < 0) lines = 0;
 
@@ -428,6 +448,7 @@ void setlines(Arg *arg) {
 }
 
 void setcolumns(Arg *arg) {
+    if (fullscreen) return;
     columns += arg->i;
     if (columns < 1) columns = 1;
 

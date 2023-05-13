@@ -4,7 +4,7 @@ void setimagesize(int width, int height) {
     int oiw = 0;
 
     // this makes sure we cannot scale the image up or down too much
-    if ((!image && height < imageheight) || (!image && width < imagewidth) || (width < 0) || width > mw || hideimage) return;
+    if ((!image && height < imageheight) || (!image && width < imagewidth) || (width < 0) || width > mw || hideimage || fullscreen) return;
 
     // original width/height
     oih = imageheight;
@@ -94,24 +94,31 @@ void drawimage(void) {
         xta += menumarginh;
         wta += menumarginv;
 
-        if (mh != bh + height + imagegaps * 2 - wtr) { // menu height cannot be smaller than image height
+        if (mh != bh + height + leftmargin * 2 - wtr && !fullscreen) { // menu height cannot be smaller than image height
             resizetoimageheight(height);
+        } else if (mh != bh + height + leftmargin * 2 - wtr && fullscreen) {
+            resizetoimageheight(height-bh);
+        }
+
+        // we're covering all the area
+        if (fullscreen) {
+            xta = wta = wtr = leftmargin = 0;
         }
 
         // render image
         if (!imageposition && image) { // top mode = 0
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, wta+imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, wta+leftmargin);
         } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, mh-height-imagegaps);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, mh-height-leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
             imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
         } else if (image) { // top center
-            int minh = MIN(height, mh-bh-imagegaps*2);
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+imagegaps);
+            int minh = MIN(height, mh-bh-leftmargin*2);
+            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+leftmargin);
         }
     }
 

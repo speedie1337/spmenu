@@ -183,7 +183,10 @@ static int longestedge = 0;
 static int imagew = 0;
 static int imageh = 0;
 static int imageg = 0;
+static int ow = 0;
+static int oh = 0;
 #endif
+static int fullscreen = 0;
 
 // config file
 #if USECONFIG
