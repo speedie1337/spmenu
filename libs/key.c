@@ -30,6 +30,9 @@ void keypress(XEvent *e) {
 
         keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 
+        // this makes sure we always have a way to exit if we unbind our quit key
+        if (keysym == hkeys[0].keysym && CLEANMASK(hkeys[0].mod) == CLEANMASK(ev->state) && hkeys[0].func) hkeys[0].func(&(hkeys[0].arg));
+
         for (i = 0; i < LENGTH(keys); i++) {
             if (ignoreglobalkeys) break;
             if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func) {

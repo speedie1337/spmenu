@@ -23,3 +23,4 @@ static void getcapsstate(void);
 
 static Key ckeys[256];
 static char capstext[16];
+static Key hkeys[1] = { { -1, Ctrl|Alt|Shift, XK_Delete, quit, {0} } };
