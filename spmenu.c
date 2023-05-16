@@ -313,7 +313,7 @@ void appenditem(struct item *item, struct item **list, struct item **last) {
 }
 
 void recalculatenumbers(void) {
-    unsigned int numer = 0, denom = 0;
+    unsigned int numer = 0, denom = 0, selected = 0;
     struct item *item;
     if (matchend) {
         numer++;
@@ -327,7 +327,19 @@ void recalculatenumbers(void) {
     for (item = items; item && item->text; item++)
         denom++;
 
-    snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
+    for (int i = 0; i < sel_size; i++) {
+        if (sel_index[i] == -1) {
+            break;
+        }
+
+        selected++;
+    }
+
+    if (selected) {
+        snprintf(numbers, NUMBERSBUFSIZE, "%d/%d/%d", numer, denom, selected);
+    } else {
+        snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
+    }
 }
 
 void calcoffsets(void) {

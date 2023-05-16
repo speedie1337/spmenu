@@ -608,7 +608,7 @@ exec_program() {
 
     # finally run the program
     if [ -n "$exec" ]; then
-        /bin/sh -c "$exec"
+        ${SHELL:-/bin/sh} -c "$exec" &
     else
         printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
