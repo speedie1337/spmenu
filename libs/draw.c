@@ -492,8 +492,9 @@ void drawmenu(void) {
             drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
         }
 #if USEIMAGE
-        else if (hideprompt && hideinput && hidemode && hidematchcount) {
+        else if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
             y -= bh;
+            mh = (lines + 1) * bh - bh + 2 * menumarginv;
         }
 #endif
 

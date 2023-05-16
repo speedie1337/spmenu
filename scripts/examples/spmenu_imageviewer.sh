@@ -20,7 +20,9 @@ main() {
 	    --hide-left-arrow \
 	    --hide-right-arrow \
 	    --hide-prompt \
-	    --hide-cursor \
+        --hide-input \
+	    --hide-caret \
+        --hide-caps \
 	    --hide-highlighting \
 	    --image-size 200 \
 	    --generate-cache \
