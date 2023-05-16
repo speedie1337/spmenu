@@ -72,6 +72,20 @@ l[25]=z
 
 main() {
 printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $(spmenu -v | sed 's/spmenu-//g')\n\
+\n<big><u>Formatting</u></big>\n\n\
+abcdefghijklmnopqrstuvwxyz\n\
+<b>abcdefghijklmnopqrstuvwxyz</b> - b\n\
+<i>abcdefghijklmnopqrstuvwxyz</i> - i\n\
+<s>abcdefghijklmnopqrstuvwxyz</s> - s\n\
+<u>abcdefghijklmnopqrstuvwxyz</u> - u\n\
+<sub>abcdefghijklmnopqrstuvwxyz - sub</sub>\n\
+<sup>abcdefghijklmnopqrstuvwxyz - sup</sup>\n\
+<tt>abcdefghijklmnopqrstuvwxyz</tt> - tt\n\
+<small>abcdefghijklmnopqrstuvwxyz</small> - small\n\
+<big>abcdefghijklmnopqrstuvwxyz</big> - big\n\
+\n<big><u>16 foreground colors</u></big>\n\n\
+${v1}a${v2}b${v3}c${v4}d${v5}e${v6}f${v7}g${v8}h${v9}i${v10}j${v11}k${v12}j${v13}m${v14}n${v15}o${v16}p\n\
+\n<big><u>16 background colors</u></big>\n\n\
 ${b1}\n\
 ${b2}\n\
 ${b3}\n\
@@ -88,24 +102,7 @@ ${b13}\n\
 ${b14}\n\
 ${b15}\n\
 ${b16}\n\
-${v1}a${v2}b${v3}c${v4}d${v5}e${v6}f${v7}g${v8}h${v9}i${v10}j${v11}k${v12}j${v13}m${v14}n${v15}o${v16}p\n\
-<b>abcdefghijklmnopqrstuvwxyz</b> - b\n\
-<i>abcdefghijklmnopqrstuvwxyz</i> - i\n\
-<s>abcdefghijklmnopqrstuvwxyz</s> - s\n\
-<u>abcdefghijklmnopqrstuvwxyz</u> - u\n\
-<sub>abcdefghijklmnopqrstuvwxyz - sub</sub>\n\
-<sup>abcdefghijklmnopqrstuvwxyz - sup</sup>\n\
-<tt>abcdefghijklmnopqrstuvwxyz</tt> - tt\n\
-<small>abcdefghijklmnopqrstuvwxyz</small> - small\n\
-<big>abcdefghijklmnopqrstuvwxyz</big> - big\n\
 "
-
-for i in {0..255}; do
-    printf "\e[48;5;%dm " "$i"
-    (((i+3) % 18)) || printf '\e[0m\n'
-done
-
-printf '\033[0m\n\n'
 
 cindex=0
 l[0]=a
@@ -135,6 +132,8 @@ l[23]=x
 l[24]=y
 l[25]=z
 
+printf "\n<big><u>256 foreground colors</u></big>\n"
+
 for i in {0..255}; do
     [ "$cindex" -gt "25" ] && cindex=0
     printf "\e[38;5;%dm${l[cindex]}" "$i"
@@ -142,7 +141,14 @@ for i in {0..255}; do
     cindex=$((cindex+1))
 done
 
-printf '\033[0m\n'
+printf "\n\n<big><u>256 background colors</u></big>\n"
+
+for i in {0..255}; do
+    printf "\e[48;5;%dm " "$i"
+    (((i+3) % 18)) || printf '\e[0m\n'
+done
+
+printf "\n\n<big><u>The End</u></big>\n"
 
 printf "\nIf spmenu displayed 256 colors as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
 }
