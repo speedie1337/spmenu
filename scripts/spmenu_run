@@ -277,33 +277,37 @@ EOF
 }
 
 parse() {
-    sout="$(path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}")"
+    path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
 
-    # parse
-    case "${sout:0:1}" in
-        "#") EXEC="term" ;;
-        "?") EXEC="man" ;;
-    esac
+    while read -r sout; do
+        # parse
+        case "${sout:0:1}" in
+            "#") EXEC="term" ;;
+            "?") EXEC="man" ;;
+        esac
 
-    printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
+        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
 
-    case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
-        "magnet") EXEC=torrent ;;
-        "www") EXEC=web ;;
-        "?") ;;
-    esac
+        case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
+            "magnet") EXEC=torrent ;;
+            "www") EXEC=web ;;
+            "?") ;;
+        esac
 
-    if [ "$sout" = "?" ]; then
-        print_help "$@"
-        parse
-        exec_cmd
-    fi
+        if [ "$sout" = "?" ]; then
+            print_help "$@"
+            parse
+            exec_cmd
+        fi
 
-    printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
+        printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
-    # check for keywords
-    printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
-    printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+        # check for keywords
+        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
+        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+
+        exec_cmd "$args"
+    done < /tmp/spmenu_out
 }
 
 exec_cmd() {
@@ -615,17 +619,19 @@ print_desktop_menu() {
 
     HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
 
-    menusel="$(print_desktop_list | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}")"
+    print_desktop_list | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
 
-    [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
-    command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
-    [ -z "$menusel" ] && return 1 \
-        || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+    while read -r menusel; do
+        [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
+        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
+        [ -z "$menusel" ] && return 1 \
+            || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
 
-    # this must now be the title only
-    menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
+        # this must now be the title only
+        menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
 
-    exec_program "$@"
+        exec_program "$@"
+    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
 }
 
 prep_desktop() {
@@ -740,7 +746,6 @@ main() {
     case "$function" in
         "run")
             parse "$args"
-            exec_cmd "$args"
             ;;
         "fm") prepare_dirnav "$args"
             ;;

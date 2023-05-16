@@ -281,7 +281,6 @@ void selectitem(Arg *arg) {
     for (int i = 0; i < sel_size; i++) {
         if (sel_index[i] != -1 && (!sel || sel->index != sel_index[i])) {
             puts(items[sel_index[i]].text);
-            savehistory(items[sel_index[i]].text);
         }
     }
 
