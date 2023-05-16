@@ -26,6 +26,7 @@ static void deleteword(Arg *arg);
 static void movecursor(Arg *arg);
 static void navhistory(Arg *arg);
 static void backspace(Arg *arg);
+static void markitem(Arg *arg);
 static void selectitem(Arg *arg);
 static void quit(Arg *arg);
 static void complete(Arg *arg);

@@ -157,6 +157,8 @@ static size_t cursor;
 static struct item *items = NULL, *backup_items, *list_items;
 static struct item *matches, *matchend;
 static struct item *prev, *curr, *next, *sel;
+static int *sel_index = NULL;
+static unsigned int sel_size = 0;
 static int screen;
 static int itemn = 0;
 
@@ -224,6 +226,7 @@ static Clr **scheme;
 static Clr textclrs[256];
 
 // declare functions
+static int is_selected(size_t index);
 static void calcoffsets(void);
 static void recalculatenumbers(void);
 static void usage(void);
@@ -287,6 +290,16 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/stream.c"
 #include "libs/event.h"
 #include "libs/event.c"
+
+int is_selected(size_t index) {
+    for (int i = 0; i < sel_size; i++) {
+        if (sel_index[i] == index) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void appenditem(struct item *item, struct item **list, struct item **last) {
     if (*last)
@@ -382,6 +395,7 @@ void cleanup(void) {
     drw_free(drw);
     XSync(dpy, False);
     XCloseDisplay(dpy);
+    free(sel_index);
 }
 
 char * cistrstr(const char *h, const char *n) {

@@ -352,6 +352,7 @@ static FuncList fl[] = {
     { "navhistory",     navhistory },
     { "backspace",      backspace },
     { "selectitem",     selectitem },
+    { "markitem",       markitem },
     { "quit",           quit },
     { "complete",       complete },
     { "setimgsize",     setimgsize },

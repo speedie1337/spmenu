@@ -71,6 +71,10 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         }
     }
 
+    if (is_selected(item->index)) {
+        memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
+    }
+
     // apply extra padding
     if ((selitem && !priitem) && lines) {
         leftpadding += selitempadding;

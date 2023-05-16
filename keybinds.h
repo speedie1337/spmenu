@@ -12,6 +12,7 @@ static Key keys[] = {
      */
     { -1,      0,              XK_Return,    selectitem,      {.i = +1 } },
     { -1,      Shift,          XK_Return,    selectitem,      {0} },
+    { -1,      Ctrl,           XK_Return,    markitem,        {0} },
     { -1,      0,              XK_Tab,       complete,        {0} },
     { -1,      Ctrl,           XK_v,         paste,           {.i = 2  } },
     { -1,      Ctrl|Shift,     XK_v,         paste,           {.i = 1  } },

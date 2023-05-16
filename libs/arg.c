@@ -240,6 +240,27 @@ void backspace(Arg *arg) {
     drawmenu();
 }
 
+void markitem(Arg *arg) {
+    if (sel && is_selected(sel->index)) {
+        for (int i = 0; i < sel_size; i++) {
+            if (sel_index[i] == sel->index) {
+                sel_index[i] = -1;
+            }
+        }
+    } else {
+        for (int i = 0; i < sel_size; i++) {
+            if (sel_index[i] == -1) {
+                sel_index[i] = sel->index;
+                return;
+            }
+        }
+
+        sel_size++;
+        sel_index = realloc(sel_index, (sel_size + 1) * sizeof(int));
+        sel_index[sel_size - 1] = sel->index;
+    }
+}
+
 void selectitem(Arg *arg) {
     char *selection;
 
@@ -255,6 +276,13 @@ void selectitem(Arg *arg) {
         selection = sel->text;
     } else {
         selection = text;
+    }
+
+    for (int i = 0; i < sel_size; i++) {
+        if (sel_index[i] != -1 && (!sel || sel->index != sel_index[i])) {
+            puts(items[sel_index[i]].text);
+            savehistory(items[sel_index[i]].text);
+        }
     }
 
     if (!selection)
