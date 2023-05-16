@@ -9,6 +9,7 @@ cp -rf LICENSE meson.build meson.options *.h *.c scripts/ docs/ libs/ themes/ PK
 [ -f host.mk ] && cp host.mk spmenu-${version} || :
 [ -f toggle.mk ] && cp toggle.mk spmenu-${version} || :
 [ -f spmenu.1 ] && cp spmenu.1 spmenu-${version} || :
+[ -f spmenu_run.1 ] && cp spmenu_run.1 spmenu-${version} || :
 tar -cf spmenu-${version}.tar spmenu-${version}
 gzip spmenu-${version}.tar
 rm -rf spmenu-${version}

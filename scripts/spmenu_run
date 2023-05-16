@@ -160,17 +160,19 @@ print_cli_help() {
 spmenu_run - Run launcher for spmenu
 
 spmenu_run -x,   --run             List entries in \$PATH.
-spmenu_run -f,   --fm <dir>        List files and directories in <dir>.
+spmenu_run -fm,  --fm <dir>        List files and directories in <dir>
 spmenu_run -d,   --desktop         List .desktop entries.
 spmenu_run -p,   --full-path       Print the full path to the file selected (-fm)
 spmenu_run -np,  --no-full-path    Don't print the full path to the file selected (-fm)
-spmenu_run -cc,  --clear-cache     Clear cache, useful if you just installed/uninstalled a program.
-spmenu_run -dm,  --dmenu           Run spmenu_run using dmenu instead of spmenu.
-spmenu_run -ndm, --no-dmenu        Run spmenu_run using spmenu instead of dmenu.
-spmenu_run -h,   --help            Print this help.
-spmenu_run -o,   --stdout          Print to standard input and do not execute the selected item.
-spmenu_run -no,  --no-stdout       Don't print to standard input, execute the selected item.
-spmenu_run -a,   --args <args>     Pass <args> to spmenu.
+spmenu_run -cc,  --clear-cache     Clear cache, useful if you just installed/uninstalled a program (-d)
+spmenu_run -dm,  --dmenu           Run spmenu_run using dmenu instead of spmenu
+spmenu_run -ndm, --no-dmenu        Run spmenu_run using spmenu instead of dmenu
+spmenu_run -h,   --help            Print this help
+spmenu_run -o,   --stdout          Print to standard input and do not execute the selected item
+spmenu_run -no,  --no-stdout       Don't print to standard input, execute the selected item
+spmenu_run -a,   --args <args>     Pass <args> to spmenu
+
+See spmenu(1) and spmenu_run(1) for more information.
 EOF
 }
 

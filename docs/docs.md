@@ -1,17 +1,17 @@
 spmenu
 ======
 
-spmenu is a program for X11 that reads standard input and allows the user to
-select items separated by a newline. It's a fork of
-[suckless's dmenu](https://tools.suckless.org/dmenu) which is a good more
-minimal alternative to spmenu.
+spmenu is an X11 menu application which takes standard input, parses
+it, and lets the user choose an option and sends the
+selected option to standard output.
 
-What makes spmenu different from all the dmenu forks is that spmenu has
-features like color support, Vim-like modes, image support,
-proper mouse/keybind configuration, and more.
+In addition to this, it also serves as a run launcher through the included
+shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
+and file listing. See spmenu_run(1) for more information related to
+using spmenu as a run launcher.
 
-It should be noted that most of these features may be disabled by the user, either
-during compile time or through configuration.
+While spmenu is based on dmenu, and is also fully compatible with dmenu,
+spmenu introduces many new features which can be useful in shell scripting.
 
 ## Usage
 
@@ -22,6 +22,9 @@ item will be piped to stdout.
 This allows things like `printf "Apple\nOrange\nPear\n" | spmenu`. This command
 will spawn an spmenu window with three items, 'Apple', 'Orange' and 'Pear'.
 This can be used in shell scripts to create interactive menus.
+
+spmenu doesn't strictly read standard input, it can read from files too using
+the `-lf` or `--list-file` argument.
 
 On top of this, you can specify arguments to change the behavior of spmenu.
 See a list below for a list.
