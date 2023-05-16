@@ -467,20 +467,34 @@ void defaultimg(Arg *arg) {
 
 void setlines(Arg *arg) {
     if (fullscreen) return;
-    lines += arg->i;
-    if (lines < 0) lines = 0;
 
-    match();
+    lines += arg->i;
+
+    if (lines < 0) {
+        lines = 0;
+    }
+
+    if (lines == 0) {
+        match();
+    }
+
     resizeclient();
     drawmenu();
 }
 
 void setcolumns(Arg *arg) {
     if (fullscreen) return;
-    columns += arg->i;
-    if (columns < 1) columns = 1;
 
-    match();
+    columns += arg->i;
+
+    if (columns < 1) {
+        columns = 1;
+    }
+
+    if (lines == 0) {
+        match();
+    }
+
     resizeclient();
     drawmenu();
 }
