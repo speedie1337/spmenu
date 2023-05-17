@@ -7,6 +7,8 @@ executable programs in $PATH and displays them to the user in a list.
 Not only that but it optionally shows recently run programs first in the list,
 which is very useful.
 
+## Run launcher component
+
 By default it also saves history, which can be viewed by calling
 `viewhistory` in your spmenu config. By default the keybind
 is Ctrl+h in normal mode.
@@ -27,19 +29,37 @@ Most of the time you don't need to prepend `www` though, for example
 typing in `https://gnu.org` will open gnu.org in $BROWSER even
 without the prefix. Same goes for magnet links.
 
+By default it also saves history, which can be viewed by calling
+`viewhistory` in your spmenu config. By default the keybind
+is Ctrl+h in normal mode.
+
+## .desktop entry component
+
 In addition to the $PATH listing, spmenu_run also allows listing out
 and displaying .desktop entries through the desktop component.
 It does this in style too by default, by displaying the program icon.
 
-Finally, it also comes with a file manager component. Out of the box
-this is very basic, but could be expanded to allow for features
-proper file managers usually have. It is intended to be used in
-your shell scripts with the `-o` flag to select a file. You can
-see this in action in the spmenuify theme manager.
+The .desktop entries are looked for recursively in /usr/share/applications,
+and the icons are looked for recursively in /usr/share/icons/hicolor. Of course
+you can change this path or even add multiple. This is done in the configuration
+file for spmenu_run.
 
-It can be configured through editing `~/.config/spmenu/run/config`. The
-configuration file can also be moved by setting `${XDG_CONFIG_HOME}`.
-For more information regarding configuration, see 'Configuration'.
+Entries are cached, so the first time the component is used spmenu will take a while
+to spawn. Just be patient, it will eventually get through all of them. To clear the
+cache (useful if you just installed/uninstalled a program) run `spmenu_run -cc`.
+
+**NOTE: By default it will hide any entries matching `spmenu` (for convenience)
+but you can unhide these if you wish through the configuration file.**
+
+## File manager component
+
+Finally, it also comes with a file manager component. Out of the box
+this is very basic and only lists out files and opens some default
+known filetypes in respective programs, but could be expanded to
+allow for features proper file managers usually have.
+
+It is intended to be used in your shell scripts with the `-o` flag to
+select a file. You can see this in action in the spmenuify theme manager.
 
 ## Usage
 
@@ -91,11 +111,13 @@ You may use long, descriptive arguments or the shorter arguments.
 ## Configuration
 
 When spmenu_run is started for the first time, a default configuration file
-is created at `~/.config/spmenu/run/config`. This configuration file unlike
+is created at `~/.config/spmenu/run/config`. If `${XDG_CONFIG_HOME}` has
+been changed this path will differ. This configuration file unlike
 the spmenu configuration file is configured in Bash, allowing you to use
-POSIX compliant features as well as Bash features.
+POSIX compliant features as well as Bash features for not only
+configuration but also to create various functions.
 
-Most of the variables are already defined, and there are several functions
+All of the variables are already defined, and there are several functions
 you can define yourself which spmenu_run will execute on a certain condition.
 This allows for a very customizable run launcher, because it means almost anything
 Bash can do can be done with spmenu_run.
@@ -129,3 +151,7 @@ that's the original suckless license. See the included LICENSE file for more inf
 Please report issues on the
 [Codeberg repository](https://codeberg.org/speedie/spmenu) or alternatively
 email me.
+
+## See also
+
+- spmenu(1)

@@ -746,3 +746,7 @@ license. See the included LICENSE file for more information.
 Please report issues on the
 [Codeberg repository](https://codeberg.org/speedie/spmenu) or alternatively
 email me.
+
+## See also
+
+- spmenu_run(1)

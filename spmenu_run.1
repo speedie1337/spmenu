@@ -24,6 +24,7 @@ lists out executable programs in $PATH and displays them to the user in
 a list.
 Not only that but it optionally shows recently run programs first in the
 list, which is very useful.
+.SS Run launcher component
 .PP
 By default it also saves history, which can be viewed by calling
 \f[V]viewhistory\f[R] in your spmenu config.
@@ -51,22 +52,40 @@ example typing in \f[V]https://gnu.org\f[R] will open gnu.org in
 $BROWSER even without the prefix.
 Same goes for magnet links.
 .PP
+By default it also saves history, which can be viewed by calling
+\f[V]viewhistory\f[R] in your spmenu config.
+By default the keybind is Ctrl+h in normal mode.
+.SS .desktop entry component
+.PP
 In addition to the $PATH listing, spmenu_run also allows listing out and
 displaying .desktop entries through the desktop component.
 It does this in style too by default, by displaying the program icon.
 .PP
+The .desktop entries are looked for recursively in
+/usr/share/applications, and the icons are looked for recursively in
+/usr/share/icons/hicolor.
+Of course you can change this path or even add multiple.
+This is done in the configuration file for spmenu_run.
+.PP
+Entries are cached, so the first time the component is used spmenu will
+take a while to spawn.
+Just be patient, it will eventually get through all of them.
+To clear the cache (useful if you just installed/uninstalled a program)
+run \f[V]spmenu_run -cc\f[R].
+.PP
+\f[B]NOTE: By default it will hide any entries matching
+\f[VB]spmenu\f[B] (for convenience) but you can unhide these if you wish
+through the configuration file.\f[R]
+.SS File manager component
+.PP
 Finally, it also comes with a file manager component.
-Out of the box this is very basic, but could be expanded to allow for
-features proper file managers usually have.
+Out of the box this is very basic and only lists out files and opens
+some default known filetypes in respective programs, but could be
+expanded to allow for features proper file managers usually have.
+.PP
 It is intended to be used in your shell scripts with the \f[V]-o\f[R]
 flag to select a file.
 You can see this in action in the spmenuify theme manager.
-.PP
-It can be configured through editing
-\f[V]\[ti]/.config/spmenu/run/config\f[R].
-The configuration file can also be moved by setting
-\f[V]${XDG_CONFIG_HOME}\f[R].
-For more information regarding configuration, see `Configuration'.
 .SS Usage
 .PP
 Running \f[V]spmenu_run\f[R] in a shell will execute spmenu_run using
@@ -118,11 +137,13 @@ Pass args to spmenu
 .PP
 When spmenu_run is started for the first time, a default configuration
 file is created at \f[V]\[ti]/.config/spmenu/run/config\f[R].
+If \f[V]${XDG_CONFIG_HOME}\f[R] has been changed this path will differ.
 This configuration file unlike the spmenu configuration file is
 configured in Bash, allowing you to use POSIX compliant features as well
-as Bash features.
+as Bash features for not only configuration but also to create various
+functions.
 .PP
-Most of the variables are already defined, and there are several
+All of the variables are already defined, and there are several
 functions you can define yourself which spmenu_run will execute on a
 certain condition.
 This allows for a very customizable run launcher, because it means
@@ -172,3 +193,6 @@ See the included LICENSE file for more information.
 Please report issues on the Codeberg
 repository (https://codeberg.org/speedie/spmenu) or alternatively email
 me.
+.SS See also
+.IP \[bu] 2
+spmenu(1)
