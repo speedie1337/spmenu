@@ -1,6 +1,5 @@
 #!/bin/bash
 # spmenu build script
-opt="${opt:-${OPT:--O2}}"
 warn="${warn:-true}"
 reconfigure="${reconfigure:-true}"
 version="${version:-1.1}"
@@ -45,7 +44,6 @@ build() {
             -Dpango="$pango" \
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
-            -Dopt="$opt" \
             -Dutf8="$utf8" \
             --prefix "$prefix" \
             build
@@ -59,7 +57,6 @@ build() {
             -Dpango="$pango" \
             -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
-            -Dopt="$opt" \
             -Dutf8="$utf8" \
             --prefix "$prefix" \
             build

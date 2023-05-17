@@ -35,7 +35,6 @@ build_args = [
   '-Wno-deprecated-declarations',
   '-Wno-unused-parameter',
   '-Wno-sign-compare',
-  get_option('opt'),
 ]
 
 if get_option('imlib2') and get_option('openssl')
