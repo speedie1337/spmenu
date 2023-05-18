@@ -1,9 +1,62 @@
-option('imlib2', type : 'boolean', value : true, description : 'Enable image support')
-option('openssl', type : 'boolean', value : true, description : 'Enable OpenSSL, used for image support')
-option('xresources', type : 'boolean', value : true, description : 'Enable .Xresources/xrdb support')
-option('fribidi', type : 'boolean', value : true, description : 'Enable Right-to-left language support')
-option('libconfig', type : 'boolean', value : true, description : 'Enable configuration file support')
-option('pango', type : 'boolean', value : true, description : 'Enable Pango markup support')
-option('pangoxft', type : 'boolean', value : true, description : 'Enable Pango for libXft')
-option('xinerama', type : 'boolean', value : true, description : 'Enable multi-monitor support using libXinerama')
-option('utf8', type : 'boolean', value : true, description : 'Enable UTF-8 character support')
+option(
+  'imlib2',
+  type : 'boolean',
+  value : true,
+  description : 'Enable image support'
+)
+
+option(
+  'openssl',
+  type : 'boolean',
+  value : true,
+  description : 'Enable OpenSSL, used for image support'
+)
+
+option(
+  'xresources',
+  type : 'boolean',
+  value : true,
+  description : 'Enable .Xresources/xrdb support'
+)
+
+option(
+  'fribidi',
+  type : 'boolean',
+  value : true,
+  description : 'Enable Right-to-left language support'
+)
+
+option(
+  'libconfig',
+  type : 'boolean',
+  value : true,
+  description : 'Enable configuration file support'
+)
+
+option(
+  'pango',
+  type : 'boolean',
+  value : true,
+  description : 'Enable Pango markup support'
+)
+
+option(
+  'pangoxft',
+  type : 'boolean',
+  value : true,
+  description : 'Enable Pango for libXft'
+)
+
+option(
+  'xinerama',
+  type : 'boolean',
+  value : true,
+  description : 'Enable multi-monitor support using libXinerama'
+)
+
+option(
+  'utf8',
+  type : 'boolean',
+  value : true,
+  description : 'Enable UTF-8 character support'
+)
