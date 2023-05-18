@@ -53,7 +53,7 @@ void conf_init(void) {
     // attempt to read config file to cfg
     if (!config_read_file(&cfg, cfgfile)) {
         // invalid configuration, but let's try to read it anyway
-        fprintf(stdout, "spmenu: Invalid configuration.\n");
+        fprintf(stderr, "spmenu: Invalid configuration.\n");
     }
 
     // load options spmenu.window

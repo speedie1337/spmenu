@@ -49,7 +49,7 @@ void theme_load(void) {
 
     // attempt to read theme
     if (!config_read_file(&cfg, theme)) {
-        fprintf(stdout, "spmenu: Invalid theme.\n"); // invalid configuration, but let's try to read it anyway
+        fprintf(stderr, "spmenu: Invalid theme.\n"); // invalid configuration, but let's try to read it anyway
     }
 
     // load options theme.window
