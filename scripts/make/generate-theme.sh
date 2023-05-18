@@ -18,8 +18,7 @@ read_colors() {
     while true; do
         color[i]="$(sed -n ${i},${i}p $1)"
         ccol="${color[i]}"
-        [ "${#ccol}" != "7" ] && color[i]="#000000"
-        [ "${ccol:0:1}" != "#" ] && color[i]="#000000"
+        [ "${#ccol}" != "7" ] || [ "${ccol:0:1}" != "#" ] && color[i]="#000000"
         [ "$i" = "18" ] && break
         i=$((i+1))
     done
