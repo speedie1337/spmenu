@@ -229,7 +229,6 @@ static Clr textclrs[256];
 static int is_selected(size_t index);
 static void calcoffsets(void);
 static void recalculatenumbers(void);
-static void usage(void);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);

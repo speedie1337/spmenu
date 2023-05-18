@@ -66,7 +66,7 @@ void readargs(int argc, char *argv[]) {
             puts("spmenu-"VERSION);
             exit(0);
         } else if (!strcmp(argv[i], "-h") || (!strcmp(argv[i], "--help"))) { // help
-            usage();
+            usage(0);
         } else if (!strcmp(argv[i], "-it") || (!strcmp(argv[i], "--image-top"))) { // image: top
             imageposition = 0;
         } else if (!strcmp(argv[i], "-ib") || (!strcmp(argv[i], "--image-bottom"))) { // image: bottom
@@ -461,7 +461,7 @@ void readargs(int argc, char *argv[]) {
         insert(input, strlen(input));
 }
 
-void usage(void) {
+void usage(int status) {
     // print help
     fputs("spmenu: fancy dynamic menu\n\n"
             "- Arguments -\n"
@@ -498,7 +498,7 @@ void usage(void) {
             "spmenu -na,      --no-alpha                                  Disable alpha\n"
             "spmenu -tp,      --allow-typing                              Allow the user to type\n"
             "spmenu -nt,      --no-allow-typing                           Don't allow typing, the user must select an option\n"
-            , stdout);
+            , status ? stderr : stdout);
 
     fputs("spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset>\n"
             "spmenu -y,       --y-position <y offset>                     Offset spmenu y position by <y offset>\n"
@@ -519,7 +519,7 @@ void usage(void) {
             "spmenu -t,       --top                                       Position spmenu at the top of the screen\n"
             "spmenu -b,       --bottom                                    Position spmenu at the bottom of the screen\n"
             "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
-            "\n", stdout);
+            "\n", status ? stderr : stdout);
 
     // more args
     fputs("spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
@@ -567,7 +567,7 @@ void usage(void) {
             "spmenu -ib,      --image-bottom                              Position the image at the bottom\n"
             "spmenu -ic,      --image-center                              Position the image in the center\n"
             "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
-            , stdout);
+            , status ? stderr : stdout);
 
     // general/config related
     fputs("spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
@@ -579,7 +579,7 @@ void usage(void) {
             "spmenu -ltm,     --load-theme                                Load theme\n"
             "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
             "spmenu -v,       --version                                   Print spmenu version to stdout\n"
-            "\n", stdout);
+            "\n", status ? stderr : stdout);
 
     // colors
     fputs("- Appearance arguments -\n"
@@ -614,7 +614,7 @@ void usage(void) {
             "spmenu -cfc,     --caret-foreground <color>                  Set the caret foreground color\n"
             "spmenu -cbc,     --caret-background <color>                  Set the caret background color\n"
             "spmenu -bc,      --border-background <color>                 Set the border color\n"
-            "\n", stdout);
+            "\n", status ? stderr : stdout);
 
     // sgr sequences
     fputs("spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
@@ -633,7 +633,7 @@ void usage(void) {
             "spmenu -sgr13,   --sgr13 <color>                             Set the SGR 13 color\n"
             "spmenu -sgr14,   --sgr14 <color>                             Set the SGR 14 color\n"
             "spmenu -sgr15,   --sgr15 <color>                             Set the SGR 15 color\n"
-            "\n", stdout);
+            "\n", status ? stderr : stdout);
 
     // dmenu compat
     fputs("- dmenu compatibility -\n"
@@ -645,7 +645,7 @@ void usage(void) {
             "spmenu -sf <color>                                           Set the selected foreground color\n"
             "\n"
             "See the spmenu(1) man page for more information.\n"
-            , stdout);
+            , status ? stderr : stdout);
 
-    exit(1);
+    exit(status);
 }
