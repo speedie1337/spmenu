@@ -3,13 +3,15 @@
 static void init_appearance(void);
 
 // Color schemes
-enum { SchemeLArrow,
+enum {
+    SchemeLArrow,
     SchemeRArrow,
     SchemeItemNorm1,
     SchemeItemNorm2,
     SchemeItemSel,
     SchemeItemNormPri,
     SchemeItemSelPri,
+    SchemeItemMarked,
     SchemeMenu,
     SchemeInput,
     SchemePrompt,

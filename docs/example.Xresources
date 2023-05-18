@@ -17,6 +17,8 @@ spmenu.col_itemnormfg2:     #bbbbbb
 spmenu.col_itemnormbg2:     #222222
 spmenu.col_itemselfg:       #eeeeee
 spmenu.col_itemselbg:       #35638A
+spmenu.col_itemmarkedfg:    #eeeeee
+spmenu.col_itemmarkedbg:    #35638A
 spmenu.col_itemnormprifg:   #bbbbbb
 spmenu.col_itemnormpribg:   #222222
 spmenu.col_itemselprifg:    #eeeeee
@@ -67,6 +69,8 @@ spmenu.alpha_itemnormfg2:   255
 spmenu.alpha_itemnormbg2:   200
 spmenu.alpha_itemselfg:     255
 spmenu.alpha_itemselbg:     200
+spmenu.alpha_itemmarkedfg:  255
+spmenu.alpha_itemmarkedbg:  200
 spmenu.alpha_itemnormprifg: 255
 spmenu.alpha_itemnormpribg: 200
 spmenu.alpha_itemselprifg:  255

@@ -20,6 +20,8 @@ void init_appearance(void) {
     alphas[SchemeItemNorm2][ColBg] = alpha_itemnormbg2;
     alphas[SchemeItemSel][ColFg] = alpha_itemselfg;
     alphas[SchemeItemSel][ColBg] = alpha_itemselbg;
+    alphas[SchemeItemMarked][ColFg] = alpha_itemmarkedfg;
+    alphas[SchemeItemMarked][ColBg] = alpha_itemmarkedbg;
     alphas[SchemeItemNormPri][ColFg] = alpha_itemnormprifg;
     alphas[SchemeItemNormPri][ColBg] = alpha_itemnormpribg;
     alphas[SchemeItemSelPri][ColFg] = alpha_itemselprifg;

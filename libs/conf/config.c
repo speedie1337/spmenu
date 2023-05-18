@@ -179,6 +179,12 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "itemselfg", &alpha_itemselfg); // spmenu.alpha.itemselfg
             config_setting_lookup_int(conf, "itemselbg", &alpha_itemselbg); // spmenu.alpha.itemselbg
 
+            if (!config_setting_lookup_int(conf, "itemmarkedfg", &alpha_itemmarkedfg))
+                config_setting_lookup_int(conf, "itemselfg", &alpha_itemmarkedfg);
+
+            if (!config_setting_lookup_int(conf, "itemmarkedbg", &alpha_itemmarkedbg))
+                config_setting_lookup_int(conf, "itemselbg", &alpha_itemmarkedbg);
+
             config_setting_lookup_int(conf, "itemnormprifg", &alpha_itemnormprifg); // spmenu.alpha.itemnormprifg
             config_setting_lookup_int(conf, "itemnormpribg", &alpha_itemnormpribg); // spmenu.alpha.itemnormpribg
             config_setting_lookup_int(conf, "itemselprifg", &alpha_itemselprifg); // spmenu.alpha.itemselprifg
@@ -246,6 +252,16 @@ void conf_init(void) {
 
             if (config_setting_lookup_string(conf, "itemselbg", &dest))
                 strcpy(colors[SchemeItemSel][ColBg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemmarkedfg", &dest))
+                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemselfg", &dest))
+                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemmarkedbg", &dest))
+                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemselbg", &dest))
+                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
 
             // items with priority
             if (config_setting_lookup_string(conf, "itemnormprifg", &dest))

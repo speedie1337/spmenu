@@ -159,6 +159,12 @@ void theme_load(void) {
             config_setting_lookup_int(conf, "itemselfg", &alpha_itemselfg); // theme.alpha.itemselfg
             config_setting_lookup_int(conf, "itemselbg", &alpha_itemselbg); // theme.alpha.itemselbg
 
+            if (!config_setting_lookup_int(conf, "itemmarkedfg", &alpha_itemmarkedfg))
+                config_setting_lookup_int(conf, "itemselfg", &alpha_itemmarkedfg);
+
+            if (!config_setting_lookup_int(conf, "itemmarkedbg", &alpha_itemmarkedbg))
+                config_setting_lookup_int(conf, "itemselbg", &alpha_itemmarkedbg);
+
             config_setting_lookup_int(conf, "itemnormprifg", &alpha_itemnormprifg); // theme.alpha.itemnormprifg
             config_setting_lookup_int(conf, "itemnormpribg", &alpha_itemnormpribg); // theme.alpha.itemnormpribg
             config_setting_lookup_int(conf, "itemselprifg", &alpha_itemselprifg); // theme.alpha.itemselprifg
@@ -226,6 +232,16 @@ void theme_load(void) {
 
             if (config_setting_lookup_string(conf, "itemselbg", &dest))
                 strcpy(colors[SchemeItemSel][ColBg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemmarkedfg", &dest))
+                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemselfg", &dest))
+                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+
+            if (config_setting_lookup_string(conf, "itemmarkedbg", &dest))
+                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
+            else if (config_setting_lookup_string(conf, "itemselbg", &dest))
+                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
 
             // items with priority
             if (config_setting_lookup_string(conf, "itemnormprifg", &dest))
