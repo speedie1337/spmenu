@@ -404,7 +404,7 @@ read_args() {
 
 exec_file() {
     [ "$USE_FULL_PATH" != "false" ] && DIR="$(pwd)/"
-    [ "$STDOUT" != "false" ] && printf "%s%s\n" "${DIR}" "$1" && exit 0
+    [ "$STDOUT" != "false" ] && printf "%s%s\n" "${DIR}" "$1" && return 0
     command -v fm_post_func > /dev/null && fm_post_func "$1"
 
     # some default basic parsing
@@ -444,22 +444,23 @@ prepare_dirnav() {
 
     command -v fm_pre_func > /dev/null && fm_pre_func
 
-    dir="$(listing | $RUNLAUNCHER "${rl_fm[@]}" | sed -e 's/\x1b\[[0-9;]*m//g')"
+    listing | $RUNLAUNCHER "${rl_fm[@]}" | sed -e 's/\x1b\[[0-9;]*m//g' > /tmp/spmenu_out
 
-    case "$dir" in
-        *)
-            if [ -d "$dir" ]; then
-                dir="$(pwd)/$dir"
-                command -v fm_dir_func > /dev/null && fm_dir_func "$dir"
-                prepare_dirnav
-            elif [ -f "$dir" ]; then
-                exec_file "$dir" && return 0
-                return 1
-            else
-                return 1
-            fi
-            ;;
-    esac
+    while read -r dir; do
+        case "$dir" in
+            *)
+                if [ -d "$dir" ]; then
+                    dir="$(pwd)/$dir"
+                    command -v fm_dir_func > /dev/null && fm_dir_func "$dir"
+                    prepare_dirnav
+                elif [ -f "$dir" ]; then
+                    exec_file "$dir"
+                else
+                    return 1
+                fi
+                ;;
+        esac
+    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
 }
 
 print_desktop_help() {
