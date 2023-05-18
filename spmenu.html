@@ -981,6 +981,485 @@ override this by exporting <code>$XDG_CONFIG_HOME</code>.</p>
 on startup.</p>
 <p>You can also include other configuration files in the configuration
 file using <code>@include "path/to/config"</code>.</p>
+<h2 id="default-keybinds">Default keybinds</h2>
+<p>These are the default keybinds. You can generate these yourself from
+a <code>keybinds.h</code> using
+<code>scripts/make/generate-keybind-list.sh</code>.</p>
+<dl>
+<dt>Mode <code>-1</code></dt>
+<dd>
+Any
+</dd>
+<dt>Mode <code>0</code></dt>
+<dd>
+Normal mode
+</dd>
+<dt>Mode <code>1</code></dt>
+<dd>
+Insert mode
+</dd>
+</dl>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Mode</th>
+<th style="text-align: left;">Modifier</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Argument</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Return</td>
+<td style="text-align: left;">selectitem</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">Return</td>
+<td style="text-align: left;">selectitem</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">Return</td>
+<td style="text-align: left;">markitem</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Tab</td>
+<td style="text-align: left;">complete</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">v</td>
+<td style="text-align: left;">paste</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl+Shift</td>
+<td style="text-align: left;">v</td>
+<td style="text-align: left;">paste</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">BackSpace</td>
+<td style="text-align: left;">backspace</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">BackSpace</td>
+<td style="text-align: left;">deleteword</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">Left</td>
+<td style="text-align: left;">moveword</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">Right</td>
+<td style="text-align: left;">moveword</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Left</td>
+<td style="text-align: left;">movecursor</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Right</td>
+<td style="text-align: left;">movecursor</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-1</td>
+<td style="text-align: left;">Ctrl+Shift</td>
+<td style="text-align: left;">p</td>
+<td style="text-align: left;">setprofile</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">i</td>
+<td style="text-align: left;">switchmode</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">slash</td>
+<td style="text-align: left;">switchmode</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">equal</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">minus</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">equal</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">+10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">minus</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">-10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">equal</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">+100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">minus</td>
+<td style="text-align: left;">setimgsize</td>
+<td style="text-align: left;">-100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">defaultimg</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">r</td>
+<td style="text-align: left;">rotateimg</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">o</td>
+<td style="text-align: left;">setimgpos</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">-10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">+10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">-100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">setimggaps</td>
+<td style="text-align: left;">+100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">t</td>
+<td style="text-align: left;">toggleimg</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">f</td>
+<td style="text-align: left;">togglefullimg</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">p</td>
+<td style="text-align: left;">paste</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">h</td>
+<td style="text-align: left;">flipimg</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">v</td>
+<td style="text-align: left;">flipimg</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">k</td>
+<td style="text-align: left;">moveup</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">j</td>
+<td style="text-align: left;">movedown</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">h</td>
+<td style="text-align: left;">moveleft</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">l</td>
+<td style="text-align: left;">moveright</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">u</td>
+<td style="text-align: left;">moveup</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">d</td>
+<td style="text-align: left;">movedown</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">k</td>
+<td style="text-align: left;">setlines</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">j</td>
+<td style="text-align: left;">setlines</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl+Alt+Shift</td>
+<td style="text-align: left;">k</td>
+<td style="text-align: left;">setlines</td>
+<td style="text-align: left;">+5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl+Alt+Shift</td>
+<td style="text-align: left;">j</td>
+<td style="text-align: left;">setlines</td>
+<td style="text-align: left;">-5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">h</td>
+<td style="text-align: left;">setcolumns</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl</td>
+<td style="text-align: left;">l</td>
+<td style="text-align: left;">setcolumns</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl+Alt+Shift</td>
+<td style="text-align: left;">h</td>
+<td style="text-align: left;">setcolumns</td>
+<td style="text-align: left;">+5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl+Alt+Shift</td>
+<td style="text-align: left;">l</td>
+<td style="text-align: left;">setcolumns</td>
+<td style="text-align: left;">-5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">u</td>
+<td style="text-align: left;">togglehighlight</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Ctrl+Shift</td>
+<td style="text-align: left;">h</td>
+<td style="text-align: left;">viewhist</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">d</td>
+<td style="text-align: left;">clear</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">d</td>
+<td style="text-align: left;">clearins</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Escape</td>
+<td style="text-align: left;">quit</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Home</td>
+<td style="text-align: left;">movestart</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">End</td>
+<td style="text-align: left;">moveend</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">g</td>
+<td style="text-align: left;">movestart</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Shift</td>
+<td style="text-align: left;">g</td>
+<td style="text-align: left;">moveend</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Next</td>
+<td style="text-align: left;">movenext</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Prior</td>
+<td style="text-align: left;">moveprev</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Alt</td>
+<td style="text-align: left;">p</td>
+<td style="text-align: left;">navhistory</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Alt</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">navhistory</td>
+<td style="text-align: left;">+1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Escape</td>
+<td style="text-align: left;">switchmode</td>
+<td style="text-align: left;">0</td>
+</tr>
+</tbody>
+</table>
 <h2 id="xresources">.Xresources</h2>
 <p>spmenu also has .Xresources (xrdb) support built in. It reads the
 xrdb (.Xresources database) on runtime. You may disable it by passing

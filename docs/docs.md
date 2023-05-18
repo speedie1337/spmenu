@@ -666,6 +666,77 @@ This configuration file is loaded on startup.
 You can also include other configuration files in the configuration file using
 `@include "path/to/config"`.
 
+## Default keybinds
+
+These are the default keybinds. You can generate these yourself from a
+`keybinds.h` using `scripts/make/generate-keybind-list.sh`.
+
+| Mode               | Modifier           | Key                | Function           | Argument           |
+| :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+| -1                 | 0                  | Return             | selectitem         | +1                 |
+| -1                 | Shift              | Return             | selectitem         | 0                  |
+| -1                 | Ctrl               | Return             | markitem           | 0                  |
+| -1                 | 0                  | Tab                | complete           | 0                  |
+| -1                 | Ctrl               | v                  | paste              | 2                  |
+| -1                 | Ctrl+Shift         | v                  | paste              | 1                  |
+| -1                 | 0                  | BackSpace          | backspace          | 0                  |
+| -1                 | Ctrl               | BackSpace          | deleteword         | 0                  |
+| -1                 | Ctrl               | Left               | moveword           | -1                 |
+| -1                 | Ctrl               | Right              | moveword           | +1                 |
+| -1                 | 0                  | Left               | movecursor         | -1                 |
+| -1                 | 0                  | Right              | movecursor         | +1                 |
+| -1                 | Ctrl+Shift         | p                  | setprofile         | 0                  |
+| 0                  | 0                  | i                  | switchmode         | 0                  |
+| 0                  | 0                  | slash              | switchmode         | 0                  |
+| 0                  | Ctrl               | equal              | setimgsize         | +1                 |
+| 0                  | Ctrl               | minus              | setimgsize         | -1                 |
+| 0                  | 0                  | equal              | setimgsize         | +10                |
+| 0                  | 0                  | minus              | setimgsize         | -10                |
+| 0                  | Shift              | equal              | setimgsize         | +100               |
+| 0                  | Shift              | minus              | setimgsize         | -100               |
+| 0                  | Shift              | 0                  | defaultimg         | 0                  |
+| 0                  | 0                  | r                  | rotateimg          | 0                  |
+| 0                  | 0                  | o                  | setimgpos          | +1                 |
+| 0                  | Ctrl               | 1                  | setimggaps         | -1                 |
+| 0                  | Ctrl               | 2                  | setimggaps         | +1                 |
+| 0                  | 0                  | 1                  | setimggaps         | -10                |
+| 0                  | 0                  | 2                  | setimggaps         | +10                |
+| 0                  | Shift              | 1                  | setimggaps         | -100               |
+| 0                  | Shift              | 2                  | setimggaps         | +100               |
+| 0                  | 0                  | t                  | toggleimg          | 0                  |
+| 0                  | 0                  | f                  | togglefullimg      | 0                  |
+| 0                  | 0                  | p                  | paste              | 2                  |
+| 0                  | 0                  | h                  | flipimg            | 1                  |
+| 0                  | 0                  | v                  | flipimg            | 0                  |
+| 0                  | 0                  | k                  | moveup             | 0                  |
+| 0                  | 0                  | j                  | movedown           | 0                  |
+| 0                  | 0                  | h                  | moveleft           | 0                  |
+| 0                  | 0                  | l                  | moveright          | 0                  |
+| 0                  | Ctrl               | u                  | moveup             | 5                  |
+| 0                  | Ctrl               | d                  | movedown           | 5                  |
+| 0                  | Ctrl               | k                  | setlines           | +1                 |
+| 0                  | Ctrl               | j                  | setlines           | -1                 |
+| 0                  | Ctrl+Alt+Shift     | k                  | setlines           | +5                 |
+| 0                  | Ctrl+Alt+Shift     | j                  | setlines           | -5                 |
+| 0                  | Ctrl               | h                  | setcolumns         | +1                 |
+| 0                  | Ctrl               | l                  | setcolumns         | -1                 |
+| 0                  | Ctrl+Alt+Shift     | h                  | setcolumns         | +5                 |
+| 0                  | Ctrl+Alt+Shift     | l                  | setcolumns         | -5                 |
+| 0                  | 0                  | u                  | togglehighlight    | 0                  |
+| 0                  | Ctrl+Shift         | h                  | viewhist           | 0                  |
+| 0                  | 0                  | d                  | clear              | 0                  |
+| 0                  | Shift              | d                  | clearins           | 0                  |
+| 0                  | 0                  | Escape             | quit               | 0                  |
+| 0                  | 0                  | Home               | movestart          | 0                  |
+| 0                  | 0                  | End                | moveend            | 0                  |
+| 0                  | 0                  | g                  | movestart          | 0                  |
+| 0                  | Shift              | g                  | moveend            | 0                  |
+| 0                  | 0                  | Next               | movenext           | 0                  |
+| 0                  | 0                  | Prior              | moveprev           | 0                  |
+| 0                  | Alt                | p                  | navhistory         | -1                 |
+| 0                  | Alt                | n                  | navhistory         | +1                 |
+| 1                  | 0                  | Escape             | switchmode         | 0                  |
+
 ## .Xresources
 
 spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
