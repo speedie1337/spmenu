@@ -21,12 +21,12 @@ md5sums=(MD5SUM)
 build(){
   cd $pkgname-$pkgver
   mkdir -p build/
-  meson setup --reconfigure build
+  meson setup --reconfigure --prefix=${pkgdir}/usr build
   ninja -C build
 }
 
 package() {
   cd "$pkgname-$pkgver"
 
-  meson install -C build --destdir "$pkgdir"
+  meson install -C build
 }
