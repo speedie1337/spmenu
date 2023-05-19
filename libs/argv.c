@@ -65,6 +65,9 @@ void readargs(int argc, char *argv[]) {
         if (!strcmp(argv[i], "-v") || (!strcmp(argv[i], "--version"))) { // prints version information
             puts("spmenu-"VERSION);
             exit(0);
+        } else if (!strcmp(argv[i], "-rv") || (!strcmp(argv[i], "--raw-version"))) { // help
+            puts(VERSION);
+            exit(0);
         } else if (!strcmp(argv[i], "-h") || (!strcmp(argv[i], "--help"))) { // help
             usage(0);
         } else if (!strcmp(argv[i], "-it") || (!strcmp(argv[i], "--image-top"))) { // image: top
@@ -93,8 +96,12 @@ void readargs(int argc, char *argv[]) {
             incremental = 0;
         } else if (!strcmp(argv[i], "-rm") || (!strcmp(argv[i], "--require-match"))) { // require match
             requirematch = 1;
-        } else if (!strcmp(argv[i], "-nrm") || (!strcmp(argv[i], "--no-require-match"))) { // no incremental
+        } else if (!strcmp(argv[i], "-nrm") || (!strcmp(argv[i], "--no-require-match"))) { // no require match
             requirematch = 0;
+        } else if (!strcmp(argv[i], "-ma") || (!strcmp(argv[i], "--mark-items"))) { // allow marking items
+            mark = 1;
+        } else if (!strcmp(argv[i], "-nma") || (!strcmp(argv[i], "--no-mark-items"))) { // don't allow marking items
+            mark = 0;
         } else if (!strcmp(argv[i], "-rw") || (!strcmp(argv[i], "--relative-width"))) {  // relative width
             accuratewidth = 1;
         } else if (!strcmp(argv[i], "-nrw") || (!strcmp(argv[i], "--no-relative-width"))) {   // no relative width
@@ -482,6 +489,8 @@ void usage(int status) {
             "spmenu -nr,      --no-incremental                            Don't print text every time a key is pressed\n"
             "spmenu -rm,      --require-match                             Require that input text matches an item\n"
             "spmenu -nrm,     --no-require-match                          Don't require that input text matches an item\n"
+            "spmenu -ma,      --mark-items                                Allow marking/selecting multiple items\n"
+            "spmenu -nma,     --no-mark-items                             Don't allow marking/selecting multiple items\n"
             "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
             "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
             "spmenu -P,       --password                                  Hide characters\n"
@@ -578,6 +587,7 @@ void usage(int status) {
             "spmenu -tm,      --theme <theme>                             Load theme <theme>\n"
             "spmenu -ltm,     --load-theme                                Load theme\n"
             "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
+            "spmenu -rv,      --raw-version                               Print spmenu version number to stdout\n"
             "spmenu -v,       --version                                   Print spmenu version to stdout\n"
             "\n", status ? stderr : stdout);
 

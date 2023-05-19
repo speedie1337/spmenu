@@ -81,6 +81,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nrm, --no-require-match`
 :   Don't require that input text matches an item
 
+`-ma, --mark-items`
+:   Allow marking/selecting multiple items
+
+`-nma, --no-mark-items`
+:   Don't allow marking/selecting multiple items
+
 `-F, --fuzzy`
 :   Enable fuzzy matching
 
@@ -348,6 +354,9 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-v, --version`
 :   Print spmenu version to stdout
+
+`-rv, --raw-version`
+:   Print raw spmenu version number to stdout
 
 `-fn, --font font`
 :   Set the spmenu font to font

@@ -155,6 +155,7 @@ ResourcePref resources[] = {
     { "mode",                        INTEGER, &mode },
     { "fast",                        INTEGER, &fast },
     { "managed",                     INTEGER, &managed },
+    { "mark",                        INTEGER, &mark },
     { "mon",                         INTEGER, &mon },
     { "sortmatches",                 INTEGER, &sortmatches },
     { "printindex",                  INTEGER, &printindex },

@@ -241,6 +241,7 @@ void backspace(Arg *arg) {
 }
 
 void markitem(Arg *arg) {
+    if (!mark) return;
     if (sel && is_selected(sel->index)) {
         for (int i = 0; i < sel_size; i++) {
             if (sel_index[i] == sel->index) {
