@@ -34,6 +34,7 @@ HELP_COLOR="${HELP_COLOR:-#FFFF00}"
 DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-false}"
+MULTISELECT="${MULTISELECT:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
@@ -252,6 +253,7 @@ TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entr
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
+MULTISELECT="true" # Allow handling multiple items, if set to false only the first line/selected item will be used.
 IMAGE="true" # Display images (true/false)
 VALIDATE_ENTRIES="true" # Validate entries using desktop-file-validate (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
@@ -309,6 +311,7 @@ parse() {
         printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
 
         exec_cmd "$args"
+        [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
 }
 
@@ -460,6 +463,7 @@ prepare_dirnav() {
                 fi
                 ;;
         esac
+        [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
 }
 
@@ -634,6 +638,7 @@ print_desktop_menu() {
         menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
 
         exec_program "$@"
+        [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
 }
 
