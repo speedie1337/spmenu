@@ -33,7 +33,7 @@ There are way too many to list, but spmenu has a
   - Used to calculate MD5 of images if image support is enabled, can be
 disabled during compile time.
 - Pango
-  - Can be disabled if you don't want/need Pango markup during compile time.
+- Cairo
 - libconfig
   - Can be disabled if you don't want/need config file support during compile time.
 - meson
@@ -115,7 +115,6 @@ Pull requests would be greatly appreciated for any of these issues!
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
 have LibreSSL compatibility.
 - Image support: Ability to display icons, similar to rofi
-- Text drawing: Use cairo for text drawing over Xft.
 - Lines: Rofi-like newlines in the same entry
   - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
   for each added line.
@@ -130,10 +129,9 @@ common dependency most people already have.
 - X11: Move from Xlib to libXcb
 - Wayland: Wayland support, but only if it doesn't require writing any extra
 code which as of now seems unlikely, or if someone makes a patch.
-  - Before this can even be done, replace Xft with cairo,
-  deal with keybinds in some Wayland compatible way, remove .Xresources
-  usage and figure out a way to preserve X11 compatibility as I do
-  not want to use Wayland as of now.
+  - Before this can even be done, deal with keybinds in some Wayland compatible
+  way, remove .Xresources usage and figure out a way to preserve X11
+  compatibility as I do not want to use Wayland as of now.
   - You can just use XWayland anyway if you happen to use Wayland, so it's not
 like you will be unable to use spmenu in its current state.
 

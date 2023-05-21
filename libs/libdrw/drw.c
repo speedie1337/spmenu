@@ -3,81 +3,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <X11/Xlib.h>
-#include <X11/Xft/Xft.h>
-
-#ifndef PANGO
-#define USEPANGO 0
-#else
-#define USEPANGO 1
-#ifndef UTF8
-#define USEUTF8 0
-#else
-#define USEUTF8 1
-#endif
-#endif
-
-#if USEPANGO
+#include <cairo/cairo.h>
+#include <cairo/cairo-ft.h>
+#include <cairo/cairo-xlib.h>
 #include <pango/pango.h>
-#include <pango/pangoxft.h>
+#include <pango/pangocairo.h>
 #include <iconv.h>
-#endif
 
 #include "drw.h"
 #include "../sl/main.h"
 
-#if !USEPANGO
-#define UTF_INVALID 0xFFFD
-#define UTF_SIZ     4
+Clr transcheme[3]; // transition colorscheme
 
-static const unsigned char utfbyte[UTF_SIZ + 1] = {0x80,    0, 0xC0, 0xE0, 0xF0};
-static const unsigned char utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
-static const long utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
-static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
-
-static long utf8decodebyte(const char c, size_t *i) {
-    for (*i = 0; *i < (UTF_SIZ + 1); ++(*i))
-        if (((unsigned char)c & utfmask[*i]) == utfbyte[*i])
-            return (unsigned char)c & ~utfmask[*i];
-    return 0;
-}
-
-static size_t utf8validate(long *u, size_t i) {
-    if (!BETWEEN(*u, utfmin[i], utfmax[i]) || BETWEEN(*u, 0xD800, 0xDFFF))
-        *u = UTF_INVALID;
-    for (i = 1; *u > utfmax[i]; ++i)
-        ;
-    return i;
-}
-
-static size_t utf8decode(const char *c, long *u, size_t clen) {
-    size_t i, j, len, type;
-    long udecoded;
-
-    *u = UTF_INVALID;
-    if (!clen)
-        return 0;
-    udecoded = utf8decodebyte(c[0], &len);
-    if (!BETWEEN(len, 1, UTF_SIZ))
-        return 1;
-    for (i = 1, j = 1; i < clen && j < len; ++i, ++j) {
-        udecoded = (udecoded << 6) | utf8decodebyte(c[i], &type);
-        if (type)
-            return j;
-    }
-    if (j < len)
-        return 0;
-    *u = udecoded;
-    utf8validate(u, len);
-
-    return len;
-}
-#else
-static char *parse_utf(char *str, size_t clen);
-#endif
-
-Clr transcheme[3];
-
-Drw * drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap) {
+Drw *drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap) {
     Drw *drw = ecalloc(1, sizeof(Drw));
 
     drw->dpy = dpy;
@@ -101,8 +39,10 @@ void drw_resize(Drw *drw, unsigned int w, unsigned int h) {
 
     drw->w = w;
     drw->h = h;
+
     if (drw->drawable)
         XFreePixmap(drw->dpy, drw->drawable);
+
     drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, drw->depth);
 }
 
@@ -113,8 +53,7 @@ void drw_free(Drw *drw) {
     free(drw);
 }
 
-#if USEPANGO
-static Fnt * xfont_create(Drw *drw, const char *fontname) {
+static Fnt *xfont_create(Drw *drw, const char *fontname) {
     Fnt *font;
     PangoFontMap *fontmap;
     PangoContext *context;
@@ -128,7 +67,7 @@ static Fnt * xfont_create(Drw *drw, const char *fontname) {
     font = ecalloc(1, sizeof(Fnt));
     font->dpy = drw->dpy;
 
-    fontmap = pango_xft_get_font_map(drw->dpy, drw->screen);
+    fontmap = pango_cairo_font_map_new();
     context = pango_font_map_create_context(fontmap);
     desc = pango_font_description_from_string(fontname);
     font->layout = pango_layout_new(context);
@@ -150,100 +89,36 @@ void xfont_free(Fnt *font) {
         g_object_unref(font->layout);
     free(font);
 }
-#else
-static Fnt * xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern) {
-    Fnt *font;
-    XftFont *xfont = NULL;
-    FcPattern *pattern = NULL;
-
-    if (fontname) {
-        /* Using the pattern found at font->xfont->pattern does not yield the
-         * same substitution results as using the pattern returned by
-         * FcNameParse; using the latter results in the desired fallback
-         * behaviour whereas the former just results in missing-character
-         * rectangles being drawn, at least with some fonts. */
-        if (!(xfont = XftFontOpenName(drw->dpy, drw->screen, fontname))) {
-            fprintf(stderr, "error, cannot load font from name: '%s'\n", fontname);
-            return NULL;
-        }
-
-        if (fontname[0] == '-')
-            pattern = XftXlfdParse(fontname, False, False);
-        else
-            pattern = FcNameParse((FcChar8 *) fontname);
-
-        if (!pattern) {
-            fprintf(stderr, "error, cannot parse font name to pattern: '%s'\n", fontname);
-            XftFontClose(drw->dpy, xfont);
-            return NULL;
-        }
-    } else if (fontpattern) {
-        if (!(xfont = XftFontOpenPattern(drw->dpy, fontpattern))) {
-            fprintf(stderr, "spmenu: cannot load font from pattern.\n");
-            return NULL;
-        }
-    } else {
-        die("spmenu: no font specified.");
-    }
-
-    font = ecalloc(1, sizeof(Fnt));
-    font->xfont = xfont;
-    font->pattern = pattern;
-    font->h = xfont->ascent + xfont->descent;
-    font->dpy = drw->dpy;
-
-    return font;
-}
-
-void xfont_free(Fnt *font) {
-    if (!font)
-        return;
-    if (font->pattern)
-        FcPatternDestroy(font->pattern);
-    XftFontClose(font->dpy, font->xfont);
-    free(font);
-}
-#endif
 
 Fnt* drw_font_create(Drw* drw, char *font[], size_t fontcount) {
     if (!drw || !font)
         return NULL;
 
-#if USEPANGO
     Fnt *fnt = NULL;
 
     fnt = xfont_create(drw, *font);
-    return (drw->font = fnt);
-#else
-    Fnt *cur, *ret = NULL;
-    size_t i;
 
-    for (i = 1; i <= fontcount; i++) {
-        if ((cur = xfont_create(drw, font[fontcount - i], NULL))) {
-            cur->next = ret;
-            ret = cur;
-        }
-    }
-    return (drw->font = ret);
-#endif
+    return (drw->font = fnt);
 }
 
 void drw_font_free(Fnt *font) {
     if (font) {
-#if !USEPANGO
-        drw_font_free(font->next);
-#endif
         xfont_free(font);
     }
 }
 
 void drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha) {
+    XColor color;
+
     if (!drw || !dest || !clrname)
         return;
 
-    if (!XftColorAllocName(drw->dpy, drw->visual, drw->cmap,
-                clrname, dest))
+    if (!XAllocNamedColor(drw->dpy, drw->cmap, clrname, &color, dest))
         die("spmenu: cannot allocate color '%s'", clrname);
+
+    dest->red = color.red;
+    dest->green = color.green;
+    dest->blue = color.blue;
 
     dest->pixel = (dest->pixel & 0x00ffffffU) | (alpha << 24);
 }
@@ -255,7 +130,7 @@ Clr * drw_scm_create(Drw *drw, char *clrnames[], unsigned int alphas[], size_t c
     Clr *ret;
 
     /* need at least two colors for a scheme */
-    if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
+    if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XColor))))
         return NULL;
 
     for (i = 0; i < clrcount; i++)
@@ -316,7 +191,6 @@ int xerrordummy(Display *dpy, XErrorEvent *ee) {
     return 0;
 }
 
-#if USEPANGO
 char *parse_utf(char *str, size_t clen) {
     char *ostr = str;
     char *cnstr = calloc(clen + 1, sizeof(char));
@@ -341,19 +215,17 @@ char *parse_utf(char *str, size_t clen) {
 
     return cnstr;
 }
-#endif
 
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup) {
-    XSetErrorHandler(xerrordummy);
-
-#if USEPANGO // pango
     char buf[1024];
     int ty;
     unsigned int ew = 0;
-    XftDraw *d = NULL;
+
     size_t i, len;
     int render = x || y || w || h;
     char *t;
+
+    XSetErrorHandler(xerrordummy);
 
     if (!drw || (render && !drw->scheme) || !text || !drw->font)
         return 0;
@@ -363,19 +235,21 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     } else {
         XSetForeground(drw->dpy, drw->gc, drw->scheme[invert ? ColFg : ColBg].pixel);
         XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w, h);
-        d = XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap);
+
+        drw->surface = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+        drw->d = cairo_create(drw->surface);
+
         x += lpad;
         w -= lpad;
     }
 
-    len = strlen(text);
-    t = strdup(text);
-
-    t = parse_utf(t, len);
+    t = parse_utf(strdup(text), strlen(text));
+    len = strlen(t);
 
     if (len) {
         drw_font_getexts(drw->font, t, len, &ew, NULL, markup);
-        /* shorten text if necessary */
+
+        // shorten text if necessary
         for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, t, len, &ew, NULL, markup))
             len--;
 
@@ -384,20 +258,31 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
             buf[len] = '\0';
             if (len < strlen(t))
                 for (i = len; i && i > len - 3; buf[--i] = '.')
-                    ; /* NOP */
+                    ; // NOP
 
-            if (!strstr(buf, "</"))
+            if (!strstr(buf, "</")) // must contain </
                 markup = 0;
 
             if (render) {
                 ty = y + (h - drw->font->h) / 2;
-                if(markup)
+
+                if (markup) {
                     pango_layout_set_markup(drw->font->layout, buf, len);
-                else
+                } else {
                     pango_layout_set_text(drw->font->layout, buf, len);
-                pango_xft_render_layout(d, &drw->scheme[invert ? ColBg : ColFg],
-                        drw->font->layout, x * PANGO_SCALE, ty * PANGO_SCALE);
-                if(markup) /* clear markup attributes */
+                }
+
+                cairo_save(drw->d);
+
+                cairo_set_source_rgb(drw->d, convert_color(drw->scheme->red), convert_color(drw->scheme->green), convert_color(drw->scheme->blue));
+                cairo_move_to(drw->d, x, ty);
+
+                pango_cairo_update_layout(drw->d, drw->font->layout);
+                pango_cairo_show_layout(drw->d, drw->font->layout);
+
+                cairo_restore(drw->d);
+
+                if (markup) // clear markup attributes
                     pango_layout_set_attributes(drw->font->layout, NULL);
             }
 
@@ -405,139 +290,8 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
             w -= ew;
         }
     }
-    if (d)
-        XftDrawDestroy(d);
 
     return x + (render ? w : 0);
-#else // xft
-    char buf[1024];
-    int ty;
-    unsigned int ew = 0;
-    XftDraw *d = NULL;
-    Fnt *usedfont, *curfont, *nextfont;
-    size_t i, len;
-    int utf8strlen, utf8charlen, render = x || y || w || h;
-    long utf8codepoint = 0;
-    const char *utf8str;
-    FcCharSet *fccharset;
-    FcPattern *fcpattern;
-    FcPattern *match;
-    XftResult result;
-    int charexists = 0;
-
-    if (!drw || (render && !drw->scheme) || !text || !drw->font)
-        return 0;
-
-    if (!render) {
-        w = ~w;
-    } else {
-        XSetForeground(drw->dpy, drw->gc, drw->scheme[invert ? ColFg : ColBg].pixel);
-        XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w, h);
-        d = XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap);
-        x += lpad;
-        w -= lpad;
-    }
-
-    usedfont = drw->font;
-    while (1) {
-        utf8strlen = 0;
-        utf8str = text;
-        nextfont = NULL;
-        while (*text) {
-            utf8charlen = utf8decode(text, &utf8codepoint, UTF_SIZ);
-            for (curfont = drw->font; curfont; curfont = curfont->next) {
-                charexists = charexists || XftCharExists(drw->dpy, curfont->xfont, utf8codepoint);
-                if (charexists) {
-                    if (curfont == usedfont) {
-                        utf8strlen += utf8charlen;
-                        text += utf8charlen;
-                    } else {
-                        nextfont = curfont;
-                    }
-                    break;
-                }
-            }
-
-            if (!charexists || nextfont)
-                break;
-            else
-                charexists = 0;
-        }
-
-        if (utf8strlen) {
-            drw_font_getexts(usedfont, utf8str, utf8strlen, &ew, NULL, True);
-            /* shorten text if necessary */
-            for (len = MIN(utf8strlen, sizeof(buf) - 1); len && ew > w; drw_font_getexts(usedfont, utf8str, len, &ew, NULL, True))
-                len--;
-
-            if (len) {
-                memcpy(buf, utf8str, len);
-                buf[len] = '\0';
-                if (len < utf8strlen)
-                    for (i = len; i && i > len - 3; buf[--i] = '.')
-                        ; /* NOP */
-
-                if (render) {
-                    ty = y + (h - usedfont->h) / 2 + usedfont->xfont->ascent;
-                    XftDrawStringUtf8(d, &drw->scheme[invert ? ColBg : ColFg],
-                            usedfont->xfont, x, ty, (XftChar8 *)buf, len);
-                }
-                x += ew;
-                w -= ew;
-            }
-        }
-
-        if (!*text) {
-            break;
-        } else if (nextfont) {
-            charexists = 0;
-            usedfont = nextfont;
-        } else {
-            /* Regardless of whether or not a fallback font is found, the
-             * character must be drawn. */
-            charexists = 1;
-
-            fccharset = FcCharSetCreate();
-            FcCharSetAddChar(fccharset, utf8codepoint);
-
-            if (!drw->font->pattern) {
-                /* Refer to the comment in xfont_create for more information. */
-                die("spmenu: the first font in the cache must be loaded from a font string.");
-            }
-
-            fcpattern = FcPatternDuplicate(drw->font->pattern);
-            FcPatternAddCharSet(fcpattern, FC_CHARSET, fccharset);
-            FcPatternAddBool(fcpattern, FC_SCALABLE, FcTrue);
-
-            FcConfigSubstitute(NULL, fcpattern, FcMatchPattern);
-            FcDefaultSubstitute(fcpattern);
-            match = XftFontMatch(drw->dpy, drw->screen, fcpattern, &result);
-
-            FcCharSetDestroy(fccharset);
-            FcPatternDestroy(fcpattern);
-
-            if (match) {
-                usedfont = xfont_create(drw, NULL, match);
-                if (usedfont && XftCharExists(drw->dpy, usedfont->xfont, utf8codepoint)) {
-                    for (curfont = drw->font; curfont->next; curfont = curfont->next)
-                        ; /* NOP */
-                    curfont->next = usedfont;
-                } else {
-                    xfont_free(usedfont);
-                    usedfont = drw->font;
-                }
-            }
-        }
-    }
-    if (d)
-        XftDrawDestroy(d);
-
-    XSync(drw->dpy, False);
-
-    return x + (render ? w : 0);
-#endif
-
-    XSync(drw->dpy, False);
 }
 
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h) {
@@ -555,37 +309,31 @@ unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup) {
 }
 
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup) {
-#if !USEPANGO
-    XGlyphInfo ext;
-#endif
-
     if (!font || !text)
         return;
 
     char *t = strdup(text);
 
-#if USEPANGO
     t = parse_utf(t, len);
 
     if (!strstr(t, "</"))
         markup = 0;
+
     PangoRectangle r;
-    if(markup)
+
+    if (markup)
         pango_layout_set_markup(font->layout, t, len);
     else
         pango_layout_set_text(font->layout, t, len);
+
     pango_layout_get_extents(font->layout, 0, &r);
-    if(markup) // clear markup attributes
+
+    if (markup) // clear markup attributes
         pango_layout_set_attributes(font->layout, NULL);
-#else
-    XftTextExtentsUtf8(font->dpy, font->xfont, (XftChar8 *)t, len, &ext);
-#endif
+
     if (w)
-#if USEPANGO
         *w = r.width / PANGO_SCALE;
-#else
-    *w = ext.xOff;
-#endif
+
     if (h)
         *h = font->h;
 }

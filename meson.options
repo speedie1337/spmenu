@@ -34,20 +34,6 @@ option(
 )
 
 option(
-  'pango',
-  type : 'boolean',
-  value : true,
-  description : 'Enable Pango markup support'
-)
-
-option(
-  'pangoxft',
-  type : 'boolean',
-  value : true,
-  description : 'Enable Pango for libXft'
-)
-
-option(
   'xinerama',
   type : 'boolean',
   value : true,

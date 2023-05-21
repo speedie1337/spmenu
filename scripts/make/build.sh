@@ -41,8 +41,6 @@ build() {
             -Dxinerama="$xinerama" \
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
-            -Dpango="$pango" \
-            -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
             -Dutf8="$utf8" \
             --prefix "$prefix" \
@@ -54,8 +52,6 @@ build() {
             -Dxinerama="$xinerama" \
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
-            -Dpango="$pango" \
-            -Dpangoxft="$pangoxft" \
             -Dlibconfig="$libconfig" \
             -Dutf8="$utf8" \
             --prefix "$prefix" \

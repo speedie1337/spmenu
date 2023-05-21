@@ -1,29 +1,33 @@
 /* See LICENSE file for copyright and license details. */
 
-#ifndef PANGO
-#define USEPANGO 0
-#else
-#define USEPANGO 1
-#endif
+#include <cairo/cairo.h>
+#include <cairo/cairo-ft.h>
+#include <cairo/cairo-xlib.h>
+#include <pango/pango.h>
+#include <pango/pangocairo.h>
+
+#define convert_color(x) (double)((x) / 65535.0)
 
 typedef struct {
     Cursor cursor;
 } Cur;
 
+typedef XColor Clr;
+
 typedef struct Fnt {
     Display *dpy;
     unsigned int h;
-#if USEPANGO
+	FcPattern *pattern;
     PangoLayout *layout;
-#else
-    XftFont *xfont;
-    FcPattern *pattern;
-    struct Fnt *next;
-#endif
 } Fnt;
 
+typedef struct Rgb {
+    unsigned int r;
+    unsigned int g;
+    unsigned int b;
+} Rgb;
+
 enum { ColFg, ColBg, ColPwl }; /* Clr scheme index */
-typedef XftColor Clr;
 
 typedef struct {
     unsigned int w, h;
@@ -37,6 +41,9 @@ typedef struct {
     GC gc;
     Clr *scheme;
     Fnt *font;
+    Rgb *rgb;
+    cairo_surface_t *surface;
+    cairo_t *d;
 } Drw;
 
 /* Drawable abstraction */
@@ -60,9 +67,6 @@ Cur *drw_cur_create(Drw *drw, int shape);
 void drw_cur_free(Drw *drw, Cur *cursor);
 
 /* Drawing context manipulation */
-#if !USEPANGO
-void drw_setfont(Drw *drw, Fnt *set);
-#endif
 void drw_setscheme(Drw *drw, Clr *scm);
 
 /* Drawing functions */
@@ -75,3 +79,6 @@ void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
 /* Powerline functions */
 void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
 void drw_arrow(Drw* drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);
+
+/* UTF-8 functions */
+char *parse_utf(char *str, size_t clen);

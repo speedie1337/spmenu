@@ -17,7 +17,10 @@ project_dependencies = [
   dependency('x11'),
   dependency('xrender'),
   dependency('freetype2'),
-  dependency('xft'),
+  dependency('cairo'),
+  dependency('pango'),
+  dependency('pangocairo'),
+  dependency('fontconfig'),
   cc.find_library('m', required : false),
 ]
 
@@ -51,14 +54,6 @@ endif
 if get_option('xinerama')
   project_dependencies += [ dependency('xinerama') ]
   build_args += [ '-DXINERAMA' ]
-endif
-
-if get_option('pango') and get_option('pangoxft')
-  project_dependencies += [ dependency('pango') ]
-  project_dependencies += [ dependency('pangoxft') ]
-  build_args += [ '-DPANGO' ]
-else
-  project_dependencies += [ dependency('fontconfig') ]
 endif
 
 if get_option('libconfig')

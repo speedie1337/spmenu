@@ -210,11 +210,8 @@ time.</li>
 <li>Used to calculate MD5 of images if image support is enabled, can be
 disabled during compile time.</li>
 </ul></li>
-<li>Pango
-<ul>
-<li>Can be disabled if you don’t want/need Pango markup during compile
-time.</li>
-</ul></li>
+<li>Pango</li>
+<li>Cairo</li>
 <li>libconfig
 <ul>
 <li>Can be disabled if you don’t want/need config file support during
@@ -285,7 +282,6 @@ issues!</p>
 MD5() is deprecated as of OpenSSL 3.0, but this would also make it very
 easy to have LibreSSL compatibility.</li>
 <li>Image support: Ability to display icons, similar to rofi</li>
-<li>Text drawing: Use cairo for text drawing over Xft.</li>
 <li>Lines: Rofi-like newlines in the same entry
 <ul>
 <li>Just need to <code>XMoveResizeWindow()</code> as well as
@@ -308,10 +304,10 @@ but maybe at some point in the distant future</h3>
 <li>Wayland: Wayland support, but only if it doesn’t require writing any
 extra code which as of now seems unlikely, or if someone makes a patch.
 <ul>
-<li>Before this can even be done, replace Xft with cairo, deal with
-keybinds in some Wayland compatible way, remove .Xresources usage and
-figure out a way to preserve X11 compatibility as I do not want to use
-Wayland as of now.</li>
+<li>Before this can even be done, deal with keybinds in some Wayland
+compatible way, remove .Xresources usage and figure out a way to
+preserve X11 compatibility as I do not want to use Wayland as of
+now.</li>
 <li>You can just use XWayland anyway if you happen to use Wayland, so
 it’s not like you will be unable to use spmenu in its current
 state.</li>
