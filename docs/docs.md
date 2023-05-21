@@ -762,9 +762,10 @@ it's kind of inconvenient. For this reason, spmenu reads `.theme.conf`
 and `.config/spmenu/theme.conf` on startup as well. To apply a basic theme,
 you simply replace theme.conf with the theme you want to use.
 
-`themes/` in the [Git repository](https://git.speedie.site/spmenu) contains
-a bunch of themes written for spmenu, and you can use them as a template
-when making your own themes.
+There is a [Git repository](https://git.speedie.site/spmenu-themes)
+which contains a bunch of themes written for spmenu,
+and you can use them as a template when making your own themes.
+You may also contribute to this repository if you have a theme to show.
 
 Do however note that the theme file is **not** the same as the config file.
 There are quite a lot of differences, and many options are not available.
