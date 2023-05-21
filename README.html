@@ -169,8 +169,7 @@
 <h1 class="title">spmenu README</h1>
 </header>
 <figure>
-<img src="docs/spmenu.svg" title="spmenu" style="width:25.0%"
-alt="spmenu logo" />
+<img src="docs/spmenu.svg" title="spmenu" alt="spmenu logo" />
 <figcaption aria-hidden="true">spmenu logo</figcaption>
 </figure>
 <h1 id="spmenu">spmenu</h1>
@@ -258,10 +257,12 @@ those packages in your distribution repositories.</p>
 <p>Configure the build by running these commands:</p>
 <p><code>mkdir -p build/ # Create a build/ directory, Meson will use this as the working directory</code></p>
 <p><code>meson setup build # This will check to make sure all dependencies are found. If you're recompiling you may want to pass --reconfigure as an argument</code></p>
+<p>This is where you can enable/disable certain features, as well as set
+compiler options.</p>
 <p>Now, to build it run <code>ninja -C build</code>. If all went well
 you should have a binary in the <code>build/</code> directory.</p>
 <p>Finally, to install it all, run:</p>
-<p><code>meson install -C build --destdir /usr # /usr may be overriden to /usr/local or anything else if you use macOS or simply want another destination directory</code></p>
+<p><code>meson install -C build --prefix /usr # /usr may be overriden to /usr/local or anything else if you use macOS or simply want another destination directory</code></p>
 <p>To generate documentation, which may be necessary if you’re pushing
 new changes to your Git repository, run
 <code>scripts/make/generate-docs.sh</code> <strong>in the current

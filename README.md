@@ -1,4 +1,4 @@
-![spmenu logo](docs/spmenu.svg "spmenu"){ width=25% }
+![spmenu logo](docs/spmenu.svg "spmenu")
 
 spmenu
 ======
@@ -86,12 +86,15 @@ directory`
 `meson setup build # This will check to make sure all dependencies are found.
 If you're recompiling you may want to pass --reconfigure as an argument`
 
+This is where you can enable/disable certain features, as well as set
+compiler options.
+
 Now, to build it run `ninja -C build`. If all went well you should have a
 binary in the `build/` directory.
 
 Finally, to install it all, run:
 
-`meson install -C build --destdir /usr # /usr may be overriden to /usr/local
+`meson install -C build --prefix /usr # /usr may be overriden to /usr/local
 or anything else if you use macOS or simply want another destination directory`
 
 To generate documentation, which may be necessary if you're pushing new changes
