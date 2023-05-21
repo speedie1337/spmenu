@@ -1,0 +1,1 @@
+static void setupdisplay(void);

@@ -138,10 +138,6 @@ code which as of now seems unlikely, or if someone makes a patch.
   - You can just use XWayland anyway if you happen to use Wayland, so it's not
 like you will be unable to use spmenu in its current state.
 
-### Bugs
-
-None discovered yet! :)
-
 ## Scripts
 
 There's a page dedicated to user scripts
