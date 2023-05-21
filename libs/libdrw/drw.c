@@ -272,15 +272,13 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
                     pango_layout_set_text(drw->font->layout, buf, len);
                 }
 
-                cairo_save(drw->d);
+                pango_layout_set_single_paragraph_mode(drw->font->layout, True);
 
                 cairo_set_source_rgb(drw->d, convert_color(drw->scheme->red), convert_color(drw->scheme->green), convert_color(drw->scheme->blue));
                 cairo_move_to(drw->d, x, ty);
 
                 pango_cairo_update_layout(drw->d, drw->font->layout);
                 pango_cairo_show_layout(drw->d, drw->font->layout);
-
-                cairo_restore(drw->d);
 
                 if (markup) // clear markup attributes
                     pango_layout_set_attributes(drw->font->layout, NULL);
