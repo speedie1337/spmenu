@@ -124,6 +124,7 @@ static int allowkeys = 1; // whether or not to interpret a keypress as an insert
 #include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/x11/xrdb.h"
+#include "libs/x11/xim.h"
 #include "libs/x11/key.h"
 #include "libs/x11/mouse.h"
 #include "libs/sort.h"
@@ -212,12 +213,6 @@ static int ignoreglobalkeys = 0; // should be set in the config file, if 1, the 
 static int ignoreconfmouse = 0; // same for mouse
 static int ignoreglobalmouse = 0; // same for mouse
 
-// X11 properties
-static Atom clip, utf8, types, dock;
-static Display *dpy;
-static Window root, parentwin, win;
-static XIC xic;
-
 // colors
 static int useargb = 0;
 static Visual *visual;
@@ -273,6 +268,7 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 #include "libs/img.c"
 #include "libs/rtl.h"
 #include "libs/rtl.c"
+#include "libs/x11/xim.c"
 #include "libs/x11/key.c"
 #include "libs/x11/mouse.c"
 #include "libs/sort.c"

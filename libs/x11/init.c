@@ -7,7 +7,6 @@ void setupdisplay(void) {
     unsigned int tmp, minstrlen = 0, curstrlen = 0;
     int numwidthchecks = 100;
     struct item *item;
-    XIM xim;
     Window w, dw, *dws;
     XWindowAttributes wa;
 #if USEXINERAMA
@@ -16,16 +15,7 @@ void setupdisplay(void) {
     int a, n, area = 0;
 #endif
 
-    // set properties indicating what spmenu handles
-    clip = XInternAtom(dpy, "CLIPBOARD",   False);
-    utf8 = XInternAtom(dpy, "UTF8_STRING", False);
-    types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
-    dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
-
-    // resize client
-    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
-    lines = MAX(lines, 0);
-    reallines = lines;
+    prepare_window_size();
 
     // resize client to image height if deemed necessary
 #if USEIMAGE
@@ -125,18 +115,7 @@ void setupdisplay(void) {
     setimageopts();
 #endif
 
-    // input methods
-    if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL) {
-        XSetLocaleModifiers("@im=local");
-        if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL) {
-            XSetLocaleModifiers("@im=");
-            if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL)
-                die("XOpenIM failed: could not open input device");
-        }
-    }
-
-    xic = XCreateIC(xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
-            XNClientWindow, win, XNFocusWindow, win, NULL);
+    open_xim(); // open xim
 
     XMapRaised(dpy, win);
 

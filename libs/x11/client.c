@@ -4,6 +4,13 @@ void prepare_window_size(void) {
     sp = menupaddingh;
     vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
 
+    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    lines = MAX(lines, 0);
+    reallines = lines;
+
+    lrpad = drw->font->h + textpadding;
+    mh = (lines + 1) * bh + 2 * menumarginv; // lines + 1 * bh is the menu height
+
     return;
 }
 
@@ -40,8 +47,16 @@ void set_window(void) {
 }
 
 void set_prop(void) {
-    if (dockproperty) XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1); // set dock property
-    return;
+    // set properties indicating what spmenu handles
+    clip = XInternAtom(dpy, "CLIPBOARD",   False);
+    utf8 = XInternAtom(dpy, "UTF8_STRING", False);
+    types = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
+
+    // set dock property
+    if (dockproperty) {
+        dock = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+        XChangeProperty(dpy, win, types, XA_ATOM, 32, PropModeReplace, (unsigned char *) &dock, 1); // set dock property
+    }
 }
 
 void resizeclient(void) {
