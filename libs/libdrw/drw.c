@@ -4,8 +4,6 @@
 #include <string.h>
 #include <X11/Xlib.h>
 #include <cairo/cairo.h>
-#include <cairo/cairo-ft.h>
-#include <cairo/cairo-xlib.h>
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
 #include <iconv.h>
