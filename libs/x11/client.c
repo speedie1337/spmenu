@@ -14,6 +14,27 @@ void prepare_window_size(void) {
     return;
 }
 
+void get_width(int numwidthchecks, unsigned int minstrlen, unsigned int curstrlen) {
+    struct item *item;
+    unsigned int tmp = 0;
+
+    // get accurate width
+    if (accuratewidth) {
+        for (item = items; !lines && item && item->text; ++item) {
+            curstrlen = strlen(item->text);
+            if (numwidthchecks || minstrlen < curstrlen) {
+                numwidthchecks = MAX(numwidthchecks - 1, 0);
+                minstrlen = MAX(minstrlen, curstrlen);
+                if ((tmp = MIN(TEXTW(item->text), mw/3) > inputw)) {
+                    inputw = tmp;
+                    if (tmp == mw/3)
+                        break;
+                }
+            }
+        }
+    }
+}
+
 void create_window(int x, int y, int w, int h) {
     XSetWindowAttributes swa;
 
@@ -71,14 +92,14 @@ void resizeclient(void) {
 #endif
     XWindowAttributes wa;
     struct item *item;
-    int itemCount = 0;
+    int ic = 0; // item count
 
     // walk through all items
     for (item = items; item && item->text; item++)
-        itemCount++;
+        ic++;
 
     bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
-    lines = MIN(itemCount, MAX(lines, 0));
+    lines = MIN(ic, MAX(lines, 0));
     reallines = lines;
 
     // resize client to image height

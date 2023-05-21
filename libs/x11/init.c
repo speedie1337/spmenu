@@ -4,11 +4,13 @@ void setupdisplay(void) {
     int j, di;
 #endif
     unsigned int du;
-    unsigned int tmp, minstrlen = 0, curstrlen = 0;
+
+    unsigned int minstrlen = 0, curstrlen = 0;
     int numwidthchecks = 100;
-    struct item *item;
+
     Window w, dw, *dws;
     XWindowAttributes wa;
+
 #if USEXINERAMA
     XineramaScreenInfo *info;
     Window pw;
@@ -28,21 +30,7 @@ void setupdisplay(void) {
     promptw = (prompt && *prompt)
         ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - lrpad / 4 : 0; // prompt width
 
-    // get accurate width
-    if (accuratewidth) {
-        for (item = items; !lines && item && item->text; ++item) {
-            curstrlen = strlen(item->text);
-            if (numwidthchecks || minstrlen < curstrlen) {
-                numwidthchecks = MAX(numwidthchecks - 1, 0);
-                minstrlen = MAX(minstrlen, curstrlen);
-                if ((tmp = MIN(TEXTW(item->text), mw/3) > inputw)) {
-                    inputw = tmp;
-                    if (tmp == mw/3)
-                        break;
-                }
-            }
-        }
-    }
+    get_width(numwidthchecks, minstrlen, curstrlen);
 
     // init xinerama screens
 #if USEXINERAMA
