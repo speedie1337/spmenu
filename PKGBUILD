@@ -13,10 +13,11 @@ provides=($pkgname)
 conflicts=($pkgname)
 source=(
     "$pkgname-$pkgver.tar.gz"
+    "$pkgname-$pkgver.tar.gz.sig"
     #"https://ls.speedie.site/releases/$pkgname/$pkgname-$pkgver.tar.gz"
 )
 
-md5sums=(MD5SUM)
+md5sums=(MD5SUM 'SKIP')
 
 build(){
   cd $pkgname-$pkgver

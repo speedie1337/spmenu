@@ -13,3 +13,6 @@ cp -rf LICENSE meson.build meson.options *.h *.c scripts/ docs/ libs/ PKGBUILD s
 tar -cf spmenu-${version}.tar spmenu-${version}
 gzip spmenu-${version}.tar
 rm -rf spmenu-${version}
+if [ -x "$(command -v gpg)" ]; then
+gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.tar.gz
+fi
