@@ -22,6 +22,11 @@
 #include <time.h>
 #include <unistd.h>
 
+// set version
+#ifndef VERSION
+#define VERSION "unknown"
+#endif
+
 // check if we should enable right to left language support
 #ifndef RTL
 #define USERTL 0
@@ -62,10 +67,6 @@
 #define USEXRESOURCES 0
 #else
 #define USEXRESOURCES 1
-#endif
-
-#ifndef VERSION
-#define VERSION "unknown"
 #endif
 
 // include fribidi used for right to left language support
@@ -111,9 +112,9 @@
 #include "libs/define.c"
 
 // mode
-static char modetext[16] = "Insert"; // default mode text
-static int curMode = 1; // 0 is command mode
-static int allowkeys = 1; // whether or not to interpret a keypress as an insertion
+static char modetext[16]; // default mode text
+static int curMode; // 0 is command mode
+static int allowkeys; // whether or not to interpret a keypress as an insertion
 
 // various headers
 #include "libs/libdrw/drw.h"
@@ -133,37 +134,32 @@ static int allowkeys = 1; // whether or not to interpret a keypress as an insert
 // text
 static char text[BUFSIZ] = "";
 static char numbers[NUMBERSBUFSIZE] = "";
-
-// high priority
-static int hplength = 0;
-static char **hpitems = NULL;
-
-// embed
-static char *embed;
+static char *embed; // x11 embed
 
 // keybinds
 static int numlockmask = 0;
 static int capslockstate = 0;
 
-// height of each item, menu width, menu height
-static int bh, mw, mh;
-static int reallines = 0;
-static int inputw = 0;
-static int promptw;
-static int plw = 0;
+static int bh, mw, mh; // height of each item, menu width, menu height
+static int reallines = 0; // temporary integer which holds lines
+static int inputw = 0; // input width
+static int promptw; // prompt width
+static int plw = 0; // powerline width
 static int lrpad; // sum of left and right padding
-static int vp;    // vertical padding for bar
-static int sp;    // side padding for bar
+static int vp; // vertical padding for bar
+static int sp; // side padding for bar
 static int cursorstate = 1; // cursor state
 static int itemnumber = 0; // item number
 static size_t cursor;
 static struct item *items = NULL, *backup_items, *list_items;
-static struct item *matches, *matchend;
-static struct item *prev, *curr, *next, *sel;
+static struct item *matches, *matchend; // matches, final match
+static struct item *prev, *curr, *next, *sel; // previous, current, next, selected
+static int hplength = 0; // high priority
+static char **hpitems = NULL; // high priority
 static int *sel_index = NULL;
 static unsigned int sel_size = 0;
 static int screen;
-static int itemn = 0;
+static int itemn = 0; // item number
 
 // item struct
 struct item {
