@@ -17,15 +17,8 @@ typedef XColor Clr;
 typedef struct Fnt {
     Display *dpy;
     unsigned int h;
-	FcPattern *pattern;
     PangoLayout *layout;
 } Fnt;
-
-typedef struct Rgb {
-    unsigned int r;
-    unsigned int g;
-    unsigned int b;
-} Rgb;
 
 enum { ColFg, ColBg, ColPwl }; /* Clr scheme index */
 
@@ -41,7 +34,6 @@ typedef struct {
     GC gc;
     Clr *scheme;
     Fnt *font;
-    Rgb *rgb;
     cairo_surface_t *surface;
     cairo_t *d;
 } Drw;
