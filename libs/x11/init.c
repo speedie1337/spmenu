@@ -104,10 +104,14 @@ void setupdisplay(void) {
     // might be faster in some instances, most of the time unnecessary
     if (!accuratewidth) inputw = MIN(inputw, mw/3);
 
-    match(); // match entries
-
     // create menu window and set properties for it
-    create_window(x + sp, y + vp - (menuposition == 1 ? 0 : menuposition == 2 ? borderwidth : borderwidth * 2), mw - 2 * sp - borderwidth * 2, mh);
+    create_window(
+            x + sp,
+            y + vp - (menuposition == 1 ? 0 : menuposition == 2 ? borderwidth : borderwidth * 2),
+            mw - 2 * sp - borderwidth * 2,
+            mh
+    );
+
     set_window();
     set_prop();
 
@@ -118,26 +122,30 @@ void setupdisplay(void) {
     open_xim(); // open xim
 
     XMapRaised(dpy, win);
-
     XSync(dpy, False);
     XGetWindowAttributes(dpy, win, &wa);
 
-    if (wa.map_state == IsViewable) // must be viewable, otherwise we get a BadMatch error
+    if (wa.map_state == IsViewable) { // must be viewable, otherwise we get a BadMatch error
         XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
+    }
 
     // embed spmenu inside parent window
     if (embed) {
         XReparentWindow(dpy, win, parentwin, x, y);
         XSelectInput(dpy, parentwin, FocusChangeMask | SubstructureNotifyMask);
+
         if (XQueryTree(dpy, parentwin, &dw, &w, &dws, &du) && dws) {
             for (i = 0; i < du && dws[i] != win; ++i)
                 XSelectInput(dpy, dws[i], FocusChangeMask);
             XFree(dws);
         }
+
         grabfocus();
     }
 
-    // resize and draw
+    // resize window and draw
     drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
+
+    match();
     drawmenu();
 }
