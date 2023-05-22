@@ -102,7 +102,6 @@ void movenext(Arg *arg) {
         return;
 
     sel = curr = next;
-    calcoffsets();
     drawmenu();
 }
 
@@ -112,6 +111,17 @@ void moveprev(Arg *arg) {
 
     sel = curr = prev;
     calcoffsets();
+    drawmenu();
+}
+
+void moveitem(Arg *arg) {
+    for (int i = 0; i < arg->i; i++) {
+        if (sel && sel->right && (sel = sel->right) == next) {
+            curr = next;
+            calcoffsets();
+        }
+    }
+
     drawmenu();
 }
 

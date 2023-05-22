@@ -16,6 +16,7 @@ static void moveend(Arg *arg);
 static void movestart(Arg *arg);
 static void movenext(Arg *arg);
 static void moveprev(Arg *arg);
+static void moveitem(Arg *arg);
 static void paste(Arg *arg);
 static void restoresel(Arg *arg);
 static void clear(Arg *arg);
