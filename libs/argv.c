@@ -15,20 +15,28 @@ void readargs(int argc, char *argv[]) {
             loadtheme = 1;
         } else if (!strcmp(argv[j], "-nltm") || (!strcmp(argv[j], "--no-load-theme"))) {
             loadtheme = 0;
+        } else if (!strcmp(argv[j], "-lbi") || (!strcmp(argv[j], "--load-binds"))) {
+            loadbinds = 1;
+        } else if (!strcmp(argv[j], "-nlbi") || (!strcmp(argv[j], "--no-load-binds"))) {
+            loadbinds = 0;
 #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
-                cconf = 1;
                 argconf = argv[++j];
             } else {
-                die("This argument requires a second argument.\n");
+                die("This argument requires a second argument.");
+            }
+        } else if (!strcmp(argv[j], "-bf") || (!strcmp(argv[j], "--bind-file"))) { // specify a bind file
+            if (argv[j+1]) {
+                argbinds = argv[++j];
+            } else {
+                die("This argument requires a second argument.");
             }
         } else if (!strcmp(argv[j], "-tm") || (!strcmp(argv[j], "--theme"))) { // specify a theme
             if (argv[j+1]) {
-                ctheme = 1;
                 argtheme = argv[++j];
             } else {
-                die("This argument requires a second argument.\n");
+                die("This argument requires a second argument.");
             }
 #endif
         }
@@ -216,6 +224,10 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "-nltm")
                         || !strcmp(argv[i], "--load-theme")
                         || !strcmp(argv[i], "--no-load-theme")
+                        || !strcmp(argv[i], "-lbi")
+                        || !strcmp(argv[i], "-nlbi")
+                        || !strcmp(argv[i], "--load-binds")
+                        || !strcmp(argv[i], "--no-load-binds")
                         || !strcmp(argv[i], "-gbc")
                         || !strcmp(argv[i], "-ngbc")
                         || !strcmp(argv[i], "--global-colors")
@@ -227,6 +239,9 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "-tm")
                         || !strcmp(argv[i], "--theme")
                         || (argtheme && !strcmp(argv[i], argtheme))
+                        || !strcmp(argv[i], "-bf")
+                        || !strcmp(argv[i], "--bind-file")
+                        || (argbinds && !strcmp(argv[i], argbinds))
 #endif
                         ))
                         continue;
@@ -435,6 +450,10 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "-nltm")
                         || !strcmp(argv[i], "--load-theme")
                         || !strcmp(argv[i], "--no-load-theme")
+                        || !strcmp(argv[i], "-lbi")
+                        || !strcmp(argv[i], "-nlbi")
+                        || !strcmp(argv[i], "--load-binds")
+                        || !strcmp(argv[i], "--no-load-binds")
                         || !strcmp(argv[i], "-gbc")
                         || !strcmp(argv[i], "-ngbc")
                         || !strcmp(argv[i], "--global-colors")
@@ -446,6 +465,9 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "-tm")
                         || !strcmp(argv[i], "--theme")
                         || (argtheme && !strcmp(argv[i], argtheme))
+                        || !strcmp(argv[i], "-bf")
+                        || !strcmp(argv[i], "--bind-file")
+                        || (argbinds && !strcmp(argv[i], argbinds))
 #endif
                         ))
                         continue;
@@ -528,7 +550,7 @@ void usage(int status) {
             "spmenu -t,       --top                                       Position spmenu at the top of the screen\n"
             "spmenu -b,       --bottom                                    Position spmenu at the bottom of the screen\n"
             "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
-            "\n", status ? stderr : stdout);
+            , status ? stderr : stdout);
 
     // more args
     fputs("spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
@@ -582,8 +604,11 @@ void usage(int status) {
     fputs("spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window. Useful for testing\n"
             "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window. Useful for testing\n"
             "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
-            "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)\n"
-            "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)\n"
+            "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
+            "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
+            "spmenu -bf,      --bind-file <file>                          Exclusively load binds from <file>\n"
+            "spmenu -lbi,     --load-binds                                Load spmenu binds (~/.config/spmenu/binds.conf)\n"
+            "spmenu -nlbi,    --no-load-binds                             Don't load spmenu binds (~/.config/spmenu/binds.conf)\n"
             "spmenu -tm,      --theme <theme>                             Load theme <theme>\n"
             "spmenu -ltm,     --load-theme                                Load theme\n"
             "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
@@ -624,7 +649,7 @@ void usage(int status) {
             "spmenu -cfc,     --caret-foreground <color>                  Set the caret foreground color\n"
             "spmenu -cbc,     --caret-background <color>                  Set the caret background color\n"
             "spmenu -bc,      --border-background <color>                 Set the border color\n"
-            "\n", status ? stderr : stdout);
+            , status ? stderr : stdout);
 
     // sgr sequences
     fputs("spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"

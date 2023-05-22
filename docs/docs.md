@@ -288,7 +288,6 @@ You may use long, descriptive arguments or the shorter arguments.
 `-lf, --list-file list file`
 :   Specify a file to load entries from
 
-
 `-ig, --image-gaps gaps`
 :   Set image gaps to gaps
 
@@ -338,19 +337,28 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Set config file to load to file
 
 `-lcfg, --load-config`
-:   Load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)
+:   Load spmenu configuration (~/.config/spmenu/spmenu.conf) on runtime
 
 `-ncfg, --no-load-config`
-:   Don't load spmenu configuration (~/.spmenu.conf or ~/.config/spmenu/spmenu.conf)
+:   Don't load spmenu configuration (~/.config/spmenu/spmenu.conf) on runtime
+
+`-bf, --bind-file file`
+:   Set bind file to load to file
+
+`-lbi, --load-binds`
+:   Exclusively load binds from file (~/.config/spmenu/binds.conf) on runtime
+
+`-nlbi, --no-load-binds`
+:   Don't exclusively load binds from file (~/.config/spmenu/binds.conf) on runtime
 
 `-tm, --theme theme`
-:   Load theme 'theme' on runtime.
+:   Load theme 'theme' on runtime
 
 `-ltm, --load-theme`
-:   Load theme
+:   Load theme (~/.config/spmenu/theme.conf) on runtime
 
 `-nltm, --no-load-theme`
-:   Don't load theme
+:   Don't load theme (~/.config/spmenu/theme.conf) on runtime
 
 `-v, --version`
 :   Print spmenu version to stdout
@@ -831,3 +839,6 @@ email me.
 ## See also
 
 - spmenu_run(1)
+- [spmenu wiki](https://spmenu.speedie.site)
+- [spmenu git repository](https://git.speedie.site/spmenu)
+- [spmenu GitHub mirror](https://github.com/speediegq/spmenu)

@@ -362,21 +362,31 @@ Useful for testing
 Set config file to load to file
 .TP
 \f[V]-lcfg, --load-config\f[R]
-Load spmenu configuration (\[ti]/.spmenu.conf or
-\[ti]/.config/spmenu/spmenu.conf)
+Load spmenu configuration (\[ti]/.config/spmenu/spmenu.conf) on runtime
 .TP
 \f[V]-ncfg, --no-load-config\f[R]
-Don\[cq]t load spmenu configuration (\[ti]/.spmenu.conf or
-\[ti]/.config/spmenu/spmenu.conf)
+Don\[cq]t load spmenu configuration (\[ti]/.config/spmenu/spmenu.conf)
+on runtime
+.TP
+\f[V]-bf, --bind-file file\f[R]
+Set bind file to load to file
+.TP
+\f[V]-lbi, --load-binds\f[R]
+Exclusively load binds from file (\[ti]/.config/spmenu/binds.conf) on
+runtime
+.TP
+\f[V]-nlbi, --no-load-binds\f[R]
+Don\[cq]t exclusively load binds from file
+(\[ti]/.config/spmenu/binds.conf) on runtime
 .TP
 \f[V]-tm, --theme theme\f[R]
-Load theme `theme' on runtime.
+Load theme `theme' on runtime
 .TP
 \f[V]-ltm, --load-theme\f[R]
-Load theme
+Load theme (\[ti]/.config/spmenu/theme.conf) on runtime
 .TP
 \f[V]-nltm, --no-load-theme\f[R]
-Don\[cq]t load theme
+Don\[cq]t load theme (\[ti]/.config/spmenu/theme.conf) on runtime
 .TP
 \f[V]-v, --version\f[R]
 Print spmenu version to stdout
@@ -1538,3 +1548,9 @@ me.
 .SS See also
 .IP \[bu] 2
 spmenu_run(1)
+.IP \[bu] 2
+spmenu wiki (https://spmenu.speedie.site)
+.IP \[bu] 2
+spmenu git repository (https://git.speedie.site/spmenu)
+.IP \[bu] 2
+spmenu GitHub mirror (https://github.com/speediegq/spmenu)

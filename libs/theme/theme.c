@@ -10,7 +10,7 @@ void theme_load(void) {
     if (!loadconfig) return;
 
     // get path for configuration file
-    if (!ctheme || !argtheme) {
+    if (!argtheme) {
         if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
             // ~/.config/spmenu/theme.conf
             home = getenv("HOME");

@@ -36,8 +36,8 @@ DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-false}"
 MULTISELECT="${MULTISELECT:-true}"
 
-DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications}"
-ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
+DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
+ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${HOME}/.local/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
 TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
 IMAGE="${IMAGE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
@@ -247,8 +247,8 @@ DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/desktop/help)
 HELP_COLOR="#FFFF00"
 
 # .desktop options
-DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications" # Directories for .desktop entries
-ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
+DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications \${HOME}/.local/share/applications" # Directories for .desktop entries
+ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${HOME}/.local/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
