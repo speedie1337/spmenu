@@ -39,10 +39,3 @@ option(
   value : true,
   description : 'Enable multi-monitor support using libXinerama'
 )
-
-option(
-  'utf8',
-  type : 'boolean',
-  value : true,
-  description : 'Enable UTF-8 character support'
-)

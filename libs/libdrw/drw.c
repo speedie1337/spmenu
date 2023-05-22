@@ -189,31 +189,6 @@ int xerrordummy(Display *dpy, XErrorEvent *ee) {
     return 0;
 }
 
-char *parse_utf(char *str, size_t clen) {
-    char *ostr = str;
-    char *cnstr = calloc(clen + 1, sizeof(char));
-    char *cstr = cnstr;
-    size_t olen = clen;
-
-#if USEUTF8
-    iconv_t cd = iconv_open("UTF-8//IGNORE", "UTF-8");
-#else
-    iconv_t cd = iconv_open("UTF-8//IGNORE", "ASCII");
-#endif
-
-    if (cd == (iconv_t) - 1) {
-        die("spmenu: iconv_open failed");
-    }
-
-    if (iconv(cd, &ostr, &olen, &cstr, &clen)) {
-        ; // should be ok
-    }
-
-    iconv_close(cd);
-
-    return cnstr;
-}
-
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup) {
     char buf[1024];
     int ty;
@@ -241,7 +216,7 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
         w -= lpad;
     }
 
-    t = parse_utf(strdup(text), strlen(text));
+    t = strdup(text);
     len = strlen(t);
 
     if (len) {
@@ -309,8 +284,6 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
         return;
 
     char *t = strdup(text);
-
-    t = parse_utf(t, len);
 
     if (!strstr(t, "</"))
         markup = 0;

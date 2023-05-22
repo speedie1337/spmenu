@@ -42,7 +42,6 @@ build() {
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
-            -Dutf8="$utf8" \
             --prefix "$prefix" \
             build
     else
@@ -53,7 +52,6 @@ build() {
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
-            -Dutf8="$utf8" \
             --prefix "$prefix" \
             build
     fi

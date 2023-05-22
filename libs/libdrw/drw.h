@@ -71,6 +71,3 @@ void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
 /* Powerline functions */
 void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
 void drw_arrow(Drw* drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);
-
-/* UTF-8 functions */
-char *parse_utf(char *str, size_t clen);

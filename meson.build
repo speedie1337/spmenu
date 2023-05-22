@@ -20,7 +20,6 @@ project_dependencies = [
   dependency('cairo'),
   dependency('pango'),
   dependency('pangocairo'),
-  dependency('fontconfig'),
   cc.find_library('m', required : false),
 ]
 
@@ -63,10 +62,6 @@ endif
 
 if get_option('xresources')
   build_args += [ '-DXRESOURCES' ]
-endif
-
-if get_option('utf8')
-  build_args += [ '-DUTF8' ]
 endif
 
 project_target = executable(
