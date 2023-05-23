@@ -15,6 +15,37 @@ void prepare_window_size(void) {
     return;
 }
 
+void store_image_vars(void) {
+#if USEIMAGE
+    longestedge = MAX(imagewidth, imageheight);
+
+    if (!imagew || !imageh || !imageg) {
+        imagew = imagewidth;
+        imageh = imageheight;
+        imagegaps = imagegaps;
+    }
+#endif
+}
+
+void set_mode(void) {
+    if (!type) { // no typing allowed, require normal mode
+        mode = 0;
+    }
+
+    // set default mode, must be done before the event loop or keybindings will not work
+    if (mode) {
+        curMode = 1;
+        allowkeys = 1;
+
+        strcpy(modetext, instext);
+    } else {
+        curMode = 0;
+        allowkeys = !curMode;
+
+        strcpy(modetext, normtext);
+    }
+}
+
 void get_width(int numwidthchecks, unsigned int minstrlen, unsigned int curstrlen) {
     struct item *item;
     unsigned int tmp = 0;

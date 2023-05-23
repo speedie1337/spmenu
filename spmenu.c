@@ -509,61 +509,14 @@ void xinitvisual(void) {
 }
 
 int main(int argc, char *argv[]) {
-    XWindowAttributes wa;
-
     readargs(argc, argv); // start by reading arguments
 
-#if USEIMAGE
-    longestedge = MAX(imagewidth, imageheight);
-#endif
-
-    if (!type) {
-        mode = 0;
-    }
-
-    // set default mode, must be done before the event loop or keybindings will not work
-    if (mode) {
-        curMode = 1;
-        allowkeys = 1;
-
-        strcpy(modetext, instext);
-    } else {
-        curMode = 0;
-        allowkeys = !curMode;
-
-        strcpy(modetext, normtext);
-    }
-
-    if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
-        fputs("warning: no locale support\n", stderr); // invalid locale, so notify the user about it
-
-    if (!XSetLocaleModifiers(""))
-        fputs("warning: no locale modifiers support\n", stderr);
-
-    if (!(dpy = opendisplay(NULL)))
-        die("spmenu: cannot open display"); // failed to open display
-
-    // set screen and root window
-    set_screen(dpy);
-
-    // parent window is the root window (ie. window manager) because we're not embedding
-    if (!embed || !(parentwin = strtol(embed, NULL, 0)))
-        parentwin = root;
-
-    if (!XGetWindowAttributes(dpy, parentwin, &wa)) {
-        die("spmenu: could not get embedding window attributes: 0x%lx", parentwin);
-    }
-
-    xinitvisual(); // init visual and create drawable after
-    drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap); // wrapper function creating a drawable
+    // open x11 display and create drawable
+    handle_x11();
 
     // load fonts
     if (!drw_font_create(drw, fonts, LENGTH(fonts)))
         die("no fonts could be loaded.");
-
-    // resize window
-    lrpad = drw->font->h + textpadding;
-    prepare_window_size(); // this function sets padding size
 
     // pledge limits what programs can do, so here we specify what spmenu should be allowed to do
 #ifdef __OpenBSD__
@@ -582,14 +535,8 @@ int main(int argc, char *argv[]) {
         grabkeyboard();
     }
 
-    // set default values
-#if USEIMAGE
-    if (!imagew || !imageh || !imageg) {
-        imagew = imagewidth;
-        imageh = imageheight;
-        imagegaps = imagegaps;
-    }
-#endif
+    store_image_vars();
+    set_mode();
 
     init_appearance(); // init colorschemes by reading arrays
     setupdisplay(); // set up display and create window

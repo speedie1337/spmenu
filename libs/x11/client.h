@@ -6,3 +6,5 @@ static void prepare_window_size(void);
 static void set_window(void);
 static void set_prop(void);
 static void resizeclient(void);
+static void store_image_vars(void);
+static void set_mode(void);
