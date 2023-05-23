@@ -5,3 +5,5 @@ static Display *dpy;
 static Window root, parentwin, win;
 
 static void setupdisplay(void);
+static void set_screen(Display *disp);
+static Display * opendisplay(char *disp);

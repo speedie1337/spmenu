@@ -534,26 +534,25 @@ int main(int argc, char *argv[]) {
         strcpy(modetext, normtext);
     }
 
-    if (!setlocale(LC_CTYPE, "") || !supports_locale())
+    if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
         fputs("warning: no locale support\n", stderr); // invalid locale, so notify the user about it
 
-    if (!get_locale("")) {
+    if (!XSetLocaleModifiers(""))
         fputs("warning: no locale modifiers support\n", stderr);
-    }
 
-    if (!(dpy = XOpenDisplay(NULL)))
+    if (!(dpy = opendisplay(NULL)))
         die("spmenu: cannot open display"); // failed to open display
 
     // set screen and root window
-    screen = DefaultScreen(dpy);
-    root = RootWindow(dpy, screen);
+    set_screen(dpy);
 
     // parent window is the root window (ie. window manager) because we're not embedding
     if (!embed || !(parentwin = strtol(embed, NULL, 0)))
         parentwin = root;
 
-    if (!XGetWindowAttributes(dpy, parentwin, &wa))
+    if (!XGetWindowAttributes(dpy, parentwin, &wa)) {
         die("spmenu: could not get embedding window attributes: 0x%lx", parentwin);
+    }
 
     xinitvisual(); // init visual and create drawable after
     drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap); // wrapper function creating a drawable

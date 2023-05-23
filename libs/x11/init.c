@@ -138,3 +138,12 @@ void setupdisplay(void) {
     match();
     drawmenu();
 }
+
+Display * opendisplay(char *disp) {
+    return XOpenDisplay(disp);
+}
+
+void set_screen(Display *disp) {
+    screen = DefaultScreen(disp);
+    root = RootWindow(disp, screen);
+}
