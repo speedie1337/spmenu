@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 static Atom clip, utf8, types, dock;
 static Display *dpy;
 static Window root, parentwin, win;

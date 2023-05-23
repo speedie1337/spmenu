@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 void setupdisplay(void) {
     int x, y, i;
 #if USEXINERAMA

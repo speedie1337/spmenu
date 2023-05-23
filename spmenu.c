@@ -80,32 +80,6 @@
 #include <pwd.h>
 #include <Imlib2.h>
 #include <openssl/md5.h>
-// openssl is used to generate a checksum, used for caching
-// TODO: remove this dependency by doing it some other way
-#endif
-
-// include xinerama used for multi monitor support
-#if USEXINERAMA
-#include <X11/extensions/Xinerama.h>
-#endif
-
-// include X11 headers
-#include <X11/XKBlib.h>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/keysym.h>
-#include <X11/Xutil.h>
-#include <X11/Xproto.h>
-#include <X11/extensions/Xrender.h>
-
-// include xresources
-#if USEXRESOURCES
-#include <X11/Xresource.h>
-#endif
-
-// include pango used for markup
-#if USEPANGO
-#include <pango/pango.h>
 #endif
 
 // include macros and other defines
@@ -119,22 +93,17 @@ static int allowkeys; // whether or not to interpret a keypress as an insertion
 // various headers
 #include "libs/libdrw/drw.h"
 #include "libs/sl/main.h"
-#include "libs/x11/init.h"
 #include "libs/draw.h"
 #include "libs/stream.h"
 #include "libs/schemes.h"
 #include "libs/arg.h"
-#include "libs/x11/xrdb.h"
-#include "libs/x11/xim.h"
-#include "libs/x11/key.h"
-#include "libs/x11/mouse.h"
+#include "libs/x11/inc.h" // include x11
 #include "libs/sort.h"
 #include "libs/history.h"
 
 // text
 static char text[BUFSIZ] = "";
 static char numbers[NUMBERSBUFSIZE] = "";
-static char *embed; // x11 embed
 
 // keybinds
 static int numlockmask = 0;
@@ -158,8 +127,10 @@ static int hplength = 0; // high priority
 static char **hpitems = NULL; // high priority
 static int *sel_index = NULL;
 static unsigned int sel_size = 0;
-static int screen;
 static int itemn = 0; // item number
+
+static char *embed; // X11 embed
+static int screen; // screen
 
 // item struct
 struct item {
@@ -230,6 +201,9 @@ static void appenditem(struct item *item, struct item **list, struct item **last
 static void xinitvisual(void);
 static int max_textw(void);
 static size_t nextrune(int inc);
+static char * cistrstr(const char *s, const char *sub);
+static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
+static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 static char **list;
 static size_t listsize;
@@ -241,11 +215,10 @@ static int listchanged = 0;
 #include "keybinds.h"
 #include "mouse.h"
 
-// xresources/color arrays
-#include "libs/x11/xresources.h"
-#include "libs/colors.h"
-
 static char *fonts[] = { font };
+
+// color array
+#include "libs/colors.h"
 
 // config file
 #if USECONFIG
@@ -253,35 +226,24 @@ static char *fonts[] = { font };
 #include "libs/conf/config.c"
 #endif
 
-// matching
-static char * cistrstr(const char *s, const char *sub);
-static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
-static char *(*fstrstr)(const char *, const char *) = cistrstr;
-
 // include functions
 #include "libs/img.h"
 #include "libs/img.c"
 #include "libs/rtl.h"
 #include "libs/rtl.c"
-#include "libs/x11/xim.c"
-#include "libs/x11/key.c"
-#include "libs/x11/mouse.c"
 #include "libs/sort.c"
 #include "libs/draw.c"
 #include "libs/schemes.c"
 #include "libs/argv.h"
 #include "libs/argv.c"
-#include "libs/x11/xrdb.c"
-#include "libs/x11/client.h"
-#include "libs/x11/client.c"
 #include "libs/match.h"
 #include "libs/match.c"
+#include "libs/x11/inc.c" // include x11
 #include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
 #include "libs/event.h"
 #include "libs/event.c"
-#include "libs/x11/init.c"
 
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {
@@ -572,11 +534,12 @@ int main(int argc, char *argv[]) {
         strcpy(modetext, normtext);
     }
 
-    if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
+    if (!setlocale(LC_CTYPE, "") || !supports_locale())
         fputs("warning: no locale support\n", stderr); // invalid locale, so notify the user about it
 
-    if (!XSetLocaleModifiers(""))
+    if (!get_locale("")) {
         fputs("warning: no locale modifiers support\n", stderr);
+    }
 
     if (!(dpy = XOpenDisplay(NULL)))
         die("spmenu: cannot open display"); // failed to open display

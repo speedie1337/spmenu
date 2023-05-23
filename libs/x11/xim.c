@@ -1,3 +1,5 @@
+/* See LICENSE file for copyright and license details. */
+
 void open_xim(void) {
     XIM xim;
 

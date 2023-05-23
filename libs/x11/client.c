@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+
 void prepare_window_size(void) {
     // set horizontal and vertical padding
     sp = menupaddingh;
