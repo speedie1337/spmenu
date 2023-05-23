@@ -238,7 +238,11 @@ static char *fonts[] = { font };
 #include "libs/argv.c"
 #include "libs/match.h"
 #include "libs/match.c"
-#include "libs/x11/inc.c" // include x11
+
+// include x11 code
+#include "libs/x11/inc.c"
+
+// include more functions
 #include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
