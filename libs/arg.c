@@ -159,17 +159,7 @@ void moveend(Arg *arg) {
 }
 
 void paste(Arg *arg) {
-    int clipboard;
-
-    if (arg->i == 1) {
-        clipboard = XA_PRIMARY;
-    } else {
-        clipboard = clip;
-    }
-
-    XConvertSelection(dpy, clipboard, utf8, utf8, win, CurrentTime);
-
-    return;
+    paste_x11(arg->i);
 }
 
 void viewhist(Arg *arg) {

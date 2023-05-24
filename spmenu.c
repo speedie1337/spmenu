@@ -245,8 +245,6 @@ static char *fonts[] = { font };
 #include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
-#include "libs/event.h"
-#include "libs/event.c"
 
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {

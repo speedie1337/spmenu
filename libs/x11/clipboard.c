@@ -17,3 +17,11 @@ void pastesel_x11(void) {
     // draw the menu
     drawmenu();
 }
+
+int paste_x11(int sel) {
+    if (XConvertSelection(dpy, sel ? XA_PRIMARY : clip, utf8, utf8, win, CurrentTime)) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
