@@ -8,3 +8,4 @@ static void set_prop(void);
 static void resizeclient(void);
 static void store_image_vars(void);
 static void set_mode(void);
+static void xinitvisual(void);

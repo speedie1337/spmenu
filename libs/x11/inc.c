@@ -7,3 +7,5 @@
 #include "client.h"
 #include "client.c"
 #include "init.c"
+#include "focus.c"
+#include "clipboard.c"

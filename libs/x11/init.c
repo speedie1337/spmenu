@@ -174,3 +174,9 @@ void handle_x11(void) {
     xinitvisual(); // init visual and create drawable after
     drw = drw_create(dpy, screen, root, wa.width, wa.height, visual, depth, cmap);
 }
+
+void cleanup_x11(Display *disp) {
+    XUngrabKey(disp, AnyKey, AnyModifier, root);
+    XSync(disp, False);
+    XCloseDisplay(disp);
+}

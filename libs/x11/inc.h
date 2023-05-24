@@ -6,3 +6,5 @@
 #include "xim.h"
 #include "key.h"
 #include "mouse.h"
+#include "focus.h"
+#include "clipboard.h"

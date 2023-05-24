@@ -180,9 +180,9 @@ static int ignoreconfmouse = 0; // same for mouse
 static int ignoreglobalmouse = 0; // same for mouse
 
 // colors
-static int useargb = 0;
-static Visual *visual;
+static int useargb;
 static int depth;
+static Visual *visual;
 static Colormap cmap;
 static Drw *drw;
 static Clr **scheme;
@@ -195,10 +195,9 @@ static void recalculatenumbers(void);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
-static void grabfocus(void);
 static void pastesel(void);
+static void grabfocus(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
-static void xinitvisual(void);
 static int max_textw(void);
 static size_t nextrune(int inc);
 static char * cistrstr(const char *s, const char *sub);
@@ -351,8 +350,6 @@ void cleanup(void) {
     cleanupimage(); // function frees images
 #endif
 
-    XUngrabKey(dpy, AnyKey, AnyModifier, root); // ungrab keys
-
     // free color scheme
     for (i = 0; i < LENGTH(colors) + 1; i++)
         free(scheme[i]);
@@ -363,8 +360,7 @@ void cleanup(void) {
 
     // free drawing and close the display
     drw_free(drw);
-    XSync(dpy, False);
-    XCloseDisplay(dpy);
+    cleanup_x11(dpy);
     free(sel_index);
 }
 
@@ -386,38 +382,7 @@ char * cistrstr(const char *h, const char *n) {
 }
 
 void grabfocus(void) {
-    struct timespec ts = { .tv_sec = 0, .tv_nsec = 10000000  };
-    Window focuswin;
-    int i, revertwin;
-    XWindowAttributes wa;
-
-    XSync(dpy, False);
-    XGetWindowAttributes(dpy, win, &wa);
-
-    for (i = 0; i < 100; ++i) {
-        XGetInputFocus(dpy, &focuswin, &revertwin);
-        if (focuswin == win)
-            return;
-
-        // if it's a client, we can't just steal all the input for ourselves
-        if (managed) {
-            if (wa.map_state == IsViewable) {
-                XTextProperty prop;
-                char *windowtitle = prompt != NULL ? prompt : "spmenu";
-                Xutf8TextListToTextProperty(dpy, &windowtitle, 1, XUTF8StringStyle, &prop);
-                XSetWMName(dpy, win, &prop);
-                XSetTextProperty(dpy, win, &prop, XInternAtom(dpy, "_NET_WM_NAME", False));
-                XFree(prop.value);
-            }
-        } else { // spmenu is not managed, and is very greedy
-            if (wa.map_state == IsViewable) // it must be viewable first, otherwise we get a BadMatch error
-                XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
-        }
-
-        nanosleep(&ts, NULL);
-    }
-
-    die("spmenu: cannot grab focus"); // not possible to grab focus, abort immediately
+    grabfocus_x11();
 }
 
 void insert(const char *str, ssize_t n) {
@@ -455,61 +420,7 @@ size_t nextrune(int inc) {
 }
 
 void pastesel(void) {
-    char *p, *q;
-    int di;
-    unsigned long dl;
-    Atom da;
-
-    // we have been given the current selection, now insert it into input
-    if (XGetWindowProperty(dpy, win, utf8, 0, (sizeof text / 4) + 1, False,
-                utf8, &da, &di, &dl, &dl, (unsigned char **)&p)
-            == Success && p) {
-        insert(p, (q = strchr(p, '\n')) ? q - p : (ssize_t)strlen(p)); // insert selection
-        XFree(p);
-    }
-
-    // draw the menu
-    drawmenu();
-}
-
-void xinitvisual(void) {
-    XVisualInfo *infos;
-    XRenderPictFormat *fmt;
-    int nitems;
-    int i;
-
-    // visual properties
-    XVisualInfo tpl = {
-        .screen = screen,
-        .depth = 32,
-        .class = TrueColor
-    };
-
-    long masks = VisualScreenMask | VisualDepthMask | VisualClassMask;
-
-    infos = XGetVisualInfo(dpy, masks, &tpl, &nitems);
-    visual = NULL;
-
-    // create colormap
-    for(i = 0; i < nitems; i ++) {
-        fmt = XRenderFindVisualFormat(dpy, infos[i].visual);
-        if (fmt->type == PictTypeDirect && fmt->direct.alphaMask) {
-            visual = infos[i].visual;
-            depth = infos[i].depth;
-            cmap = XCreateColormap(dpy, root, visual, AllocNone);
-            useargb = 1;
-            break;
-        }
-    }
-
-    XFree(infos);
-
-    // no alpha, reset to default
-    if (!visual || !alpha) {
-        visual = DefaultVisual(dpy, screen);
-        depth = DefaultDepth(dpy, screen);
-        cmap = DefaultColormap(dpy, screen);
-    }
+    pastesel_x11();
 }
 
 int main(int argc, char *argv[]) {
