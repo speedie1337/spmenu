@@ -9,6 +9,43 @@ void init_appearance(void) {
 
     char cbuf[8];
 
+    if (!alpha && protocol) {
+        alpha_itemnormfg = 255;
+        alpha_itemnormbg = 255;
+        alpha_itemnormfg2 = 255;
+        alpha_itemnormbg2 = 255;
+        alpha_itemselfg = 255;
+        alpha_itemselbg = 255;
+        alpha_itemmarkedfg = 255;
+        alpha_itemmarkedbg = 255;
+        alpha_itemnormprifg = 255;
+        alpha_itemnormpribg = 255;
+        alpha_itemselprifg = 255;
+        alpha_itemselpribg = 255;
+        alpha_inputfg = 255;
+        alpha_inputbg = 255;
+        alpha_menu = 255;
+        alpha_promptfg = 255;
+        alpha_promptbg = 255;
+        alpha_larrowfg = 255;
+        alpha_larrowbg = 255;
+        alpha_rarrowfg = 255;
+        alpha_rarrowbg = 255;
+        alpha_hlnormfg = 255;
+        alpha_hlnormbg = 255;
+        alpha_hlselfg = 255;
+        alpha_hlselbg = 255;
+        alpha_numfg = 255;
+        alpha_numbg = 255;
+        alpha_border = 255;
+        alpha_caretfg = 255;
+        alpha_caretbg = 255;
+        alpha_modefg = 255;
+        alpha_modebg = 255;
+        alpha_capsfg = 255;
+        alpha_capsbg = 255;
+    }
+
     for (i = 0; i < LENGTH(textcolors) && i < LENGTH(txtcols); i++) {
         txtcols[i] = textcolors[i];
     }
