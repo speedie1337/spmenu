@@ -12,5 +12,4 @@ grep -v docs/preview.png docs/run-docs.md >> .man.md
 pandoc --standalone --to man .man.md -o spmenu_run.1
 rm -f .man.md
 
-scripts/make/generate-code-docs.sh docs/code-docs.md code.html || return
 pandoc --standalone README.md -o README.html --metadata title="spmenu README"
