@@ -137,6 +137,7 @@ static int hplength = 0; // high priority
 static char **hpitems = NULL; // high priority
 static int *sel_index = NULL;
 static unsigned int sel_size = 0;
+static int protocol_override = 0;
 static int itemn = 0; // item number
 
 static char *embed; // X11 embed

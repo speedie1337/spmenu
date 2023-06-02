@@ -21,8 +21,10 @@ void readargs(int argc, char *argv[]) {
             loadbinds = 0;
         } else if (!strcmp(argv[j], "-x11") || (!strcmp(argv[j], "--x11"))) {
             protocol = 0;
+            protocol_override = 1;
         } else if (!strcmp(argv[j], "-wl") || (!strcmp(argv[j], "--wayland"))) {
             protocol = 1;
+            protocol_override = 1;
 #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {

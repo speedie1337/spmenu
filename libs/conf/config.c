@@ -76,7 +76,10 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "managed", &managed); // spmenu.window.managed
             config_setting_lookup_int(conf, "monitor", &mon); // spmenu.window.monitor
             config_setting_lookup_int(conf, "alpha", &alpha); // spmenu.window.alpha
-            config_setting_lookup_int(conf, "protocol", &protocol); // spmenu.window.protocol
+
+            if (!protocol_override) {
+                config_setting_lookup_int(conf, "protocol", &protocol); // spmenu.window.protocol
+            }
         }
     }
 
