@@ -174,9 +174,9 @@
 </figure>
 <h1 id="spmenu">spmenu</h1>
 <h2 id="what-is-spmenu">What is spmenu?</h2>
-<p>spmenu is an X11 menu application which takes standard input, parses
-it, and lets the user choose an option and sends the selected option to
-standard output.</p>
+<p>spmenu is a simple X11 and Wayland menu application which takes
+standard input, parses it, lets the user choose an option and sends the
+selected option to standard output.</p>
 <p>In addition to this, it also serves as a run launcher through the
 included shell script <code>spmenu_run</code>, which handles both $PATH
 listing, .desktop entries and file listing.</p>
@@ -185,10 +185,28 @@ dmenu, spmenu introduces many new features which can be useful in shell
 scripting. There are way too many to list, but spmenu has a <a
 href="https://spmenu.speedie.site">wiki</a> which goes through features
 in more detail.</p>
+<p>It also serves as a dmenu replacement for Wayland users.</p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
+<li>wayland-client
+<ul>
+<li>For Wayland support, which is optional.</li>
+</ul></li>
+<li>wayland-scanner
+<ul>
+<li>For Wayland support, which is optional.</li>
+</ul></li>
+<li>wayland-protocols
+<ul>
+<li>For Wayland support, which is optional.</li>
+</ul></li>
+<li>xkbcommon
+<ul>
+<li>For Wayland support, which is optional.</li>
+</ul></li>
 <li>libX11
 <ul>
+<li>For X11 support</li>
 <li>If you’re using macOS, XQuartz is a dependency instead.</li>
 <li>If you’re using Wayland, <code>xorg-xwayland</code> is a
 dependency.</li>
@@ -274,10 +292,36 @@ instead.</p>
 <p>See <a
 href="https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS">this
 wiki article</a> for more information.</p>
+<h2 id="wayland-support">Wayland support</h2>
+<p>Note that Wayland support is still experimental, and some features do
+not currently work under Wayland. Some will never work under Wayland due
+to limitations. These are:</p>
+<ul>
+<li>Image support
+<ul>
+<li>Images simply will not be drawn on Wayland.</li>
+<li>Will eventually be solved by replacing imlib2 with cairo.</li>
+</ul></li>
+<li><code>--x-position</code> and <code>--y-position</code> arguments
+<ul>
+<li>These arguments do not work under Wayland, because the layer_shell
+protocol doesn’t allow clients to be placed on a specific position.</li>
+</ul></li>
+<li>Embedding <code>-w</code> and window manager managed
+<code>-wm</code>
+<ul>
+<li>These arguments do not make much sense on Wayland, and embedding is
+not possible due to the original implementation using XEmbed. If the
+embed argument is passed it will simply be ignored and the window will
+be layered as normal.</li>
+</ul></li>
+<li><code>--monitor</code> argument</li>
+<li>Window borders</li>
+<li>Pasting</li>
+</ul>
 <h2 id="todo">TODO</h2>
 <p>Pull requests would be greatly appreciated for any of these
 issues!</p>
-<h3 id="general">General</h3>
 <ul>
 <li>Image support: Stop using OpenSSL for caching images, mostly because
 MD5() is deprecated as of OpenSSL 3.0, but this would also make it very
@@ -290,29 +334,9 @@ easy to have LibreSSL compatibility.</li>
 </ul></li>
 <li>Matching: Add support for contextual completions similar to
 xprompt</li>
-<li>Matching: Regex matching
-<ul>
-<li>Probably use some minimal public domain library for this, I’d like
-to avoid adding more external dependencies unless it’s a common
-dependency most people already have.</li>
-</ul></li>
-</ul>
-<h3
-id="unlikely-but-maybe-at-some-point-in-the-distant-future">Unlikely,
-but maybe at some point in the distant future</h3>
-<ul>
+<li>Matching: Regex matching</li>
 <li>X11: Move from Xlib to libXcb</li>
-<li>Wayland: Wayland support, but only if it doesn’t require writing any
-extra code which as of now seems unlikely, or if someone makes a patch.
-<ul>
-<li>Before this can even be done, deal with keybinds in some Wayland
-compatible way, remove .Xresources usage and figure out a way to
-preserve X11 compatibility as I do not want to use Wayland as of
-now.</li>
-<li>You can just use XWayland anyway if you happen to use Wayland, so
-it’s not like you will be unable to use spmenu in its current
-state.</li>
-</ul></li>
+<li>Wayland: Anything listed as broken under ‘Wayland support’.</li>
 </ul>
 <h2 id="scripts">Scripts</h2>
 <p>There’s a page dedicated to user scripts <a

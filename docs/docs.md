@@ -1,9 +1,8 @@
 spmenu
 ======
 
-spmenu is an X11 menu application which takes standard input, parses
-it, and lets the user choose an option and sends the
-selected option to standard output.
+spmenu is an X11 and Wayland menu application which takes standard input, parses
+it, lets the user choose an option and sends the selected option to standard output.
 
 In addition to this, it also serves as a run launcher through the included
 shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
@@ -12,6 +11,8 @@ using spmenu as a run launcher.
 
 While spmenu is based on dmenu, and is also fully compatible with dmenu,
 spmenu introduces many new features which can be useful in shell scripting.
+
+It also serves as a dmenu replacement for Wayland users.
 
 ## Usage
 
@@ -53,12 +54,6 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-cd, --cache-dir dir`
 : Set cache directory to dir
-
-`-rw, --relative-width`
-:   Enable relative input width
-
-`-nrw, --no-relative-width`
-:   Disable relative input width
 
 `-ix, --print-index`
 :   Print index instead of actual text
@@ -359,6 +354,12 @@ You may use long, descriptive arguments or the shorter arguments.
 
 `-nltm, --no-load-theme`
 :   Don't load theme (~/.config/spmenu/theme.conf) on runtime
+
+`-x11, --x11`
+:   Run spmenu in X11 mode
+
+`-wl, --wayland`
+:   Run spmenu in Wayland mode
 
 `-v, --version`
 :   Print spmenu version to stdout
@@ -756,6 +757,8 @@ These are the default keybinds. You can generate these yourself from a
 
 ## .Xresources
 
+**NOTE: Only applies for X11 users**
+
 spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
 (.Xresources database) on runtime. You may disable it by passing -nxrdb,
 or enable it by padding -xrdb. You can also set this in the config file.
@@ -824,6 +827,26 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 
 `spmenu:license`
 :    Print the spmenu license
+
+## Wayland support
+
+Note that Wayland support is still experimental, and some features do not
+currently work under Wayland. Some will never work under Wayland due to limitations.
+These are:
+
+- Image support
+  - Images simply will not be drawn on Wayland.
+  - Will eventually be solved by replacing imlib2 with cairo.
+- `--x-position` and `--y-position` arguments
+  - These arguments do not work under Wayland, because the layer_shell
+  protocol doesn't allow clients to be placed on a specific position.
+- Embedding `-w` and window manager managed `-wm`
+  - These arguments do not make much sense on Wayland, and embedding is not possible
+  due to the original implementation using XEmbed. If the embed argument is passed
+  it will simply be ignored and the window will be layered as normal.
+- `--monitor` argument
+- Window borders
+- Pasting
 
 ## License
 

@@ -1,51 +1,5 @@
 /* See LICENSE file for copyright and license details. */
 
-// alpha array
-static unsigned int alphas[][2] = {
-    //                         fg   bg
-    [SchemeLArrow]        = { 255, 200 },
-    [SchemeRArrow]        = { 255, 200 },
-    [SchemeItemNorm1]     = { 255, 200 },
-    [SchemeItemNorm2]     = { 255, 200 },
-    [SchemeItemSel]       = { 255, 200 },
-    [SchemeItemNormPri]   = { 255, 200 },
-    [SchemeItemSelPri]    = { 255, 200 },
-    [SchemeItemMarked]    = { 255, 200 },
-    [SchemeMenu]          = { 255, 200 },
-    [SchemeInput]         = { 255, 200 },
-    [SchemePrompt]        = { 255, 200 },
-    [SchemeNormHighlight] = { 255, 200 },
-    [SchemeSelHighlight]  = { 255, 200 },
-    [SchemeMode]          = { 255, 200 },
-    [SchemeCaret]         = { 255, 200 },
-    [SchemeNumber]        = { 255, 200 },
-    [SchemeBorder]        = { 255, 200 },
-    [SchemeCaps]          = { 255, 200 },
-};
-
-// colorscheme array
-static char *colors[][2] = {
-    //                        fg                 bg
-    [SchemeLArrow]        = { col_larrowfg,      col_larrowbg      },
-    [SchemeRArrow]        = { col_rarrowfg,      col_rarrowbg      },
-    [SchemeItemNorm1]     = { col_itemnormfg,    col_itemnormbg    },
-    [SchemeItemNorm2]     = { col_itemnormfg2,   col_itemnormbg2   },
-    [SchemeItemSel]       = { col_itemselfg,     col_itemselbg     },
-    [SchemeItemNormPri]   = { col_itemnormprifg, col_itemnormpribg },
-    [SchemeItemSelPri]    = { col_itemselprifg,  col_itemselpribg  },
-    [SchemeItemMarked]    = { col_itemmarkedfg,  col_itemmarkedbg  },
-    [SchemeInput]         = { col_inputfg,       col_inputbg,      },
-    [SchemeMenu]          = { NULL,              col_menu          },
-    [SchemeCaps]          = { col_capsfg,        col_capsbg        },
-    [SchemePrompt]        = { col_promptfg,      col_promptbg      },
-    [SchemeNormHighlight] = { col_hlnormfg,      col_hlnormbg      },
-    [SchemeSelHighlight]  = { col_hlselfg,       col_hlselbg       },
-    [SchemeCaret]         = { col_caretfg,       col_caretbg       },
-    [SchemeMode]          = { col_modefg,        col_modebg        },
-    [SchemeNumber]        = { col_numfg,         col_numbg         },
-    [SchemeBorder]        = { NULL,              col_border        },
-};
-
 // sgr color array, first 16 colors are defined in the config, the rest are 256 colors
 static char *textcolors[] = {
     col_sgr0,
@@ -304,3 +258,5 @@ static char *textcolors[] = {
     "#e4e4e4",
     "#eeeeee",
 };
+
+static char *txtcols[256];

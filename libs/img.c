@@ -402,7 +402,7 @@ void resizetoimageheight(int imageheight) {
         } else { // top or bottom
             x = info[i].x_org + xpos;
             y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
-            mw = (menuwidth>0 ? menuwidth : info[i].width);
+            mw = (menuwidth > 0 ? menuwidth : info[i].width);
         }
 
         XFree(info);
@@ -420,7 +420,7 @@ void resizetoimageheight(int imageheight) {
         } else { // top or bottom
             x = 0;
             y = menuposition ? 0 : wa.height - mh - ypos;
-            mw = wa.width;
+            mw = (menuwidth > 0 ? menuwidth : wa.width);
         }
     }
 

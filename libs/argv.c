@@ -19,6 +19,10 @@ void readargs(int argc, char *argv[]) {
             loadbinds = 1;
         } else if (!strcmp(argv[j], "-nlbi") || (!strcmp(argv[j], "--no-load-binds"))) {
             loadbinds = 0;
+        } else if (!strcmp(argv[j], "-x11") || (!strcmp(argv[j], "--x11"))) {
+            protocol = 0;
+        } else if (!strcmp(argv[j], "-wl") || (!strcmp(argv[j], "--wayland"))) {
+            protocol = 1;
 #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
@@ -59,7 +63,7 @@ void readargs(int argc, char *argv[]) {
     }
 
     // init/read xrdb
-    if (xresources) {
+    if (xresources && !protocol) {
 #if USEXRESOURCES
         XrmInitialize();
         load_xresources();
@@ -110,10 +114,6 @@ void readargs(int argc, char *argv[]) {
             mark = 1;
         } else if (!strcmp(argv[i], "-nma") || (!strcmp(argv[i], "--no-mark-items"))) { // don't allow marking items
             mark = 0;
-        } else if (!strcmp(argv[i], "-rw") || (!strcmp(argv[i], "--relative-width"))) {  // relative width
-            accuratewidth = 1;
-        } else if (!strcmp(argv[i], "-nrw") || (!strcmp(argv[i], "--no-relative-width"))) {   // no relative width
-            accuratewidth = 0;
         } else if (!strcmp(argv[i], "-F") || (!strcmp(argv[i], "--fuzzy"))) {   // fuzzy matching
             fuzzy = 1;
         } else if (!strcmp(argv[i], "-NF") || (!strcmp(argv[i], "--no-fuzzy"))) {   // no fuzzy matching
@@ -226,6 +226,10 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--no-load-theme")
                         || !strcmp(argv[i], "-lbi")
                         || !strcmp(argv[i], "-nlbi")
+                        || !strcmp(argv[i], "-wl")
+                        || !strcmp(argv[i], "--wayland")
+                        || !strcmp(argv[i], "-x11")
+                        || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
                         || !strcmp(argv[i], "-gbc")
@@ -321,27 +325,29 @@ void readargs(int argc, char *argv[]) {
 
             // dmenu compatibility options
         } else if (!strcmp(argv[i], "-nb")) {  // normal background color
-            colors[SchemeItemNorm1][ColBg] = argv[++i];
-            colors[SchemeItemNorm2][ColBg] = argv[++i];
-            colors[SchemeMenu][ColBg] = argv[++i];
-            colors[SchemeInput][ColBg] = argv[++i];
-            colors[SchemePrompt][ColBg] = argv[++i];
+            int ix = ++i;
+            strcpy(col_itemnormbg, argv[ix]);
+            strcpy(col_itemnormbg2, argv[ix]);
+            strcpy(col_menu, argv[ix]);
+            strcpy(col_inputbg, argv[ix]);
+            strcpy(col_promptbg, argv[ix]);
         } else if (!strcmp(argv[i], "-nf")) {  // normal foreground color
-            colors[SchemeItemNorm1][ColFg] = argv[++i];
-            colors[SchemeItemNorm2][ColFg] = argv[++i];
-            colors[SchemeMenu][ColFg] = argv[++i];
-            colors[SchemeInput][ColFg] = argv[++i];
-            colors[SchemePrompt][ColFg] = argv[++i];
+            int ix = ++i;
+            strcpy(col_itemnormfg, argv[ix]);
+            strcpy(col_itemnormfg2, argv[ix]);
+            strcpy(col_inputfg, argv[ix]);
+            strcpy(col_promptfg, argv[ix]);
         } else if (!strcmp(argv[i], "-sb")) {  // selected background color
-            colors[SchemeItemSel][ColBg] = argv[++i];
-            colors[SchemeMenu][ColBg] = argv[++i];
-            colors[SchemeInput][ColBg] = argv[++i];
-            colors[SchemePrompt][ColBg] = argv[++i];
+            int ix = ++i;
+            strcpy(col_itemselbg, argv[ix]);
+            strcpy(col_menu, argv[ix]);
+            strcpy(col_inputbg, argv[ix]);
+            strcpy(col_promptbg, argv[ix]);
         } else if (!strcmp(argv[i], "-sf")) {  // selected foreground color
-            colors[SchemeItemSel][ColFg] = argv[++i];
-            colors[SchemeMenu][ColFg] = argv[++i];
-            colors[SchemeInput][ColBg] = argv[++i];
-            colors[SchemePrompt][ColFg] = argv[++i];
+            int ix = ++i;
+            strcpy(col_itemselfg, argv[ix]);
+            strcpy(col_inputfg, argv[ix]);
+            strcpy(col_promptfg, argv[ix]);
 
             // more
         } else if (!strcmp(argv[i], "-is") || (!strcmp(argv[i], "--image-size"))) { // image size
@@ -359,65 +365,65 @@ void readargs(int argc, char *argv[]) {
 
             // spmenu colors
         } else if (!strcmp(argv[i], "-nif") || (!strcmp(argv[i], "--normal-item-foreground"))) { // normal item foreground color
-            colors[SchemeItemNorm1][ColFg] = argv[++i];
+            strcpy(col_itemnormfg, argv[++i]);
         } else if (!strcmp(argv[i], "-nib") || (!strcmp(argv[i], "--normal-item-background"))) { // normal item background color
-            colors[SchemeItemNorm1][ColBg] = argv[++i];
+            strcpy(col_itemnormbg, argv[++i]);
         } else if (!strcmp(argv[i], "-nnif") || (!strcmp(argv[i], "--normal-next-item-foreground"))) { // normal next item foreground color
-            colors[SchemeItemNorm2][ColFg] = argv[++i];
+            strcpy(col_itemnormfg2, argv[++i]);
         } else if (!strcmp(argv[i], "-nnib") || (!strcmp(argv[i], "--normal-next-item-background"))) { // normal next item background color
-            colors[SchemeItemNorm2][ColBg] = argv[++i];
+            strcpy(col_itemnormbg2, argv[++i]);
         } else if (!strcmp(argv[i], "-sif") || (!strcmp(argv[i], "--selected-item-foreground"))) { // selected item foreground color
-            colors[SchemeItemSel][ColFg] = argv[++i];
+            strcpy(col_itemselfg, argv[++i]);
         } else if (!strcmp(argv[i], "-sib") || (!strcmp(argv[i], "--selected-item-background"))) { // selected item background color
-            colors[SchemeItemSel][ColBg] = argv[++i];
+            strcpy(col_itemselbg, argv[++i]);
         } else if (!strcmp(argv[i], "-npf") || (!strcmp(argv[i], "--normal-item-priority-foreground"))) { // normal item priority foreground color
-            colors[SchemeItemNormPri][ColFg] = argv[++i];
+            strcpy(col_itemnormprifg, argv[++i]);
         } else if (!strcmp(argv[i], "-npb") || (!strcmp(argv[i], "--normal-item-priority-background"))) { // normal item priority background color
-            colors[SchemeItemNormPri][ColBg] = argv[++i];
+            strcpy(col_itemnormpribg, argv[++i]);
         } else if (!strcmp(argv[i], "-spf") || (!strcmp(argv[i], "--selected-item-priority-foreground"))) { // selected item priority foreground color
-            colors[SchemeItemSelPri][ColFg] = argv[++i];
+            strcpy(col_itemselprifg, argv[++i]);
         } else if (!strcmp(argv[i], "-spb") || (!strcmp(argv[i], "--selected-item-priority-background"))) { // selected item priority background color
-            colors[SchemeItemSelPri][ColBg] = argv[++i];
+            strcpy(col_itemselpribg, argv[++i]);
         } else if (!strcmp(argv[i], "-mnbg") || (!strcmp(argv[i], "--menu-background"))) { // menu color
-            colors[SchemeMenu][ColBg] = argv[++i];
+            strcpy(col_menu, argv[++i]);
         } else if (!strcmp(argv[i], "-pfg") || (!strcmp(argv[i], "--prompt-foreground"))) { // prompt fg color
-            colors[SchemePrompt][ColFg] = argv[++i];
+            strcpy(col_promptfg, argv[++i]);
         } else if (!strcmp(argv[i], "-pbg") || (!strcmp(argv[i], "--prompt-background"))) { // prompt bg color
-            colors[SchemePrompt][ColBg] = argv[++i];
+            strcpy(col_promptbg, argv[++i]);
         } else if (!strcmp(argv[i], "-ifg") || (!strcmp(argv[i], "--input-foreground"))) { // input fg color
-            colors[SchemeInput][ColFg] = argv[++i];
+            strcpy(col_inputfg, argv[++i]);
         } else if (!strcmp(argv[i], "-pfg") || (!strcmp(argv[i], "--input-background"))) { // input bg color
-            colors[SchemeInput][ColBg] = argv[++i];
+            strcpy(col_inputbg, argv[++i]);
         } else if (!strcmp(argv[i], "-nhb") || (!strcmp(argv[i], "--normal-highlight-background"))) { // normal highlight background color
-            colors[SchemeNormHighlight][ColBg] = argv[++i];
-        } else if (!strcmp(argv[i], "-shf") || (!strcmp(argv[i], "--normal-highlight-foreground"))) { // normal highlight foreground color
-            colors[SchemeNormHighlight][ColFg] = argv[++i];
-        } else if (!strcmp(argv[i], "-nhf") || (!strcmp(argv[i], "--selected-highlight-foreground"))) { // selected highlight foreground color
-            colors[SchemeSelHighlight][ColFg] = argv[++i];
+            strcpy(col_hlnormbg, argv[++i]);
+        } else if (!strcmp(argv[i], "-nhf") || (!strcmp(argv[i], "--normal-highlight-foreground"))) { // normal highlight foreground color
+            strcpy(col_hlnormfg, argv[++i]);
+        } else if (!strcmp(argv[i], "-shf") || (!strcmp(argv[i], "--selected-highlight-foreground"))) { // selected highlight foreground color
+            strcpy(col_hlselfg, argv[++i]);
         } else if (!strcmp(argv[i], "-shb") || (!strcmp(argv[i], "--selected-highlight-background"))) { // selected highlight background color
-            colors[SchemeSelHighlight][ColBg] = argv[++i];
+            strcpy(col_hlselbg, argv[++i]);
         } else if (!strcmp(argv[i], "-nbg") || (!strcmp(argv[i], "--number-background"))) { // numbg
-            colors[SchemeNumber][ColBg] = argv[++i];
+            strcpy(col_numbg, argv[++i]);
         } else if (!strcmp(argv[i], "-nfg") || (!strcmp(argv[i], "--number-foreground"))) { // numfg
-            colors[SchemeNumber][ColFg] = argv[++i];
+            strcpy(col_numfg, argv[++i]);
         } else if (!strcmp(argv[i], "-mbg") || (!strcmp(argv[i], "--mode-background"))) { // mode
-            colors[SchemeMode][ColBg] = argv[++i];
+            strcpy(col_modebg, argv[++i]);
         } else if (!strcmp(argv[i], "-mfg") || (!strcmp(argv[i], "--mode-foreground"))) { // mode
-            colors[SchemeMode][ColFg] = argv[++i];
+            strcpy(col_modefg, argv[++i]);
         } else if (!strcmp(argv[i], "-laf") || (!strcmp(argv[i], "--left-arrow-foreground"))) { // left arrow fg
-            colors[SchemeLArrow][ColFg] = argv[++i];
+            strcpy(col_larrowfg, argv[++i]);
         } else if (!strcmp(argv[i], "-raf") || (!strcmp(argv[i], "--right-arrow-foreground"))) { // right arrow fg
-            colors[SchemeRArrow][ColFg] = argv[++i];
+            strcpy(col_rarrowfg, argv[++i]);
         } else if (!strcmp(argv[i], "-lab") || (!strcmp(argv[i], "--left-arrow-background"))) { // left arrow bg
-            colors[SchemeLArrow][ColFg] = argv[++i];
+            strcpy(col_larrowbg, argv[++i]);
         } else if (!strcmp(argv[i], "-rab") || (!strcmp(argv[i], "--right-arrow-background"))) { // right arrow bg
-            colors[SchemeRArrow][ColFg] = argv[++i];
+            strcpy(col_rarrowbg, argv[++i]);
         } else if (!strcmp(argv[i], "-bc") || (!strcmp(argv[i], "--border-background"))) { // border
-            colors[SchemeBorder][ColBg] = argv[++i];
+            strcpy(col_border, argv[++i]);
         } else if (!strcmp(argv[i], "-cc") || (!strcmp(argv[i], "-cfc")) || (!strcmp(argv[i], "--caret-foreground"))) {   // caret color
-            colors[SchemeCaret][ColFg] = argv[++i];
+            strcpy(col_caretfg, argv[++i]);
         } else if (!strcmp(argv[i], "-cbc") || (!strcmp(argv[i], "--caret-background"))) {   // caret color
-            colors[SchemeCaret][ColBg] = argv[++i];
+            strcpy(col_caretbg, argv[++i]);
         }
 
     // sgr colors
@@ -452,6 +458,10 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--no-load-theme")
                         || !strcmp(argv[i], "-lbi")
                         || !strcmp(argv[i], "-nlbi")
+                        || !strcmp(argv[i], "-wl")
+                        || !strcmp(argv[i], "--wayland")
+                        || !strcmp(argv[i], "-x11")
+                        || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
                         || !strcmp(argv[i], "-gbc")
@@ -474,6 +484,10 @@ void readargs(int argc, char *argv[]) {
             else
                 fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
+#if !USEWAYLAND
+    protocol = 0;
+#endif
+
     if (casesensitive) {
         fstrncmp = strncmp;
         fstrstr = strstr;
@@ -492,7 +506,9 @@ void readargs(int argc, char *argv[]) {
 
 void usage(int status) {
     // print help
-    fputs("spmenu: fancy dynamic menu\n\n"
+    fputs("spmenu ", status ? stderr : stdout);
+    fputs(VERSION, status ? stderr : stdout);
+    fputs(": fancy dynamic menu\n\n"
             "- Arguments -\n"
             "spmenu -l,       --lines <line>                              Set line count to stdin\n"
             "spmenu -mh,      --line-height <height>                      Set spmenu line height to <height>\n"
@@ -502,8 +518,6 @@ void usage(int status) {
             "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"
             "spmenu -mc,      --max-cache <size>                          Set max image cache size to <size>\n"
             "spmenu -cd,      --cache-dir <dir>                           Set cache directory to <dir>\n"
-            "spmenu -rw,      --relative-width                            Enable relative input width\n"
-            "spmenu -nrw,     --no-relative-width                         Disable relative input width\n"
             "spmenu -ix,      --print-index                               Print index instead of actual text\n"
             "spmenu -nix,     --no-print-index                            Don't print index instead of actual text\n"
             "spmenu -f,       --fast                                      Grabs keyboard before reading stdin\n"
@@ -612,6 +626,8 @@ void usage(int status) {
             "spmenu -tm,      --theme <theme>                             Load theme <theme>\n"
             "spmenu -ltm,     --load-theme                                Load theme\n"
             "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
+            "spmenu -x11,     --x11                                       Run spmenu in X11 mode\n"
+            "spmenu -wl,      --wayland                                   Run spmenu in Wayland mode\n"
             "spmenu -rv,      --raw-version                               Print spmenu version number to stdout\n"
             "spmenu -v,       --version                                   Print spmenu version to stdout\n"
             "\n", status ? stderr : stdout);

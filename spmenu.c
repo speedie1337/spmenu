@@ -21,6 +21,8 @@
 #include <strings.h>
 #include <time.h>
 #include <unistd.h>
+#include <signal.h>
+#include <fcntl.h>
 
 // set version
 #ifndef VERSION
@@ -69,6 +71,13 @@
 #define USEXRESOURCES 1
 #endif
 
+// check if we should enable Wayland support
+#ifndef WAYLAND
+#define USEWAYLAND 0
+#else
+#define USEWAYLAND 1
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
@@ -98,6 +107,7 @@ static int allowkeys; // whether or not to interpret a keypress as an insertion
 #include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/x11/inc.h" // include x11
+#include "libs/wl/inc.h" // include wayland
 #include "libs/sort.h"
 #include "libs/history.h"
 
@@ -185,8 +195,6 @@ static int depth;
 static Visual *visual;
 static Colormap cmap;
 static Drw *drw;
-static Clr **scheme;
-static Clr textclrs[256];
 
 // declare functions
 static int is_selected(size_t index);
@@ -196,7 +204,10 @@ static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
 static void pastesel(void);
+static void resizeclient(void);
+static void get_width(void);
 static void grabfocus(void);
+static void handle(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
 static int max_textw(void);
 static size_t nextrune(int inc);
@@ -240,6 +251,7 @@ static char *fonts[] = { font };
 
 // include x11 code
 #include "libs/x11/inc.c"
+#include "libs/wl/inc.c"
 
 // include more functions
 #include "libs/history.c"
@@ -348,17 +360,17 @@ void cleanup(void) {
     cleanupimage(); // function frees images
 #endif
 
-    // free color scheme
-    for (i = 0; i < LENGTH(colors) + 1; i++)
-        free(scheme[i]);
-
     // free high priority items
     for (i = 0; i < hplength; ++i)
         free(hpitems[i]);
 
     // free drawing and close the display
     drw_free(drw);
-    cleanup_x11(dpy);
+
+    if (!protocol) {
+        cleanup_x11(dpy);
+    }
+
     free(sel_index);
 }
 
@@ -418,18 +430,74 @@ size_t nextrune(int inc) {
 }
 
 void pastesel(void) {
-    pastesel_x11();
+    if (!protocol) {
+        pastesel_x11();
+    }
+}
+
+void resizeclient(void) {
+#if USEWAYLAND
+    if (protocol) {
+        resizeclient_wl(&state);
+    } else {
+        resizeclient_x11();
+    }
+#else
+    resizeclient_x11();
+#endif
+}
+
+void get_width(void) {
+    inputw = mw / 3;
+}
+
+void handle(void) {
+    if (!protocol) {
+        handle_x11();
+
+        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+            die("no fonts could be loaded.");
+        }
+
+        loadhistory(); // read history entries
+        store_image_vars();
+
+        // fast (-f) means we grab keyboard before reading standard input
+        if (fast && !isatty(0)) {
+            grabkeyboard_x11();
+            readstdin();
+        } else {
+            readstdin();
+            grabkeyboard_x11();
+        }
+
+        set_mode();
+
+        init_appearance(); // init colorschemes by reading arrays
+        setupdisplay_x11(); // set up display and create window
+        eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
+#if USEWAYLAND
+    } else {
+        loadhistory();
+        store_image_vars();
+
+        drw = drw_create_wl(protocol);
+
+        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+            die("no fonts could be loaded.");
+        }
+
+        readstdin();
+        set_mode();
+        init_appearance();
+
+        handle_wl();
+#endif
+    }
 }
 
 int main(int argc, char *argv[]) {
     readargs(argc, argv); // start by reading arguments
-
-    // open x11 display and create drawable
-    handle_x11();
-
-    // load fonts
-    if (!drw_font_create(drw, fonts, LENGTH(fonts)))
-        die("no fonts could be loaded.");
 
     // pledge limits what programs can do, so here we specify what spmenu should be allowed to do
 #ifdef __OpenBSD__
@@ -437,23 +505,7 @@ int main(int argc, char *argv[]) {
         die("pledge");
 #endif
 
-    loadhistory(); // read history entries
-
-    // fast (-f) means we grab keyboard before reading standard input
-    if (fast && !isatty(0)) {
-        grabkeyboard();
-        readstdin();
-    } else {
-        readstdin();
-        grabkeyboard();
-    }
-
-    store_image_vars();
-    set_mode();
-
-    init_appearance(); // init colorschemes by reading arrays
-    setupdisplay(); // set up display and create window
-    eventloop(); // function is a loop which checks X11 events and calls other functions accordingly
+    handle();
 
     return 1; // should be unreachable
 }

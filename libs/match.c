@@ -33,11 +33,7 @@ void fuzzymatch(void) {
             }
             // build list of matches
             if (eidx != -1) {
-                // compute distance
-                // add penalty if match starts late (log(sidx+2))
-                //add penalty for long a match without many matching characters
                 it->distance = log(sidx + 2) + (double)(eidx - sidx - text_len);
-                // fprintf(stderr, "distance %s %f\n", it->text, it->distance);
                 appenditem(it, &matches, &matchend);
                 number_of_matches++;
             }
@@ -79,16 +75,20 @@ void fuzzymatch(void) {
     for (i = 0; i < preselected; i++) {
         if (sel && sel->right && (sel = sel->right) == next) {
             curr = next;
-            calcoffsets();
         }
     }
+
+    calcoffsets();
 }
 
 void match(void) {
+    get_width();
+
     if (fuzzy) {
         fuzzymatch();
         return;
     }
+
     static char **tokv = NULL;
     static int tokn = 0;
 
@@ -103,6 +103,7 @@ void match(void) {
     for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
         if (++tokc > tokn && !(tokv = realloc(tokv, ++tokn * sizeof *tokv)))
             die("spmenu: cannot realloc %u bytes:", tokn * sizeof *tokv);
+
     len = tokc ? strlen(tokv[0]) : 0;
 
     matches = lhpprefix = lprefix = lsubstr = matchend = hpprefixend = prefixend = substrend = NULL;

@@ -7,7 +7,7 @@ void theme_load(void) {
     const char *dest;
 
     // don't load configuration
-    if (!loadconfig) return;
+    if (!loadtheme) return;
 
     // get path for configuration file
     if (!argtheme) {
@@ -212,125 +212,125 @@ void theme_load(void) {
 
             // items
             if (config_setting_lookup_string(conf, "itemnormfg", &dest))
-                strcpy(colors[SchemeItemNorm1][ColFg], strdup(dest));
+                strcpy(col_itemnormfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemnormbg", &dest))
-                strcpy(colors[SchemeItemNorm1][ColBg], strdup(dest));
+                strcpy(col_itemnormbg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemnormfg2", &dest))
-                strcpy(colors[SchemeItemNorm2][ColFg], strdup(dest));
+                strcpy(col_itemnormfg2, strdup(dest));
             else if (config_setting_lookup_string(conf, "itemnormfg", &dest))
-                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
+                strcpy(col_itemnormfg2, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemnormbg2", &dest))
-                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
+                strcpy(col_itemnormbg2, strdup(dest));
             else if (config_setting_lookup_string(conf, "itemnormbg", &dest))
-                strcpy(colors[SchemeItemNorm2][ColBg], strdup(dest));
+                strcpy(col_itemnormbg2, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemselfg", &dest))
-                strcpy(colors[SchemeItemSel][ColFg], strdup(dest));
+                strcpy(col_itemselfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemselbg", &dest))
-                strcpy(colors[SchemeItemSel][ColBg], strdup(dest));
+                strcpy(col_itemselbg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemmarkedfg", &dest))
-                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+                strcpy(col_itemmarkedfg, strdup(dest));
             else if (config_setting_lookup_string(conf, "itemselfg", &dest))
-                strcpy(colors[SchemeItemMarked][ColFg], strdup(dest));
+                strcpy(col_itemmarkedfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemmarkedbg", &dest))
-                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
+                strcpy(col_itemmarkedbg, strdup(dest));
             else if (config_setting_lookup_string(conf, "itemselbg", &dest))
-                strcpy(colors[SchemeItemMarked][ColBg], strdup(dest));
+                strcpy(col_itemmarkedbg, strdup(dest));
 
             // items with priority
             if (config_setting_lookup_string(conf, "itemnormprifg", &dest))
-                strcpy(colors[SchemeItemNormPri][ColFg], strdup(dest));
+                strcpy(col_itemnormprifg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemnormpribg", &dest))
-                strcpy(colors[SchemeItemNormPri][ColBg], strdup(dest));
+                strcpy(col_itemnormpribg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemselprifg", &dest))
-                strcpy(colors[SchemeItemSelPri][ColFg], strdup(dest));
+                strcpy(col_itemselprifg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "itemselpribg", &dest))
-                strcpy(colors[SchemeItemSelPri][ColBg], strdup(dest));
+                strcpy(col_itemselpribg, strdup(dest));
 
             // input
             if (config_setting_lookup_string(conf, "inputfg", &dest))
-                strcpy(colors[SchemeInput][ColFg], strdup(dest));
+                strcpy(col_inputfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "inputbg", &dest))
-                strcpy(colors[SchemeInput][ColBg], strdup(dest));
+                strcpy(col_inputbg, strdup(dest));
 
             // menu
             if (config_setting_lookup_string(conf, "menu", &dest))
-                strcpy(colors[SchemeMenu][ColBg], strdup(dest));
+                strcpy(col_menu, strdup(dest));
 
             // prompt
             if (config_setting_lookup_string(conf, "promptfg", &dest))
-                strcpy(colors[SchemePrompt][ColFg], strdup(dest));
+                strcpy(col_promptfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "promptbg", &dest))
-                strcpy(colors[SchemePrompt][ColBg], strdup(dest));
+                strcpy(col_promptbg, strdup(dest));
 
             // arrows
             if (config_setting_lookup_string(conf, "larrowfg", &dest))
-                strcpy(colors[SchemeLArrow][ColFg], strdup(dest));
+                strcpy(col_larrowfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "larrowbg", &dest))
-                strcpy(colors[SchemeLArrow][ColBg], strdup(dest));
+                strcpy(col_larrowbg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "rarrowfg", &dest))
-                strcpy(colors[SchemeRArrow][ColFg], strdup(dest));
+                strcpy(col_rarrowfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "rarrowbg", &dest))
-                strcpy(colors[SchemeRArrow][ColBg], strdup(dest));
+                strcpy(col_rarrowbg, strdup(dest));
 
             // highlight
             if (config_setting_lookup_string(conf, "hlnormfg", &dest))
-                strcpy(colors[SchemeNormHighlight][ColFg], strdup(dest));
+                strcpy(col_hlnormfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "hlnormbg", &dest))
-                strcpy(colors[SchemeNormHighlight][ColBg], strdup(dest));
+                strcpy(col_hlnormbg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "hlselfg", &dest))
-                strcpy(colors[SchemeSelHighlight][ColFg], strdup(dest));
+                strcpy(col_hlselfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "hlselbg", &dest))
-                strcpy(colors[SchemeSelHighlight][ColBg], strdup(dest));
+                strcpy(col_hlselbg, strdup(dest));
 
             // number
             if (config_setting_lookup_string(conf, "numfg", &dest))
-                strcpy(colors[SchemeNumber][ColFg], strdup(dest));
+                strcpy(col_numfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "numbg", &dest))
-                strcpy(colors[SchemeNumber][ColBg], strdup(dest));
+                strcpy(col_numbg, strdup(dest));
 
             // mode
             if (config_setting_lookup_string(conf, "modefg", &dest))
-                strcpy(colors[SchemeMode][ColFg], strdup(dest));
+                strcpy(col_modefg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "modebg", &dest))
-                strcpy(colors[SchemeMode][ColBg], strdup(dest));
+                strcpy(col_modebg, strdup(dest));
 
             // caps
             if (config_setting_lookup_string(conf, "capsfg", &dest))
-                strcpy(colors[SchemeCaps][ColFg], strdup(dest));
+                strcpy(col_capsfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "capsbg", &dest))
-                strcpy(colors[SchemeCaps][ColBg], strdup(dest));
+                strcpy(col_capsbg, strdup(dest));
 
             // border
             if (config_setting_lookup_string(conf, "border", &dest))
-                strcpy(colors[SchemeBorder][ColBg], strdup(dest));
+                strcpy(col_border, strdup(dest));
 
             // caret
             if (config_setting_lookup_string(conf, "caretfg", &dest))
-                strcpy(colors[SchemeCaret][ColFg], strdup(dest));
+                strcpy(col_caretfg, strdup(dest));
 
             if (config_setting_lookup_string(conf, "caretbg", &dest))
-                strcpy(colors[SchemeCaret][ColBg], strdup(dest));
+                strcpy(col_caretbg, strdup(dest));
 
             // sgr colors
             if (config_setting_lookup_string(conf, "sgr0", &dest))

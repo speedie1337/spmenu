@@ -1,7 +1,7 @@
 project(
   'spmenu',
   'c',
-  version : '"1.2.1"',
+  version : '"2.0"',
   default_options : ['warning_level=3']
 )
 
@@ -38,6 +38,21 @@ build_args = [
   '-Wno-unused-parameter',
   '-Wno-sign-compare',
 ]
+
+if get_option('wayland')
+  project_dependencies += [ dependency('wayland-client') ]
+  project_dependencies += [ dependency('wayland-scanner') ]
+  project_dependencies += [ dependency('wayland-protocols') ]
+  project_dependencies += [ dependency('xkbcommon') ]
+  project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
+  project_source_files += [ 'libs/wl/xdg-output-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'libs/wl/xdg-output-unstable-v1-protocol.c' ]
+  project_source_files += [ 'libs/wl/xdg-shell-client-protocol.h' ]
+  project_source_files += [ 'libs/wl/xdg-shell-protocol.c' ]
+  build_args += [ '-DWAYLAND' ]
+  run_command('scripts/make/generate-headers.sh', check : false)
+endif
 
 if get_option('imlib2') and get_option('openssl')
   project_dependencies += [ dependency('imlib2') ]

@@ -2,6 +2,8 @@
 *.o
 *zst*
 *sig*
+*gz*
+*tar*
 spmenu
 buildconf_dev
 buildconf

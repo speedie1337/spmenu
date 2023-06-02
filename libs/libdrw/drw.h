@@ -6,13 +6,9 @@
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
 
-#define convert_color(x) (double)((x) / 65535.0)
-
 typedef struct {
     Cursor cursor;
 } Cur;
-
-typedef XColor Clr;
 
 typedef struct Fnt {
     Display *dpy;
@@ -20,26 +16,31 @@ typedef struct Fnt {
     PangoLayout *layout;
 } Fnt;
 
-enum { ColFg, ColBg, ColPwl }; /* Clr scheme index */
-
 typedef struct {
     unsigned int w, h;
+    int protocol;
     Display *dpy;
     int screen;
     Window root;
     Visual *visual;
     unsigned int depth;
+    void *data;
     Colormap cmap;
     Drawable drawable;
     GC gc;
-    Clr *scheme;
     Fnt *font;
     cairo_surface_t *surface;
     cairo_t *d;
 } Drw;
 
+/* Cairo color convertion */
+void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha);
+
 /* Drawable abstraction */
-Drw *drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap);
+Drw *drw_create_x11(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol);
+Drw *drw_create_wl(int protocol);
+void drw_create_surface_wl(Drw *drw, void *data, int32_t w, int32_t h);
+
 void drw_resize(Drw *drw, unsigned int w, unsigned int h);
 void drw_free(Drw *drw);
 
@@ -50,24 +51,16 @@ unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int
 unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup);
 
-/* Colorscheme abstraction */
-void drw_clr_create(Drw *drw, Clr *dest, char *clrname, unsigned int alpha);
-Clr *drw_scm_create(Drw *drw, char *clrnames[], unsigned int alphas[], size_t clrcount);
-
 /* Cursor abstraction */
 Cur *drw_cur_create(Drw *drw, int shape);
 void drw_cur_free(Drw *drw, Cur *cursor);
 
-/* Drawing context manipulation */
-void drw_setscheme(Drw *drw, Clr *scm);
-
 /* Drawing functions */
-void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert);
-int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup);
+void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
+int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
 
 /* Map functions */
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);
 
 /* Powerline functions */
-void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
-void drw_arrow(Drw* drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);
+void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha);

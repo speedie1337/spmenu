@@ -1,18 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
-void prepare_window_size(void) {
-    // set horizontal and vertical padding
-    sp = menupaddingh;
-    vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
+void hexconv(const char *hex, unsigned short *r, unsigned short *g, unsigned short *b) {
+    unsigned int col;
 
-    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
-    lines = MAX(lines, 0);
-    reallines = lines;
+    sscanf(hex, "#%06X", &col);
 
-    lrpad = drw->font->h + textpadding;
-    mh = (lines + 1) * bh + 2 * menumarginv; // lines + 1 * bh is the menu height
-
-    return;
+    *r = (col >> 16) & 0xFF;
+    *g = (col >> 8) & 0xFF;
+    *b = col & 0xFF;
 }
 
 void store_image_vars(void) {
@@ -22,7 +17,7 @@ void store_image_vars(void) {
     if (!imagew || !imageh || !imageg) {
         imagew = imagewidth;
         imageh = imageheight;
-        imagegaps = imagegaps;
+        imageg = imagegaps;
     }
 #endif
 }
@@ -46,28 +41,7 @@ void set_mode(void) {
     }
 }
 
-void get_width(int numwidthchecks, unsigned int minstrlen, unsigned int curstrlen) {
-    struct item *item;
-    unsigned int tmp = 0;
-
-    // get accurate width
-    if (accuratewidth) {
-        for (item = items; !lines && item && item->text; ++item) {
-            curstrlen = strlen(item->text);
-            if (numwidthchecks || minstrlen < curstrlen) {
-                numwidthchecks = MAX(numwidthchecks - 1, 0);
-                minstrlen = MAX(minstrlen, curstrlen);
-                if ((tmp = MIN(TEXTW(item->text), mw/3) > inputw)) {
-                    inputw = tmp;
-                    if (tmp == mw/3)
-                        break;
-                }
-            }
-        }
-    }
-}
-
-void create_window(int x, int y, int w, int h) {
+void create_window_x11(int x, int y, int w, int h) {
     XSetWindowAttributes swa;
 
     swa.override_redirect = managed ? False : True;
@@ -85,21 +59,35 @@ void create_window(int x, int y, int w, int h) {
             depth, InputOutput, visual,
             CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
 
-
     return;
 }
 
-void set_window(void) {
+void set_window_x11(void) {
+    XColor col;
     XClassHint ch = { class, class };
 
+    unsigned short r;
+    unsigned short g;
+    unsigned short b;
+
+    hexconv(col_border, &r, &g, &b);
+
+    col.red = r << 8;
+    col.green = g << 8;
+    col.blue = b << 8;
+
+    if (!XAllocColor(dpy, cmap, &col)) {
+        die("spmenu: failed to allocate xcolor");
+    }
+
     // set border and class
-    XSetWindowBorder(dpy, win, scheme[SchemeBorder][ColBg].pixel);
+    XSetWindowBorder(dpy, win, col.pixel);
     XSetClassHint(dpy, win, &ch);
 
     return;
 }
 
-void set_prop(void) {
+void set_prop_x11(void) {
     // set properties indicating what spmenu handles
     clip = XInternAtom(dpy, "CLIPBOARD",   False);
     utf8 = XInternAtom(dpy, "UTF8_STRING", False);
@@ -112,7 +100,7 @@ void set_prop(void) {
     }
 }
 
-void resizeclient(void) {
+void resizeclient_x11(void) {
     int omh = mh;
     int x, y;
 #if USEXINERAMA
@@ -196,7 +184,7 @@ void resizeclient(void) {
         } else { // top or bottom
             x = 0;
             y = menuposition ? 0 : wa.height - mh - ypos;
-            mw = wa.width;
+            mw = (menuwidth > 0 ? menuwidth : wa.width);
         }
     }
 

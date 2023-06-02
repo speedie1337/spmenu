@@ -6,10 +6,24 @@ typedef struct {
     KeySym keysym;
 } KeyList;
 
+#if USEWAYLAND
+typedef struct {
+    char *key;
+    xkb_keysym_t keysym;
+} WlKeyList;
+#endif
+
 typedef struct {
     char *mod;
     unsigned int modifier;
 } ModList;
+
+#if USEWAYLAND
+typedef struct {
+    char *mod;
+    char *modifier;
+} WlModList;
+#endif
 
 typedef struct {
     char *argument;
@@ -396,6 +410,25 @@ static ModList ml[] = {
     { "0",       0 },
 };
 
+#if USEWAYLAND
+static WlModList wml[] = {
+    { "Ctrl+Shift", WL_CtrlShift },
+    { "Ctrl+Shift+Super", WL_CtrlShiftSuper },
+    { "Ctrl+Super", WL_CtrlSuper },
+    { "Ctrl+Alt", WL_CtrlAlt },
+    { "Ctrl+Alt+Shift", WL_CtrlAltShift },
+    { "Ctrl+Alt+Shift+Super", WL_CtrlAltShiftSuper },
+    { "Ctrl+Alt+Super", WL_CtrlAltSuper },
+    { "Alt+Shift", WL_AltShift },
+    { "Shift",   WL_Shift },
+    { "Ctrl",    WL_Ctrl },
+    { "Alt",     WL_Alt },
+    { "Super",   WL_Super },
+    { "None",    WL_None },
+    { "0",       WL_None },
+};
+#endif
+
 // list of keys that can be used in the config file
 // expand this array if you want more
 static KeyList kl[] = {
@@ -500,10 +533,123 @@ static KeyList kl[] = {
     { "Prior",      XK_Prior },
 };
 
+// list of keys that can be used in the config file
+// expand this array if you want more
+#if USEWAYLAND
+static WlKeyList wkl[] = {
+    { "None",       0 },
+    { "Space",      XKB_KEY_space },
+    { "Enter",      XKB_KEY_Return },
+    { "Tab",        XKB_KEY_Tab },
+    { "a",          XKB_KEY_a },
+    { "b",          XKB_KEY_b },
+    { "c",          XKB_KEY_c },
+    { "d",          XKB_KEY_d },
+    { "e",          XKB_KEY_e },
+    { "f",          XKB_KEY_f },
+    { "g",          XKB_KEY_g },
+    { "h",          XKB_KEY_h },
+    { "i",          XKB_KEY_i },
+    { "j",          XKB_KEY_j },
+    { "k",          XKB_KEY_k },
+    { "l",          XKB_KEY_l },
+    { "m",          XKB_KEY_m },
+    { "n",          XKB_KEY_n },
+    { "o",          XKB_KEY_o },
+    { "p",          XKB_KEY_p },
+    { "q",          XKB_KEY_q },
+    { "r",          XKB_KEY_r },
+    { "s",          XKB_KEY_s },
+    { "t",          XKB_KEY_t },
+    { "u",          XKB_KEY_u },
+    { "v",          XKB_KEY_v },
+    { "w",          XKB_KEY_w },
+    { "x",          XKB_KEY_x },
+    { "y",          XKB_KEY_y },
+    { "z",          XKB_KEY_z },
+    { "0",          XKB_KEY_0 },
+    { "1",          XKB_KEY_1 },
+    { "2",          XKB_KEY_2 },
+    { "3",          XKB_KEY_3 },
+    { "4",          XKB_KEY_4 },
+    { "5",          XKB_KEY_5 },
+    { "6",          XKB_KEY_6 },
+    { "7",          XKB_KEY_7 },
+    { "8",          XKB_KEY_8 },
+    { "9",          XKB_KEY_9 },
+    { "!",          XKB_KEY_exclam },
+    { "\"",         XKB_KEY_quotedbl },
+    { "#",          XKB_KEY_numbersign },
+    { "$",          XKB_KEY_dollar },
+    { "%",          XKB_KEY_percent },
+    { "&",          XKB_KEY_ampersand },
+    { "'",          XKB_KEY_apostrophe },
+    { "(",          XKB_KEY_parenleft },
+    { ")",          XKB_KEY_parenright },
+    { "*",          XKB_KEY_asterisk },
+    { "+",          XKB_KEY_plus },
+    { ",",          XKB_KEY_comma },
+    { "-",          XKB_KEY_minus },
+    { ".",          XKB_KEY_period },
+    { "/",          XKB_KEY_slash },
+    { ":",          XKB_KEY_colon },
+    { ";",          XKB_KEY_semicolon },
+    { "<",          XKB_KEY_less },
+    { "=",          XKB_KEY_equal },
+    { ">",          XKB_KEY_greater },
+    { "?",          XKB_KEY_question },
+    { "@",          XKB_KEY_at },
+    { "[",          XKB_KEY_bracketleft },
+    { "\\",         XKB_KEY_backslash },
+    { "]",          XKB_KEY_bracketright },
+    { "_",          XKB_KEY_underscore },
+    { "grave",      XKB_KEY_grave },
+    { "{",          XKB_KEY_braceleft },
+    { "bar",        XKB_KEY_bar },
+    { "}",          XKB_KEY_braceright },
+    { "~",          XKB_KEY_asciitilde },
+    { "F1",         XKB_KEY_F1 },
+    { "F2",         XKB_KEY_F2 },
+    { "F3",         XKB_KEY_F3 },
+    { "F4",         XKB_KEY_F4 },
+    { "F5",         XKB_KEY_F5 },
+    { "F6",         XKB_KEY_F6 },
+    { "F7",         XKB_KEY_F7 },
+    { "F8",         XKB_KEY_F8 },
+    { "F9",         XKB_KEY_F9 },
+    { "F10",        XKB_KEY_F10 },
+    { "F11",        XKB_KEY_F11 },
+    { "F12",        XKB_KEY_F12 },
+    { "PageUp",     XKB_KEY_Page_Up },
+    { "PageDown",   XKB_KEY_Page_Down },
+    { "Home",       XKB_KEY_Home },
+    { "End",        XKB_KEY_End },
+    { "Delete",     XKB_KEY_Delete },
+    { "PrintScr",   XKB_KEY_Print },
+    { "Esc",        XKB_KEY_Escape },
+    { "Pause",      XKB_KEY_Pause },
+    { "ScrollLock", XKB_KEY_Scroll_Lock },
+    { "Backspace",  XKB_KEY_BackSpace },
+    { "Up",         XKB_KEY_Up },
+    { "Down",       XKB_KEY_Down },
+    { "Left",       XKB_KEY_Left },
+    { "Right",      XKB_KEY_Right },
+    { "Next",       XKB_KEY_Next },
+    { "Prior",      XKB_KEY_Prior },
+};
+#endif
+
 typedef struct {
     char *click;
     unsigned int button;
 } ButtonType;
+
+#if USEWAYLAND
+typedef struct {
+    char *click;
+    unsigned int button;
+} WlButtonType;
+#endif
 
 typedef struct {
     char *tclick;
@@ -518,6 +664,14 @@ static ButtonType btp[] = {
     { "Scroll Down",  Button5 },
 };
 
+#if USEWAYLAND
+static WlButtonType w_btp[] = {
+    { "Left Click",   WL_Left },
+    { "Middle Click", WL_Middle },
+    { "Right Click",  WL_Right },
+};
+#endif
+
 static ClickType ctp[] = {
     { "ClickWindow",  ClickWindow },
     { "ClickPrompt",  ClickPrompt },
@@ -529,18 +683,6 @@ static ClickType ctp[] = {
     { "ClickNumber",  ClickNumber },
     { "ClickCaps",    ClickCaps },
     { "ClickMode",    ClickMode },
-
-    // compatibility
-    { "clickwindow",  ClickWindow },
-    { "clickprompt",  ClickPrompt },
-    { "clickinput",   ClickInput },
-    { "clicklarrow",  ClickLArrow },
-    { "clickitem",    ClickItem },
-    { "clickselitem", ClickSelItem },
-    { "clickrarrow",  ClickRArrow },
-    { "clicknumber",  ClickNumber },
-    { "clickcaps",    ClickCaps },
-    { "clickmode",    ClickMode },
 };
 
 static void conf_init(void);

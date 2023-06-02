@@ -1,4 +1,11 @@
 option(
+  'wayland',
+  type : 'boolean',
+  value : true,
+  description : 'Enable Wayland support'
+)
+
+option(
   'imlib2',
   type : 'boolean',
   value : true,

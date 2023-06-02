@@ -5,9 +5,8 @@ spmenu
 
 ## What is spmenu?
 
-spmenu is an X11 menu application which takes standard input, parses
-it, and lets the user choose an option and sends the
-selected option to standard output.
+spmenu is a simple X11 and Wayland menu application which takes standard input, parses
+it, lets the user choose an option and sends the selected option to standard output.
 
 In addition to this, it also serves as a run launcher through the included
 shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
@@ -18,9 +17,20 @@ spmenu introduces many new features which can be useful in shell scripting.
 There are way too many to list, but spmenu has a
 [wiki](https://spmenu.speedie.site) which goes through features in more detail.
 
+It also serves as a dmenu replacement for Wayland users.
+
 ## Dependencies
 
+- wayland-client
+  - For Wayland support, which is optional.
+- wayland-scanner
+  - For Wayland support, which is optional.
+- wayland-protocols
+  - For Wayland support, which is optional.
+- xkbcommon
+  - For Wayland support, which is optional.
 - libX11
+  - For X11 support
   - If you're using macOS, XQuartz is a dependency instead.
   - If you're using Wayland, `xorg-xwayland` is a dependency.
 - libXrender
@@ -108,11 +118,29 @@ directory**. If you want to generate a Pacman package, run
 See [this wiki article](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS)
 for more information.
 
+## Wayland support
+
+Note that Wayland support is still experimental, and some features do not
+currently work under Wayland. Some will never work under Wayland due to limitations.
+These are:
+
+- Image support
+  - Images simply will not be drawn on Wayland.
+  - Will eventually be solved by replacing imlib2 with cairo.
+- `--x-position` and `--y-position` arguments
+  - These arguments do not work under Wayland, because the layer_shell
+  protocol doesn't allow clients to be placed on a specific position.
+- Embedding `-w` and window manager managed `-wm`
+  - These arguments do not make much sense on Wayland, and embedding is not possible
+  due to the original implementation using XEmbed. If the embed argument is passed
+  it will simply be ignored and the window will be layered as normal.
+- `--monitor` argument
+- Window borders
+- Pasting
+
 ## TODO
 
 Pull requests would be greatly appreciated for any of these issues!
-
-### General
 
 - Image support: Stop using OpenSSL for caching images, mostly because MD5()
 is deprecated as of OpenSSL 3.0, but this would also make it very easy to
@@ -123,20 +151,8 @@ have LibreSSL compatibility.
   for each added line.
 - Matching: Add support for contextual completions similar to xprompt
 - Matching: Regex matching
-  - Probably use some minimal public domain library for this, I'd
-like to avoid adding more external dependencies unless it's a
-common dependency most people already have.
-
-### Unlikely, but maybe at some point in the distant future
-
 - X11: Move from Xlib to libXcb
-- Wayland: Wayland support, but only if it doesn't require writing any extra
-code which as of now seems unlikely, or if someone makes a patch.
-  - Before this can even be done, deal with keybinds in some Wayland compatible
-  way, remove .Xresources usage and figure out a way to preserve X11
-  compatibility as I do not want to use Wayland as of now.
-  - You can just use XWayland anyway if you happen to use Wayland, so it's not
-like you will be unable to use spmenu in its current state.
+- Wayland: Anything listed as broken under 'Wayland support'.
 
 ## Scripts
 

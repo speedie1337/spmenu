@@ -25,6 +25,7 @@ loadconf() {
 build() {
     [ ! -f "meson.build" ] && printf "meson.build does not exist.\n" && exit 1
     [ "$gen_manual" != "false" ] && [ -x "$(command -v pandoc)" ] && scripts/make/generate-docs.sh
+    [ -z "$wayland" ] && wayland=true
 
     cp -f meson.build meson.build.orig
 
@@ -42,6 +43,7 @@ build() {
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
+            -Dwayland="$wayland" \
             --prefix "$prefix" \
             build
     else
@@ -52,6 +54,7 @@ build() {
             -Dimlib2="$imlib2" \
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
+            -Dwayland="$wayland" \
             --prefix "$prefix" \
             build
     fi
@@ -69,6 +72,7 @@ install() {
     [ "$reconfigure" = "true" ] && rm -rf build/
 }
 
+[ "$(id -u)" != "0" ] && [ "$install" != "false" ] && printf "Run as root.\n" && exit 1
 check
 loadconf
 build

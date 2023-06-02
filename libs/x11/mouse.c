@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-void buttonpress(XEvent *e) {
+void buttonpress_x11(XEvent *e) {
     struct item *item;
     XButtonPressedEvent *ev = &e->xbutton;
     int x = 0, y = 0, h = bh, w, item_num = 0;
@@ -68,7 +68,7 @@ void buttonpress(XEvent *e) {
             if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
-                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
                     } else if (buttons[i].click == ClickItem) {
@@ -77,7 +77,7 @@ void buttonpress(XEvent *e) {
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
                     if (ignoreconfmouse) break;
-                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
                     } else if (cbuttons[i].click == ClickItem) {
@@ -103,7 +103,7 @@ void buttonpress(XEvent *e) {
             if (ev->x >= x && ev->x <= x + w) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
-                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
                     } else if (buttons[i].click == ClickItem) {
@@ -112,7 +112,7 @@ void buttonpress(XEvent *e) {
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
                     if (ignoreconfmouse) break;
-                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state)) {
+                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
                     } else if (cbuttons[i].click == ClickItem) {
@@ -133,16 +133,14 @@ void buttonpress(XEvent *e) {
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(buttons); i++) {
         if (ignoreglobalmouse) break;
-        if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
-                && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
+        if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button)
             buttons[i].func(&buttons[i].arg);
     }
 
     // go through mouse config array and run function
     for (i = 0; i < LENGTH(cbuttons); i++) {
         if (ignoreconfmouse) break;
-        if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button
-                && CLEANMASK(cbuttons[i].mask) == CLEANMASK(ev->state))
+        if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button)
             cbuttons[i].func(&cbuttons[i].arg);
     }
 }

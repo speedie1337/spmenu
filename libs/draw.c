@@ -11,9 +11,6 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
 
     if (!(strlen(itemtext) && strlen(text))) return;
 
-    drw_setscheme(drw, scheme[item == sel
-            ? SchemeSelHighlight
-            : SchemeNormHighlight]);
     for (i = 0, highlight = itemtext; *highlight && text[i];) {
         if (((fuzzy && !fstrncmp(&(*highlight), &text[i], 1)) || (!fuzzy && *highlight == text[i]))) {
             c = *highlight;
@@ -29,7 +26,11 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
                     x + indent + (p),
                     y,
                     MIN(w - indent - lrpad, TEXTW(highlight) - lrpad),
-                    bh, 0, highlight, 0, pango_highlight ? True : False);
+                    bh, 0, highlight, 0, pango_highlight ? True : False,
+                    item == sel ? col_hlselfg : col_hlnormfg,
+                    item == sel ? col_hlselbg : col_hlnormbg,
+                    item == sel ? alpha_hlselfg : alpha_hlnormfg,
+                    item == sel ? alpha_hlselbg : alpha_hlnormbg);
             highlight[1] = c;
             i++;
         }
@@ -39,7 +40,6 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
 
 int drawitemtext(struct item *item, int x, int y, int w) {
     char buffer[MAXITEMLENGTH]; // buffer containing item text
-    Clr scm[2]; // color scheme
     int leftpadding = lrpad / 2; // padding
     int wr, rd; // character
     int fg = 7; // foreground
@@ -48,31 +48,54 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int ignore = 0; // ignore colors
     int selitem = 0;
     int priitem = 0;
+    char *bgcol;
+    char *fgcol;
+    int bga;
+    int fga;
 
     // memcpy the correct scheme
     if (item == sel) {
-        memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
         selitem = 1;
+        bgcol = col_itemselbg;
+        fgcol = col_itemselfg;
+        bga = alpha_itemselbg;
+        fga = alpha_itemselfg;
 
         if (item->hp) {
-            memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
             priitem = 1;
+            bgcol = col_itemselpribg;
+            fgcol = col_itemselprifg;
+
+            fga = alpha_itemselprifg;
+            bga = alpha_itemselpribg;
         }
     } else {
         if (itemn) {
-            memcpy(scm, scheme[SchemeItemNorm2], sizeof(scm));
+            bgcol = col_itemnormbg2;
+            fgcol = col_itemnormfg2;
+            fga = alpha_itemnormfg2;
+            bga = alpha_itemnormbg2;
         } else {
-            memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
+            bgcol = col_itemnormbg;
+            fgcol = col_itemnormfg;
+            fga = alpha_itemnormfg;
+            bga = alpha_itemnormbg;
         }
 
         if (item->hp) {
-            memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
             priitem = 1;
+            bgcol = col_itemnormpribg;
+            fgcol = col_itemnormprifg;
+            fga = alpha_itemnormprifg;
+            bga = alpha_itemnormpribg;
         }
     }
 
     if (is_selected(item->index)) {
-        memcpy(scm, scheme[SchemeItemMarked], sizeof(scm));
+        bgcol = col_itemmarkedbg;
+        fgcol = col_itemmarkedfg;
+        fga = alpha_itemmarkedfg;
+        bga = alpha_itemmarkedbg;
     }
 
     // apply extra padding
@@ -85,9 +108,12 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     // don't color
-    if (!coloritems) memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
-
-    drw_setscheme(drw, scm); // set scheme
+    if (!coloritems) {
+        bgcol = itemn ? col_itemnormbg2 : col_itemnormbg;
+        fgcol = itemn ? col_itemnormfg2 : col_itemnormfg;
+        bga = itemn ? alpha_itemnormbg2 : alpha_itemnormbg;
+        fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
+    }
 
     // parse item text
     for (wr = 0, rd = 0; item->text[rd]; rd++) {
@@ -101,7 +127,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                 }
 
                 apply_fribidi(buffer);
-                drw_text(drw, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+                drw_text(drw, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
                 drawhighlights(item, x, y, MIN(w, TEXTW(buffer) - lrpad) + leftpadding, leftpadding, isrtl ? fribidi_text : buffer);
 
                 // position and width
@@ -113,7 +139,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
                 char *character = item->text + rd + 1; // current character
 
-                // parse hex colors in scm, m is always the last character
+                // parse hex colors, m is always the last character
                 while (*character != 'm') {
                     unsigned nextchar = strtoul(character + 1, &character, 10);
                     if (ignore)
@@ -123,61 +149,90 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                             bgfg <<= 1;
                             continue;
                         }
-                        if (bgfg == 4)
-                            scm[0] = textclrs[fg = nextchar];
-                        else if (bgfg == 6)
-                            scm[1] = textclrs[bg = nextchar];
-                        ignore = 1;
+                        if (bgfg == 4) {
+                            fgcol = txtcols[fg = nextchar];
+                        } else if (bgfg == 6) {
+                            bgcol = txtcols[bg = nextchar];
+                        }
 
+                        ignore = 1;
                         continue;
                     }
 
                     if (nextchar == 1) {
                         fg |= 8;
-                        scm[0] = textclrs[fg];
+                        fgcol = txtcols[fg];
                     } else if (nextchar == 22) {
                         fg &= ~8;
-                        scm[0] = textclrs[fg];
+                        fgcol = txtcols[fg];
                     } else if (nextchar == 38) {
                         bgfg = 2;
                     } else if (nextchar >= 30 && nextchar <= 37) {
                         fg = nextchar % 10 | (fg & 8);
-                        scm[0] = textclrs[fg];
+                        fgcol = txtcols[fg];
                     } else if (nextchar >= 40 && nextchar <= 47) {
                         bg = nextchar % 10;
-                        scm[1] = textclrs[bg];
+                        bgcol = txtcols[bg];
                     } else if (nextchar == 48) {
                         bgfg = 3;
                     } else if (nextchar == 0) {
+                        // memcpy the correct scheme
                         if (item == sel) {
-                            memcpy(scm, scheme[SchemeItemSel], sizeof(scm));
+                            selitem = 1;
+                            bgcol = col_itemselbg;
+                            fgcol = col_itemselfg;
+                            bga = alpha_itemselbg;
+                            fga = alpha_itemselfg;
 
-                            if (item->hp)
-                                memcpy(scm, scheme[SchemeItemSelPri], sizeof(scm));
+                            if (item->hp) {
+                                priitem = 1;
+                                bgcol = col_itemselpribg;
+                                fgcol = col_itemselprifg;
+
+                                fga = alpha_itemselprifg;
+                                bga = alpha_itemselpribg;
+                            }
                         } else {
                             if (itemn) {
-                                memcpy(scm, scheme[SchemeItemNorm2], sizeof(scm));
+                                bgcol = col_itemnormbg2;
+                                fgcol = col_itemnormfg2;
+                                fga = alpha_itemnormfg2;
+                                bga = alpha_itemnormbg2;
                             } else {
-                                memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
+                                bgcol = col_itemnormbg;
+                                fgcol = col_itemnormfg;
+                                fga = alpha_itemnormfg;
+                                bga = alpha_itemnormbg;
                             }
 
-                            if (item->hp)
-                                memcpy(scm, scheme[SchemeItemNormPri], sizeof(scm));
+                            if (item->hp) {
+                                priitem = 1;
+                                bgcol = col_itemnormpribg;
+                                fgcol = col_itemnormprifg;
+                                fga = alpha_itemnormprifg;
+                                bga = alpha_itemnormpribg;
+                            }
                         }
 
                         if (is_selected(item->index)) {
-                            memcpy(scm, scheme[SchemeItemMarked], sizeof(scm));
+                            bgcol = col_itemmarkedbg;
+                            fgcol = col_itemmarkedfg;
+                            fga = alpha_itemmarkedfg;
+                            bga = alpha_itemmarkedbg;
                         }
 
                         // don't color
-                        if (!coloritems) memcpy(scm, scheme[SchemeItemNorm1], sizeof(scm));
+                        if (!coloritems) {
+                            bgcol = itemn ? col_itemnormbg2 : col_itemnormbg;
+                            fgcol = itemn ? col_itemnormfg2 : col_itemnormfg;
+                            bga = itemn ? alpha_itemnormbg2 : alpha_itemnormbg;
+                            fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
+                        }
                     }
                 }
 
                 rd += alen + 2;
                 wr = 0;
-
-                drw_setscheme(drw, scm); // set scheme
 
                 continue;
             }
@@ -190,7 +245,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     // now draw any non-colored text
     apply_fribidi(buffer);
-    int r = drw_text(drw, x, y, w, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False);
+    int r = drw_text(drw, x, y, w, bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
     if (!hidehighlight) drawhighlights(item, x, y, w, leftpadding, buffer);
 
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
@@ -231,7 +286,7 @@ int drawitem(int x, int y, int w) {
 
         // draw image first
 #if USEIMAGE
-        if (!hideimage && longestedge != 0) {
+        if (!hideimage && longestedge != 0 && !protocol) { // TODO: wayland image support
             rx = ox;
             rx += MAX((imagegaps * 2) + imagewidth + menumarginh, indentitems ? x : 0);
         } else
@@ -301,14 +356,10 @@ int drawitem(int x, int y, int w) {
 
 int drawprompt(int x, int y, int w) {
     if (prompt && *prompt && !hideprompt) {
-        drw_setscheme(drw, scheme[SchemePrompt]);
-
-        x = drw_text(drw, x, y, w, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False);
+        x = drw_text(drw, x, y, w, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False, col_promptfg, col_promptbg, alpha_promptfg, alpha_promptbg);
 
         if (!hidepowerline && powerlineprompt) {
-            drw_settrans(drw, scheme[SchemePrompt], scheme[SchemeMenu]);
-            drw_arrow(drw, x, y, plw, bh, 1, promptpwlstyle);
-
+            drw_arrow(drw, x, y, plw, bh, 1, promptpwlstyle, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
             x += plw;
         }
     }
@@ -321,9 +372,6 @@ int drawinput(int x, int y, int w) {
     unsigned int curpos = 0;
     int fh = drw->font->h;
 
-    // draw input
-    drw_setscheme(drw, scheme[SchemeInput]);
-
     if (passwd) {
         censort = ecalloc(1, sizeof(text));
 
@@ -331,21 +379,20 @@ int drawinput(int x, int y, int w) {
             memcpy(&censort[i], password, strlen(text));
 
         apply_fribidi(censort);
-        drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
 
         curpos = TEXTW(censort) - TEXTW(&text[cursor]);
 
         free(censort);
     } else if (!passwd) {
         apply_fribidi(text);
-        drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2, isrtl ? fribidi_text : text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
 
         curpos = TEXTW(text) - TEXTW(&text[cursor]);
     }
 
     if ((curpos += lrpad / 2 - 1) < w && !hidecaret && cursorstate) {
-        drw_setscheme(drw, scheme[SchemeCaret]);
-        drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0);
+        drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
     }
 
     return x;
@@ -355,8 +402,7 @@ int drawlarrow(int x, int y, int w) {
     if (hidelarrow) return x;
 
     if (curr->left) { // draw left arrow
-        drw_setscheme(drw, scheme[SchemeLArrow]);
-        drw_text(drw, x, y, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False, col_larrowfg, col_larrowbg, alpha_larrowfg, alpha_larrowbg);
         x += w;
     }
 
@@ -367,8 +413,7 @@ int drawrarrow(int x, int y, int w) {
     if (hiderarrow) return x;
 
     if (next) { // draw right arrow
-        drw_setscheme(drw, scheme[SchemeRArrow]);
-        drw_text(drw, mw - w, y, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False);
+        drw_text(drw, mw - w, y, w, bh, lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False, col_rarrowfg, col_rarrowbg, alpha_rarrowfg, alpha_rarrowbg);
         x += w;
     }
 
@@ -384,13 +429,11 @@ int drawnumber(int x, int y, int w) {
         powerlinewidth = plw / 2;
     }
 
-    drw_setscheme(drw, scheme[SchemeNumber]);
-    drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, numbers, 0, pango_numbers ? True : False);
+    drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, numbers, 0, pango_numbers ? True : False, col_numfg, col_numbg, alpha_numfg, alpha_numbg);
 
     // draw powerline for match count
     if (!hidepowerline && powerlinecount) {
-        drw_settrans(drw, scheme[SchemeNumber], scheme[SchemeMenu]);
-        drw_arrow(drw, x, y, plw, bh, 0, matchcountpwlstyle);
+        drw_arrow(drw, x, y, plw, bh, 0, matchcountpwlstyle, col_menu, col_numbg, alpha_menu, alpha_numbg);
 
         x += plw;
     }
@@ -406,13 +449,13 @@ int drawmode(int x, int y, int w) {
             powerlinewidth = plw / 2;
         }
 
-        drw_setscheme(drw, scheme[SchemeMode]);
-        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, modetext, 0, pango_mode ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, modetext, 0, pango_mode ? True : False, col_modefg, col_modebg, alpha_modefg, alpha_modebg);
 
         // draw powerline for match count
         if (!hidepowerline && powerlinemode) {
-            drw_settrans(drw, scheme[SchemeMode], hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber]);
-            drw_arrow(drw, x, y, plw, bh, 0, modepwlstyle);
+            drw_arrow(drw, x, y, plw, bh, 0, modepwlstyle,
+                    hidematchcount ? col_menu : col_numbg, col_modebg,
+                    hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
 
             x += plw;
         }
@@ -431,13 +474,13 @@ int drawcaps(int x, int y, int w) {
             powerlinewidth = plw / 2;
         }
 
-        drw_setscheme(drw, scheme[SchemeCaps]);
-        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, capstext, 0, pango_caps ? True : False);
+        drw_text(drw, x, y, w, bh, lrpad / 2 + powerlinewidth, capstext, 0, pango_caps ? True : False, col_capsfg, col_capsbg, alpha_capsfg, alpha_capsbg);
 
         // draw powerline for caps lock indicator
         if (!hidepowerline && powerlinecaps) {
-            drw_settrans(drw, scheme[SchemeCaps], hidemode ? hidematchcount ? scheme[SchemeMenu] : scheme[SchemeNumber] : scheme[SchemeMode]);
-            drw_arrow(drw, x, y, plw, bh, 0, capspwlstyle);
+            drw_arrow(drw, x, y, plw, bh, 0, capspwlstyle,
+                    hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
+                    hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
 
             x += plw;
         }
@@ -447,12 +490,29 @@ int drawcaps(int x, int y, int w) {
 }
 
 void drawmenu(void) {
+#if USEWAYLAND
+    if (protocol) {
+        readfile();
+        drawmenu_layer();
+
+        wl_surface_set_buffer_scale(state.surface, 1);
+        wl_surface_attach(state.surface, state.buffer, 0, 0);
+        wl_surface_damage(state.surface, 0, 0, state.width, state.height);
+        wl_surface_commit(state.surface);
+    } else {
+        drawmenu_layer();
+    }
+#else
+    drawmenu_layer();
+#endif
+}
+
+void drawmenu_layer(void) {
     int x = 0, y = 0, w = 0;
     plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
 
     // draw menu first using menu scheme
-    drw_setscheme(drw, scheme[SchemeMenu]);
-    drw_rect(drw, 0, 0, mw, mh, 1, 1);
+    drw_rect(drw, 0, 0, mw, mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);
 
     int numberWidth = 0;
     int modeWidth = 0;
@@ -486,15 +546,30 @@ void drawmenu(void) {
             y -= bh;
             mh = (lines + 1) * bh - bh + 2 * menumarginv;
 
-            if (!win) return;
+            if (!protocol) {
+                if (!win) {
+                    return;
+                }
 
-            XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
-            drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
+                XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
+                drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
+            } else {
+                resizeclient();
+            }
         }
 #if USEIMAGE
         else if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
             y -= bh;
             mh = (lines + 1) * bh - bh + 2 * menumarginv;
+
+#if USEWAYLAND
+            if (protocol) {
+                state.width = mw;
+                state.height = mh;
+
+                set_layer_size(&state, state.width, state.height);
+            }
+#endif
         }
 #endif
 

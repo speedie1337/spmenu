@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-void eventloop(void) {
+void eventloop_x11(void) {
     XEvent ev;
     int noimg = 0;
 
@@ -14,7 +14,7 @@ void eventloop(void) {
                 cleanup();
                 exit(1);
             case ButtonPress:
-                buttonpress(&ev);
+                buttonpress_x11(&ev);
                 noimg = 0;
                 break;
             case MotionNotify: // currently does nothing
@@ -34,7 +34,7 @@ void eventloop(void) {
                     fflush(stdout);
                 }
 
-                keypress(&ev);
+                keypress_x11(&ev);
                 noimg = 1;
                 break;
             case SelectionNotify: // paste selection

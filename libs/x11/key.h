@@ -17,8 +17,8 @@ typedef struct {
 #define ShiftGr Mod5Mask
 
 static void updatenumlockmask(void);
-static void keypress(XEvent *e);
-static void grabkeyboard(void);
+static void keypress_x11(XEvent *e);
+static void grabkeyboard_x11(void);
 static void getcapsstate(void);
 
 static Key ckeys[256];

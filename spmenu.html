@@ -169,9 +169,9 @@
 <h1 class="title">spmenu man page</h1>
 </header>
 <h1 id="spmenu">spmenu</h1>
-<p>spmenu is an X11 menu application which takes standard input, parses
-it, and lets the user choose an option and sends the selected option to
-standard output.</p>
+<p>spmenu is an X11 and Wayland menu application which takes standard
+input, parses it, lets the user choose an option and sends the selected
+option to standard output.</p>
 <p>In addition to this, it also serves as a run launcher through the
 included shell script <code>spmenu_run</code>, which handles both $PATH
 listing, .desktop entries and file listing. See spmenu_run(1) for more
@@ -179,6 +179,7 @@ information related to using spmenu as a run launcher.</p>
 <p>While spmenu is based on dmenu, and is also fully compatible with
 dmenu, spmenu introduces many new features which can be useful in shell
 scripting.</p>
+<p>It also serves as a dmenu replacement for Wayland users.</p>
 <h2 id="usage">Usage</h2>
 <p>On runtime, spmenu reads from standard input (stdin). spmenu items
 are separated by a newline (<code>\n</code>). When (by default) Enter is
@@ -221,14 +222,6 @@ Set max image cache size to size
 <dt><code>-cd, --cache-dir dir</code></dt>
 <dd>
 Set cache directory to dir
-</dd>
-<dt><code>-rw, --relative-width</code></dt>
-<dd>
-Enable relative input width
-</dd>
-<dt><code>-nrw, --no-relative-width</code></dt>
-<dd>
-Disable relative input width
 </dd>
 <dt><code>-ix, --print-index</code></dt>
 <dd>
@@ -634,6 +627,14 @@ Load theme (~/.config/spmenu/theme.conf) on runtime
 <dt><code>-nltm, --no-load-theme</code></dt>
 <dd>
 Don’t load theme (~/.config/spmenu/theme.conf) on runtime
+</dd>
+<dt><code>-x11, --x11</code></dt>
+<dd>
+Run spmenu in X11 mode
+</dd>
+<dt><code>-wl, --wayland</code></dt>
+<dd>
+Run spmenu in Wayland mode
 </dd>
 <dt><code>-v, --version</code></dt>
 <dd>
@@ -1472,6 +1473,7 @@ a <code>keybinds.h</code> using
 </tbody>
 </table>
 <h2 id="xresources">.Xresources</h2>
+<p><strong>NOTE: Only applies for X11 users</strong></p>
 <p>spmenu also has .Xresources (xrdb) support built in. It reads the
 xrdb (.Xresources database) on runtime. You may disable it by passing
 -nxrdb, or enable it by padding -xrdb. You can also set this in the
@@ -1543,6 +1545,33 @@ Print the spmenu version
 Print the spmenu license
 </dd>
 </dl>
+<h2 id="wayland-support">Wayland support</h2>
+<p>Note that Wayland support is still experimental, and some features do
+not currently work under Wayland. Some will never work under Wayland due
+to limitations. These are:</p>
+<ul>
+<li>Image support
+<ul>
+<li>Images simply will not be drawn on Wayland.</li>
+<li>Will eventually be solved by replacing imlib2 with cairo.</li>
+</ul></li>
+<li><code>--x-position</code> and <code>--y-position</code> arguments
+<ul>
+<li>These arguments do not work under Wayland, because the layer_shell
+protocol doesn’t allow clients to be placed on a specific position.</li>
+</ul></li>
+<li>Embedding <code>-w</code> and window manager managed
+<code>-wm</code>
+<ul>
+<li>These arguments do not make much sense on Wayland, and embedding is
+not possible due to the original implementation using XEmbed. If the
+embed argument is passed it will simply be ignored and the window will
+be layered as normal.</li>
+</ul></li>
+<li><code>--monitor</code> argument</li>
+<li>Window borders</li>
+<li>Pasting</li>
+</ul>
 <h2 id="license">License</h2>
 <p>spmenu is licensed under the MIT license because that’s the original
 suckless license. See the included LICENSE file for more

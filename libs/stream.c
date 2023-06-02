@@ -2,7 +2,7 @@
 
 void readstdin(void) {
     char buf[sizeof text], *p;
-    size_t i, imax = 0, itemsiz = 0;
+    size_t i, itemsiz = 0;
     unsigned int tmpmax = 0;
 
     if (passwd) {
@@ -32,7 +32,6 @@ void readstdin(void) {
         drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
         if (tmpmax > inputw) {
             inputw = tmpmax;
-            imax = i;
         }
 
         items[i].index = i;
@@ -60,7 +59,6 @@ void readstdin(void) {
 #endif
     }
 
-    inputw = items ? TEXTWM(items[imax].text) : 0;
     lines = MIN(lines, i);
 }
 
@@ -128,7 +126,6 @@ void readfile(void) {
 #endif
         }
 
-        inputw = items ? TEXTWM(items[i].text) : 0;
         lines = columns == 1 ? i : MIN(i, lines); // i = number of items
 
 #if USEIMAGE
@@ -141,7 +138,10 @@ void readfile(void) {
             listcount = i;
             listchanged = 1;
 
-            resizeclient();
+            // prevents state->buffer from being NULL
+            if (!protocol) {
+                resizeclient();
+            }
         }
     } else {
         free(items);

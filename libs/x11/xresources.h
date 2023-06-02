@@ -120,7 +120,6 @@ ResourcePref resources[] = {
     { "selitempadding",              INTEGER, &selitempadding },
     { "priitempadding",              INTEGER, &priitempadding },
     { "indentitems",                 INTEGER, &indentitems },
-    { "accuratewidth",               INTEGER, &accuratewidth },
     { "alpha",                       INTEGER, &alpha },
     { "type",                        INTEGER, &type },
     { "passwd",                      INTEGER, &passwd },

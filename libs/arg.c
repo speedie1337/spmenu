@@ -159,7 +159,9 @@ void moveend(Arg *arg) {
 }
 
 void paste(Arg *arg) {
-    paste_x11(arg->i);
+    if (!protocol) {
+        paste_x11(arg->i);
+    }
 }
 
 void viewhist(Arg *arg) {
@@ -480,6 +482,7 @@ void setlines(Arg *arg) {
     }
 
     resizeclient();
+    calcoffsets();
     drawmenu();
 }
 
@@ -497,6 +500,7 @@ void setcolumns(Arg *arg) {
     }
 
     resizeclient();
+    calcoffsets();
     drawmenu();
 }
 

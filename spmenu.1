@@ -15,13 +15,13 @@
 . ftr VB CB
 . ftr VBI CBI
 .\}
-.TH "spmenu" "1" "" "1.2.1" "fancy dynamic menu"
+.TH "spmenu" "1" "" "2.0" "fancy dynamic menu"
 .hy
 .SH spmenu
 .PP
-spmenu is an X11 menu application which takes standard input, parses it,
-and lets the user choose an option and sends the selected option to
-standard output.
+spmenu is an X11 and Wayland menu application which takes standard
+input, parses it, lets the user choose an option and sends the selected
+option to standard output.
 .PP
 In addition to this, it also serves as a run launcher through the
 included shell script \f[V]spmenu_run\f[R], which handles both $PATH
@@ -32,6 +32,8 @@ launcher.
 While spmenu is based on dmenu, and is also fully compatible with dmenu,
 spmenu introduces many new features which can be useful in shell
 scripting.
+.PP
+It also serves as a dmenu replacement for Wayland users.
 .SS Usage
 .PP
 On runtime, spmenu reads from standard input (stdin).
@@ -75,12 +77,6 @@ Set max image cache size to size
 .TP
 \f[V]-cd, --cache-dir dir\f[R]
 Set cache directory to dir
-.TP
-\f[V]-rw, --relative-width\f[R]
-Enable relative input width
-.TP
-\f[V]-nrw, --no-relative-width\f[R]
-Disable relative input width
 .TP
 \f[V]-ix, --print-index\f[R]
 Print index instead of actual text
@@ -387,6 +383,12 @@ Load theme (\[ti]/.config/spmenu/theme.conf) on runtime
 .TP
 \f[V]-nltm, --no-load-theme\f[R]
 Don\[cq]t load theme (\[ti]/.config/spmenu/theme.conf) on runtime
+.TP
+\f[V]-x11, --x11\f[R]
+Run spmenu in X11 mode
+.TP
+\f[V]-wl, --wayland\f[R]
+Run spmenu in Wayland mode
 .TP
 \f[V]-v, --version\f[R]
 Print spmenu version to stdout
@@ -1448,6 +1450,8 @@ T}
 .TE
 .SS .Xresources
 .PP
+\f[B]NOTE: Only applies for X11 users\f[R]
+.PP
 spmenu also has .Xresources (xrdb) support built in.
 It reads the xrdb (.Xresources database) on runtime.
 You may disable it by passing -nxrdb, or enable it by padding -xrdb.
@@ -1535,6 +1539,42 @@ Print the spmenu version
 .TP
 \f[V]spmenu:license\f[R]
 Print the spmenu license
+.SS Wayland support
+.PP
+Note that Wayland support is still experimental, and some features do
+not currently work under Wayland.
+Some will never work under Wayland due to limitations.
+These are:
+.IP \[bu] 2
+Image support
+.RS 2
+.IP \[bu] 2
+Images simply will not be drawn on Wayland.
+.IP \[bu] 2
+Will eventually be solved by replacing imlib2 with cairo.
+.RE
+.IP \[bu] 2
+\f[V]--x-position\f[R] and \f[V]--y-position\f[R] arguments
+.RS 2
+.IP \[bu] 2
+These arguments do not work under Wayland, because the layer_shell
+protocol doesn\[cq]t allow clients to be placed on a specific position.
+.RE
+.IP \[bu] 2
+Embedding \f[V]-w\f[R] and window manager managed \f[V]-wm\f[R]
+.RS 2
+.IP \[bu] 2
+These arguments do not make much sense on Wayland, and embedding is not
+possible due to the original implementation using XEmbed.
+If the embed argument is passed it will simply be ignored and the window
+will be layered as normal.
+.RE
+.IP \[bu] 2
+\f[V]--monitor\f[R] argument
+.IP \[bu] 2
+Window borders
+.IP \[bu] 2
+Pasting
 .SS License
 .PP
 spmenu is licensed under the MIT license because that\[cq]s the original

@@ -14,7 +14,7 @@ void updatenumlockmask(void) {
     XFreeModifiermap(modmap);
 }
 
-void keypress(XEvent *e) {
+void keypress_x11(XEvent *e) {
     updatenumlockmask();
     {
         unsigned int i;
@@ -73,7 +73,7 @@ void keypress(XEvent *e) {
     }
 }
 
-void grabkeyboard(void) {
+void grabkeyboard_x11(void) {
     struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
     int i;
 
