@@ -36,13 +36,6 @@
 #define USERTL 1
 #endif
 
-// check if we should enable pango or use xft
-#ifndef PANGO
-#define USEPANGO 0
-#else
-#define USEPANGO 1
-#endif
-
 // check if we should enable image support
 #ifndef IMAGE
 #define USEIMAGE 0
