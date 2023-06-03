@@ -64,6 +64,12 @@ void readargs(int argc, char *argv[]) {
         }
     }
 
+    if (protocol) {
+        if (connect_display(&state)) {
+            protocol = 0;
+        }
+    }
+
     // init/read xrdb
     if (xresources && !protocol) {
 #if USEXRESOURCES
