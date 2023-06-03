@@ -156,5 +156,5 @@ email me.
 
 - spmenu(1)
 - [spmenu wiki](https://spmenu.speedie.site)
-- [spmenu git repository](https://git.speedie.site/spmenu)
+- [spmenu git repository](https://git.speedie.site/speedie/spmenu)
 - [spmenu GitHub mirror](https://github.com/speediegq/spmenu)

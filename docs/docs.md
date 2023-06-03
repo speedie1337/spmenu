@@ -773,7 +773,7 @@ it's kind of inconvenient. For this reason, spmenu reads `.theme.conf`
 and `.config/spmenu/theme.conf` on startup as well. To apply a basic theme,
 you simply replace theme.conf with the theme you want to use.
 
-There is a [Git repository](https://git.speedie.site/spmenu-themes)
+There is a [Git repository](https://git.speedie.site/speedie/spmenu-themes)
 which contains a bunch of themes written for spmenu,
 and you can use them as a template when making your own themes.
 You may also contribute to this repository if you have a theme to show.
@@ -784,7 +784,7 @@ This is by design, as these options should be set by the user, not the theme.
 
 This is not very convenient if you have many themes because you constantly
 have to replace your theme file, so theme managers exist to make this a
-bit easier. [spmenuify](https://git.speedie.site/spmenuify) is the official
+bit easier. [spmenuify](https://git.speedie.site/speedie/spmenuify) is the official
 theme manager, but you could use another one or write your own.
 
 ## Run launcher
@@ -863,5 +863,5 @@ email me.
 
 - spmenu_run(1)
 - [spmenu wiki](https://spmenu.speedie.site)
-- [spmenu git repository](https://git.speedie.site/spmenu)
+- [spmenu git repository](https://git.speedie.site/speedie/spmenu)
 - [spmenu GitHub mirror](https://github.com/speediegq/spmenu)

@@ -55,11 +55,11 @@ disabled during compile time.
 le](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS) for more information.
 
 - If you are on Arch GNU/Linux, you can add
-[my repository](https://git.speedie.site/speedie-repository) which includes
+[my repository](https://git.speedie.site/speedie/speedie-repository) which includes
 `spmenu` as well as other useful packages. Then simply `pacman -S spmenu`.
 
 - Or if you are on Gentoo GNU/Linux, you can add
-[my overlay](https://git.speedie.site/speedie-overlay) which includes
+[my overlay](https://git.speedie.site/speedie/speedie-overlay) which includes
 `x11-misc/spmenu` as well as other useful packages. Then simply `emerge spmenu`.
 
 If you still need/want to manually compile, follow along with manual compilation.
@@ -84,7 +84,7 @@ have to find those packages in your distribution repositories.
 
 To clone the repository using Git:
 
-`git clone https://git.speedie.site/spmenu`
+`git clone https://git.speedie.site/speedie/spmenu`
 
 `cd spmenu/`
 
