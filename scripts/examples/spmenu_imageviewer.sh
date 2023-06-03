@@ -1,6 +1,9 @@
 #!/bin/sh
-# proof of concept script allowing you to view images in spmenu
-# usage: spmenu_imageviewer.sh image1 image2 ...
+# spmenu_imageviewer.sh
+# Proof of concept script allowing you to view images in spmenu
+# Usage: spmenu_imageviewer.sh image1 image2 ...
+#
+# See LICENSE file for copyright and license details.
 [ ! -f "$1" ] && printf "You must specify an image to view.\n" && exit 1
 
 genlist() {

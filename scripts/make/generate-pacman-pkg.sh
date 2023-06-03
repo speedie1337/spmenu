@@ -1,4 +1,8 @@
 #!/bin/sh
+# generate-pacman-pkg.sh
+# Generate spmenu package for Arch and Pacman
+#
+# See LICENSE file for copyright and license details.
 [ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
 version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 

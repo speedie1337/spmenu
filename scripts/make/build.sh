@@ -1,5 +1,6 @@
 #!/bin/bash
 # spmenu build script
+# See LICENSE file for copyright and license details.
 warn="${warn:-true}"
 reconfigure="${reconfigure:-true}"
 version="${version:-1.1}"

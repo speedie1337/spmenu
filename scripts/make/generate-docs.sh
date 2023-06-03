@@ -1,4 +1,8 @@
 #!/bin/sh
+# generate-docs.sh
+# Generate documentation from docs.md
+#
+# See LICENSE file for copyright and license details.
 [ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
 version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 printf "%% spmenu(1) ${version} | fancy dynamic menu\n" > .man.md

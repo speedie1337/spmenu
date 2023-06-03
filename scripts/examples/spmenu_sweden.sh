@@ -1,4 +1,9 @@
 #!/bin/sh
+# spmenu_sweden.sh
+# Just the swedish flag using SGR sequences, serves as a good example on how to do background colors.
+#
+# See LICENSE file for copyright and license details.
+
 [ -z "$fg_blue" ] && fg_blue='\033[1;34m'
 [ -z "$fg_yellow" ] && fg_yellow='\033[1;35m'
 [ -z "$bg_blue" ] && bg_blue='\033[1;44m'

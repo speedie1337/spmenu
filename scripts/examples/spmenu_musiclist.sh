@@ -3,6 +3,8 @@
 #
 # This script lists out songs in a path you give to it and also displays the cover art for that song if it can be found.
 # It serves as an example of how image drawing can be done with spmenu.
+#
+# See LICENSE file for copyright and license details.
 [ -z "$dir" ] && dir="$1"
 [ -z "$maxcount" ] && maxcount="$2"
 [ -z "$startline" ] && startline="$3"

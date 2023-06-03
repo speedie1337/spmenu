@@ -1,6 +1,8 @@
 #!/bin/bash
 # generate-theme.sh
 # Generate a theme from a list of colors
+#
+# See LICENSE file for copyright and license details.
 
 declare -a color
 

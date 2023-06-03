@@ -1,5 +1,10 @@
 #!/bin/sh
+# generate-headers.h
+# Generate headers using wayland-scanner
+#
+# See LICENSE file for copyright and license details.
 [ ! -x "$(command -v wayland-scanner)" ] && exit 1
+
 wayland-scanner \
     client-header \
     protocols/wlr-layer-shell-unstable-v1.xml \

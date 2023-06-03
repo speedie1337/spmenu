@@ -1,4 +1,8 @@
 #!/bin/sh
+# spmenu_itemcounter.sh
+# Example script which adds a new entry to spmenu every second.
+#
+# See LICENSE file for copyright and license details.
 func() {
     rm -f /tmp/fl
 
