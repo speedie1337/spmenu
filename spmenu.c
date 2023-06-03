@@ -482,6 +482,12 @@ void handle(void) {
         loadhistory();
         store_image_vars();
 
+        // Disable some X11 only features
+        menupaddingv = menupaddingh = 0;
+        xpos = ypos = 0;
+        borderwidth = 0;
+        managed = 0;
+
         drw = drw_create_wl(protocol);
 
         if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
