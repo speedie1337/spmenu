@@ -472,6 +472,12 @@ void handle(void) {
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
 #if USEWAYLAND
     } else {
+        if (connect_display(&state)) {
+            protocol = 0;
+            handle();
+            return;
+        }
+
         loadhistory();
         store_image_vars();
 

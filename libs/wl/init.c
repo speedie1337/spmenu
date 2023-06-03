@@ -27,9 +27,7 @@ void handle_wl(void) {
     init_disp(&state);
 
     if (no_display) {
-        protocol = 0;
-        handle();
-        return;
+        die("spmenu: failed to connect to wayland display");
     }
 
     create_layer(&state, "spmenu");

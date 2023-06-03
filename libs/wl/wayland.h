@@ -129,6 +129,7 @@ static void buttonpress_wl(uint32_t button, double ex, double ey);
 static int is_correct_modifier(struct state *state, char *modifier);
 static int roundtrip(struct state *state);
 static int init_disp(struct state *state);
+static int connect_display(struct state *state);
 static int init_keys(struct state *state);
 static int create_layer(struct state *state, char *name);
 static int anchor_layer(struct state *state, int position);

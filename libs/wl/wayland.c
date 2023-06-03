@@ -491,14 +491,21 @@ int roundtrip(struct state *state) {
     }
 }
 
+int connect_display(struct state *state) {
+    state->display = wl_display_connect(NULL);
+
+    if (state->display) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
 /* If this function returns 1, something went wrong.
  * This may be that the user is using X11, or a compositor like Mutter.
  * In this case, it may be a good idea to fall back to X11.
  */
 int init_disp(struct state *state) {
-    state->display = wl_display_connect(NULL);
-
-    // Open display
     if (!state->display) {
         return 1;
     } else {
