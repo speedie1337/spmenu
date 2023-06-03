@@ -34,7 +34,6 @@ It also serves as a dmenu replacement for Wayland users.
   - If you're using macOS, XQuartz is a dependency instead.
   - If you're using Wayland, `xorg-xwayland` is a dependency.
 - libXrender
-- freetype
 - imlib2
   - Used for image support, can be disabled during compile time.
 - libXinerama

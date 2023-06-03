@@ -8,7 +8,7 @@ url="https://spmenu.speedie.site"
 arch=(i686 x86_64)
 license=(MIT)
 depends=(
-    sh
+    bash
     libxinerama
     cairo
     pango

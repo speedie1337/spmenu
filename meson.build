@@ -16,7 +16,6 @@ project_source_files = [
 project_dependencies = [
   dependency('x11'),
   dependency('xrender'),
-  dependency('freetype2'),
   dependency('cairo'),
   dependency('pango'),
   dependency('pangocairo'),
