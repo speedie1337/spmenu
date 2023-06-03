@@ -1,7 +1,8 @@
-! spmenu default configuration
+! spmenu .Xresources file
 !
-! You may copy this configuration file to ~/.config/spmenu/spmenurc OR ~/.spmenurc, it will be loaded on runtime.
-! It is .Xresources syntax. As such you may also append it to your existing .Xresources configuration, use programs like Pywal to have universal colorschemes.
+! This is a .Xresources file with all possible .Xresources values defined, except global color values.
+! Do note that it only works on X11, Wayland users cannot use it because .Xresources is X11 specific.
+! To load it,  run `xrdb /path/to/file` and then run spmenu as normal.
 
 !! Fonts
 spmenu.font:                Noto Sans Mono 8
