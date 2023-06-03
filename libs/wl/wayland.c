@@ -436,7 +436,7 @@ void draw_sf(struct state *state) {
     }
 
     if (state->buffer == NULL) {
-        die("state->buffer == null");
+        die("state->buffer == NULL");
     }
 
     drw_create_surface_wl(drw, state->data, state->width, state->height);
