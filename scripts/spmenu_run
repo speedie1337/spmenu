@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # spmenu_run
 # Feature rich run launcher, file lister and .desktop launcher for spmenu
+#
+# See LICENSE file for copyright and license details.
 
 # Set basic variables, in case the config isn't valid, env variables and config file can override these
 CONFDIR="${CONFDIR:-${XDG_CONFIG_HOME:-$HOME/.config}}"

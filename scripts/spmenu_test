@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # spmenu test script
+# See LICENSE file for copyright and license details.
 
 PREFIX="${PREFIX:-/usr}"
 
