@@ -12,5 +12,5 @@ command -v makepkg > /dev/null || exit 1
 cp -f PKGBUILD PKGBUILD.orig
 sed -i "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
 makepkg -sfr --sign || exit 1
-rm -rf src/ pkg/ *.tar.gz
+rm -rf src/ pkg/
 cp PKGBUILD spmenu-${version}.PKGBUILD; mv PKGBUILD.orig PKGBUILD
