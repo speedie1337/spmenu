@@ -14,19 +14,13 @@ loadconf() {
     [ ! -f spmenu.c ] && printf "You're probably in the wrong directory.\n" && exit 1
     [ -x "buildconf" ] && [ ! -x "buildconf_dev" ] && source buildconf
     [ -x "buildconf_dev" ] && source buildconf_dev
-
-    # mandatory deps
-    [ "$freetype" = "false" ] && printf "Freetype not found. Install it.\n" && exit 1
-    [ "$openssl" = "false" ] && [ "$imlib2" = "true" ] && printf "OpenSSL not found. Install it.\n" && exit 1
-    [ "$xrender" = "false" ] && printf "libXrender not found. Install it.\n" && exit 1
-    [ "$x11" = "false" ] && printf "libX11 not found. Install it.\n" && exit 1
-    [ "$xft" = "false" ] && printf "libXft not found. Install it.\n" && exit 1
 }
 
 build() {
     [ ! -f "meson.build" ] && printf "meson.build does not exist.\n" && exit 1
     [ "$gen_manual" != "false" ] && [ -x "$(command -v pandoc)" ] && scripts/make/generate-docs.sh
     [ -z "$wayland" ] && wayland=true
+    [ -z "$x11" ] && x11=true
 
     cp -f meson.build meson.build.orig
 
@@ -45,8 +39,9 @@ build() {
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
             -Dwayland="$wayland" \
+            -Dx11="$x11" \
             --prefix "$prefix" \
-            build
+            build || exit 1
     else
         meson setup \
             -Dxresources="$xresources" $STATIC \
@@ -56,8 +51,9 @@ build() {
             -Dopenssl="$openssl" \
             -Dlibconfig="$libconfig" \
             -Dwayland="$wayland" \
+            -Dx11="$x11" \
             --prefix "$prefix" \
-            build
+            build || exit 1
     fi
 
     ninja -C build

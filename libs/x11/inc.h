@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#if USEX
 #include "lib.h"
 
 #include "def.h"
@@ -10,3 +11,4 @@
 #include "mouse.h"
 #include "focus.h"
 #include "clipboard.h"
+#endif

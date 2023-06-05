@@ -33,8 +33,15 @@ typedef struct {
     Arg arg;
 } WlKey;
 
+typedef struct {
+    unsigned int click;
+    unsigned int button;
+    void (*func)(Arg *arg);
+    Arg arg;
+} WlMouse;
+
 static WlKey wl_ckeys[256];
-static Mouse wl_cbuttons[256];
+static WlMouse wl_cbuttons[256];
 
 #define WL_CtrlShift "CtrlShift"
 #define WL_CtrlShiftSuper "CtrlShiftSuper"

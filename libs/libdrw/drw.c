@@ -11,6 +11,18 @@
 #include "drw.h"
 #include "../sl/main.h"
 
+#ifndef X11
+#define USEX 0
+#else
+#define USEX 1
+#endif
+
+#ifndef WAYLAND
+#define USEWAYLAND 0
+#else
+#define USEWAYLAND 1
+#endif
+
 void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
     unsigned int hex;
 
@@ -23,6 +35,7 @@ void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
     cairo_set_source_rgba(cr, r, g, b, alpha / 255.0);
 }
 
+#if USEX
 Drw *drw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol) {
     Drw *drw = ecalloc(1, sizeof(Drw));
 
@@ -41,7 +54,9 @@ Drw *drw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsig
 
     return drw;
 }
+#endif
 
+#if USEWAYLAND
 Drw *drw_create_wl(int protocol) {
     Drw *drw = ecalloc(1, sizeof(Drw));
 
@@ -57,6 +72,7 @@ void drw_create_surface_wl(Drw *drw, void *data, int32_t w, int32_t h) {
     drw->surface = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
     drw->d = cairo_create(drw->surface);
 }
+#endif
 
 void drw_resize(Drw *drw, unsigned int w, unsigned int h) {
     if (!drw)
@@ -65,18 +81,21 @@ void drw_resize(Drw *drw, unsigned int w, unsigned int h) {
     drw->w = w;
     drw->h = h;
 
+#if USEX
     if (drw->drawable)
         XFreePixmap(drw->dpy, drw->drawable);
 
     drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, drw->depth);
+#endif
 }
 
 void drw_free(Drw *drw) {
-
+#if USEX
     if (!drw->protocol) {
         XFreePixmap(drw->dpy, drw->drawable);
         XFreeGC(drw->dpy, drw->gc);
     }
+#endif
 
     drw_font_free(drw->font);
     free(drw);
@@ -292,10 +311,12 @@ void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
     if (!drw)
         return;
 
+#if USEX
     if (!drw->protocol) {
         XCopyArea(drw->dpy, drw->drawable, win, drw->gc, x, y, w, h, x, y);
         XSync(drw->dpy, False);
     }
+#endif
 }
 
 unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup) {
@@ -338,17 +359,21 @@ Cur * drw_cur_create(Drw *drw, int shape) {
     if (!drw || !(cur = ecalloc(1, sizeof(Cur))))
         return NULL;
 
+#if USEX
     cur->cursor = XCreateFontCursor(drw->dpy, shape);
+#endif
 
     return cur;
 }
 
 void drw_cur_free(Drw *drw, Cur *cursor) {
+#if USEX
     if (!cursor)
         return;
 
     XFreeCursor(drw->dpy, cursor->cursor);
     free(cursor);
+#endif
 }
 
 unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup) {

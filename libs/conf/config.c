@@ -568,11 +568,13 @@ void conf_init(void) {
             // look up
             config_setting_lookup_string(conf, "modifier", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(ml); j++) {
                 if (!strcmp(ml[j].mod, strdup(dest))) {
                     ckeys[i].mod = ml[j].modifier;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(wml); j++) {
@@ -583,7 +585,9 @@ void conf_init(void) {
 #endif
 
             if (config_setting_lookup_int(conf, "mode", &nmode)) {
+#if USEX
                 ckeys[i].mode = nmode;
+#endif
 #if USEWAYLAND
                 wl_ckeys[i].mode = nmode;
 #endif
@@ -591,11 +595,13 @@ void conf_init(void) {
 
             config_setting_lookup_string(conf, "key", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(kl); j++) {
                 if (!strcmp(kl[j].key, strdup(dest))) {
                     ckeys[i].keysym = kl[j].keysym;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(wkl); j++) {
@@ -609,7 +615,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
                     ckeys[i].func = fl[j].func;
+#endif
 #if USEWAYLAND
                     wl_ckeys[i].func = fl[j].func;
 #endif
@@ -620,7 +628,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
                     ckeys[i].arg = al[j].arg;
+#endif
 #if USEWAYLAND
                     wl_ckeys[i].arg = al[j].arg;
 #endif
@@ -641,7 +651,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(ctp); j++) {
                 if (!strcmp(ctp[j].tclick, strdup(dest))) {
+#if USEX
                     cbuttons[i].click = ctp[j].click;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].click = ctp[j].click;
 #endif
@@ -650,11 +662,13 @@ void conf_init(void) {
 
             config_setting_lookup_string(conf, "button", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(btp); j++) {
                 if (!strcmp(btp[j].click, strdup(dest))) {
                     cbuttons[i].button = btp[j].button;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(w_btp); j++) {
@@ -668,7 +682,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
                     cbuttons[i].func = fl[j].func;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].func = fl[j].func;
 #endif
@@ -679,7 +695,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
                     cbuttons[i].arg = al[j].arg;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].arg = al[j].arg;
 #endif
@@ -743,7 +761,9 @@ void conf_init(void) {
     if (key_bind != NULL && loadbinds) {
         int nmode = 0;
 
+#if USEX
         memset(ckeys, '\0', LENGTH(ckeys)-1);
+#endif
 #if USEWAYLAND
         memset(wl_ckeys, '\0', LENGTH(wl_ckeys)-1);
 #endif
@@ -753,11 +773,13 @@ void conf_init(void) {
             // look up
             config_setting_lookup_string(conf, "modifier", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(ml); j++) {
                 if (!strcmp(ml[j].mod, strdup(dest))) {
                     ckeys[i].mod = ml[j].modifier;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(wml); j++) {
@@ -768,7 +790,9 @@ void conf_init(void) {
 #endif
 
             if (config_setting_lookup_int(conf, "mode", &nmode)) {
+#if USEX
                 ckeys[i].mode = nmode;
+#endif
 #if USEWAYLAND
                 wl_ckeys[i].mode = nmode;
 #endif
@@ -776,11 +800,13 @@ void conf_init(void) {
 
             config_setting_lookup_string(conf, "key", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(kl); j++) {
                 if (!strcmp(kl[j].key, strdup(dest))) {
                     ckeys[i].keysym = kl[j].keysym;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(wkl); j++) {
@@ -794,7 +820,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
                     ckeys[i].func = fl[j].func;
+#endif
 #if USEWAYLAND
                     wl_ckeys[i].func = fl[j].func;
 #endif
@@ -805,7 +833,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
                     ckeys[i].arg = al[j].arg;
+#endif
 #if USEWAYLAND
                     wl_ckeys[i].arg = al[j].arg;
 #endif
@@ -819,7 +849,9 @@ void conf_init(void) {
     // load options binds.mouse
     config_setting_t *mouse_bind = config_lookup(&bind, "bind.mouse");
     if (mouse_bind != NULL && loadbinds) {
+#if USEX
         memset(cbuttons, '\0', LENGTH(cbuttons)-1);
+#endif
         for (unsigned int i = 0; i < config_setting_length(mouse_bind); ++i) {
             config_setting_t *conf = config_setting_get_elem(mouse_bind, i);
 
@@ -827,7 +859,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(ctp); j++) {
                 if (!strcmp(ctp[j].tclick, strdup(dest))) {
+#if USEX
                     cbuttons[i].click = ctp[j].click;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].click = ctp[j].click;
 #endif
@@ -836,11 +870,13 @@ void conf_init(void) {
 
             config_setting_lookup_string(conf, "button", &dest);
 
+#if USEX
             for (int j = 0; j < LENGTH(btp); j++) {
                 if (!strcmp(btp[j].click, strdup(dest))) {
                     cbuttons[i].button = btp[j].button;
                 }
             }
+#endif
 
 #if USEWAYLAND
             for (int j = 0; j < LENGTH(w_btp); j++) {
@@ -854,7 +890,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
                     cbuttons[i].func = fl[j].func;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].func = fl[j].func;
 #endif
@@ -865,7 +903,9 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
                     cbuttons[i].arg = al[j].arg;
+#endif
 #if USEWAYLAND
                     wl_cbuttons[i].arg = al[j].arg;
 #endif

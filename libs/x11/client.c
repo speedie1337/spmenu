@@ -10,37 +10,6 @@ void hexconv(const char *hex, unsigned short *r, unsigned short *g, unsigned sho
     *b = col & 0xFF;
 }
 
-void store_image_vars(void) {
-#if USEIMAGE
-    longestedge = MAX(imagewidth, imageheight);
-
-    if (!imagew || !imageh || !imageg) {
-        imagew = imagewidth;
-        imageh = imageheight;
-        imageg = imagegaps;
-    }
-#endif
-}
-
-void set_mode(void) {
-    if (!type) { // no typing allowed, require normal mode
-        mode = 0;
-    }
-
-    // set default mode, must be done before the event loop or keybindings will not work
-    if (mode) {
-        curMode = 1;
-        allowkeys = 1;
-
-        strcpy(modetext, instext);
-    } else {
-        curMode = 0;
-        allowkeys = !curMode;
-
-        strcpy(modetext, normtext);
-    }
-}
-
 void create_window_x11(int x, int y, int w, int h) {
     XSetWindowAttributes swa;
 

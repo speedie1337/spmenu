@@ -547,12 +547,14 @@ void drawmenu_layer(void) {
             mh = (lines + 1) * bh - bh + 2 * menumarginv;
 
             if (!protocol) {
+#if USEX
                 if (!win) {
                     return;
                 }
 
                 XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
                 drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
+#endif
             } else {
                 resizeclient();
             }
@@ -603,5 +605,7 @@ void drawmenu_layer(void) {
             drawcaps(mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
         }
 
+#if USEX
         drw_map(drw, win, 0, 0, mw, mh);
+#endif
     }

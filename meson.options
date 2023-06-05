@@ -6,6 +6,20 @@ option(
 )
 
 option(
+  'x11',
+  type : 'boolean',
+  value : true,
+  description : 'Enable X11 support'
+)
+
+option(
+  'xinerama',
+  type : 'boolean',
+  value : true,
+  description : 'Enable multi-monitor support using libXinerama'
+)
+
+option(
   'imlib2',
   type : 'boolean',
   value : true,
@@ -38,11 +52,4 @@ option(
   type : 'boolean',
   value : true,
   description : 'Enable configuration file support'
-)
-
-option(
-  'xinerama',
-  type : 'boolean',
-  value : true,
-  description : 'Enable multi-monitor support using libXinerama'
 )

@@ -1,10 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 #include "../theme/theme.h"
 
+#if USEX
 typedef struct {
     char *key;
     KeySym keysym;
 } KeyList;
+#endif
 
 #if USEWAYLAND
 typedef struct {
@@ -13,10 +15,12 @@ typedef struct {
 } WlKeyList;
 #endif
 
+#if USEX
 typedef struct {
     char *mod;
     unsigned int modifier;
 } ModList;
+#endif
 
 #if USEWAYLAND
 typedef struct {
@@ -353,7 +357,6 @@ static FuncList fl[] = {
     { "moveprev",       moveprev },
     { "moveitem",       moveitem },
     { "paste",          paste },
-    { "pastesel",       paste },
     { "restoresel",     restoresel },
     { "clear",          clear },
     { "clearins",       clearins },
@@ -391,6 +394,7 @@ static FuncList fl[] = {
 };
 
 // list of modifiers that can be used in the config file
+#if USEX
 static ModList ml[] = {
     { "Ctrl+Shift", ShiftMask|ControlMask },
     { "Ctrl+Shift+Super", ShiftMask|ControlMask|Mod4Mask },
@@ -409,6 +413,7 @@ static ModList ml[] = {
     { "None",    0 },
     { "0",       0 },
 };
+#endif
 
 #if USEWAYLAND
 static WlModList wml[] = {
@@ -431,6 +436,7 @@ static WlModList wml[] = {
 
 // list of keys that can be used in the config file
 // expand this array if you want more
+#if USEX
 static KeyList kl[] = {
     { "None",       0 },
     { "Space",      XK_space },
@@ -532,6 +538,7 @@ static KeyList kl[] = {
     { "Next",       XK_Next },
     { "Prior",      XK_Prior },
 };
+#endif
 
 // list of keys that can be used in the config file
 // expand this array if you want more
@@ -639,23 +646,18 @@ static WlKeyList wkl[] = {
 };
 #endif
 
+#
 typedef struct {
     char *click;
     unsigned int button;
 } ButtonType;
-
-#if USEWAYLAND
-typedef struct {
-    char *click;
-    unsigned int button;
-} WlButtonType;
-#endif
 
 typedef struct {
     char *tclick;
     unsigned int click;
 } ClickType;
 
+#if USEX
 static ButtonType btp[] = {
     { "Left Click",   Button1 },
     { "Middle Click", Button2 },
@@ -663,9 +665,10 @@ static ButtonType btp[] = {
     { "Scroll Up",    Button4 },
     { "Scroll Down",  Button5 },
 };
+#endif
 
 #if USEWAYLAND
-static WlButtonType w_btp[] = {
+static ButtonType w_btp[] = {
     { "Left Click",   WL_Left },
     { "Middle Click", WL_Middle },
     { "Right Click",  WL_Right },

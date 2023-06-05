@@ -131,6 +131,7 @@ void drawimage(void) {
     }
 }
 
+#if USEX
 void setimageopts(void) {
     imlib_set_cache_size(8192 * 1024);
     imlib_context_set_blend(1);
@@ -141,6 +142,7 @@ void setimageopts(void) {
     imlib_context_set_colormap(cmap);
     imlib_context_set_drawable(win);
 }
+#endif
 
 void createifnexist(const char *dir) {
     // exists, so return
@@ -336,6 +338,7 @@ void jumptoindex(unsigned int index) {
 }
 
 void resizetoimageheight(int imageheight) {
+#if USEX
     int omh = mh, olines = lines;
     lines = reallines;
     int wtr = 0;
@@ -424,7 +427,9 @@ void resizetoimageheight(int imageheight) {
         }
     }
 
-    if (!win || omh == mh) {
+    if (
+        !win ||
+        omh == mh) {
         return;
     }
 
@@ -443,5 +448,16 @@ void resizetoimageheight(int imageheight) {
     }
 
     drawmenu();
+#endif
+}
+
+void store_image_vars(void) {
+    longestedge = MAX(imagewidth, imageheight);
+
+    if (!imagew || !imageh || !imageg) {
+        imagew = imagewidth;
+        imageh = imageheight;
+        imageg = imagegaps;
+    }
 }
 #endif

@@ -6,6 +6,7 @@
  */
 
 /* X11 hardcoded keybinds */
+#if USEX
 static Key keys[] = {
     /* mode    modifier        key           function         argument
      *
@@ -79,6 +80,7 @@ static Key keys[] = {
     /* insert mode */
     { 1,       0,              XK_Escape,    switchmode,      {0} },
 };
+#endif
 
 /* Wayland hardcoded keybinds */
 #if USEWAYLAND

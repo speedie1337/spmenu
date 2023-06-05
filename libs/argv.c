@@ -64,13 +64,16 @@ void readargs(int argc, char *argv[]) {
         }
     }
 
+#if USEWAYLAND
     if (protocol) {
         if (connect_display(&state)) {
             protocol = 0;
         }
     }
+#endif
 
     // init/read xrdb
+#if USEX
     if (xresources && !protocol) {
 #if USEXRESOURCES
         XrmInitialize();
@@ -79,6 +82,7 @@ void readargs(int argc, char *argv[]) {
         ; // avoids a warning
 #endif
     }
+#endif
 
     // no arguments
     for (i = 1; i < argc; i++)
@@ -367,7 +371,9 @@ void readargs(int argc, char *argv[]) {
                 imageheight = imagewidth;
 
         } else if (!strcmp(argv[i], "-w") || (!strcmp(argv[i], "--embed"))) { // embedding window id
+#if USEX
             embed = argv[++i];
+#endif
         } else if (!strcmp(argv[i], "-n") || (!strcmp(argv[i], "--preselect"))) { // preselected item
             preselected = atoi(argv[++i]);
 
@@ -492,6 +498,9 @@ void readargs(int argc, char *argv[]) {
             else
                 fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
+#if !USEX
+    protocol = 1;
+#endif
 #if !USEWAYLAND
     protocol = 0;
 #endif

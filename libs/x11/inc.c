@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
+#if USEX
 #include "xim.c"
 #include "key.c"
 #include "mouse.c"
@@ -11,3 +12,4 @@
 #include "init.c"
 #include "focus.c"
 #include "clipboard.c"
+#endif

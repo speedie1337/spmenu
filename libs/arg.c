@@ -159,9 +159,11 @@ void moveend(Arg *arg) {
 }
 
 void paste(Arg *arg) {
+#if USEX
     if (!protocol) {
         paste_x11(arg->i);
     }
+#endif
 }
 
 void viewhist(Arg *arg) {

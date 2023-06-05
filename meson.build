@@ -14,8 +14,6 @@ project_source_files = [
 ]
 
 project_dependencies = [
-  dependency('x11'),
-  dependency('xrender'),
   dependency('cairo'),
   dependency('pango'),
   dependency('pangocairo'),
@@ -38,6 +36,12 @@ build_args = [
   '-Wno-sign-compare',
 ]
 
+if get_option('x11')
+  project_dependencies += [ dependency('x11') ]
+  project_dependencies += [ dependency('xrender') ]
+  build_args += [ '-DX11' ]
+endif
+
 if get_option('wayland')
   project_dependencies += [ dependency('wayland-client') ]
   project_dependencies += [ dependency('wayland-scanner') ]
@@ -53,7 +57,7 @@ if get_option('wayland')
   run_command('scripts/make/generate-headers.sh', check : false)
 endif
 
-if get_option('imlib2') and get_option('openssl')
+if get_option('imlib2') and get_option('openssl') and get_option('x11')
   project_dependencies += [ dependency('imlib2') ]
   project_dependencies += [ dependency('openssl') ]
   build_args += [ '-DIMAGE' ]
@@ -64,7 +68,7 @@ if get_option('fribidi')
   build_args += [ '-DRTL' ]
 endif
 
-if get_option('xinerama')
+if get_option('xinerama') and get_option('x11')
   project_dependencies += [ dependency('xinerama') ]
   build_args += [ '-DXINERAMA' ]
 endif

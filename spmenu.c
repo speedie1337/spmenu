@@ -1,15 +1,4 @@
 /* spmenu - fancy dynamic menu
- *
- * If you're looking for functions used to draw text, see 'libs/draw.c'
- * If you're looking for wrapper functions used inside the draw functions, see 'libs/libdrw/drw.c'
- * If you're looking for functions used to draw images, see 'libs/img.c'
- * If you're looking for the .Xresources array, see 'libs/x11/xresources.h'
- *
- * You don't need to edit spmenu.c if you aren't making big changes to the software.
- *
- * After making changes, run `./build.sh` to attempt to build the software.
- * `scripts/make/generate-docs.sh` will generate a man page from 'docs/docs.md', which is a Markdown document. Run this before commiting.
- *
  * See LICENSE file for copyright and license details.
  */
 #include <ctype.h>
@@ -71,6 +60,13 @@
 #define USEWAYLAND 1
 #endif
 
+// check if we should enable X11 support
+#ifndef X11
+#define USEX 0
+#else
+#define USEX 1
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>
@@ -109,7 +105,9 @@ static char text[BUFSIZ] = "";
 static char numbers[NUMBERSBUFSIZE] = "";
 
 // keybinds
+#if USEX
 static int numlockmask = 0;
+#endif
 static int capslockstate = 0;
 
 static int bh, mw, mh; // height of each item, menu width, menu height
@@ -133,8 +131,10 @@ static unsigned int sel_size = 0;
 static int protocol_override = 0;
 static int itemn = 0; // item number
 
+#if USEX
 static char *embed; // X11 embed
 static int screen; // screen
+#endif
 
 // item struct
 struct item {
@@ -184,10 +184,12 @@ static int ignoreconfmouse = 0; // same for mouse
 static int ignoreglobalmouse = 0; // same for mouse
 
 // colors
+#if USEX
 static int useargb;
 static int depth;
 static Visual *visual;
 static Colormap cmap;
+#endif
 static Drw *drw;
 
 // declare functions
@@ -197,10 +199,13 @@ static void recalculatenumbers(void);
 static void insert(const char *str, ssize_t n);
 static void cleanup(void);
 static void navigatehistfile(int dir);
+#if USEX
 static void pastesel(void);
+static void grabfocus(void);
+#endif
 static void resizeclient(void);
 static void get_width(void);
-static void grabfocus(void);
+static void set_mode(void);
 static void handle(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
 static int max_textw(void);
@@ -214,11 +219,26 @@ static size_t listsize;
 static int listcount;
 static int listchanged = 0;
 
+// clicks
+enum {
+    ClickWindow,
+    ClickPrompt,
+    ClickInput,
+    ClickLArrow,
+    ClickItem,
+    ClickSelItem,
+    ClickRArrow,
+    ClickNumber,
+    ClickCaps,
+    ClickMode,
+};
+
 // user configuration
 #include "options.h"
 #include "keybinds.h"
 #include "mouse.h"
 
+static char capstext[16];
 static char *fonts[] = { font };
 
 // color array
@@ -361,9 +381,11 @@ void cleanup(void) {
     // free drawing and close the display
     drw_free(drw);
 
+#if USEX
     if (!protocol) {
         cleanup_x11(dpy);
     }
+#endif
 
     free(sel_index);
 }
@@ -385,9 +407,11 @@ char * cistrstr(const char *h, const char *n) {
     return NULL;
 }
 
+#if USEX
 void grabfocus(void) {
     grabfocus_x11();
 }
+#endif
 
 void insert(const char *str, ssize_t n) {
     if (strlen(text) + n > sizeof text - 1)
@@ -423,20 +447,24 @@ size_t nextrune(int inc) {
     return n;
 }
 
+#if USEX
 void pastesel(void) {
     if (!protocol) {
         pastesel_x11();
     }
 }
+#endif
 
 void resizeclient(void) {
 #if USEWAYLAND
     if (protocol) {
         resizeclient_wl(&state);
     } else {
+#if USEX
         resizeclient_x11();
+#endif
     }
-#else
+#elif USEX
     resizeclient_x11();
 #endif
 }
@@ -445,8 +473,28 @@ void get_width(void) {
     inputw = mw / 3;
 }
 
+void set_mode(void) {
+    if (!type) { // no typing allowed, require normal mode
+        mode = 0;
+    }
+
+    // set default mode, must be done before the event loop or keybindings will not work
+    if (mode) {
+        curMode = 1;
+        allowkeys = 1;
+
+        strcpy(modetext, instext);
+    } else {
+        curMode = 0;
+        allowkeys = !curMode;
+
+        strcpy(modetext, normtext);
+    }
+}
+
 void handle(void) {
     if (!protocol) {
+#if USEX
         handle_x11();
 
         if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
@@ -454,7 +502,9 @@ void handle(void) {
         }
 
         loadhistory(); // read history entries
+#if USEX
         store_image_vars();
+#endif
 
         // fast (-f) means we grab keyboard before reading standard input
         if (fast && !isatty(0)) {
@@ -470,10 +520,13 @@ void handle(void) {
         init_appearance(); // init colorschemes by reading arrays
         setupdisplay_x11(); // set up display and create window
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
+#endif
 #if USEWAYLAND
     } else {
         loadhistory();
+#if USEIMAGE
         store_image_vars();
+#endif
 
         // Disable some X11 only features
         menupaddingv = menupaddingh = 0;
