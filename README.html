@@ -173,7 +173,6 @@
 <figcaption aria-hidden="true">spmenu logo</figcaption>
 </figure>
 <h1 id="spmenu">spmenu</h1>
-<h2 id="what-is-spmenu">What is spmenu?</h2>
 <p>spmenu is a simple X11 and Wayland menu application which takes
 standard input, parses it, lets the user choose an option and sends the
 selected option to standard output.</p>
@@ -226,8 +225,8 @@ time.</li>
 <li>Used to calculate MD5 of images if image support is enabled, can be
 disabled during compile time.</li>
 </ul></li>
-<li>Pango</li>
-<li>Cairo</li>
+<li>pango</li>
+<li>cairo</li>
 <li>libconfig
 <ul>
 <li>Can be disabled if you don’t want/need config file support during
@@ -241,9 +240,6 @@ build systems.</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <ul>
-<li><p>If you’re using macOS you may want to consider looking at <a
-href="https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS">this
-wiki artic le</a> for more information.</p></li>
 <li><p>If you are on Arch GNU/Linux, you can add <a
 href="https://git.speedie.site/speedie/speedie-repository">my
 repository</a> which includes <code>spmenu</code> as well as other
@@ -288,9 +284,6 @@ directory</strong>.</p>
 <strong>in the current directory</strong>. If you want to generate a
 Pacman package, run <code>scripts/make/generate-pacman-pkg.sh</code>
 instead.</p>
-<p>See <a
-href="https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS">this
-wiki article</a> for more information.</p>
 <h2 id="wayland-support">Wayland support</h2>
 <p>Note that Wayland support is still experimental, and some features do
 not currently work under Wayland. Some will never work under Wayland due
@@ -317,25 +310,6 @@ be layered as normal.</li>
 <li><code>--monitor</code> argument</li>
 <li>Window borders</li>
 <li>Pasting</li>
-</ul>
-<h2 id="todo">TODO</h2>
-<p>Pull requests would be greatly appreciated for any of these
-issues!</p>
-<ul>
-<li>Image support: Stop using OpenSSL for caching images, mostly because
-MD5() is deprecated as of OpenSSL 3.0, but this would also make it very
-easy to have LibreSSL compatibility.</li>
-<li>Image support: Ability to display icons, similar to rofi</li>
-<li>Lines: Rofi-like newlines in the same entry
-<ul>
-<li>Just need to <code>XMoveResizeWindow()</code> as well as
-<code>mh += bh</code> and <code>y += bh</code> for each added line.</li>
-</ul></li>
-<li>Matching: Add support for contextual completions similar to
-xprompt</li>
-<li>Matching: Regex matching</li>
-<li>X11: Move from Xlib to libXcb</li>
-<li>Wayland: Anything listed as broken under ‘Wayland support’.</li>
 </ul>
 <h2 id="scripts">Scripts</h2>
 <p>There’s a page dedicated to user scripts <a

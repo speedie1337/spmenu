@@ -3,8 +3,6 @@
 spmenu
 ======
 
-## What is spmenu?
-
 spmenu is a simple X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
@@ -41,17 +39,14 @@ It also serves as a dmenu replacement for Wayland users.
 - OpenSSL
   - Used to calculate MD5 of images if image support is enabled, can be
 disabled during compile time.
-- Pango
-- Cairo
+- pango
+- cairo
 - libconfig
   - Can be disabled if you don't want/need config file support during compile time.
 - meson
   - Used to compile spmenu, not optional unless you're experienced with build systems.
 
 ## Installation
-
-- If you're using macOS you may want to consider looking at [this wiki artic
-le](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS) for more information.
 
 - If you are on Arch GNU/Linux, you can add
 [my repository](https://git.speedie.site/speedie/speedie-repository) which includes
@@ -114,9 +109,6 @@ To generate a tarball, run `scripts/make/generate-pkg.sh` **in the current
 directory**. If you want to generate a Pacman package, run
 `scripts/make/generate-pacman-pkg.sh` instead.
 
-See [this wiki article](https://spmenu.speedie.site/index.php/Using+spmenu+on+macOS)
-for more information.
-
 ## Wayland support
 
 Note that Wayland support is still experimental, and some features do not
@@ -136,22 +128,6 @@ These are:
 - `--monitor` argument
 - Window borders
 - Pasting
-
-## TODO
-
-Pull requests would be greatly appreciated for any of these issues!
-
-- Image support: Stop using OpenSSL for caching images, mostly because MD5()
-is deprecated as of OpenSSL 3.0, but this would also make it very easy to
-have LibreSSL compatibility.
-- Image support: Ability to display icons, similar to rofi
-- Lines: Rofi-like newlines in the same entry
-  - Just need to `XMoveResizeWindow()` as well as `mh += bh` and `y += bh`
-  for each added line.
-- Matching: Add support for contextual completions similar to xprompt
-- Matching: Regex matching
-- X11: Move from Xlib to libXcb
-- Wayland: Anything listed as broken under 'Wayland support'.
 
 ## Scripts
 

@@ -5,6 +5,7 @@
 *gz*
 *tar*
 spmenu
+*[.]PKGBUILD
 buildconf_dev
 buildconf
 build
