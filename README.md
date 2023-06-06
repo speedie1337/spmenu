@@ -28,13 +28,14 @@ It also serves as a dmenu replacement for Wayland users.
 - xkbcommon
   - For Wayland support, which is optional.
 - libX11
-  - For X11 support
-  - If you're using macOS, XQuartz is a dependency instead.
-  - If you're using Wayland, `xorg-xwayland` is a dependency.
+  - For X11 support, which is optional.
 - libXrender
+  - For X11 support, which is optional.
 - imlib2
+  - Only a dependency if X11 support is enabled.
   - Used for image support, can be disabled during compile time.
 - libXinerama
+  - For X11 support, which is optional.
   - Used for multi-monitor support, can be disabled during compile time.
 - OpenSSL
   - Used to calculate MD5 of images if image support is enabled, can be
@@ -99,7 +100,7 @@ binary in the `build/` directory.
 Finally, to install it all, run:
 
 `meson install -C build --prefix /usr # /usr may be overriden to /usr/local
-or anything else if you use macOS or simply want another destination directory`
+or anything else`
 
 To generate documentation, which may be necessary if you're pushing new changes
 to your Git repository, run `scripts/make/generate-docs.sh` **in the current
@@ -147,4 +148,5 @@ more information!
 ## Wiki
 
 spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
-documentation. Contributions to the wiki are appreciated!
+documentation. Contributions to the wiki are appreciated, and
+can be done through [the Git repository](https://git.speedie.site/speedie/spmenu-wiki).

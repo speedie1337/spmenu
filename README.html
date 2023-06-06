@@ -205,18 +205,20 @@ in more detail.</p>
 </ul></li>
 <li>libX11
 <ul>
-<li>For X11 support</li>
-<li>If you’re using macOS, XQuartz is a dependency instead.</li>
-<li>If you’re using Wayland, <code>xorg-xwayland</code> is a
-dependency.</li>
+<li>For X11 support, which is optional.</li>
 </ul></li>
-<li>libXrender</li>
+<li>libXrender
+<ul>
+<li>For X11 support, which is optional.</li>
+</ul></li>
 <li>imlib2
 <ul>
+<li>Only a dependency if X11 support is enabled.</li>
 <li>Used for image support, can be disabled during compile time.</li>
 </ul></li>
 <li>libXinerama
 <ul>
+<li>For X11 support, which is optional.</li>
 <li>Used for multi-monitor support, can be disabled during compile
 time.</li>
 </ul></li>
@@ -275,7 +277,7 @@ compiler options.</p>
 <p>Now, to build it run <code>ninja -C build</code>. If all went well
 you should have a binary in the <code>build/</code> directory.</p>
 <p>Finally, to install it all, run:</p>
-<p><code>meson install -C build --prefix /usr # /usr may be overriden to /usr/local or anything else if you use macOS or simply want another destination directory</code></p>
+<p><code>meson install -C build --prefix /usr # /usr may be overriden to /usr/local or anything else</code></p>
 <p>To generate documentation, which may be necessary if you’re pushing
 new changes to your Git repository, run
 <code>scripts/make/generate-docs.sh</code> <strong>in the current
@@ -322,6 +324,9 @@ wiki</a>. Feel free to contribute and try scripts on there.</p>
 file for more information!</p>
 <h2 id="wiki">Wiki</h2>
 <p>spmenu has <a href="https://spmenu.speedie.site">a wiki</a> for more
-extensive documentation. Contributions to the wiki are appreciated!</p>
+extensive documentation. Contributions to the wiki are appreciated, and
+can be done through <a
+href="https://git.speedie.site/speedie/spmenu-wiki">the Git
+repository</a>.</p>
 </body>
 </html>
