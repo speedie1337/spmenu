@@ -3,6 +3,8 @@
 spmenu
 ======
 
+![preview](docs/spmenu-themes.gif)
+
 spmenu is a simple X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
