@@ -78,7 +78,7 @@ if get_option('libconfig')
   build_args += [ '-DCONFIG' ]
 endif
 
-if get_option('xresources')
+if get_option('xresources') and get_option('x11')
   build_args += [ '-DXRESOURCES' ]
 endif
 

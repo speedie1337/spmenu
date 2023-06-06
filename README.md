@@ -6,16 +6,17 @@ spmenu
 spmenu is a simple X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
-In addition to this, it also serves as a run launcher through the included
-shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
-and file listing.
+In addition to this, it also serves as a run launcher and desktop launcher
+through the included shell script `spmenu_run`, which handles both $PATH
+listing, .desktop entries, and file listing.
 
 While spmenu is based on dmenu, and is also fully compatible with dmenu,
-spmenu introduces many new features which can be useful in shell scripting.
-There are way too many to list, but spmenu has a
+spmenu introduces many new features which can be useful in shell scripting,
+and notably Wayland support. There are way too many to list, but spmenu has a
 [wiki](https://spmenu.speedie.site) which goes through features in more detail.
 
-It also serves as a dmenu replacement for Wayland users.
+spmenu also serves as a proper dmenu replacement for Wayland users, and
+can be themed to look identical to dmenu.
 
 ## Dependencies
 
@@ -107,7 +108,7 @@ to your Git repository, run `scripts/make/generate-docs.sh` **in the current
 directory**.
 
 To generate a tarball, run `scripts/make/generate-pkg.sh` **in the current
-directory**. If you want to generate a Pacman package, run
+directory**. If you want to generate a pacman package, run
 `scripts/make/generate-pacman-pkg.sh` instead.
 
 ## Wayland support
@@ -127,6 +128,9 @@ These are:
   due to the original implementation using XEmbed. If the embed argument is passed
   it will simply be ignored and the window will be layered as normal.
 - `--monitor` argument
+  - Possible under Wayland, but not really useful.
+- `--vertical-padding` and `--horizontal-padding` arguments
+  - Not possible under Wayland due to layer_shell not supporting it.
 - Window borders
 - Pasting
 
@@ -138,7 +142,7 @@ free to contribute and try scripts on there.
 
 ## More information
 
-See the included `man` page.
+See the included spmenu(1) and spmenu_run(1) man pages.
 
 ## License
 

@@ -176,15 +176,17 @@
 <p>spmenu is a simple X11 and Wayland menu application which takes
 standard input, parses it, lets the user choose an option and sends the
 selected option to standard output.</p>
-<p>In addition to this, it also serves as a run launcher through the
-included shell script <code>spmenu_run</code>, which handles both $PATH
-listing, .desktop entries and file listing.</p>
+<p>In addition to this, it also serves as a run launcher and desktop
+launcher through the included shell script <code>spmenu_run</code>,
+which handles both $PATH listing, .desktop entries, and file
+listing.</p>
 <p>While spmenu is based on dmenu, and is also fully compatible with
 dmenu, spmenu introduces many new features which can be useful in shell
-scripting. There are way too many to list, but spmenu has a <a
-href="https://spmenu.speedie.site">wiki</a> which goes through features
-in more detail.</p>
-<p>It also serves as a dmenu replacement for Wayland users.</p>
+scripting, and notably Wayland support. There are way too many to list,
+but spmenu has a <a href="https://spmenu.speedie.site">wiki</a> which
+goes through features in more detail.</p>
+<p>spmenu also serves as a proper dmenu replacement for Wayland users,
+and can be themed to look identical to dmenu.</p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>wayland-client
@@ -284,7 +286,7 @@ new changes to your Git repository, run
 directory</strong>.</p>
 <p>To generate a tarball, run <code>scripts/make/generate-pkg.sh</code>
 <strong>in the current directory</strong>. If you want to generate a
-Pacman package, run <code>scripts/make/generate-pacman-pkg.sh</code>
+pacman package, run <code>scripts/make/generate-pacman-pkg.sh</code>
 instead.</p>
 <h2 id="wayland-support">Wayland support</h2>
 <p>Note that Wayland support is still experimental, and some features do
@@ -309,7 +311,16 @@ not possible due to the original implementation using XEmbed. If the
 embed argument is passed it will simply be ignored and the window will
 be layered as normal.</li>
 </ul></li>
-<li><code>--monitor</code> argument</li>
+<li><code>--monitor</code> argument
+<ul>
+<li>Possible under Wayland, but not really useful.</li>
+</ul></li>
+<li><code>--vertical-padding</code> and
+<code>--horizontal-padding</code> arguments
+<ul>
+<li>Not possible under Wayland due to layer_shell not supporting
+it.</li>
+</ul></li>
 <li>Window borders</li>
 <li>Pasting</li>
 </ul>
@@ -318,7 +329,7 @@ be layered as normal.</li>
 href="https://spmenu.speedie.site/index.php/User+scripts">over on the
 wiki</a>. Feel free to contribute and try scripts on there.</p>
 <h2 id="more-information">More information</h2>
-<p>See the included <code>man</code> page.</p>
+<p>See the included spmenu(1) and spmenu_run(1) man pages.</p>
 <h2 id="license">License</h2>
 <p>spmenu is licensed under the MIT license. See the included LICENSE
 file for more information!</p>
