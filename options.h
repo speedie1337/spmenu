@@ -15,6 +15,13 @@ static int loadtheme                   = 1; /* Load theme (~/.config/spmenu/them
 static int loadbinds                   = 1; /* Load keybind file (~/.config/spmenu/binds.conf) on runtime */
 static int mon                         = -1; /* Monitor to run spmenu on */
 
+/* Config file options */
+#if USECONFIG
+static char *configfile                = NULL; /* Config file path. Default is ~/.config/spmenu/spmenu.conf */
+static char *themefile                 = NULL; /* Theme file path. Default is ~/.config/spmenu/theme.conf */
+static char *bindsfile                 = NULL; /* Keybind file path. Default is ~/.config/spmenu/binds.conf */
+#endif
+
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
 static int menuposition                = 2; /* Position of the menu (0: Bottom, 1: Top, 2: Center */

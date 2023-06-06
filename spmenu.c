@@ -164,13 +164,6 @@ static int oh = 0;
 #endif
 static int fullscreen = 0;
 
-// config file
-#if USECONFIG
-static char *argconf = NULL; // arg config path
-static char *argtheme = NULL; // arg theme path
-static char *argbinds = NULL; // arg binds path
-#endif
-
 // set an integer to 1 if we have rtl enabled, this saves a lot of lines and duplicate code
 #if USERTL
 static int isrtl = 1;

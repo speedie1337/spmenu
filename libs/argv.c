@@ -28,19 +28,19 @@ void readargs(int argc, char *argv[]) {
 #if USECONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
-                argconf = argv[++j];
+                configfile = argv[++j];
             } else {
                 die("This argument requires a second argument.");
             }
         } else if (!strcmp(argv[j], "-bf") || (!strcmp(argv[j], "--bind-file"))) { // specify a bind file
             if (argv[j+1]) {
-                argbinds = argv[++j];
+                bindsfile = argv[++j];
             } else {
                 die("This argument requires a second argument.");
             }
         } else if (!strcmp(argv[j], "-tm") || (!strcmp(argv[j], "--theme"))) { // specify a theme
             if (argv[j+1]) {
-                argtheme = argv[++j];
+                themefile = argv[++j];
             } else {
                 die("This argument requires a second argument.");
             }
@@ -251,13 +251,13 @@ void readargs(int argc, char *argv[]) {
 #if USECONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
-                        || (argconf && !strcmp(argv[i], argconf))
+                        || (configfile && !strcmp(argv[i], configfile))
                         || !strcmp(argv[i], "-tm")
                         || !strcmp(argv[i], "--theme")
-                        || (argtheme && !strcmp(argv[i], argtheme))
+                        || (themefile && !strcmp(argv[i], themefile))
                         || !strcmp(argv[i], "-bf")
                         || !strcmp(argv[i], "--bind-file")
-                        || (argbinds && !strcmp(argv[i], argbinds))
+                        || (bindsfile && !strcmp(argv[i], bindsfile))
 #endif
                         ))
                         continue;
@@ -485,13 +485,13 @@ void readargs(int argc, char *argv[]) {
 #if USECONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
-                        || (argconf && !strcmp(argv[i], argconf))
+                        || (configfile && !strcmp(argv[i], configfile))
                         || !strcmp(argv[i], "-tm")
                         || !strcmp(argv[i], "--theme")
-                        || (argtheme && !strcmp(argv[i], argtheme))
+                        || (themefile && !strcmp(argv[i], themefile))
                         || !strcmp(argv[i], "-bf")
                         || !strcmp(argv[i], "--bind-file")
-                        || (argbinds && !strcmp(argv[i], argbinds))
+                        || (bindsfile && !strcmp(argv[i], bindsfile))
 #endif
                         ))
                         continue;

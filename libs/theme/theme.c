@@ -10,7 +10,7 @@ void theme_load(void) {
     if (!loadtheme) return;
 
     // get path for configuration file
-    if (!argtheme) {
+    if (!themefile || !strcmp(themefile, "NULL")) {
         if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
             // ~/.config/spmenu/theme.conf
             home = getenv("HOME");
@@ -31,11 +31,11 @@ void theme_load(void) {
             sprintf(theme, "%s/%s", xdg_conf, "spmenu/theme.conf");
         }
     } else { // custom config path
-        if (!(theme = malloc(snprintf(NULL, 0, "%s", argtheme) + 1))) {
+        if (!(theme = malloc(snprintf(NULL, 0, "%s", themefile) + 1))) {
             die("spmenu: failed to malloc theme");
         }
 
-        sprintf(theme, "%s", argtheme);
+        sprintf(theme, "%s", themefile);
     }
 
     // don't bother trying to load if it doesn't exist.

@@ -10,7 +10,7 @@ void conf_init(void) {
     const char *dest;
 
     // get path for configuration file
-    if (!argconf) {
+    if (!configfile) {
         if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
             // ~/.config/spmenu/spmenu.conf
             home = getenv("HOME");
@@ -31,11 +31,11 @@ void conf_init(void) {
             sprintf(cfgfile, "%s/%s", xdg_conf, "spmenu/spmenu.conf");
         }
     } else { // custom config path
-        if (!(cfgfile = malloc(snprintf(NULL, 0, "%s", argconf) + 1))) {
+        if (!(cfgfile = malloc(snprintf(NULL, 0, "%s", configfile) + 1))) {
             die("spmenu: failed to malloc cfgfile");
         }
 
-        sprintf(cfgfile, "%s", argconf);
+        sprintf(cfgfile, "%s", configfile);
     }
 
     // don't bother trying to load if it doesn't exist.
@@ -424,6 +424,14 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "binds", &loadbinds); // spmenu.file.binds
             config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
             config_setting_lookup_int(conf, "xresources", &xresources); // spmenu.file.xresources
+
+            if (config_setting_lookup_string(conf, "themefile", &dest)) {
+                themefile = strdup(dest);
+            }
+
+            if (config_setting_lookup_string(conf, "bindsfile", &dest)) {
+                bindsfile = strdup(dest);
+            }
         }
     }
 
@@ -716,7 +724,7 @@ void conf_init(void) {
         theme_load();
     }
 
-    if (!argbinds) {
+    if (!bindsfile || !strcmp(bindsfile, "NULL")) {
         if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
             home = getenv("HOME");
 
@@ -733,11 +741,11 @@ void conf_init(void) {
             sprintf(bindfile, "%s/%s", xdg_conf, "spmenu/binds.conf");
         }
     } else { // custom keys path
-        if (!(bindfile = malloc(snprintf(NULL, 0, "%s", argbinds) + 1))) {
+        if (!(bindfile = malloc(snprintf(NULL, 0, "%s", bindsfile) + 1))) {
             die("spmenu: failed to malloc bindfile");
         }
 
-        sprintf(bindfile, "%s", argbinds);
+        sprintf(bindfile, "%s", bindsfile);
     }
 
     // don't bother trying to load if it doesn't exist.
