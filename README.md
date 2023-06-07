@@ -18,6 +18,11 @@ and notably Wayland support. There are way too many to list, but spmenu has a
 spmenu also serves as a proper dmenu replacement for Wayland users, and
 can be themed to look identical to dmenu.
 
+## Screenshots
+
+![.desktop launcher](screenshots/desktop-launcher.png)
+![typing](screenshots/typing.gif)
+
 ## Dependencies
 
 - wayland-client
