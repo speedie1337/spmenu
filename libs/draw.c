@@ -359,7 +359,12 @@ int drawprompt(int x, int y, int w) {
         x = drw_text(drw, x, y, w, bh, lrpad / 2, prompt, 0, pango_prompt ? True : False, col_promptfg, col_promptbg, alpha_promptfg, alpha_promptbg);
 
         if (!hidepowerline && powerlineprompt) {
-            drw_arrow(drw, x, y, plw, bh, 1, promptpwlstyle, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
+            if (promptpwlstyle == 2) {
+                drw_circle(drw, x, y, plw, bh, 1, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
+            } else {
+                drw_arrow(drw, x, y, plw, bh, 1, promptpwlstyle, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
+            }
+
             x += plw;
         }
     }
@@ -433,7 +438,11 @@ int drawnumber(int x, int y, int w) {
 
     // draw powerline for match count
     if (!hidepowerline && powerlinecount) {
-        drw_arrow(drw, x, y, plw, bh, 0, matchcountpwlstyle, col_menu, col_numbg, alpha_menu, alpha_numbg);
+        if (matchcountpwlstyle == 2) {
+            drw_circle(drw, x, y, plw, bh, 0, col_menu, col_numbg, alpha_menu, alpha_numbg);
+        } else {
+            drw_arrow(drw, x, y, plw, bh, 0, matchcountpwlstyle, col_menu, col_numbg, alpha_menu, alpha_numbg);
+        }
 
         x += plw;
     }
@@ -453,9 +462,15 @@ int drawmode(int x, int y, int w) {
 
         // draw powerline for match count
         if (!hidepowerline && powerlinemode) {
-            drw_arrow(drw, x, y, plw, bh, 0, modepwlstyle,
-                    hidematchcount ? col_menu : col_numbg, col_modebg,
-                    hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
+            if (modepwlstyle == 2) {
+                drw_circle(drw, x, y, plw, bh, 0,
+                        hidematchcount ? col_menu : col_numbg, col_modebg,
+                        hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
+            } else {
+                drw_arrow(drw, x, y, plw, bh, 0, modepwlstyle,
+                        hidematchcount ? col_menu : col_numbg, col_modebg,
+                        hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
+            }
 
             x += plw;
         }
@@ -478,9 +493,15 @@ int drawcaps(int x, int y, int w) {
 
         // draw powerline for caps lock indicator
         if (!hidepowerline && powerlinecaps) {
-            drw_arrow(drw, x, y, plw, bh, 0, capspwlstyle,
-                    hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
-                    hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
+            if (capspwlstyle == 2) {
+                drw_circle(drw, x, y, plw, bh, 0,
+                        hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
+                        hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
+            } else {
+                drw_arrow(drw, x, y, plw, bh, 0, capspwlstyle,
+                        hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
+                        hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
+            }
 
             x += plw;
         }

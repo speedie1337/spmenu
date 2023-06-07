@@ -6,7 +6,7 @@
 #include <cairo/cairo.h>
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
-#include <iconv.h>
+#include <math.h>
 
 #include "drw.h"
 #include "../sl/main.h"
@@ -182,6 +182,45 @@ void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direc
     cairo_move_to(cr, x, y);
     cairo_line_to(cr, x + w, y + hh);
     cairo_line_to(cr, x, y + h);
+    cairo_close_path(cr);
+
+    cairo_set_source_hex(cr, nextcol, nextalpha);
+    cairo_fill(cr);
+
+    cairo_destroy(cr);
+    cairo_surface_destroy(sf);
+}
+
+void drw_circle(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha) {
+    if (!drw)
+        return;
+
+    cairo_surface_t *sf = NULL;
+
+    if (drw->protocol) {
+        sf = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
+    } else {
+        sf = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+    }
+
+    cairo_t *cr = cairo_create(sf);
+
+    cairo_set_source_hex(cr, prevcol, prevalpha);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+
+    // draw rectangle
+    cairo_rectangle(cr, x, y, w, h);
+    cairo_fill(cr);
+
+    double cx = direction ? x + w - h / 2.0 : x + h / 2.0;
+    double cy = y + h / 2;
+    double rad = h / 2.0;
+
+    double start = direction ? -M_PI_2 : M_PI_2;
+    double end = direction ? M_PI_2 : 3 * M_PI_2;
+
+    // draw circle
+    cairo_arc(cr, cx, cy, rad, start, end);
     cairo_close_path(cr);
 
     cairo_set_source_hex(cr, nextcol, nextalpha);
