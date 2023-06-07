@@ -22,6 +22,7 @@ can be themed to look identical to dmenu.
 
 ![.desktop launcher](screenshots/desktop-launcher.png)
 ![typing](screenshots/typing.gif)
+![bliss](screenshots/bliss.png)
 
 ## Dependencies
 
