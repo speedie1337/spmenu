@@ -39,7 +39,6 @@ can be themed to look identical to dmenu.
 - libXrender
   - For X11 support, which is optional.
 - imlib2
-  - Only a dependency if X11 support is enabled.
   - Used for image support, can be disabled during compile time.
 - libXinerama
   - For X11 support, which is optional.

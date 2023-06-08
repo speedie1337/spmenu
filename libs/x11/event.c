@@ -1,7 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 void eventloop_x11(void) {
     XEvent ev;
-    int noimg = 0;
 
     while (!XNextEvent(dpy, &ev)) {
         if (XFilterEvent(&ev, None))
@@ -15,7 +14,6 @@ void eventloop_x11(void) {
                 exit(1);
             case ButtonPress:
                 buttonpress_x11(&ev);
-                noimg = 0;
                 break;
             case MotionNotify: // currently does nothing
                 break;
@@ -35,7 +33,6 @@ void eventloop_x11(void) {
                 }
 
                 keypress_x11(&ev);
-                noimg = 1;
                 break;
             case SelectionNotify: // paste selection
                 if (ev.xselection.property == utf8)
@@ -48,7 +45,6 @@ void eventloop_x11(void) {
             case KeyRelease:
                 getcapsstate();
                 drawmenu();
-                noimg = 0;
                 break;
         }
 
@@ -67,13 +63,5 @@ void eventloop_x11(void) {
                 drawmenu();
             }
         }
-
-        // redraw image on X11 event
-        if (!noimg)
-#if USEIMAGE
-            drawimage();
-#else
-        ;
-#endif
     }
 }
