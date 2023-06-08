@@ -93,7 +93,7 @@ void resizeclient_x11(void) {
 
     // resize client to image height
 #if USEIMAGE
-    if (image) resizetoimageheight(imageheight);
+    if (image) resizetoimageheight(imagewidth, imageheight);
 #endif
 
     mh = (lines + 1) * bh + 2 * menumarginv;

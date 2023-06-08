@@ -286,7 +286,7 @@ int drawitem(int x, int y, int w) {
 
         // draw image first
 #if USEIMAGE
-        if (!hideimage && longestedge != 0 && !protocol) { // TODO: wayland image support
+        if (!hideimage && longestedge != 0) {
             rx = ox;
             rx += MAX((imagegaps * 2) + imagewidth + menumarginh, indentitems ? x : 0);
         } else
@@ -520,10 +520,12 @@ void drawmenu(void) {
         wl_surface_attach(state.surface, state.buffer, 0, 0);
         wl_surface_damage(state.surface, 0, 0, state.width, state.height);
         wl_surface_commit(state.surface);
+
+        drawimage();
     } else {
         drawmenu_layer();
     }
-#else
+#elif USEX
     drawmenu_layer();
 #endif
 }
@@ -627,6 +629,7 @@ void drawmenu_layer(void) {
         }
 
 #if USEX
+        drawimage();
         drw_map(drw, win, 0, 0, mw, mh);
 #endif
     }

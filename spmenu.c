@@ -153,7 +153,6 @@ struct item {
 // image globals
 #if USEIMAGE
 static int flip = 0;
-static int rotation = 0;
 static int needredraw = 1;
 static int longestedge = 0;
 static int imagew = 0;
@@ -495,7 +494,7 @@ void handle(void) {
         }
 
         loadhistory(); // read history entries
-#if USEX
+#if USEIMAGE
         store_image_vars();
 #endif
 

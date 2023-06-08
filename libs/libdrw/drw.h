@@ -24,17 +24,24 @@ typedef struct {
     Window root;
     Visual *visual;
     unsigned int depth;
+    void *img_data;
     void *data;
     Colormap cmap;
     Drawable drawable;
     GC gc;
     Fnt *font;
     cairo_surface_t *surface;
+    cairo_surface_t *img_surface;
     cairo_t *d;
+    cairo_t *img_d;
 } Drw;
 
 /* Cairo color convertion */
 void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha);
+
+/* Cairo image drawing */
+void drw_img(Drw *drw, int x, int y);
+void drw_set_img(Drw *drw, void *data, int w, int h);
 
 /* Drawable abstraction */
 Drw *drw_create_x11(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol);

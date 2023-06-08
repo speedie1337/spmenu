@@ -10,7 +10,7 @@ void setupdisplay_x11(void) {
 
     // resize client to image height if deemed necessary
 #if USEIMAGE
-    if (image) resizetoimageheight(imageheight);
+    if (image) resizetoimageheight(imagewidth, imageheight);
 #endif
 
     // set prompt width based on prompt size
