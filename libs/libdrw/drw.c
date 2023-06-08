@@ -415,6 +415,28 @@ void drw_cur_free(Drw *drw, Cur *cursor) {
 #endif
 }
 
+void drw_set_img(Drw *drw, void *data, int w, int h) {
+    if (!w || !h || !drw) {
+        return;
+    }
+
+    drw->img_data = data;
+    drw->img_surface = cairo_image_surface_create_for_data(drw->img_data, CAIRO_FORMAT_ARGB32, w, h, w * 4);
+}
+
+void drw_img(Drw *drw, int x, int y) {
+    if (!drw) {
+        return;
+    }
+
+    cairo_set_operator(drw->d, CAIRO_OPERATOR_OVER);
+
+    cairo_set_source_surface(drw->d, drw->img_surface, x, y);
+    cairo_mask_surface(drw->d, drw->img_surface, x, y);
+
+    cairo_set_source_surface(drw->d, drw->surface, drw->w, drw->h);
+}
+
 unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup) {
     unsigned int tmp = 0;
     if (drw && drw->font && text && n)

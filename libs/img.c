@@ -12,10 +12,10 @@ void setimagesize(int width, int height) {
     oih = imageheight;
     oiw = imagewidth;
 
+    drawimage();
+
     imageheight = height;
     imagewidth = width;
-
-    drawimage();
 
     needredraw = 0;
 
@@ -46,11 +46,6 @@ void flipimage(void) {
     }
 }
 
-void rotateimage(void) {
-    rotation %= 4;
-    imlib_image_orientate(rotation);
-}
-
 void cleanupimage(void) {
     if (image) { // free image using imlib2
         imlib_free_image();
@@ -77,8 +72,6 @@ void drawimage(void) {
     } else if ((!sel || !sel->image) && image) { // free image
         cleanupimage();
     } if (image && longestedge && width && height) { // render the image
-                                                     // rotate and flip, will return if we don't need to
-        rotateimage();
         flipimage();
 
         int leftmargin = imagegaps; // gaps between image and menu
@@ -97,9 +90,9 @@ void drawimage(void) {
         wta += menumarginv;
 
         if (mh != bh + height + leftmargin * 2 - wtr && !fullscreen) { // menu height cannot be smaller than image height
-            resizetoimageheight(height);
+            resizetoimageheight(width, height);
         } else if (mh != bh + height + leftmargin * 2 - wtr && fullscreen) {
-            resizetoimageheight(height-bh);
+            resizetoimageheight(width-bh, height-bh);
         }
 
         // we're covering all the area
@@ -107,20 +100,23 @@ void drawimage(void) {
             xta = wta = wtr = leftmargin = 0;
         }
 
-        // render image
+        drw_set_img(drw, imlib_image_get_data(), width, height);
+
+        // render image on X11
         if (!imageposition && image) { // top mode = 0
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, wta+leftmargin);
+
+            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, wta+leftmargin);
         } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, mh-height-leftmargin);
+            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, mh-height-leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
+            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
         } else if (image) { // top center
             int minh = MIN(height, mh-bh-leftmargin*2);
-            imlib_render_image_on_drawable(leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+leftmargin);
+            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+leftmargin);
         }
     }
 
@@ -131,18 +127,10 @@ void drawimage(void) {
     }
 }
 
-#if USEX
 void setimageopts(void) {
     imlib_set_cache_size(8192 * 1024);
-    imlib_context_set_blend(1);
-    imlib_context_set_dither(1);
     imlib_set_color_usage(128);
-    imlib_context_set_display(dpy);
-    imlib_context_set_visual(visual);
-    imlib_context_set_colormap(cmap);
-    imlib_context_set_drawable(win);
 }
-#endif
 
 void createifnexist(const char *dir) {
     // exists, so return
@@ -337,8 +325,25 @@ void jumptoindex(unsigned int index) {
     }
 }
 
-void resizetoimageheight(int imageheight) {
+void resizetoimageheight(int imagewidth, int imageheight) {
+    //int ih = imageheight;
+    int ih = imlib_image_get_height();
+
 #if USEX
+    if (!protocol) {
+        resizetoimageheight_x11(ih);
+    } else {
+#if USEWAYLAND
+        resizetoimageheight_wl(ih);
+#endif
+    }
+#elif USEWAYLAND
+    resizetoimageheight_wl(ih);
+#endif
+}
+
+#if USEX
+void resizetoimageheight_x11(int imageheight) {
     int omh = mh, olines = lines;
     lines = reallines;
     int wtr = 0;
@@ -447,9 +452,69 @@ void resizetoimageheight(int imageheight) {
         jumptoindex(i);
     }
 
-    drawmenu();
-#endif
+    drawmenu_layer();
 }
+#endif
+
+#if USEWAYLAND
+void resizetoimageheight_wl(int imageheight) {
+    int omh = mh, olines = lines;
+    lines = reallines;
+    int wtr = 0;
+
+    if (lines * bh < imageheight + imagegaps * 2) {
+        lines = (imageheight + imagegaps * 2) / bh;
+    }
+
+    if (hideprompt && hideinput && hidemode && hidematchcount) {
+        wtr = bh;
+    }
+
+    mh = MAX((lines + 1) * bh + 2 * menumarginv, ((lines + 1) * bh) - wtr + 2 * menumarginv);
+
+    if (mh - bh < imageheight + imagegaps * 2) {
+        mh = (imageheight + imagegaps * 2 + bh) - wtr + 2 * menumarginv;
+    }
+
+    if (omh == mh) {
+        return;
+    }
+
+    if (olines != lines) {
+        struct item *item;
+        unsigned int i = 1;
+
+        // walk through all matches
+        for (item = matches; item && item != sel; item = item->right)
+            ++i;
+
+        jumptoindex(i);
+    }
+
+    state.width = mw;
+    state.height = mh;
+
+    state.buffer = create_buffer(&state);
+
+    if (drw == NULL) {
+        die("spmenu: drw == NULL");
+    }
+
+    if (state.buffer == NULL) {
+        die("state.buffer == null");
+    }
+
+    set_layer_size(&state, state.width, state.height);
+    drw_create_surface_wl(drw, state.data, state.width, state.height);
+
+    drawmenu();
+
+    wl_surface_set_buffer_scale(state.surface, 1);
+	wl_surface_attach(state.surface, state.buffer, 0, 0);
+	wl_surface_damage(state.surface, 0, 0, state.width, state.height);
+	wl_surface_commit(state.surface);
+}
+#endif
 
 void store_image_vars(void) {
     longestedge = MAX(imagewidth, imageheight);

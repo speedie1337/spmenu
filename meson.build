@@ -57,7 +57,7 @@ if get_option('wayland')
   run_command('scripts/make/generate-headers.sh', check : false)
 endif
 
-if get_option('imlib2') and get_option('openssl') and get_option('x11')
+if get_option('imlib2') and get_option('openssl')
   project_dependencies += [ dependency('imlib2') ]
   project_dependencies += [ dependency('openssl') ]
   build_args += [ '-DIMAGE' ]

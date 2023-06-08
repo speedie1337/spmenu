@@ -713,7 +713,6 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | Shift              | equal              | setimgsize         | +100               |
 | 0                  | Shift              | minus              | setimgsize         | -100               |
 | 0                  | Shift              | 0                  | defaultimg         | 0                  |
-| 0                  | 0                  | r                  | rotateimg          | 0                  |
 | 0                  | 0                  | o                  | setimgpos          | +1                 |
 | 0                  | Ctrl               | 1                  | setimggaps         | -1                 |
 | 0                  | Ctrl               | 2                  | setimggaps         | +1                 |

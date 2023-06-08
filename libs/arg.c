@@ -415,17 +415,6 @@ void setimggaps(Arg *arg) {
 #endif
 }
 
-void rotateimg(Arg *arg) {
-#if USEIMAGE
-
-    if (!image || hideimage) return;
-
-    rotation += arg->i ? arg->i : 1;
-
-    drawmenu();
-#endif
-}
-
 void toggleimg(Arg *arg) {
 #if USEIMAGE
 
