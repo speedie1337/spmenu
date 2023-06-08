@@ -178,22 +178,22 @@ static char col_capsfg[]               = "#ffffff"; /* Caps lock text color */
 static char col_capsbg[]               = "#45638A"; /* Caps lock background color */
 
 /* SGR colors */
-static char col_sgr0[]                 = "#000000"; /* SGR color #0 */
-static char col_sgr1[]                 = "#7f0000"; /* SGR color #1 */
-static char col_sgr2[]                 = "#007f00"; /* SGR color #2 */
-static char col_sgr3[]                 = "#7f7f00"; /* SGR color #3 */
-static char col_sgr4[]                 = "#00007f"; /* SGR color #4 */
-static char col_sgr5[]                 = "#7f007f"; /* SGR color #5 */
-static char col_sgr6[]                 = "#007f7f"; /* SGR color #6 */
-static char col_sgr7[]                 = "#cccccc"; /* SGR color #7 */
-static char col_sgr8[]                 = "#333333"; /* SGR color #8 */
-static char col_sgr9[]                 = "#ff0000"; /* SGR color #9 */
-static char col_sgr10[]                = "#00ff00"; /* SGR color #10 */
-static char col_sgr11[]                = "#ffff00"; /* SGR color #11 */
-static char col_sgr12[]                = "#0000ff"; /* SGR color #12 */
-static char col_sgr13[]                = "#ff00ff"; /* SGR color #13 */
-static char col_sgr14[]                = "#00ffff"; /* SGR color #14 */
-static char col_sgr15[]                = "#ffffff"; /* SGR color #15 */
+static char col_sgr0[]                 = "#20201d"; /* SGR color #0 */
+static char col_sgr1[]                 = "#d73737"; /* SGR color #1 */
+static char col_sgr2[]                 = "#60ac39"; /* SGR color #2 */
+static char col_sgr3[]                 = "#cfb017"; /* SGR color #3 */
+static char col_sgr4[]                 = "#6684e1"; /* SGR color #4 */
+static char col_sgr5[]                 = "#b854d4"; /* SGR color #5 */
+static char col_sgr6[]                 = "#1fad83"; /* SGR color #6 */
+static char col_sgr7[]                 = "#a6a28c"; /* SGR color #7 */
+static char col_sgr8[]                 = "#7d7a68"; /* SGR color #8 */
+static char col_sgr9[]                 = "#d73737"; /* SGR color #9 */
+static char col_sgr10[]                = "#60ac39"; /* SGR color #10 */
+static char col_sgr11[]                = "#cfb017"; /* SGR color #11 */
+static char col_sgr12[]                = "#6684e1"; /* SGR color #12 */
+static char col_sgr13[]                = "#b854d4"; /* SGR color #13 */
+static char col_sgr14[]                = "#1fad83"; /* SGR color #14 */
+static char col_sgr15[]                = "#fefbec"; /* SGR color #15 */
 
 /* Alpha options */
 static int alpha_itemnormfg            = 255; /* Alpha for normal item foreground (0-255) */
