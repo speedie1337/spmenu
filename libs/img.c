@@ -129,8 +129,6 @@ void drawimage(void) {
 
 void setimageopts(void) {
     imlib_set_cache_size(8192 * 1024);
-    imlib_context_set_blend(1);
-    imlib_context_set_dither(1);
     imlib_set_color_usage(128);
 }
 

@@ -432,7 +432,7 @@ void drw_img(Drw *drw, int x, int y) {
     cairo_set_operator(drw->d, CAIRO_OPERATOR_OVER);
 
     cairo_set_source_surface(drw->d, drw->img_surface, x, y);
-    cairo_paint(drw->d);
+    cairo_mask_surface(drw->d, drw->img_surface, x, y);
 
     cairo_set_source_surface(drw->d, drw->surface, drw->w, drw->h);
 }
