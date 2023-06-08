@@ -18,7 +18,8 @@ void keypress_x11(XEvent *e) {
     updatenumlockmask();
     {
         unsigned int i;
-        KeySym keysym;
+        KeySym keysym = NoSymbol;
+        KeySym keysym_case = NoSymbol;
         XKeyEvent *ev;
         char buf[64];
         KeySym ksym = NoSymbol;
@@ -28,7 +29,8 @@ void keypress_x11(XEvent *e) {
         ev = &e->xkey;
         len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
 
-        keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
+        // keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
+        XConvertCase(ksym, &keysym, &keysym_case);
 
         // this makes sure we always have a way to exit if we unbind our quit key
         if (keysym == hkeys[0].keysym && CLEANMASK(hkeys[0].mod) == CLEANMASK(ev->state) && hkeys[0].func) hkeys[0].func(&(hkeys[0].arg));
