@@ -720,8 +720,8 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | 0                  | t                  | toggleimg          | 0                  |
 | 0                  | 0                  | f                  | togglefullimg      | 0                  |
 | 0                  | 0                  | p                  | paste              | 2                  |
-| 0                  | 0                  | h                  | flipimg            | 1                  |
-| 0                  | 0                  | v                  | flipimg            | 0                  |
+| 0                  | Shift              | h                  | flipimg            | 1                  |
+| 0                  | Shift              | v                  | flipimg            | 0                  |
 | 0                  | 0                  | k                  | moveup             | 0                  |
 | 0                  | 0                  | j                  | movedown           | 0                  |
 | 0                  | 0                  | h                  | moveleft           | 0                  |
