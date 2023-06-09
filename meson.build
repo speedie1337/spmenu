@@ -31,7 +31,6 @@ build_args = [
   '-std=c99',
   '-pedantic',
   '-Wall',
-  '-Wno-deprecated-declarations',
   '-Wno-unused-parameter',
   '-Wno-sign-compare',
 ]

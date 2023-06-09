@@ -211,8 +211,8 @@ void scaleimage(int *width, int *height) {
 
 void loadimagecache(const char *file, int *width, int *height) {
     int slen = 0, i;
-    unsigned char digest[MD5_DIGEST_LENGTH];
-    char md5[MD5_DIGEST_LENGTH*2+1];
+    unsigned int digest_len = EVP_MD_size(EVP_md5());
+    unsigned char *digest = (unsigned char *)OPENSSL_malloc(digest_len);
     char *xdg_cache, *home = NULL, *dsize, *buf = NULL;
     struct passwd *pw = NULL;
 
@@ -249,11 +249,19 @@ void loadimagecache(const char *file, int *width, int *height) {
 
         // calculate md5 from path
         sprintf(buf, "file://%s", file);
-        MD5((unsigned char*)buf, slen, digest);
+
+        EVP_MD_CTX *mdcontext = EVP_MD_CTX_new();
+        EVP_DigestInit_ex(mdcontext, EVP_md5(), NULL);
+        EVP_DigestUpdate(mdcontext, buf, slen);
+
+        EVP_DigestFinal_ex(mdcontext, digest, &digest_len);
+        EVP_MD_CTX_free(mdcontext);
 
         free(buf);
 
-        for(i = 0; i < MD5_DIGEST_LENGTH; ++i)
+        char md5[digest_len*2+1];
+
+        for (i = 0; i < digest_len; ++i)
             sprintf(&md5[i*2], "%02x", (unsigned int)digest[i]);
 
         // path for cached thumbnail
