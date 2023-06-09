@@ -226,9 +226,9 @@ enum {
 };
 
 // user configuration
-#include "options.h"
-#include "keybinds.h"
-#include "mouse.h"
+#include "libs/options.h"
+#include "libs/keybinds.h"
+#include "libs/mouse.h"
 
 static char capstext[16];
 static char *fonts[] = { font };
