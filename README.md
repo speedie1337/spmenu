@@ -116,26 +116,6 @@ To generate a tarball, run `scripts/make/generate-pkg.sh` **in the current
 directory**. If you want to generate a pacman package, run
 `scripts/make/generate-pacman-pkg.sh` instead.
 
-## Wayland support
-
-Note that Wayland support is still experimental, and some features do not
-currently work under Wayland. Some will never work under Wayland due to limitations.
-These are:
-
-- `--x-position` and `--y-position` arguments
-  - These arguments do not work under Wayland, because the layer_shell
-  protocol doesn't allow clients to be placed on a specific position.
-- Embedding `-w` and window manager managed `-wm`
-  - These arguments do not make much sense on Wayland, and embedding is not possible
-  due to the original implementation using XEmbed. If the embed argument is passed
-  it will simply be ignored and the window will be layered as normal.
-- `--monitor` argument
-  - Possible under Wayland, but not really useful.
-- `--vertical-padding` and `--horizontal-padding` arguments
-  - Not possible under Wayland due to layer_shell not supporting it.
-- Window borders
-- Pasting
-
 ## Scripts
 
 There's a page dedicated to user scripts

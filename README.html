@@ -291,37 +291,6 @@ directory</strong>.</p>
 <strong>in the current directory</strong>. If you want to generate a
 pacman package, run <code>scripts/make/generate-pacman-pkg.sh</code>
 instead.</p>
-<h2 id="wayland-support">Wayland support</h2>
-<p>Note that Wayland support is still experimental, and some features do
-not currently work under Wayland. Some will never work under Wayland due
-to limitations. These are:</p>
-<ul>
-<li><code>--x-position</code> and <code>--y-position</code> arguments
-<ul>
-<li>These arguments do not work under Wayland, because the layer_shell
-protocol doesn’t allow clients to be placed on a specific position.</li>
-</ul></li>
-<li>Embedding <code>-w</code> and window manager managed
-<code>-wm</code>
-<ul>
-<li>These arguments do not make much sense on Wayland, and embedding is
-not possible due to the original implementation using XEmbed. If the
-embed argument is passed it will simply be ignored and the window will
-be layered as normal.</li>
-</ul></li>
-<li><code>--monitor</code> argument
-<ul>
-<li>Possible under Wayland, but not really useful.</li>
-</ul></li>
-<li><code>--vertical-padding</code> and
-<code>--horizontal-padding</code> arguments
-<ul>
-<li>Not possible under Wayland due to layer_shell not supporting
-it.</li>
-</ul></li>
-<li>Window borders</li>
-<li>Pasting</li>
-</ul>
 <h2 id="scripts">Scripts</h2>
 <p>There’s a page dedicated to user scripts <a
 href="https://spmenu.speedie.site/index.php/User+scripts">over on the

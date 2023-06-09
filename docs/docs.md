@@ -33,7 +33,7 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Set spmenu line height to height
 
 `-mw, --min-width width`
-:   Set minimum width to width
+:   Set minimum width to width when centered
 
 `-g, --columns grid`
 :   Set the number of grids to grid
@@ -126,10 +126,10 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Don't allow typing, the user must select an option
 
 `-x, --x-position x offset`
-:   Offset spmenu x position by x offset
+:   Offset spmenu x position by x offset (X11 only)
 
 `-y, --y-position y offset`
-:   Offset spmenu y position by y offset
+:   Offset spmenu y position by y offset (X11 only)
 
 `-n, --preselect line`
 :   Preselect line line in the list of items
@@ -150,7 +150,7 @@ You may use long, descriptive arguments or the shorter arguments.
 : Set caps lock off text to text
 
 `-bw, --border-width width`
-:   Set width of the border to width  . 0 will disable the border
+:   Set width of the border to width. 0 will disable the border (X11 only)
 
 `-so, --sort`
 :   Sort matches
@@ -255,22 +255,22 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Show caps lock indicator
 
 `-xrdb, --xrdb`
-:   Load .Xresources on runtime
+:   Load .Xresources on runtime (X11 only)
 
 `-nxrdb, --no-xrdb`
-:   Don't load .Xresources on runtime
+:   Don't load .Xresources on runtime (X11 only)
 
 `-gbc, --global-colors`
-:   Recognize global colors (such as *.color1) on runtime
+:   Recognize global colors (such as \*.color1) on runtime (X11 only)
 
 `-ngbc, --no-global-colors`
-:   Don't recognize global colors (such as *.color1) on runtime
+:   Don't recognize global colors (such as \*.color1) on runtime (X11 only)
 
 `-m, --monitor monitor`
-:   Specify a monitor to run spmenu on
+:   Specify a monitor to run spmenu on (X11 only)
 
 `-w, --embed window id`
-:   Embed spmenu inside window id
+:   Embed spmenu inside window id (X11 only)
 
 `-H, --hist-file hist file`
 :   Specify a file to save the history to
@@ -285,16 +285,16 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Set text padding to padding
 
 `-vem, --vertical-margin margin`
-:   Set the vertical margin
+:   Set the vertical margin to margin
 
 `-hom, --horizontal-margin margin`
-:   Set the horizontal margin
+:   Set the horizontal margin to margin
 
 `-lp, --vertical-padding padding`
-:   Set the vertical padding
+:   Set the vertical padding to padding
 
 `-hp, --horizontal-padding padding`
-:   Set the horizontal padding
+:   Set the horizontal padding to padding
 
 `-la, --left-arrow-symbol symbol`
 :   Set the left arrow to symbol
@@ -318,10 +318,10 @@ You may use long, descriptive arguments or the shorter arguments.
 :   Position the image in the top center
 
 `-wm, --managed, --x11-client`
-:   Spawn spmenu as a window manager controlled client/window. Useful for testing
+:   Spawn spmenu as a window manager controlled client/window (X11 only)
 
 `-nwm, --unmanaged`
-:   Don't spawn spmenu as a window manager controlled client/window. Useful for testing
+:   Don't spawn spmenu as a window manager controlled client/window (X11 only)
 
 `-cf, --config-file file`
 :   Set config file to load to file
@@ -823,23 +823,6 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 
 `spmenu:license`
 :    Print the spmenu license
-
-## Wayland support
-
-Note that Wayland support is still experimental, and some features do not
-currently work under Wayland. Some will never work under Wayland due to limitations.
-These are:
-
-- `--x-position` and `--y-position` arguments
-  - These arguments do not work under Wayland, because the layer_shell
-  protocol doesn't allow clients to be placed on a specific position.
-- Embedding `-w` and window manager managed `-wm`
-  - These arguments do not make much sense on Wayland, and embedding is not possible
-  due to the original implementation using XEmbed. If the embed argument is passed
-  it will simply be ignored and the window will be layered as normal.
-- `--monitor` argument
-- Window borders
-- Pasting
 
 ## License
 
