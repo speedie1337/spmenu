@@ -101,7 +101,7 @@ static int maxhist                     = 64; /* Max number of history entries */
 static int histdup                     = 0;	/* If 1, record repeated histories */
 
 /* Prompt options */
-static int indentitems                 = 1; /* Indent items to prompt width? (0/1) */
+static int indentitems                 = 0; /* Indent items to prompt width? (0/1) */
 
 /* Hide options */
 static int hideinput                   = 0; /* Hide input (0/1) */

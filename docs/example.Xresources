@@ -118,7 +118,7 @@ spmenu.lineheight:          1
 spmenu.lines:               0
 spmenu.columns:             10
 spmenu.preselected:         0
-spmenu.indentitems:         1
+spmenu.indentitems:         0
 
 !! History
 spmenu.maxhist:             64
