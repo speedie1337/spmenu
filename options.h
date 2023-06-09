@@ -121,34 +121,34 @@ static int hideimage                   = 0; /* Hide image (0/1) */
  *
  * Item colors */
 static char col_itemnormfg[]           = "#bbbbbb"; /* Normal foreground item color */
-static char col_itemnormbg[]           = "#222222"; /* Normal background item color */
+static char col_itemnormbg[]           = "#110f1f"; /* Normal background item color */
 static char col_itemnormfg2[]          = "#bbbbbb"; /* Normal foreground item colors for the next item */
-static char col_itemnormbg2[]          = "#222222"; /* Normal background item colors for the next item */
-static char col_itemselfg[]            = "#eeeeee"; /* Selected foreground item color */
-static char col_itemselbg[]            = "#35638A"; /* Selected background item color */
-static char col_itemmarkedfg[]         = "#eeeeee"; /* Marked foreground item color */
-static char col_itemmarkedbg[]         = "#35638A"; /* Marked background item color */
-static char col_itemnormprifg[]        = "#bbbbbb"; /* Normal foreground item (high priority) color */
-static char col_itemnormpribg[]        = "#222222"; /* Normal background item (high priority) color */
-static char col_itemselprifg[]         = "#eeeeee"; /* Selected foreground item (high priority) color */
-static char col_itemselpribg[]         = "#35638A"; /* Selected background item (high priority) color */
+static char col_itemnormbg2[]          = "#110f1f"; /* Normal background item colors for the next item */
+static char col_itemselfg[]            = "#110f1f"; /* Selected foreground item color */
+static char col_itemselbg[]            = "#8e93c2"; /* Selected background item color */
+static char col_itemmarkedfg[]         = "#110f1f"; /* Marked foreground item color */
+static char col_itemmarkedbg[]         = "#8e93c2"; /* Marked background item color */
+static char col_itemnormprifg[]        = "#110f1f"; /* Normal foreground item (high priority) color */
+static char col_itemnormpribg[]        = "#110f1f"; /* Normal background item (high priority) color */
+static char col_itemselprifg[]         = "#110f1f"; /* Selected foreground item (high priority) color */
+static char col_itemselpribg[]         = "#8e93c2"; /* Selected background item (high priority) color */
 
 /* Input colors */
-static char col_inputbg[]              = "#222222"; /* Input field background color */
+static char col_inputbg[]              = "#110f1f"; /* Input field background color */
 static char col_inputfg[]              = "#eeeeee"; /* Input field foreground color */
 
 /* Menu colors */
-static char col_menu[]                 = "#222222"; /* Menu background color */
+static char col_menu[]                 = "#110f1f"; /* Menu background color */
 
 /* Prompt colors */
-static char col_promptfg[]             = "#eeeeee"; /* Prompt foreground color */
-static char col_promptbg[]             = "#35526b"; /* Prompt background color */
+static char col_promptfg[]             = "#110f1f"; /* Prompt foreground color */
+static char col_promptbg[]             = "#c66e5b"; /* Prompt background color */
 
 /* Arrow colors */
 static char col_larrowfg[]             = "#bbbbbb"; /* Left arrow color */
 static char col_rarrowfg[]             = "#bbbbbb"; /* Right arrow color */
-static char col_larrowbg[]             = "#222222"; /* Left arrow color */
-static char col_rarrowbg[]             = "#222222"; /* Right arrow color */
+static char col_larrowbg[]             = "#110f1f"; /* Left arrow color */
+static char col_rarrowbg[]             = "#110f1f"; /* Right arrow color */
 
 /* Normal highlight colors */
 static char col_hlnormfg[]             = "#ffffff"; /* Normal text highlight color */
@@ -159,23 +159,23 @@ static char col_hlselfg[]              = "#ffffff"; /* Selected text highlight c
 static char col_hlselbg[]              = "#000000"; /* Selected background highlight color */
 
 /* Match count colors */
-static char col_numfg[]                = "#ffffff"; /* Match count text color */
-static char col_numbg[]                = "#2d3856"; /* Match count background color */
+static char col_numfg[]                = "#110f1f"; /* Match count text color */
+static char col_numbg[]                = "#eba62a"; /* Match count background color */
 
 /* Border color */
-static char col_border[]               = "#35638A"; /* Border color */
+static char col_border[]               = "#8e93c2"; /* Border color */
 
 /* Caret colors */
 static char col_caretfg[]              = "#ffffff"; /* Foreground caret color */
-static char col_caretbg[]              = "#222222"; /* Background caret color */
+static char col_caretbg[]              = "#110f1f"; /* Background caret color */
 
 /* Mode colors */
-static char col_modefg[]               = "#ffffff"; /* Mode text color */
-static char col_modebg[]               = "#35638A"; /* Mode background color */
+static char col_modefg[]               = "#110f1f"; /* Mode text color */
+static char col_modebg[]               = "#92c94b"; /* Mode background color */
 
 /* Caps lock colors */
-static char col_capsfg[]               = "#ffffff"; /* Caps lock text color */
-static char col_capsbg[]               = "#45638A"; /* Caps lock background color */
+static char col_capsfg[]               = "#110f1f"; /* Caps lock text color */
+static char col_capsbg[]               = "#f8d3e6"; /* Caps lock background color */
 
 /* SGR colors */
 static char col_sgr0[]                 = "#20201d"; /* SGR color #0 */
