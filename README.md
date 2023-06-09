@@ -20,8 +20,8 @@ can be themed to look identical to dmenu.
 
 ## Screenshots
 
-![.desktop launcher](screenshots/desktop-launcher.png)
 ![typing](screenshots/typing.gif)
+![.desktop launcher](screenshots/desktop-launcher.png)
 ![bliss](screenshots/bliss.png)
 
 ## Dependencies
@@ -56,7 +56,7 @@ disabled during compile time.
 ## Installation
 
 - If you are on Arch GNU/Linux, you can add
-[my repository](https://git.speedie.site/speedie/speedie-repository) which includes
+[my repository](https://git.speedie.site/speedie/speedie-aur) which includes
 `spmenu` as well as other useful packages. Then simply `pacman -S spmenu`.
 
 - Or if you are on Gentoo GNU/Linux, you can add
@@ -122,9 +122,6 @@ Note that Wayland support is still experimental, and some features do not
 currently work under Wayland. Some will never work under Wayland due to limitations.
 These are:
 
-- Image support
-  - Images simply will not be drawn on Wayland.
-  - Will eventually be solved by replacing imlib2 with cairo.
 - `--x-position` and `--y-position` arguments
   - These arguments do not work under Wayland, because the layer_shell
   protocol doesn't allow clients to be placed on a specific position.

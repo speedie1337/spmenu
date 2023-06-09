@@ -188,9 +188,9 @@ goes through features in more detail.</p>
 <p>spmenu also serves as a proper dmenu replacement for Wayland users,
 and can be themed to look identical to dmenu.</p>
 <h2 id="screenshots">Screenshots</h2>
-<p><img src="screenshots/desktop-launcher.png"
-alt=".desktop launcher" /> <img src="screenshots/typing.gif"
-alt="typing" /> <img src="screenshots/bliss.png" alt="bliss" /></p>
+<p><img src="screenshots/typing.gif" alt="typing" /> <img
+src="screenshots/desktop-launcher.png" alt=".desktop launcher" /> <img
+src="screenshots/bliss.png" alt="bliss" /></p>
 <h2 id="dependencies">Dependencies</h2>
 <ul>
 <li>wayland-client
@@ -248,9 +248,9 @@ build systems.</li>
 <h2 id="installation">Installation</h2>
 <ul>
 <li><p>If you are on Arch GNU/Linux, you can add <a
-href="https://git.speedie.site/speedie/speedie-repository">my
-repository</a> which includes <code>spmenu</code> as well as other
-useful packages. Then simply <code>pacman -S spmenu</code>.</p></li>
+href="https://git.speedie.site/speedie/speedie-aur">my repository</a>
+which includes <code>spmenu</code> as well as other useful packages.
+Then simply <code>pacman -S spmenu</code>.</p></li>
 <li><p>Or if you are on Gentoo GNU/Linux, you can add <a
 href="https://git.speedie.site/speedie/speedie-overlay">my overlay</a>
 which includes <code>x11-misc/spmenu</code> as well as other useful
@@ -296,11 +296,6 @@ instead.</p>
 not currently work under Wayland. Some will never work under Wayland due
 to limitations. These are:</p>
 <ul>
-<li>Image support
-<ul>
-<li>Images simply will not be drawn on Wayland.</li>
-<li>Will eventually be solved by replacing imlib2 with cairo.</li>
-</ul></li>
 <li><code>--x-position</code> and <code>--y-position</code> arguments
 <ul>
 <li>These arguments do not work under Wayland, because the layer_shell
