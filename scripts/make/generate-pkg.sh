@@ -8,7 +8,7 @@ version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; 
 
 rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
 mkdir -p spmenu-${version}
-cp -rf LICENSE meson.build meson.options *.h *.c scripts/ docs/ libs/ protocols/ PKGBUILD spmenu-${version}
+cp -rf LICENSE meson.build meson.options *.c scripts/ docs/ libs/ protocols/ PKGBUILD spmenu-${version}
 [ -f Makefile ] && cp Makefile spmenu-${version} || :
 [ -f host.mk ] && cp host.mk spmenu-${version} || :
 [ -f toggle.mk ] && cp toggle.mk spmenu-${version} || :
