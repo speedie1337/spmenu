@@ -158,6 +158,12 @@ void conf_init(void) {
             if (config_setting_lookup_string(conf, "capslockoff", &dest))
                 capslockofftext = strdup(dest);
 
+            if (config_setting_lookup_string(conf, "normal", &dest))
+                normtext = strdup(dest);
+
+            if (config_setting_lookup_string(conf, "insert", &dest))
+                instext = strdup(dest);
+
             if (config_setting_lookup_string(conf, "input", &dest))
                 input = strdup(dest);
         }
@@ -468,12 +474,6 @@ void conf_init(void) {
 
             // look up
             config_setting_lookup_int(conf, "default", &mode); // spmenu.mode.default
-
-            config_setting_lookup_string(conf, "normal_text", &dest); // spmenu.mode.normal_text
-            normtext = strdup(dest);
-
-            config_setting_lookup_string(conf, "insert_text", &dest); // spmenu.mode.insert_text
-            instext = strdup(dest);
         }
     }
 
