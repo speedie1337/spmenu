@@ -830,9 +830,6 @@ Note that Wayland support is still experimental, and some features do not
 currently work under Wayland. Some will never work under Wayland due to limitations.
 These are:
 
-- Image support
-  - Images simply will not be drawn on Wayland.
-  - Will eventually be solved by replacing imlib2 with cairo.
 - `--x-position` and `--y-position` arguments
   - These arguments do not work under Wayland, because the layer_shell
   protocol doesn't allow clients to be placed on a specific position.
@@ -852,7 +849,7 @@ license. See the included LICENSE file for more information.
 ## Reporting issues
 
 Please report issues on the
-[Codeberg repository](https://codeberg.org/speedie/spmenu) or alternatively
+[Git repository](https://git.speedie.site/speedie/spmenu) or alternatively
 email me.
 
 ## See also

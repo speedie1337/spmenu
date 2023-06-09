@@ -149,7 +149,7 @@ that's the original suckless license. See the included LICENSE file for more inf
 ## Reporting issues
 
 Please report issues on the
-[Codeberg repository](https://codeberg.org/speedie/spmenu) or alternatively
+[Git repository](https://git.speedie.site/speedie/spmenu) or alternatively
 email me.
 
 ## See also
