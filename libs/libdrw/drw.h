@@ -6,10 +6,6 @@
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
 
-typedef struct {
-    Cursor cursor;
-} Cur;
-
 typedef struct Fnt {
     Display *dpy;
     unsigned int h;
@@ -57,10 +53,6 @@ void drw_font_free(Fnt* set);
 unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup);
 unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup);
-
-/* Cursor abstraction */
-Cur *drw_cur_create(Drw *drw, int shape);
-void drw_cur_free(Drw *drw, Cur *cursor);
 
 /* Drawing functions */
 void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha);

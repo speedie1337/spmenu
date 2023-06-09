@@ -392,29 +392,6 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
         *h = font->h;
 }
 
-Cur * drw_cur_create(Drw *drw, int shape) {
-    Cur *cur;
-
-    if (!drw || !(cur = ecalloc(1, sizeof(Cur))))
-        return NULL;
-
-#if USEX
-    cur->cursor = XCreateFontCursor(drw->dpy, shape);
-#endif
-
-    return cur;
-}
-
-void drw_cur_free(Drw *drw, Cur *cursor) {
-#if USEX
-    if (!cursor)
-        return;
-
-    XFreeCursor(drw->dpy, cursor->cursor);
-    free(cursor);
-#endif
-}
-
 void drw_set_img(Drw *drw, void *data, int w, int h) {
     if (!w || !h || !drw) {
         return;
