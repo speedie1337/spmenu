@@ -176,10 +176,6 @@ option to standard output.</p>
 included shell script <code>spmenu_run</code>, which handles both $PATH
 listing, .desktop entries and file listing. See spmenu_run(1) for more
 information related to using spmenu as a run launcher.</p>
-<p>While spmenu is based on dmenu, and is also fully compatible with
-dmenu, spmenu introduces many new features which can be useful in shell
-scripting.</p>
-<p>It also serves as a dmenu replacement for Wayland users.</p>
 <h2 id="usage">Usage</h2>
 <p>On runtime, spmenu reads from standard input (stdin). spmenu items
 are separated by a newline (<code>\n</code>). When (by default) Enter is
@@ -872,14 +868,16 @@ behaviour you can simply set <code>ignoreglobalkeys = 1</code>.</p>
 different modes. As of version 0.2, there are two modes. Normal mode and
 Insert mode. These modes are of course similar to Vim.</p>
 <p>Normal mode is the mode spmenu starts in unless a mode argument is
-specified. In normal mode, all keys perform some action, but you cannot
-type any actual text to filter items. This mode is used for navigation,
-as well as quickly selecting an item.</p>
+specified or another mode is set in the configuration file. In normal
+mode, all keys perform some action, but you cannot type any actual text
+to filter items. This mode is used for navigation, as well as quickly
+selecting an item.</p>
 <p>Insert mode is entered through (by default) pressing <code>i</code>
 in normal mode. In this mode, most keybinds do nothing. When you are in
 insert mode, you filter items by typing text into the field. Once you’re
 done with insert mode, you can press Escape to enter normal mode
 again.</p>
+<p>All of these keybinds can be overriden in the configuration file.</p>
 <h2 id="p-option">-p option</h2>
 <p>spmenu has a -p option, which stands for prompt. It allows you to
 specify text to display next to the item list. It is displayed on the
@@ -903,11 +901,10 @@ item. In practice, drawing an image might look like this:</p>
 <p>Vector images (such as .svg) can be displayed too in the same way.
 This is all done using <code>imlib2</code> so as long as imlib2 support
 it, it can be used.</p>
-<p>NOTE: Also note that older spmenu scripts may use the
-<code>IMG:</code> prefix rather than the newer <code>img://</code>
-prefix. It is recommended that you use the <code>img://</code> prefix,
-but <code>IMG:</code> may be preferred if you need compatibility with
-older spmenu versions.</p>
+<p>NOTE: Older spmenu scripts may use the <code>IMG:</code> prefix
+rather than the newer <code>img://</code> prefix. It is recommended that
+you use the <code>img://</code> prefix, but <code>IMG:</code> may be
+preferred if you need compatibility with older spmenu versions.</p>
 <h2 id="colored-text">Colored text</h2>
 <p>spmenu supports colored text through SGR sequences. This is the same
 colors that you might already be using in your shell scripts. This means

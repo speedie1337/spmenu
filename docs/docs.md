@@ -9,11 +9,6 @@ shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
 and file listing. See spmenu_run(1) for more information related to
 using spmenu as a run launcher.
 
-While spmenu is based on dmenu, and is also fully compatible with dmenu,
-spmenu introduces many new features which can be useful in shell scripting.
-
-It also serves as a dmenu replacement for Wayland users.
-
 ## Usage
 
 On runtime, spmenu reads from standard input (stdin). spmenu items are
@@ -544,15 +539,17 @@ One of the features that separate spmenu from dmenu is spmenu's different
 modes. As of version 0.2, there are two modes. Normal mode and Insert mode.
 These modes are of course similar to Vim.
 
-Normal mode is the mode spmenu starts in unless a mode argument is specified.
-In normal mode, all keys perform some action, but you cannot type any actual
-text to filter items. This mode is used for navigation, as well
-as quickly selecting an item.
+Normal mode is the mode spmenu starts in unless a mode argument is specified
+or another mode is set in the configuration file. In normal mode, all keys
+perform some action, but you cannot type any actual text to filter items.
+This mode is used for navigation, as well as quickly selecting an item.
 
 Insert mode is entered through (by default) pressing `i` in normal mode. In
 this mode, most keybinds do nothing. When you are in insert mode, you
 filter items by typing text into the field. Once you're done
 with insert mode, you can press Escape to enter normal mode again.
+
+All of these keybinds can be overriden in the configuration file.
 
 ## -p option
 
@@ -580,7 +577,7 @@ There are also a few image related arguments, such as:
 Vector images (such as .svg) can be displayed too in the same way. This is all
 done using `imlib2` so as long as imlib2 support it, it can be used.
 
-NOTE: Also note that older spmenu scripts may use the `IMG:` prefix rather than
+NOTE: Older spmenu scripts may use the `IMG:` prefix rather than
 the newer `img://` prefix. It is recommended that you use the `img://` prefix,
 but `IMG:` may be preferred if you need compatibility with older spmenu versions.
 

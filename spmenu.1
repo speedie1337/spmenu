@@ -28,12 +28,6 @@ included shell script \f[V]spmenu_run\f[R], which handles both $PATH
 listing, .desktop entries and file listing.
 See spmenu_run(1) for more information related to using spmenu as a run
 launcher.
-.PP
-While spmenu is based on dmenu, and is also fully compatible with dmenu,
-spmenu introduces many new features which can be useful in shell
-scripting.
-.PP
-It also serves as a dmenu replacement for Wayland users.
 .SS Usage
 .PP
 On runtime, spmenu reads from standard input (stdin).
@@ -575,7 +569,7 @@ Normal mode and Insert mode.
 These modes are of course similar to Vim.
 .PP
 Normal mode is the mode spmenu starts in unless a mode argument is
-specified.
+specified or another mode is set in the configuration file.
 In normal mode, all keys perform some action, but you cannot type any
 actual text to filter items.
 This mode is used for navigation, as well as quickly selecting an item.
@@ -587,6 +581,8 @@ When you are in insert mode, you filter items by typing text into the
 field.
 Once you\[cq]re done with insert mode, you can press Escape to enter
 normal mode again.
+.PP
+All of these keybinds can be overriden in the configuration file.
 .SS -p option
 .PP
 spmenu has a -p option, which stands for prompt.
@@ -618,8 +614,8 @@ Vector images (such as .svg) can be displayed too in the same way.
 This is all done using \f[V]imlib2\f[R] so as long as imlib2 support it,
 it can be used.
 .PP
-NOTE: Also note that older spmenu scripts may use the \f[V]IMG:\f[R]
-prefix rather than the newer \f[V]img://\f[R] prefix.
+NOTE: Older spmenu scripts may use the \f[V]IMG:\f[R] prefix rather than
+the newer \f[V]img://\f[R] prefix.
 It is recommended that you use the \f[V]img://\f[R] prefix, but
 \f[V]IMG:\f[R] may be preferred if you need compatibility with older
 spmenu versions.
