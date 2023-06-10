@@ -119,7 +119,7 @@ directory**. If you want to generate a pacman package, run
 ## Scripts
 
 There's a page dedicated to user scripts
-[over on the wiki](https://spmenu.speedie.site/index.php/User+scripts). Feel
+[over on the wiki](https://spmenu.speedie.site/User+scripts). Feel
 free to contribute and try scripts on there.
 
 ## More information

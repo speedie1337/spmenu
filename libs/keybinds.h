@@ -1,7 +1,4 @@
 /* These are all your hardcoded keybinds.
- * It is recommended you set keybinds in ~/.config/spmenu/spmenu.conf instead.
- *
- * See https://spmenu.speedie.site/index.php/keybinds.h+documentation for more information.
  * See LICENSE file for copyright and license details.
  */
 
