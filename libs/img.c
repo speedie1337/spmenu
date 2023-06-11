@@ -374,10 +374,10 @@ void resizetoimageheight_x11(int imageheight) {
         wtr = bh;
     }
 
-    mh = MAX((lines + 1) * bh + 2 * menumarginv, ((lines + 1) * bh) - wtr + 2 * menumarginv);
+    get_mh();
 
     if (mh - bh < imageheight + imagegaps * 2) {
-        mh = (imageheight + imagegaps * 2 + bh) - wtr + 2 * menumarginv;
+        mh = (imageheight + imagegaps * 2 + bh) - wtr;
     }
 
     // init xinerama screens
@@ -478,10 +478,10 @@ void resizetoimageheight_wl(int imageheight) {
         wtr = bh;
     }
 
-    mh = MAX((lines + 1) * bh + 2 * menumarginv, ((lines + 1) * bh) - wtr + 2 * menumarginv);
+    get_mh();
 
     if (mh - bh < imageheight + imagegaps * 2) {
-        mh = (imageheight + imagegaps * 2 + bh) - wtr + 2 * menumarginv;
+        mh = (imageheight + imagegaps * 2 + bh) - wtr;
     }
 
     if (omh == mh) {

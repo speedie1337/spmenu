@@ -197,6 +197,7 @@ static void grabfocus(void);
 #endif
 static void resizeclient(void);
 static void get_width(void);
+static void get_mh(void);
 static void set_mode(void);
 static void handle(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
@@ -463,6 +464,11 @@ void resizeclient(void) {
 
 void get_width(void) {
     inputw = mw / 3;
+}
+
+void get_mh(void) {
+    mh = (lines + 1) * bh;
+    mh += 2 * menumarginv;
 }
 
 void set_mode(void) {

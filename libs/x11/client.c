@@ -96,7 +96,7 @@ void resizeclient_x11(void) {
     if (image) resizetoimageheight(imagewidth, imageheight);
 #endif
 
-    mh = (lines + 1) * bh + 2 * menumarginv;
+    get_mh();
 
     // init xinerama screens
 #if USEXINERAMA

@@ -33,7 +33,7 @@ void handle_wl(void) {
     create_layer(&state, "spmenu");
 
     mw = (menuwidth > 0 ? menuwidth : output_width);
-    mh = (lines + 1) * bh + 2 * menumarginv;
+    get_mh();
 
     if (menuposition == 2) {
         mw = MIN(MAX(max_textw() + promptw, minwidth), output_width);

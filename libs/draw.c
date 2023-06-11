@@ -567,6 +567,7 @@ void drawmenu_layer(void) {
     y += menumarginv;
 
     calcoffsets();
+    get_mh();
 
     // why have an empty line?
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps
@@ -576,7 +577,7 @@ void drawmenu_layer(void) {
         )) {
 #endif
             y -= bh;
-            mh = (lines + 1) * bh - bh + 2 * menumarginv;
+            mh -= bh;
 
             if (!protocol) {
 #if USEX
@@ -594,7 +595,7 @@ void drawmenu_layer(void) {
 #if USEIMAGE
         else if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
             y -= bh;
-            mh = (lines + 1) * bh - bh + 2 * menumarginv;
+            mh -= bh;
 
 #if USEWAYLAND
             if (protocol) {

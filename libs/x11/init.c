@@ -134,7 +134,7 @@ void prepare_window_size_x11(void) {
     reallines = lines;
 
     lrpad = drw->font->h + textpadding;
-    mh = (lines + 1) * bh + 2 * menumarginv; // lines + 1 * bh is the menu height
+    get_mh();
 
     return;
 }

@@ -541,7 +541,7 @@ void resizeclient_wl(struct state *state) {
     bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
     reallines = lines;
-    mh = (lines + 1) * bh + 2 * menumarginv;
+    get_mh();
 
     if (mh == omh) {
         return;
