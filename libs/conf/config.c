@@ -454,6 +454,19 @@ void conf_init(void) {
         }
     }
 
+    // load options spmenu.caret
+    config_setting_t *caret_setting = config_lookup(&cfg, "spmenu.caret");
+    if (caret_setting != NULL && loadconfig) {
+        for (unsigned int i = 0; i < config_setting_length(caret_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(caret_setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "width", &caretwidth); // spmenu.caret.width
+            config_setting_lookup_int(conf, "height", &caretheight); // spmenu.caret.height
+            config_setting_lookup_int(conf, "padding", &caretpadding); // spmenu.caret.padding
+        }
+    }
+
     // load options spmenu.output
     config_setting_t *output_setting = config_lookup(&cfg, "spmenu.output");
     if (output_setting != NULL && loadconfig) {

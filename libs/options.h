@@ -25,8 +25,8 @@ static char *bindsfile                 = NULL; /* Keybind file path. Default is 
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
 static int menuposition                = 2; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
-static int menupaddingv				   = 0; /* Vertical padding inside the menu (in pixels) */
-static int menupaddingh				   = 0; /* Horizontal padding inside the menu (in pixels) */
+static int menupaddingv				   = 0; /* Vertical padding inside the menu (px) */
+static int menupaddingh				   = 0; /* Horizontal padding inside the menu (px) */
 static int menuwidth                   = 0; /* spmenu width */
 static int menumarginv                 = 0; /* Vertical padding around the menu */
 static int menumarginh                 = 0; /* Horizontal padding around the menu */
@@ -102,6 +102,11 @@ static int histdup                     = 0;	/* If 1, record repeated histories *
 
 /* Prompt options */
 static int indentitems                 = 0; /* Indent items to prompt width? (0/1) */
+
+/* Caret options */
+static int caretwidth                  = 0; /* Caret width (0: Calculate automatically) */
+static int caretheight                 = 0; /* Caret height (0: Calculate automatically) */
+static int caretpadding                = 0; /* Caret padding (px) */
 
 /* Hide options */
 static int hideinput                   = 0; /* Hide input (0/1) */

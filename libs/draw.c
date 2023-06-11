@@ -375,7 +375,15 @@ int drawprompt(int x, int y, int w) {
 int drawinput(int x, int y, int w) {
     char *censort; // censor text (password)
     unsigned int curpos = 0;
-    int fh = drw->font->h;
+    int fh = caretheight;
+    int fw = MAX(2, caretwidth);
+    int fp = caretpadding;
+
+    if (fh > bh) {
+        fh = bh;
+    } else if (!fh) {
+        fh = drw->font->h;
+    }
 
     if (passwd) {
         censort = ecalloc(1, sizeof(text));
@@ -397,7 +405,8 @@ int drawinput(int x, int y, int w) {
     }
 
     if ((curpos += lrpad / 2 - 1) < w && !hidecaret && cursorstate) {
-        drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, 2, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
+        curpos += fp;
+        drw_rect(drw, x + curpos, 2 + (bh - fh) / 2 + y, fw, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
     }
 
     return x;

@@ -124,6 +124,11 @@ spmenu.indentitems:         0
 spmenu.maxhist:             64
 spmenu.histdup:             0
 
+!! Caret
+spmenu.caretwidth:          0
+spmenu.caretheight:         0
+spmenu.caretpadding:        0
+
 !! Matches
 spmenu.type:                1
 spmenu.passwd:              0

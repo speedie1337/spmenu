@@ -74,6 +74,19 @@ void theme_load(void) {
         }
     }
 
+    // load options theme.caret
+    config_setting_t *caret_setting = config_lookup(&cfg, "theme.caret");
+    if (caret_setting != NULL && loadconfig) {
+        for (unsigned int i = 0; i < config_setting_length(caret_setting); ++i) {
+            config_setting_t *conf = config_setting_get_elem(caret_setting, i);
+
+            // look up
+            config_setting_lookup_int(conf, "width", &caretwidth); // spmenu.caret.width
+            config_setting_lookup_int(conf, "height", &caretheight); // spmenu.caret.height
+            config_setting_lookup_int(conf, "padding", &caretpadding); // spmenu.caret.padding
+        }
+    }
+
     // load options theme.powerline
     config_setting_t *pwl_setting = config_lookup(&cfg, "theme.powerline");
     if (pwl_setting != NULL) {
