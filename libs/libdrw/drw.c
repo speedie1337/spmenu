@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <X11/Xlib.h>
 #include <cairo/cairo.h>
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
@@ -21,6 +20,10 @@
 #define USEWAYLAND 0
 #else
 #define USEWAYLAND 1
+#endif
+
+#if USEX
+#include <X11/Xlib.h>
 #endif
 
 void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
