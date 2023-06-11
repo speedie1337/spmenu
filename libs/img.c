@@ -367,7 +367,7 @@ void resizetoimageheight_x11(int imageheight) {
         lines = (imageheight + imagegaps * 2) / bh;
 
         if (fullscreen) {
-            lines = imageheight / bh;
+            lines = imageheight / bh - 1;
         }
     }
 
@@ -466,7 +466,7 @@ void resizetoimageheight_wl(int imageheight) {
         lines = (imageheight + imagegaps * 2) / bh;
 
         if (fullscreen) {
-            lines = imageheight / bh;
+            lines = imageheight / bh - 1;
         }
     }
 
