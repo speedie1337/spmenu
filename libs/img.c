@@ -89,15 +89,13 @@ void drawimage(void) {
         xta += menumarginh;
         wta += menumarginv;
 
-        if (mh != bh + height + leftmargin * 2 - wtr && !fullscreen) { // menu height cannot be smaller than image height
+        if (mh != bh + height + leftmargin * 2 - wtr) { // menu height cannot be smaller than image height
             resizetoimageheight(width, height);
-        } else if (mh != bh + height + leftmargin * 2 - wtr && fullscreen) {
-            resizetoimageheight(width-bh, height-bh);
         }
 
         // we're covering all the area
         if (fullscreen) {
-            xta = wta = wtr = leftmargin = 0;
+            xta = wta = leftmargin = 0;
         }
 
         drw_set_img(drw, imlib_image_get_data(), width, height);
@@ -367,6 +365,10 @@ void resizetoimageheight_x11(int imageheight) {
 
     if (lines * bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / bh;
+
+        if (fullscreen) {
+            lines = imageheight / bh;
+        }
     }
 
     get_mh();
@@ -462,6 +464,10 @@ void resizetoimageheight_wl(int imageheight) {
 
     if (lines * bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / bh;
+
+        if (fullscreen) {
+            lines = imageheight / bh;
+        }
     }
 
     get_mh();
