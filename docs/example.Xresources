@@ -165,6 +165,7 @@ spmenu.sgr:                 1
 !! Image
 spmenu.imagewidth:          200
 spmenu.imageheight:         200
+spmenu.imageresize:         1
 spmenu.imagegaps:           0
 spmenu.imageposition:       0
 spmenu.generatecache:       1

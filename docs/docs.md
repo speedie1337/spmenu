@@ -317,6 +317,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-itc, --image-topcenter`
 :   Position the image in the top center
 
+`-ir, --image-resize`
+:   Allow spmenu to resize itself to fit the image
+
+`-nir, --no-image-resize`
+:   Don't allow spmenu to resize itself to fit the image
+
 `-wm, --managed, --x11-client`
 :   Spawn spmenu as a window manager controlled client/window (X11 only)
 

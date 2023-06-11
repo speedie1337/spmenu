@@ -71,7 +71,7 @@ void drawimage(void) {
         xta += menumarginh;
         wta += menumarginv;
 
-        if (mh != bh + height + leftmargin * 2 - wtr) { // menu height cannot be smaller than image height
+        if (mh != bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
             resizetoimageheight(width, height);
         }
 

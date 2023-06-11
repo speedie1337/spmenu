@@ -369,7 +369,10 @@ void readargs(int argc, char *argv[]) {
 
             if(sscanf(buf, "%dx%d", &imagewidth, &imageheight) == 1)
                 imageheight = imagewidth;
-
+        } else if (!strcmp(argv[i], "-ir") || (!strcmp(argv[i], "--image-resize"))) { // image resize
+            imageresize = 1;
+        } else if (!strcmp(argv[i], "-nir") || (!strcmp(argv[i], "--no-image-resize"))) { // no image resize
+            imageresize = 0;
         } else if (!strcmp(argv[i], "-w") || (!strcmp(argv[i], "--embed"))) { // embedding window id
 #if USEX
             embed = argv[++i];
@@ -562,7 +565,8 @@ void usage(int status) {
             "spmenu -nt,      --no-allow-typing                           Don't allow typing, the user must select an option\n"
             , status ? stderr : stdout);
 
-    fputs("spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset> (X11 only)\n"
+    fputs(
+            "spmenu -x,       --x-position <x offset>                     Offset spmenu x position by <x offset> (X11 only)\n"
             "spmenu -y,       --y-position <y offset>                     Offset spmenu y position by <y offset> (X11 only)\n"
             "spmenu -n,       --preselect <line>                          Preselect <line> in the list of items\n"
             "spmenu -z,       --width <width>                             Width of the spmenu window\n"
@@ -584,7 +588,8 @@ void usage(int status) {
             , status ? stderr : stdout);
 
     // more args
-    fputs("spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
+    fputs(
+            "spmenu -hm,      --hide-mode                                 Hide mode indicator\n"
             "spmenu -hmc,     --hide-match-count                          Hide match count\n"
             "spmenu -hla,     --hide-left-arrow                           Hide left arrow\n"
             "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
@@ -624,15 +629,22 @@ void usage(int status) {
             "spmenu -hom,     --horizontal-margin <margin>                Set the horizontal margin to <margin>\n"
             "spmenu -la,      --left-arrow-symbol <symbol>                Set the left arrow to <symbol>\n"
             "spmenu -ra,      --right-arrow-symbol <symbol>               Set the right arrow to <symbol>\n"
+            , status ? stderr : stdout);
+
+    // image related
+    fputs(
             "spmenu -is,      --image-size <size>                         Set image size to <size>\n"
             "spmenu -it,      --image-top                                 Position the image at the top\n"
             "spmenu -ib,      --image-bottom                              Position the image at the bottom\n"
             "spmenu -ic,      --image-center                              Position the image in the center\n"
             "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
+            "spmenu -ir,      --image-resize                              Allow spmenu to resize itself to fit the image\n"
+            "spmenu -nir,     --no-image-resize                           Don't allow spmenu to resize itself to fit the image\n"
             , status ? stderr : stdout);
 
     // general/config related
-    fputs("spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window (X11 only)\n"
+    fputs(
+            "spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window (X11 only)\n"
             "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window (X11 only)\n"
             "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
             "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
@@ -650,7 +662,8 @@ void usage(int status) {
             "\n", status ? stderr : stdout);
 
     // colors
-    fputs("- Appearance arguments -\n"
+    fputs(
+            "- Appearance arguments -\n"
             "spmenu -fn,      --font  <font>                              Set the spmenu font to <font>\n"
             "spmenu -nif,     --normal-item-foreground <color>            Set the normal item foreground color\n"
             "spmenu -nib,     --normal-item-background <color>            Set the normal item background color\n"
@@ -685,7 +698,8 @@ void usage(int status) {
             , status ? stderr : stdout);
 
     // sgr sequences
-    fputs("spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
+    fputs(
+            "spmenu -sgr0,    --sgr0 <color>                              Set the SGR 0 color\n"
             "spmenu -sgr1,    --sgr1 <color>                              Set the SGR 1 color\n"
             "spmenu -sgr2,    --sgr2 <color>                              Set the SGR 2 color\n"
             "spmenu -sgr3,    --sgr3 <color>                              Set the SGR 3 color\n"
@@ -704,7 +718,8 @@ void usage(int status) {
             "\n", status ? stderr : stdout);
 
     // dmenu compat
-    fputs("- dmenu compatibility -\n"
+    fputs(
+            "- dmenu compatibility -\n"
             "spmenu -S                                                    Don't sort matches\n"
             "spmenu -i                                                    Use case-insensitive matching\n"
             "spmenu -nb <color>                                           Set the normal background color\n"

@@ -49,8 +49,9 @@ static int capspwlstyle                = 2; /* Caps lock indicator powerline sty
 static int dockproperty                = 1; /* Set _NET_WM_WINDOW_TYPE_DOCK */
 
 /* Image options */
-static int imagewidth                  = 200; /* Default image width */
-static int imageheight                 = 200; /* Default image height */
+static int imagewidth                  = 200; /* Default image width (px) */
+static int imageheight                 = 200; /* Default image height (px) */
+static int imageresize                 = 1; /* Allow the spmenu window to resize itself to fit the image (0/1) */
 static int imagegaps                   = 0; /* Image gaps */
 static int imageposition               = 0; /* Image position (0: Top, 1: Bottom, 2: Center, 3: Top center) */
 static int generatecache               = 1; /* Generate image cache by default */
