@@ -335,7 +335,6 @@ void jumptoindex(unsigned int index) {
 }
 
 void resizetoimageheight(int imagewidth, int imageheight) {
-    //int ih = imageheight;
     int ih = imlib_image_get_height();
 
 #if USEX
@@ -460,21 +459,12 @@ void resizetoimageheight_x11(int imageheight) {
 void resizetoimageheight_wl(int imageheight) {
     int omh = mh, olines = lines;
     lines = reallines;
-    int wtr = 0;
 
     if (lines * bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / bh;
     }
 
-    if (hideprompt && hideinput && hidemode && hidematchcount) {
-        wtr = bh;
-    }
-
     get_mh();
-
-    if (mh - bh < imageheight + imagegaps * 2) {
-        mh = (imageheight + imagegaps * 2 + bh) - wtr;
-    }
 
     if (omh == mh) {
         return;
