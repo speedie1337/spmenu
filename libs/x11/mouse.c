@@ -26,7 +26,9 @@ void buttonpress_x11(XEvent *e) {
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
-    if (!strcmp(capstext, "")) capsWidth = 0; // no caps lock width for no chars
+    if (!strcmp(capstext, ""))
+        capsWidth = 0;
+
     if (ev->window != win) return; // if incorrect or wrong window, return
 
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific

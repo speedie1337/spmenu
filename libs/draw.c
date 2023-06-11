@@ -573,58 +573,43 @@ void drawmenu_layer(void) {
     calcoffsets();
     get_mh();
 
-    // why have an empty line?
-    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps)) {
-            y -= bh;
-            mh -= bh;
+    // bh must be removed from menu height resizing later
+    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
+        y -= bh;
+    }
 
-            if (!protocol && (hideimage || !image)) {
-#if USEX
-                XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
-                drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
-#endif
-            } else if (protocol && (hideimage || !image)) {
-#if USEWAYLAND
-                state.width = mw;
-                state.height = mh;
+    if (!hideprompt && !fullscreen) {
+        w = promptw;
+        x = drawprompt(x, y, w);
+    }
 
-                set_layer_size(&state, state.width, state.height);
-#endif
-            }
-        }
+    if (!hideinput && !fullscreen) {
+        w = (lines > 0 || !matches) ? mw - x : inputw;
+        x = drawinput(x, y, w);
+    }
 
-        if (!hideprompt && !fullscreen) {
-            w = promptw;
-            x = drawprompt(x, y, w);
-        }
+    if (!hidemode && !fullscreen) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
 
-        if (!hideinput && !fullscreen) {
-            w = (lines > 0 || !matches) ? mw - x : inputw;
-            x = drawinput(x, y, w);
-        }
+    // draw the items, this function also calls drawrarrow() and drawlarrow()
+    if (!hideitem) drawitem(x, y, w);
 
-        if (!hidemode && !fullscreen) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
+    if (!hidematchcount && !fullscreen) {
+        w = numberWidth;
+        drawnumber(mw - numberWidth - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+    }
 
-        // draw the items, this function also calls drawrarrow() and drawlarrow()
-        if (!hideitem) drawitem(x, y, w);
+    if (!hidemode && !fullscreen) {
+        w = modeWidth;
+        drawmode(mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+    }
 
-        if (!hidematchcount && !fullscreen) {
-            w = numberWidth;
-            drawnumber(mw - numberWidth - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
-        }
-
-        if (!hidemode && !fullscreen) {
-            w = modeWidth;
-            drawmode(mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
-        }
-
-        if (!hidecaps && !fullscreen) {
-            w = capsWidth;
-            drawcaps(mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
-        }
+    if (!hidecaps && !fullscreen) {
+        w = capsWidth;
+        drawcaps(mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh, y, w);
+    }
 
 #if USEX
-        drawimage();
-        drw_map(drw, win, 0, 0, mw, mh);
+    drawimage();
+    drw_map(drw, win, 0, 0, mw, mh);
 #endif
     }

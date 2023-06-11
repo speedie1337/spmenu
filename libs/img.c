@@ -107,16 +107,17 @@ void drawimage(void) {
             if (height > width)
                 width = height;
 
-            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, wta+leftmargin);
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, wta + leftmargin);
         } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
-            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, mh-height-leftmargin);
+
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, mh - height - leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
-            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, (mh-wta-height)/2+wta);
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (mh - wta - height) / 2 + wta);
         } else if (image) { // top center
-            int minh = MIN(height, mh-bh-leftmargin*2);
-            drw_img(drw, leftmargin+(imagewidth-width)/2+xta, (minh-height)/2+wta+leftmargin);
+            int minh = MIN(height, mh - bh - leftmargin * 2);
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
         }
     }
 
@@ -354,7 +355,6 @@ void resizetoimageheight(int imagewidth, int imageheight) {
 void resizetoimageheight_x11(int imageheight) {
     int omh = mh, olines = lines;
     lines = reallines;
-    int wtr = 0;
 
     int x, y;
 #if USEXINERAMA
@@ -370,15 +370,7 @@ void resizetoimageheight_x11(int imageheight) {
         lines = (imageheight + imagegaps * 2) / bh;
     }
 
-    if (hideprompt && hideinput && hidemode && hidematchcount) {
-        wtr = bh;
-    }
-
     get_mh();
-
-    if (mh - bh < imageheight + imagegaps * 2) {
-        mh = (imageheight + imagegaps * 2 + bh) - wtr;
-    }
 
     // init xinerama screens
 #if USEXINERAMA

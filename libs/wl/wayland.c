@@ -243,7 +243,8 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
     if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
 
-    if (!strcmp(capstext, "")) capsWidth = 0; // No caps lock width for no chars
+    if (!strcmp(capstext, ""))
+        capsWidth = 0;
 
     click = ClickWindow; // Used as a default, will be overriden.
 
@@ -543,13 +544,13 @@ void resizeclient_wl(struct state *state) {
     reallines = lines;
     get_mh();
 
+    if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
+        mh -= bh;
+    }
+
     if (mh == omh) {
         return;
     }
-
-    // why have an empty line? when there's nothing to draw there anyway?
-    if (hideprompt && hideinput && hidemode && hidematchcount)
-        mh += bh;
 
     state->width = mw;
     state->height = mh;

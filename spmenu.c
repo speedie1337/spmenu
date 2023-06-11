@@ -469,6 +469,10 @@ void get_width(void) {
 void get_mh(void) {
     mh = (lines + 1) * bh;
     mh += 2 * menumarginv;
+
+    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
+        mh -= bh;
+    }
 }
 
 void set_mode(void) {
