@@ -369,6 +369,7 @@ out:
 void setimgsize(Arg *arg) {
 #if USEIMAGE
     setimagesize(imagewidth + arg->i, imageheight + arg->i);
+    drawmenu();
 #endif
 }
 

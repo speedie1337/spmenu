@@ -2,30 +2,12 @@
 
 #if USEIMAGE
 void setimagesize(int width, int height) {
-    int oih = 0;
-    int oiw = 0;
-
-    // this makes sure we cannot scale the image up or down too much
-    if ((!image && height < imageheight) || (!image && width < imagewidth) || (width < 0) || width > mw || hideimage || fullscreen) return;
-
-    // original width/height
-    oih = imageheight;
-    oiw = imagewidth;
-
-    drawimage();
-
-    imageheight = height;
-    imagewidth = width;
-
-    needredraw = 0;
-
-    if (!image) {
-        imageheight = oih;
-        imagewidth = oiw;
+    if (!image || fullscreen || hideimage || height < 5 || width < 5 || width > mw) {
         return;
     }
 
-    drawmenu();
+    imageheight = height;
+    imagewidth = width;
 }
 
 void flipimage(void) {
