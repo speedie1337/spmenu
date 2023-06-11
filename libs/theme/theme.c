@@ -394,7 +394,7 @@ void theme_load(void) {
             // look up
             config_setting_lookup_int(conf, "width", &imagewidth); // theme.image.width
             config_setting_lookup_int(conf, "height", &imageheight); // theme.image.height
-            config_setting_lookup_int(conf, "gaps", &imageheight); // theme.image.gaps
+            config_setting_lookup_int(conf, "gaps", &imagegaps); // theme.image.gaps
             config_setting_lookup_int(conf, "position", &imageposition); // theme.image.position
         }
     }
