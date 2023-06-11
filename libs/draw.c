@@ -320,8 +320,10 @@ int drawitem(int x, int y, int w) {
     } else if (matches) {
         x += inputw;
 
-        w = larrowWidth;
-        x = drawlarrow(x, y, w);
+        if (!hidelarrow) {
+            w = larrowWidth;
+            x = drawlarrow(x, y, w);
+        }
 
         itemnumber = 0;
         int itemoverride = 1;
@@ -347,8 +349,10 @@ int drawitem(int x, int y, int w) {
             }
         }
 
-        w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp + 2 * borderwidth;
-        x = drawrarrow(mw - w, y, w);
+        if (!hiderarrow) {
+            w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp + 2 * borderwidth;
+            x = drawrarrow(mw - w, y, w);
+        }
     }
 
     return x;
