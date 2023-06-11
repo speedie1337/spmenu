@@ -411,7 +411,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "width", &imagewidth); // spmenu.image.width
             config_setting_lookup_int(conf, "height", &imageheight); // spmenu.image.height
             config_setting_lookup_int(conf, "resize", &imageresize); // spmenu.image.resize
-            config_setting_lookup_int(conf, "gaps", &imageheight); // spmenu.image.gaps
+            config_setting_lookup_int(conf, "gaps", &imagegaps); // spmenu.image.gaps
             config_setting_lookup_int(conf, "position", &imageposition); // spmenu.image.position
             config_setting_lookup_int(conf, "cache", &generatecache); // spmenu.image.cache
             config_setting_lookup_int(conf, "maxcache", &maxcache); // spmenu.image.maxcache
