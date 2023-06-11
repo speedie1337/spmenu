@@ -574,43 +574,24 @@ void drawmenu_layer(void) {
     get_mh();
 
     // why have an empty line?
-    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps
-#if USEIMAGE
-        ) && (!image || hideimage)) {
-#else
-        )) {
-#endif
+    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps)) {
             y -= bh;
             mh -= bh;
 
-            if (!protocol) {
+            if (!protocol && (hideimage || !image)) {
 #if USEX
-                if (!win) {
-                    return;
-                }
-
                 XResizeWindow(dpy, win, mw - 2 * sp - 2 * borderwidth, mh);
                 drw_resize(drw, mw - 2 * sp - 2 * borderwidth, mh);
 #endif
-            } else {
-                resizeclient();
-            }
-        }
-#if USEIMAGE
-        else if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
-            y -= bh;
-            mh -= bh;
-
+            } else if (protocol && (hideimage || !image)) {
 #if USEWAYLAND
-            if (protocol) {
                 state.width = mw;
                 state.height = mh;
 
                 set_layer_size(&state, state.width, state.height);
+#endif
             }
-#endif
         }
-#endif
 
         if (!hideprompt && !fullscreen) {
             w = promptw;
