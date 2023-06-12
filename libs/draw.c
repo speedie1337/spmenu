@@ -534,7 +534,9 @@ void drawmenu(void) {
         wl_surface_damage(state.surface, 0, 0, state.width, state.height);
         wl_surface_commit(state.surface);
 
+#if USEIMAGE
         drawimage();
+#endif
     } else {
         drawmenu_layer();
     }
@@ -609,7 +611,9 @@ void drawmenu_layer(void) {
     }
 
 #if USEX
+#if USEIMAGE
     drawimage();
+#endif
     drw_map(drw, win, 0, 0, mw, mh);
 #endif
     }
