@@ -10,3 +10,4 @@
 
 void die(const char *fmt, ...);
 void *ecalloc(size_t nmemb, size_t size);
+size_t sp_strncpy(char *dest, const char *src, size_t size);

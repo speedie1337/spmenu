@@ -327,39 +327,39 @@ void readargs(int argc, char *argv[]) {
         else if (!strcmp(argv[i], "-lf") || (!strcmp(argv[i], "--list-file"))) // list file
             listfile = argv[++i];
         else if (!strcmp(argv[i], "-nmt") || (!strcmp(argv[i], "--normal-mode-text")))  // normal mode text
-            strcpy(normtext, argv[++i]);
+            sp_strncpy(normtext, argv[++i], sizeof(normtext));
         else if (!strcmp(argv[i], "-imt") || (!strcmp(argv[i], "--insert-mode-text")))  // insert mode text
-            strcpy(instext, argv[++i]);
+            sp_strncpy(instext, argv[++i], sizeof(instext));
         else if (!strcmp(argv[i], "-clon") || (!strcmp(argv[i], "--caps-lock-on-text")))  // caps lock on text
-            strcpy(capslockontext, argv[++i]);
+            sp_strncpy(capslockontext, argv[++i], sizeof(capslockontext));
         else if (!strcmp(argv[i], "-clof") || (!strcmp(argv[i], "--caps-lock-off-text"))) {  // caps lock off text
-            strcpy(capslockofftext, argv[++i]);
+            sp_strncpy(capslockofftext, argv[++i], sizeof(capslockofftext));
 
             // dmenu compatibility options
         } else if (!strcmp(argv[i], "-nb")) {  // normal background color
             int ix = ++i;
-            strcpy(col_itemnormbg, argv[ix]);
-            strcpy(col_itemnormbg2, argv[ix]);
-            strcpy(col_menu, argv[ix]);
-            strcpy(col_inputbg, argv[ix]);
-            strcpy(col_promptbg, argv[ix]);
+            sp_strncpy(col_itemnormbg, argv[ix], sizeof(col_itemnormbg));
+            sp_strncpy(col_itemnormbg2, argv[ix], sizeof(col_itemnormbg2));
+            sp_strncpy(col_menu, argv[ix], sizeof(col_menu));
+            sp_strncpy(col_inputbg, argv[ix], sizeof(col_inputbg));
+            sp_strncpy(col_promptbg, argv[ix], sizeof(col_promptbg));
         } else if (!strcmp(argv[i], "-nf")) {  // normal foreground color
             int ix = ++i;
-            strcpy(col_itemnormfg, argv[ix]);
-            strcpy(col_itemnormfg2, argv[ix]);
-            strcpy(col_inputfg, argv[ix]);
-            strcpy(col_promptfg, argv[ix]);
+            sp_strncpy(col_itemnormfg, argv[ix], sizeof(col_itemnormfg));
+            sp_strncpy(col_itemnormfg2, argv[ix], sizeof(col_itemnormfg2));
+            sp_strncpy(col_inputfg, argv[ix], sizeof(col_inputfg));
+            sp_strncpy(col_promptfg, argv[ix], sizeof(col_promptfg));
         } else if (!strcmp(argv[i], "-sb")) {  // selected background color
             int ix = ++i;
-            strcpy(col_itemselbg, argv[ix]);
-            strcpy(col_menu, argv[ix]);
-            strcpy(col_inputbg, argv[ix]);
-            strcpy(col_promptbg, argv[ix]);
+            sp_strncpy(col_itemselbg, argv[ix], sizeof(col_itemselbg));
+            sp_strncpy(col_menu, argv[ix], sizeof(col_menu));
+            sp_strncpy(col_inputbg, argv[ix], sizeof(col_inputbg));
+            sp_strncpy(col_promptbg, argv[ix], sizeof(col_promptbg));
         } else if (!strcmp(argv[i], "-sf")) {  // selected foreground color
             int ix = ++i;
-            strcpy(col_itemselfg, argv[ix]);
-            strcpy(col_inputfg, argv[ix]);
-            strcpy(col_promptfg, argv[ix]);
+            sp_strncpy(col_itemselfg, argv[ix], sizeof(col_itemselfg));
+            sp_strncpy(col_inputfg, argv[ix], sizeof(col_inputfg));
+            sp_strncpy(col_promptfg, argv[ix], sizeof(col_promptfg));
 
             // more
         } else if (!strcmp(argv[i], "-is") || (!strcmp(argv[i], "--image-size"))) { // image size
@@ -382,68 +382,68 @@ void readargs(int argc, char *argv[]) {
 
             // spmenu colors
         } else if (!strcmp(argv[i], "-nif") || (!strcmp(argv[i], "--normal-item-foreground"))) { // normal item foreground color
-            strcpy(col_itemnormfg, argv[++i]);
+            sp_strncpy(col_itemnormfg, argv[++i], sizeof(col_itemnormfg));
         } else if (!strcmp(argv[i], "-nib") || (!strcmp(argv[i], "--normal-item-background"))) { // normal item background color
-            strcpy(col_itemnormbg, argv[++i]);
+            sp_strncpy(col_itemnormbg, argv[++i], sizeof(col_itemnormbg));
         } else if (!strcmp(argv[i], "-nnif") || (!strcmp(argv[i], "--normal-next-item-foreground"))) { // normal next item foreground color
-            strcpy(col_itemnormfg2, argv[++i]);
+            sp_strncpy(col_itemnormfg2, argv[++i], sizeof(col_itemnormfg2));
         } else if (!strcmp(argv[i], "-nnib") || (!strcmp(argv[i], "--normal-next-item-background"))) { // normal next item background color
-            strcpy(col_itemnormbg2, argv[++i]);
+            sp_strncpy(col_itemnormbg2, argv[++i], sizeof(col_itemnormbg2));
         } else if (!strcmp(argv[i], "-sif") || (!strcmp(argv[i], "--selected-item-foreground"))) { // selected item foreground color
-            strcpy(col_itemselfg, argv[++i]);
+            sp_strncpy(col_itemselfg, argv[++i], sizeof(col_itemselfg));
         } else if (!strcmp(argv[i], "-sib") || (!strcmp(argv[i], "--selected-item-background"))) { // selected item background color
-            strcpy(col_itemselbg, argv[++i]);
+            sp_strncpy(col_itemselbg, argv[++i], sizeof(col_itemselbg));
         } else if (!strcmp(argv[i], "-npf") || (!strcmp(argv[i], "--normal-item-priority-foreground"))) { // normal item priority foreground color
-            strcpy(col_itemnormprifg, argv[++i]);
+            sp_strncpy(col_itemnormprifg, argv[++i], sizeof(col_itemnormprifg));
         } else if (!strcmp(argv[i], "-npb") || (!strcmp(argv[i], "--normal-item-priority-background"))) { // normal item priority background color
-            strcpy(col_itemnormpribg, argv[++i]);
+            sp_strncpy(col_itemnormpribg, argv[++i], sizeof(col_itemnormpribg));
         } else if (!strcmp(argv[i], "-spf") || (!strcmp(argv[i], "--selected-item-priority-foreground"))) { // selected item priority foreground color
-            strcpy(col_itemselprifg, argv[++i]);
+            sp_strncpy(col_itemselprifg, argv[++i], sizeof(col_itemselprifg));
         } else if (!strcmp(argv[i], "-spb") || (!strcmp(argv[i], "--selected-item-priority-background"))) { // selected item priority background color
-            strcpy(col_itemselpribg, argv[++i]);
+            sp_strncpy(col_itemselpribg, argv[++i], sizeof(col_itemselpribg));
         } else if (!strcmp(argv[i], "-mnbg") || (!strcmp(argv[i], "--menu-background"))) { // menu color
-            strcpy(col_menu, argv[++i]);
+            sp_strncpy(col_menu, argv[++i], sizeof(col_menu));
         } else if (!strcmp(argv[i], "-pfg") || (!strcmp(argv[i], "--prompt-foreground"))) { // prompt fg color
-            strcpy(col_promptfg, argv[++i]);
+            sp_strncpy(col_promptfg, argv[++i], sizeof(col_promptfg));
         } else if (!strcmp(argv[i], "-pbg") || (!strcmp(argv[i], "--prompt-background"))) { // prompt bg color
-            strcpy(col_promptbg, argv[++i]);
+            sp_strncpy(col_promptbg, argv[++i], sizeof(col_promptbg));
         } else if (!strcmp(argv[i], "-ifg") || (!strcmp(argv[i], "--input-foreground"))) { // input fg color
-            strcpy(col_inputfg, argv[++i]);
+            sp_strncpy(col_inputfg, argv[++i], sizeof(col_inputfg));
         } else if (!strcmp(argv[i], "-pfg") || (!strcmp(argv[i], "--input-background"))) { // input bg color
-            strcpy(col_inputbg, argv[++i]);
+            sp_strncpy(col_inputbg, argv[++i], sizeof(col_inputbg));
         } else if (!strcmp(argv[i], "-nhb") || (!strcmp(argv[i], "--normal-highlight-background"))) { // normal highlight background color
-            strcpy(col_hlnormbg, argv[++i]);
+            sp_strncpy(col_hlnormbg, argv[++i], sizeof(col_hlnormbg));
         } else if (!strcmp(argv[i], "-nhf") || (!strcmp(argv[i], "--normal-highlight-foreground"))) { // normal highlight foreground color
-            strcpy(col_hlnormfg, argv[++i]);
+            sp_strncpy(col_hlnormfg, argv[++i], sizeof(col_hlnormfg));
         } else if (!strcmp(argv[i], "-shf") || (!strcmp(argv[i], "--selected-highlight-foreground"))) { // selected highlight foreground color
-            strcpy(col_hlselfg, argv[++i]);
+            sp_strncpy(col_hlselfg, argv[++i], sizeof(col_hlselfg));
         } else if (!strcmp(argv[i], "-shb") || (!strcmp(argv[i], "--selected-highlight-background"))) { // selected highlight background color
-            strcpy(col_hlselbg, argv[++i]);
+            sp_strncpy(col_hlselbg, argv[++i], sizeof(col_hlselbg));
         } else if (!strcmp(argv[i], "-nbg") || (!strcmp(argv[i], "--number-background"))) { // numbg
-            strcpy(col_numbg, argv[++i]);
+            sp_strncpy(col_numbg, argv[++i], sizeof(col_numbg));
         } else if (!strcmp(argv[i], "-nfg") || (!strcmp(argv[i], "--number-foreground"))) { // numfg
-            strcpy(col_numfg, argv[++i]);
+            sp_strncpy(col_numfg, argv[++i], sizeof(col_numfg));
         } else if (!strcmp(argv[i], "-mbg") || (!strcmp(argv[i], "--mode-background"))) { // mode
-            strcpy(col_modebg, argv[++i]);
+            sp_strncpy(col_modebg, argv[++i], sizeof(col_modebg));
         } else if (!strcmp(argv[i], "-mfg") || (!strcmp(argv[i], "--mode-foreground"))) { // mode
-            strcpy(col_modefg, argv[++i]);
+            sp_strncpy(col_modefg, argv[++i], sizeof(col_modefg));
         } else if (!strcmp(argv[i], "-laf") || (!strcmp(argv[i], "--left-arrow-foreground"))) { // left arrow fg
-            strcpy(col_larrowfg, argv[++i]);
+            sp_strncpy(col_larrowfg, argv[++i], sizeof(col_larrowfg));
         } else if (!strcmp(argv[i], "-raf") || (!strcmp(argv[i], "--right-arrow-foreground"))) { // right arrow fg
-            strcpy(col_rarrowfg, argv[++i]);
+            sp_strncpy(col_rarrowfg, argv[++i], sizeof(col_rarrowfg));
         } else if (!strcmp(argv[i], "-lab") || (!strcmp(argv[i], "--left-arrow-background"))) { // left arrow bg
-            strcpy(col_larrowbg, argv[++i]);
+            sp_strncpy(col_larrowbg, argv[++i], sizeof(col_larrowbg));
         } else if (!strcmp(argv[i], "-rab") || (!strcmp(argv[i], "--right-arrow-background"))) { // right arrow bg
-            strcpy(col_rarrowbg, argv[++i]);
+            sp_strncpy(col_rarrowbg, argv[++i], sizeof(col_rarrowbg));
         } else if (!strcmp(argv[i], "-bc") || (!strcmp(argv[i], "--border-background"))) { // border
-            strcpy(col_border, argv[++i]);
+            sp_strncpy(col_border, argv[++i], sizeof(col_border));
         } else if (!strcmp(argv[i], "-cc") || (!strcmp(argv[i], "-cfc")) || (!strcmp(argv[i], "--caret-foreground"))) {   // caret color
-            strcpy(col_caretfg, argv[++i]);
+            sp_strncpy(col_caretfg, argv[++i], sizeof(col_caretfg));
         } else if (!strcmp(argv[i], "-cbc") || (!strcmp(argv[i], "--caret-background"))) {   // caret color
-            strcpy(col_caretbg, argv[++i]);
+            sp_strncpy(col_caretbg, argv[++i], sizeof(col_caretbg));
         }
 
-    // sgr colors
+        // sgr colors
         else if (!strcmp(argv[i], "-sgr0") || (!strcmp(argv[i], "--sgr0"))) textcolors[0] = argv[++i]; // sgr color 0
         else if (!strcmp(argv[i], "-sgr1") || (!strcmp(argv[i], "--sgr1"))) textcolors[1] = argv[++i]; // sgr color 1
         else if (!strcmp(argv[i], "-sgr2") || (!strcmp(argv[i], "--sgr2"))) textcolors[2] = argv[++i]; // sgr color 2

@@ -14,6 +14,31 @@ void * ecalloc(size_t nmemb, size_t size) {
     return p;
 }
 
+size_t sp_strncpy(char *restrict dst, const char *restrict src, size_t size) {
+    int offset;
+
+    offset = 0;
+
+    if (size > 0) {
+        while (*(src+offset) != '\0' ) {
+            if (offset == size) {
+                offset--;
+                break;
+            }
+
+            *(dst+offset) = *(src+offset);
+            offset++;
+        }
+    }
+
+    *(dst+offset) = '\0';
+
+    while (*(src+offset) != '\0')
+        offset++;
+
+    return offset;
+}
+
 void die(const char *fmt, ...) {
     va_list ap;
 

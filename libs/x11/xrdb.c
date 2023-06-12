@@ -18,7 +18,7 @@ void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *d
     if (!(ret.addr == NULL || strncmp("String", type, 64))) {
         switch (rtype) { // type
             case STRING:
-                strcpy(sdst, ret.addr);
+                sp_strncpy(sdst, ret.addr, strlen(sdst));
                 break;
             case INTEGER:
                 *idst = strtoul(ret.addr, NULL, 10);

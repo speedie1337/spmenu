@@ -98,7 +98,7 @@ void match(void) {
     struct item *item, *lhpprefix, *lprefix, *lsubstr, *hpprefixend, *prefixend, *substrend;
 
 
-    strcpy(buf, text);
+    sp_strncpy(buf, text, sizeof(text));
     // separate input text into tokens to be matched individually
     for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
         if (++tokc > tokn && !(tokv = realloc(tokv, ++tokn * sizeof *tokv)))

@@ -84,7 +84,6 @@
 #include "libs/define.c"
 
 // mode
-static char modetext[16]; // default mode text
 static int curMode; // 0 is command mode
 static int allowkeys; // whether or not to interpret a keypress as an insertion
 
@@ -101,6 +100,7 @@ static int allowkeys; // whether or not to interpret a keypress as an insertion
 #include "libs/history.h"
 
 // text
+static char modetext[64] = "";
 static char text[BUFSIZ] = "";
 static char numbers[NUMBERSBUFSIZE] = "";
 
@@ -485,12 +485,12 @@ void set_mode(void) {
         curMode = 1;
         allowkeys = 1;
 
-        strcpy(modetext, instext);
+        sp_strncpy(modetext, instext, sizeof(modetext));
     } else {
         curMode = 0;
         allowkeys = !curMode;
 
-        strcpy(modetext, normtext);
+        sp_strncpy(modetext, normtext, sizeof(modetext));
     }
 }
 

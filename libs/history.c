@@ -83,7 +83,7 @@ void navigatehistfile(int dir) {
     }
 
     len = MIN(strlen(p), BUFSIZ - 1);
-    strcpy(text, p);
+    sp_strncpy(text, p, sizeof(text));
     text[len] = '\0';
     cursor = len;
     match();
