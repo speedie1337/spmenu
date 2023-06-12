@@ -89,6 +89,9 @@ void readargs(int argc, char *argv[]) {
         if (!strcmp(argv[i], "-v") || (!strcmp(argv[i], "--version"))) { // prints version information
             puts("spmenu-"VERSION);
             exit(0);
+        } else if (!strcmp(argv[i], "-fl") || (!strcmp(argv[i], "--feature-list"))) { // feature list
+            comp_opts();
+            exit(0);
         } else if (!strcmp(argv[i], "-rv") || (!strcmp(argv[i], "--raw-version"))) { // help
             puts(VERSION);
             exit(0);
@@ -524,6 +527,44 @@ void readargs(int argc, char *argv[]) {
         insert(input, strlen(input));
 }
 
+void comp_opts(void) {
+#if USEWAYLAND
+    fprintf(stdout, "Wayland: Supported\n");
+#else
+    fprintf(stdout, "Wayland: Unsupported\n");
+#endif
+#if USEX
+    fprintf(stdout, "X11: Supported\n");
+#else
+    fprintf(stdout, "X11: Unsupported\n");
+#endif
+#if USERTL
+    fprintf(stdout, "RTL: Supported\n");
+#else
+    fprintf(stdout, "RTL: Unsupported\n");
+#endif
+#if USEIMAGE
+    fprintf(stdout, "Images: Supported\n");
+#else
+    fprintf(stdout, "Images: Unsupported\n");
+#endif
+#if USEXINERAMA
+    fprintf(stdout, "Xinerama: Supported\n");
+#else
+    fprintf(stdout, "Xinerama: Unsupported\n");
+#endif
+#if USECONFIG
+    fprintf(stdout, "Config: Supported\n");
+#else
+    fprintf(stdout, "Config: Unsupported\n");
+#endif
+#if USEXRESOURCES
+    fprintf(stdout, "xrdb: Supported\n");
+#else
+    fprintf(stdout, "xrdb: Unsupported\n");
+#endif
+}
+
 void usage(int status) {
     // print help
     fputs("spmenu ", status ? stderr : stdout);
@@ -659,6 +700,7 @@ void usage(int status) {
             "spmenu -wl,      --wayland                                   Run spmenu in Wayland mode\n"
             "spmenu -rv,      --raw-version                               Print spmenu version number to stdout\n"
             "spmenu -v,       --version                                   Print spmenu version to stdout\n"
+            "spmenu -fl,      --feature-list                              List the state of all features that can be toggled\n"
             "\n", status ? stderr : stdout);
 
     // colors

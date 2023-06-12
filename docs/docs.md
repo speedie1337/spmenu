@@ -368,6 +368,9 @@ You may use long, descriptive arguments or the shorter arguments.
 `-rv, --raw-version`
 :   Print raw spmenu version number to stdout
 
+`-fl, --feature-list`
+:   List the state of all features that can be toggled
+
 `-fn, --font font`
 :   Set the spmenu font to font
 
