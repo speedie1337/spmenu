@@ -7,7 +7,7 @@
 #include <pango/pangocairo.h>
 #include <math.h>
 
-#include "drw.h"
+#include "draw.h"
 #include "../sl/main.h"
 
 #ifndef X11

@@ -89,7 +89,7 @@ static int curMode; // 0 is command mode
 static int allowkeys; // whether or not to interpret a keypress as an insertion
 
 // various headers
-#include "libs/libdrw/drw.h"
+#include "libs/draw/draw.h"
 #include "libs/sl/main.h"
 #include "libs/draw.h"
 #include "libs/stream.h"
