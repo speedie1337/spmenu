@@ -247,7 +247,7 @@ void loadimagecache(const char *file, int *width, int *height) {
 
         // path for cached thumbnail
         if (!cachedir || !strcmp(cachedir, "default")) {
-            if (xdg_cache)
+            if (xdg_cache || !strcmp(cachedir, "xdg"))
                 slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
             else
                 slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
@@ -256,7 +256,7 @@ void loadimagecache(const char *file, int *width, int *height) {
         }
 
         if(!(buf = malloc(slen))) {
-            fprintf(stderr, "out of memory");
+            fprintf(stderr, "spmenu: out of memory");
             return;
         }
 
