@@ -555,7 +555,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "matchcount", &hidematchcount); // spmenu.hide.matchcount
             config_setting_lookup_int(conf, "mode", &hidemode); // spmenu.hide.mode
             config_setting_lookup_int(conf, "caps", &hidecaps); // spmenu.hide.caps
-            config_setting_lookup_int(conf, "hideimage", &hideimage); // spmenu.hide.image
+            config_setting_lookup_int(conf, "image", &hideimage); // spmenu.hide.image
         }
     }
 

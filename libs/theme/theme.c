@@ -443,7 +443,7 @@ void theme_load(void) {
             config_setting_lookup_int(conf, "matchcount", &hidematchcount); // theme.hide.matchcount
             config_setting_lookup_int(conf, "mode", &hidemode); // theme.hide.mode
             config_setting_lookup_int(conf, "caps", &hidecaps); // theme.hide.caps
-            config_setting_lookup_int(conf, "hideimage", &hideimage); // theme.hide.image
+            config_setting_lookup_int(conf, "image", &hideimage); // theme.hide.image
         }
     }
 
