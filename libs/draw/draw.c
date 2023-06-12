@@ -8,7 +8,7 @@
 #include <math.h>
 
 #include "draw.h"
-#include "../sl/main.h"
+#include "../main.h"
 
 #ifndef X11
 #define USEX 0

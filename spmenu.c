@@ -89,7 +89,7 @@ static int allowkeys; // whether or not to interpret a keypress as an insertion
 
 // various headers
 #include "libs/draw/draw.h"
-#include "libs/sl/main.h"
+#include "libs/main.h"
 #include "libs/draw.h"
 #include "libs/stream.h"
 #include "libs/schemes.h"
