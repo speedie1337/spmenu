@@ -2,10 +2,8 @@
 *.o
 *zst*
 *sig*
-*gz*
-*tar*
+*tar.gz*
 spmenu
 *[.]PKGBUILD
-buildconf_dev
-buildconf
+buildconf*
 build
