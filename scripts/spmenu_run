@@ -49,6 +49,7 @@ EXECFILE="${EXECFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.exec}"
 ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.icon}"
 DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.desc}"
 FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.file}"
+TERMFILE="${TERMFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/.term}"
 
 # arrays containing entries
 declare -a it_title
@@ -56,6 +57,7 @@ declare -a it_icon
 declare -a it_exec
 declare -a it_file
 declare -a it_desc
+declare -a it_term
 
 # arrays containing arguments
 declare -a rl_fm
@@ -504,16 +506,17 @@ print_desktop_list() {
     it_icon=()
     it_exec=()
     it_file=()
+    it_term=()
 
     # print data from entries
     if [ "$cfiles" = "false" ]; then
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE"
 
         entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
         cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
         cached="$(find "${tmpdir[@]}" -type f)";
 
-        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE"
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
         for i in $(seq "$cached_c"); do
             # current file
@@ -527,18 +530,23 @@ print_desktop_list() {
             it_icon[i]="$(sed "4q;d" "$cur_file" | sed "s/Icon://g")"
             it_exec[i]="$(sed "3q;d" "$cur_file" | sed "s/Executable://g")"
             it_file[i]="$cur_file"
+            it_term[i]="false"
+
+            grep -q "Term:true" "$cur_file" && it_term[i]="true"
 
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
             printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
             printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
             printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
+            printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
 
             printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
             printf "%d. Description - %s\n" "${i}" "${it_desc[i]}" >> "$LOGFILE"
             printf "%d. Executable - %s\n" "${i}" "${it_exec[i]}" >> "$LOGFILE"
             printf "%d. Icon - %s\n" "${i}" "${it_icon[i]}" >> "$LOGFILE"
             printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
+            printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
         done
 
         print_desktop_list
@@ -602,20 +610,33 @@ exec_program() {
         it_exec+=("$p")
     done < "$EXECFILE"
 
+    # read term
+    while read -r p; do
+        it_term+=("$p")
+    done < "$TERMFILE"
+
     # set exec
     [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
     for i in "${!it_title[@]}"; do
         if [ "${it_title[i]}" = "$menusel" ]; then
             exec="${it_exec[i]}"
+            term="${it_term[i]}"
+
+            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
+            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
+
             break;
         else
             printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
+            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
         fi
     done
 
     # finally run the program
-    if [ -n "$exec" ]; then
+    if [ -n "$exec" ] && [ "$term" = "false" ]; then
         ${SHELL:-/bin/sh} -c "$exec" &
+    elif [ -n "$exec" ] && [ "$term" = "true" ]; then
+        ${TERMINAL} -e "$exec" &
     else
         printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
@@ -661,16 +682,12 @@ cache_desktop() {
             return
         fi
     else
-        if [ "$clearcache" != "true" ] && [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ]; then
+        if [ "$clearcache" != "true" ] && [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$TERMFILE" ]; then
             return;
         fi
     fi
 
-    [ -f "$TITLEFILE" ] && rm -f "$TITLEFILE"
-    [ -f "$ICONFILE" ] && rm -f "$ICONFILE"
-    [ -f "$EXECFILE" ] && rm -f "$EXECFILE"
-    [ -f "$FILEFILE" ] && rm -f "$FILEFILE"
-    [ -f "$DESCFILE" ] && rm -f "$DESCFILE"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}"
 
     # find
     entry="$(find "${desktopdir[@]}" -type f)"
@@ -689,13 +706,15 @@ cache_desktop() {
         name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
         desc="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
 
+        grep -q "Terminal=true" "$cur_file" && term="true" || term="false"
+
         # icon name
         icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
         icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
 
         # write the file
-        printf "%s\n%s\n%s\n%s\n" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" > "${tmpdir[*]}/$(basename "$cur_file").entry"
-        printf "Entry %s: %s\n%s\n%s\n%s\n" "$i" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" >> "$LOGFILE"
+        printf "%s\n%s\n%s\n%s\n%s\n" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" "Term:$term" > "${tmpdir[*]}/$(basename "$cur_file").entry"
+        printf "Entry %s:\n%s\n%s\n%s\n%s\n%s\n\n" "$i" "Name: $name" "Description: $desc" "Executable: $exec" "Icon: $icon" "Term: $term" >> "$LOGFILE"
     done
 
     # scan
@@ -706,7 +725,7 @@ cache_desktop() {
 
 clear_cache() {
     rm -rf "${tmpdir[*]}"
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}"
 }
 
 main() {
