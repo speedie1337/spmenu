@@ -71,8 +71,12 @@ l[23]=x
 l[24]=y
 l[25]=z
 
+protocol='Unknown'
+[ -n "$DISPLAY" ] && protocol='X11' && protocol_arg="-x11"
+[ -n "$WAYLAND_DISPLAY" ] && protocol='Wayland' && protocol_arg="-wl"
+
 main() {
-printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $(${RUNLAUNCHER:-spmenu} -v | sed 's/spmenu-//g')\n\
+printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $(${RUNLAUNCHER:-spmenu} -v | sed 's/spmenu-//g') ${reset}(using protocol $protocol)\n\
 \n<big><u>Formatting</u></big>\n\n\
 abcdefghijklmnopqrstuvwxyz\n\
 <b>abcdefghijklmnopqrstuvwxyz</b> - b\n\
@@ -154,4 +158,4 @@ printf "\n\n<big><u>The End</u></big>\n"
 printf "\nIf spmenu displayed 256 colors as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
 }
 
-main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 40 "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
+main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 40 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"

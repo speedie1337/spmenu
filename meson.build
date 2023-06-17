@@ -53,7 +53,7 @@ if get_option('wayland')
   project_source_files += [ 'libs/wl/xdg-shell-client-protocol.h' ]
   project_source_files += [ 'libs/wl/xdg-shell-protocol.c' ]
   build_args += [ '-DWAYLAND' ]
-  run_command('scripts/make/generate-headers.sh', check : false)
+  run_command('protocols/generate.sh', check : false)
 endif
 
 if get_option('imlib2') and get_option('openssl')

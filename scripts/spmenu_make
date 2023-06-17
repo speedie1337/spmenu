@@ -1,0 +1,340 @@
+#!/bin/bash
+# spmenu_make
+
+imlib2=${imlib2:-true}
+xinerama=${xinerama:-true}
+openssl=${openssl:-true}
+fribidi=${fribidi:-true}
+libconfig=${libconfig:-true}
+xresources=${xresources:-true}
+wayland=${wayland:-true}
+x11=${x11:-true}
+
+gen_manual=${gen_manual:-true}
+opt=${opt:--O2}
+reconfigure=${reconfigure:-false}
+static=${static:-false}
+
+clean() {
+    rm -f ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD
+}
+
+check_correct_dir() {
+    [ ! -f "spmenu.c" ] && printf "Incorrect directory.\n" && exit 1
+}
+
+gen_arg_list() {
+    [ ! -x "$(command -v spmenu)" ] && printf "spmenu must be installed for this action.\n" && exit 1
+
+    spmenu -h | grep -vE -- "- |: fancy dynamic menu" | sed "s/<//g; s/>/  /g; /^[[:space:]]*$/d"
+}
+
+docs() {
+    [ ! -x "$(command -v pandoc)" ] && printf "pandoc must be installed for this action.\n" && exit 1
+
+    version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
+    printf "%% spmenu(1) ${version} | fancy dynamic menu\n" > .man.md
+    cat docs/docs.md >> .man.md
+    pandoc --standalone --to man .man.md -o spmenu.1
+    rm -f .man.md
+
+    printf "%% spmenu_run(1) ${version} | \$PATH/.desktop launcher and file manager\n" > .man.md
+    cat docs/run-docs.md >> .man.md
+    pandoc --standalone --to man .man.md -o spmenu_run.1
+    rm -f .man.md
+}
+
+kblist() {
+grep "{ " "$1" | \
+grep -v "[*]" | \
+sed "s/{.i = //g; s/{.c = //g; s/{.f = //g; s/{0} }/0/g; s/ } }//g; s/,//g; s/{ //g; s/^\s*//g; s/XK_//g; s/|/+/g" > /tmp/data
+
+cat << EOF > /tmp/wipdata
+| Mode               | Modifier           | Key                | Function           | Argument           |
+| :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+EOF
+
+i=1
+
+while true; do
+    len="$(wc -l < /tmp/data)"
+    mode="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $1 }')")"
+    mod="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $2 }')")"
+    key="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $3 }')")"
+    func="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $4 }')")"
+    arg="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $5 }')")"
+cat << EOF >> /tmp/wipdata
+| $mode | $mod | $key | $func | $arg |
+EOF
+    [ "$i" = "$len" ] && break
+    i=$((i+1))
+done
+cat /tmp/wipdata
+rm -f /tmp/wipdata /tmp/data
+}
+
+headers() {
+    [ ! -x "$(command -v wayland-scanner)" ] && printf "wayland-scanner must be installed for this action.\n" && exit 1
+
+    wayland-scanner \
+        client-header \
+        protocols/wlr-layer-shell-unstable-v1.xml \
+        libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+
+    wayland-scanner \
+        client-header \
+        protocols/xdg-shell.xml \
+        libs/wl/xdg-shell-client-protocol.h
+
+    wayland-scanner \
+        client-header \
+        protocols/xdg-output-unstable-v1.xml \
+        libs/wl/xdg-output-unstable-v1-client-protocol.h
+
+    wayland-scanner \
+        public-code \
+        protocols/wlr-layer-shell-unstable-v1.xml \
+        libs/wl/wlr-layer-shell-unstable-v1-protocol.c
+
+    wayland-scanner \
+        public-code \
+        protocols/xdg-shell.xml \
+        libs/wl/xdg-shell-protocol.c
+
+    wayland-scanner \
+        public-code \
+        protocols/xdg-output-unstable-v1.xml \
+        libs/wl/xdg-output-unstable-v1-protocol.c
+}
+
+gen_pkg() {
+    version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
+
+    rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
+    mkdir -p spmenu-${version}
+    cp -rf LICENSE meson.build meson.options *.c scripts/ docs/ libs/ protocols/ PKGBUILD spmenu-${version}
+    [ -f Makefile ] && cp Makefile spmenu-${version} || :
+    [ -f host.mk ] && cp host.mk spmenu-${version} || :
+    [ -f toggle.mk ] && cp toggle.mk spmenu-${version} || :
+    [ -f spmenu.1 ] && cp spmenu.1 spmenu-${version} || :
+    [ -f spmenu_run.1 ] && cp spmenu_run.1 spmenu-${version} || :
+    tar -cf spmenu-${version}.tar spmenu-${version}
+    gzip spmenu-${version}.tar
+    rm -rf spmenu-${version}
+
+    if [ -x "$(command -v gpg)" ]; then
+        gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.tar.gz
+    fi
+}
+
+gen_arch_pkg() {
+    [ ! -x "$(command -v makepkg)" ] && printf "makepkg required for this action.\n" && exit 1
+    [ -f PKGBUILD ] || exit 1
+
+    gen_pkg
+
+    cp -f PKGBUILD PKGBUILD.orig
+    sed -i "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
+    makepkg -sfr --sign || exit 1
+    rm -rf src/ pkg/
+
+    cp PKGBUILD spmenu-${version}.PKGBUILD; mv -f PKGBUILD.orig PKGBUILD
+}
+
+generate_theme() {
+declare -a color
+
+read_colors() {
+    i=1
+    color=()
+
+    while true; do
+        color[i]="$(sed -n ${i},${i}p $1)"
+        ccol="${color[i]}"
+        [ "${#ccol}" != "7" ] || [ "${ccol:0:1}" != "#" ] && color[i]="#000000"
+        [ "$i" = "18" ] && break
+        i=$((i+1))
+    done
+}
+
+write_array() {
+cat << EOF
+/* spmenu colorscheme generated from ${1:-None} */
+theme = {
+    color = ( {
+            itemnormfg = "${color[17]}";
+            itemnormbg = "${color[18]}";
+            itemnormfg2 = "${color[17]}";
+            itemnormbg2 = "${color[18]}";
+            itemselfg = "${color[8]}";
+            itemselbg = "${color[2]}";
+            itemmarkedfg = "${color[1]}";
+            itemmarkedbg = "${color[7]}";
+            itemnormprifg = "${color[17]}";
+            itemnormpribg = "${color[18]}";
+            itemselprifg = "${color[17]}";
+            itemselpribg = "${color[13]}";
+            menu = "${color[18]}";
+            promptfg = "${color[18]}";
+            promptbg = "${color[4]}";
+            larrowfg = "${color[13]}";
+            rarrowfg = "${color[13]}";
+            larrowbg = "${color[18]}";
+            rarrowbg = "${color[18]}";
+            inputfg = "${color[17]}";
+            inputbg = "${color[18]}";
+            numfg = "${color[1]}";
+            numbg = "${color[10]}";
+            normhlfg = "${color[7]}";
+            normhlbg = "${color[18]}";
+            selhlfg = "${color[16]}";
+            selhlbg = "${color[1]}";
+            caretfg = "${color[17]}";
+            border = "${color[10]}";
+            modefg = "${color[1]}";
+            modebg = "${color[3]}";
+            capsfg = "${color[1]}";
+            capsbg = "${color[5]}";
+            sgr0 = "${color[1]}";
+            sgr1 = "${color[2]}";
+            sgr2 = "${color[3]}";
+            sgr3 = "${color[4]}";
+            sgr4 = "${color[5]}";
+            sgr5 = "${color[6]}";
+            sgr6 = "${color[7]}";
+            sgr7 = "${color[8]}";
+            sgr8 = "${color[9]}";
+            sgr9 = "${color[10]}";
+            sgr10 = "${color[11]}";
+            sgr11 = "${color[12]}";
+            sgr12 = "${color[13]}";
+            sgr13 = "${color[14]}";
+            sgr14 = "${color[15]}";
+            sgr15 = "${color[16]}";
+            } );
+
+    file = ( { global = 0; } );
+};
+EOF
+}
+
+[ ! -f "$1" ] && printf "File does not exist.\n" && exit 1
+[ "$(wc -l < "$1")" != "18" ] && printf "Color list is not 18 lines long.\n" && exit 1
+
+read_colors "$1"
+write_array "$1"
+}
+
+build() {
+    [ -x "buildconf" ] && [ ! -x "buildconf_dev" ] && source buildconf
+    [ -x "buildconf_dev" ] && source buildconf_dev
+
+    [ ! -f "meson.build" ] && printf "meson.build does not exist.\n" && exit 1
+    [ "$gen_manual" != "false" ] && docs
+
+    cp -f meson.build meson.build.orig
+
+    [ "$reconfigure" != "false" ] && rm -rf build/
+
+    mkdir -p build/
+
+    chown -R $(whoami) build/ || exit 1
+
+    [ "$static" = "true" ] && STATIC="--prefer-static"
+
+    if [ "$reconfigure" = "true" ]; then
+        meson setup --reconfigure $STATIC \
+            -Dxresources="$xresources" \
+            -Dfribidi="$fribidi" \
+            -Dxinerama="$xinerama" \
+            -Dimlib2="$imlib2" \
+            -Dopenssl="$openssl" \
+            -Dlibconfig="$libconfig" \
+            -Dwayland="$wayland" \
+            -Dx11="$x11" \
+            --prefix "$prefix" \
+            build || exit 1
+    else
+        meson setup \
+            -Dxresources="$xresources" $STATIC \
+            -Dfribidi="$fribidi" \
+            -Dxinerama="$xinerama" \
+            -Dimlib2="$imlib2" \
+            -Dopenssl="$openssl" \
+            -Dlibconfig="$libconfig" \
+            -Dwayland="$wayland" \
+            -Dx11="$x11" \
+            --prefix "$prefix" \
+            build || exit 1
+    fi
+
+    ninja -C build
+
+    [ "$cp_build" = "true" ] && cp meson.build meson.build.used
+    mv -f meson.build.orig meson.build
+}
+
+install() {
+    [ "$(id -u)" != "0" ] && printf "This action needs to be run as root.\n" && exit 1
+    [ ! -d "build/" ] && build
+    cd build/ || exit 1
+    meson install
+    cd .. || exit 1
+    [ "$reconfigure" = "true" ] && rm -rf build/
+}
+
+help() {
+cat << EOF
+$0 - Build spmenu
+
+$0               Build spmenu
+$0 install       Install spmenu
+$0 clean         Remove tarballs and pacman packages
+$0 dist          Create a distro package for spmenu
+$0 arglist       Create an argument list for spmenu based on spmenu -h output
+$0 kblist        Create a keybind list in markdown column format based on keybinds.h
+$0 pkg_arch      Create a Arch package for spmenu
+$0 theme <theme> Create a theme for spmenu based on 18 colors
+$0 docs          Generate documentation such as man pages for spmenu
+$0 headers       Generate headers using wayland-scanner
+$0 help          Print this help
+EOF
+}
+
+main() {
+    case "$1" in
+        "clean") action="clean" ;;
+        "dist") action="dist" ;;
+        "arglist") action="arglist" ;;
+        "kblist") action="kblist" ;;
+        "pkg_arch") action="arch" ;;
+        "help") action="help" ;;
+        "install") action="install" ;;
+        "theme") action="theme" ;;
+        "docs") action="mkdocs" ;;
+        "headers") action="headers" ;;
+        "") action="build" ;;
+        *) [ -z "$action" ] && action="wrong" ;;
+    esac
+
+    check_correct_dir
+
+    case "$action" in
+        "wrong") printf "Invalid action: %s\n" "$1" && exit 1 ;;
+        "clean") clean ;;
+        "mkdocs") docs ;;
+        "headers") headers ;;
+        "build") build ;;
+        "install") install ;;
+        "arch") gen_arch_pkg ;;
+        "theme") generate_theme "$2" ;;
+        "kblist") kblist "libs/keybinds.h" ;;
+        "help") help ;;
+        "arglist") gen_arg_list ;;
+        "dist") gen_pkg ;;
+    esac
+
+    exit $?
+}
+
+main "$@"
