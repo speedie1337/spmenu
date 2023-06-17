@@ -528,6 +528,7 @@ void handle(void) {
         loadhistory();
 #if USEIMAGE
         store_image_vars();
+        setimageopts();
 #endif
 
         // Disable some X11 only features
