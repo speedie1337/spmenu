@@ -461,7 +461,7 @@ void defaultimg(Arg *arg) {
 }
 
 void setlines(Arg *arg) {
-    if (fullscreen) return;
+    if (fullscreen || !overridelines) return;
 
     lines += arg->i;
 
@@ -479,7 +479,7 @@ void setlines(Arg *arg) {
 }
 
 void setcolumns(Arg *arg) {
-    if (fullscreen) return;
+    if (fullscreen || !overridecolumns) return;
 
     columns += arg->i;
 

@@ -4,6 +4,12 @@ void readargs(int argc, char *argv[]) {
     int j = 0;
     int k = 0;
 
+#if !USEX
+#if !USEWAYLAND
+    die("Why did you think it was a good idea to compile me without support for any display server? You're an idiot. :)");
+#endif
+#endif
+
     // check if we should load the xrdb/config, because it needs to be loaded before arguments are checked
     // priority: internal -> config -> xresources -> arguments
     for (j = 1; j < argc; j++) {
@@ -161,6 +167,14 @@ void readargs(int argc, char *argv[]) {
             type = 1;
         } else if (!strcmp(argv[i], "-nt") || (!strcmp(argv[i], "--no-allow-typing"))) { //  don't allow the user to type
             type = 0;
+        } else if (!strcmp(argv[i], "-ol") || (!strcmp(argv[i], "--override-lines"))) {  // allow overriding lines
+            overridelines = 1;
+        } else if (!strcmp(argv[i], "-nol") || (!strcmp(argv[i], "--no-override-lines"))) {  // don't allow overriding lines
+            overridelines = 0;
+        } else if (!strcmp(argv[i], "-oc") || (!strcmp(argv[i], "--override-columns"))) {  // allow overriding columns
+            overridecolumns = 1;
+        } else if (!strcmp(argv[i], "-noc") || (!strcmp(argv[i], "--no-override-columns"))) {  // don't allow overriding columns
+            overridecolumns = 0;
         } else if (!strcmp(argv[i], "-P") || (!strcmp(argv[i], "--password"))) {  // is the input a password
             passwd = 1;
         } else if (!strcmp(argv[i], "-nP") || (!strcmp(argv[i], "--no-password"))) {  // is the input a password
@@ -604,6 +618,10 @@ void usage(int status) {
             "spmenu -na,      --no-alpha                                  Disable alpha\n"
             "spmenu -tp,      --allow-typing                              Allow the user to type\n"
             "spmenu -nt,      --no-allow-typing                           Don't allow typing, the user must select an option\n"
+            "spmenu -ol,      --override-lines                            Allow keybinds to override lines\n"
+            "spmenu -oc,      --override-columns                          Allow keybinds to override columns\n"
+            "spmenu -nol,     --no-override-lines                         Don't allow keybinds to override lines\n"
+            "spmenu -noc,     --no-override-columns                       Don't allow keybinds to override columns\n"
             , status ? stderr : stdout);
 
     fputs(

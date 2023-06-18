@@ -523,6 +523,8 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "height", &lineheight); // spmenu.line.height
             config_setting_lookup_int(conf, "lines", &lines); // spmenu.line.lines
             config_setting_lookup_int(conf, "columns", &columns); // spmenu.line.columns
+            config_setting_lookup_int(conf, "overridelines", &overridelines); // spmenu.line.overridelines
+            config_setting_lookup_int(conf, "overridecolumns", &overridecolumns); // spmenu.line.overridecolumns
             config_setting_lookup_int(conf, "indentitems", &indentitems); // spmenu.line.indentitems
         }
     }

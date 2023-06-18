@@ -130,6 +130,18 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nt, --no-allow-typing`
 :   Don't allow typing, the user must select an option
 
+`-ol, --override-lines`
+:   Allow keybinds to override lines
+
+`-oc, --override-columns`
+:   Allow keybinds to override columns
+
+`-nol, --no-override-lines`
+:   Don't allow keybinds to override lines
+
+`-noc, --no-override-columns`
+:   Don't allow keybinds to override columns
+
 `-x, --x-position x offset`
 :   Offset spmenu x position by x offset (X11 only)
 

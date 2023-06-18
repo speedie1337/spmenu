@@ -134,6 +134,8 @@ ResourcePref resources[] = {
     { "lines",                       INTEGER, &lines },
     { "lineheight",                  INTEGER, &lineheight },
     { "columns",                     INTEGER, &columns },
+    { "overridelines",               INTEGER, &overridelines },
+    { "overridecolumns",             INTEGER, &overridecolumns },
     { "maxhist",                     INTEGER, &maxhist },
     { "hideitem",                    INTEGER, &hideitem },
     { "hidematchcount",              INTEGER, &hidematchcount },

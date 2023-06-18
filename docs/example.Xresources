@@ -119,6 +119,8 @@ spmenu.alpha:               1
 spmenu.lineheight:          1
 spmenu.lines:               0
 spmenu.columns:             10
+spmenu.overridelines:       1
+spmenu.overridecolumns:     1
 spmenu.preselected:         0
 spmenu.indentitems:         0
 

@@ -98,6 +98,8 @@ static char *listfile                  = NULL; /* File to read entries from inst
 static int lineheight                  = 1; /* Line height (0: Calculate automatically) */
 static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */
+static int overridelines               = 1; /* Allow overriding lines using keybinds */
+static int overridecolumns             = 1; /* Allow overriding columns using keybinds */
 
 /* History options */
 static int maxhist                     = 64; /* Max number of history entries */
