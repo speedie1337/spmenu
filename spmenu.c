@@ -337,17 +337,17 @@ void calcoffsets(void) {
         if (!strcmp(capstext, ""))
             capsWidth = 0;
 
-        n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + menumarginv);
+        n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + menumarginh);
     }
 
     // calculate which items will begin the next page
     for (i = 0, next = curr; next; next = next->right)
-        if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text), n)) > n)
+        if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * plw : 0 : 0), n)) > n)
             break;
 
     // calculate which items will begin the previous page
     for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
-        if ((i += (lines > 0) ? bh : MIN(TEXTWM(prev->left->text), n)) > n)
+        if ((i += (lines > 0) ? bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * plw : 0 : 0), n)) > n)
             break;
 }
 

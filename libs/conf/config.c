@@ -108,10 +108,12 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "matchcountstyle", &matchcountpwlstyle); // spmenu.powerline.matchcountstyle
             config_setting_lookup_int(conf, "modestyle", &modepwlstyle); // spmenu.powerline.modestyle
             config_setting_lookup_int(conf, "capsstyle", &capspwlstyle); // spmenu.powerline.capsstyle
+            config_setting_lookup_int(conf, "itemstyle", &itempwlstyle); // spmenu.powerline.itemstyle
             config_setting_lookup_int(conf, "prompt", &powerlineprompt); // spmenu.powerline.prompt
             config_setting_lookup_int(conf, "matchcount", &powerlinecount); // spmenu.powerline.matchcount
             config_setting_lookup_int(conf, "mode", &powerlinemode); // spmenu.powerline.mode
             config_setting_lookup_int(conf, "caps", &powerlinecaps); // spmenu.powerline.caps
+            config_setting_lookup_int(conf, "item", &powerlineitems); // spmenu.powerline.item
         }
     }
 
