@@ -116,7 +116,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
     }
 
-    if (!hidepowerline && powerlineitems && selitem && lines > 0) {
+    if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
             drw_circle(drw, x - plw, y, plw, bh, 0, col_menu, bgcol, alpha_menu, bga);
         } else {
@@ -262,7 +262,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     item->clntext = malloc(sizeof(buffer));
     memcpy(item->clntext, buffer, sizeof(buffer));
 
-    if (!hidepowerline && powerlineitems && selitem && lines > 0) {
+    if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
             drw_circle(drw, r, y, plw, bh, 1, col_menu, bgcol, alpha_menu, bga);
         } else {
@@ -347,7 +347,7 @@ int drawitem(int x, int y, int w) {
         int itemoverride = 1;
 
         for (item = curr; item != next; item = item->right) { // draw items
-            x = drawitemtext(item, x, y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
+            x = drawitemtext(item, x + (powerlineitems ? plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
                         mw - x -
                         rarrowWidth -
                         numberWidth -
