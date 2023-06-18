@@ -67,7 +67,7 @@ void buttonpress_x11(XEvent *e) {
             y += h;
 
             // ClickSelItem, called function doesn't matter
-            if (ev->y >= y && ev->y <= (y + h) && ev->x >= x && ev->x <= (x + w / columns)) {
+            if (ev->y >= y && ev->y <= (y + h) && ev->x + (powerlineitems ? plw : 0) >= x + (powerlineitems ? plw : 0) && ev->x + (powerlineitems ? plw : 0) <= (x + w / columns) + (powerlineitems ? plw : 0)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
                     if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
@@ -89,41 +89,15 @@ void buttonpress_x11(XEvent *e) {
             }
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
-                          // left arrow
         x += inputw;
         w = larrowWidth;
+
         if (prev && curr->left) {
             if (ev->x >= x && ev->x <= x + w) {
                 click = ClickLArrow;
             }
         }
-        // item click
-        // horizontal list
-        for (item = curr; item != next; item = item->right) {
-            x += w;
-            w = MIN(TEXTW(item->text), mw - x - rarrowWidth);
-            if (ev->x >= x && ev->x <= x + w) {
-                for (i = 0; i < LENGTH(buttons); i++) {
-                    if (ignoreglobalmouse) break;
-                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (buttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
-                for (i = 0; i < LENGTH(cbuttons); i++) {
-                    if (ignoreconfmouse) break;
-                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (cbuttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
 
-            }
-        }
         // right arrow
         w = rarrowWidth;
         x = mw - w;

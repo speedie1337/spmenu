@@ -275,14 +275,14 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         for (item = curr; item != next; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
-                x += w / columns;
+                x += w / columns + (powerlineitems ? plw : 0);
                 y = 0;
             }
 
             y += h;
 
             // ClickSelItem, called function doesn't matter
-            if (ey >= y && ey <= (y + h) && ex >= x && ex <= (x + w / columns)) {
+            if (ey >= y && ey <= (y + h) && ex + (powerlineitems ? plw : 0) >= x + (powerlineitems ? plw : 0) && ex + (powerlineitems ? plw : 0) <= (x + w / columns) + (powerlineitems ? plw : 0)) {
                 for (i = 0; i < LENGTH(wl_buttons); i++) {
                     if (ignoreglobalmouse) break;
                     if (wl_buttons[i].click == ClickSelItem && wl_buttons[i].button == button) {
@@ -306,40 +306,17 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     } else if (matches) {
         x += inputw;
         w = larrowWidth;
+
         if (prev && curr->left) {
             if (ex >= x && ex <= x + w) {
                 click = ClickLArrow;
             }
         }
 
-        for (item = curr; item != next; item = item->right) {
-            x += w;
-            w = MIN(TEXTW(item->text), mw - x - rarrowWidth);
-            if (ex >= x && ex <= x + w) {
-                for (i = 0; i < LENGTH(wl_buttons); i++) {
-                    if (ignoreglobalmouse) break;
-                    if (wl_buttons[i].click == ClickSelItem && wl_buttons[i].button == button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (wl_buttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
-                for (i = 0; i < LENGTH(wl_cbuttons); i++) {
-                    if (ignoreconfmouse) break;
-                    if (wl_cbuttons[i].click == ClickSelItem && wl_cbuttons[i].button == button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (wl_cbuttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
-
-            }
-        }
         // right arrow
         w = rarrowWidth;
         x = mw - w;
+
         if (next && ex >= x && ex <= x + w) {
             click = ClickRArrow;
         }
