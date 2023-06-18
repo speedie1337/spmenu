@@ -98,10 +98,12 @@ void theme_load(void) {
             config_setting_lookup_int(conf, "matchcountstyle", &matchcountpwlstyle); // theme.powerline.matchcountstyle
             config_setting_lookup_int(conf, "modestyle", &modepwlstyle); // theme.powerline.modestyle
             config_setting_lookup_int(conf, "capsstyle", &capspwlstyle); // theme.powerline.capsstyle
+            config_setting_lookup_int(conf, "itemstyle", &itempwlstyle); // theme.powerline.itemstyle
             config_setting_lookup_int(conf, "prompt", &powerlineprompt); // theme.powerline.prompt
             config_setting_lookup_int(conf, "matchcount", &powerlinecount); // theme.powerline.matchcount
             config_setting_lookup_int(conf, "mode", &powerlinemode); // theme.powerline.mode
             config_setting_lookup_int(conf, "caps", &powerlinecaps); // theme.powerline.caps
+            config_setting_lookup_int(conf, "item", &powerlineitems); // theme.powerline.item
         }
     }
 

@@ -92,6 +92,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     if (is_selected(item->index)) {
+        selitem = 1;
         bgcol = col_itemmarkedbg;
         fgcol = col_itemmarkedfg;
         fga = alpha_itemmarkedfg;
@@ -113,6 +114,14 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         fgcol = itemn ? col_itemnormfg2 : col_itemnormfg;
         bga = itemn ? alpha_itemnormbg2 : alpha_itemnormbg;
         fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
+    }
+
+    if (!hidepowerline && powerlineitems && selitem && lines > 0) {
+        if (itempwlstyle == 2) {
+            drw_circle(drw, x - plw, y, plw, bh, 0, col_menu, bgcol, alpha_menu, bga);
+        } else {
+            drw_arrow(drw, x - plw, y, plw, bh, 0, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
+        }
     }
 
     // parse item text
@@ -215,6 +224,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         }
 
                         if (is_selected(item->index)) {
+                            selitem = 1;
                             bgcol = col_itemmarkedbg;
                             fgcol = col_itemmarkedfg;
                             fga = alpha_itemmarkedfg;
@@ -251,6 +261,14 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
     item->clntext = malloc(sizeof(buffer));
     memcpy(item->clntext, buffer, sizeof(buffer));
+
+    if (!hidepowerline && powerlineitems && selitem && lines > 0) {
+        if (itempwlstyle == 2) {
+            drw_circle(drw, r, y, plw, bh, 1, col_menu, bgcol, alpha_menu, bga);
+        } else {
+            drw_arrow(drw, r, y, plw, bh, 1, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
+        }
+    }
 
     return r;
 }
@@ -303,10 +321,10 @@ int drawitem(int x, int y, int w) {
         for (item = curr; item != next; item = item->right, i++) {
             x = drawitemtext(
                     item,
-                    rx + ((i / lines) *  ((mw - rx) / columns)),
+                    rx + ((i / lines) *  ((mw - rx) / columns)) + (powerlineitems ? plw : 0),
                     y + (((i % lines) + 1) * bh),
-                    (mw - rx) / columns
-                    );
+                    (mw - rx) / columns - (powerlineitems ? 2 * plw : 0)
+            );
 
             if (item == sel && itemoverride) {
                 itemnumber = i;

@@ -104,10 +104,12 @@ spmenu.powerlineprompt:     1
 spmenu.powerlinecount:      1
 spmenu.powerlinemode:       1
 spmenu.powerlinecaps:       1
+spmenu.powerlineitems:      1
 spmenu.promptpwlstyle:      2
 spmenu.matchcountpwlstyle:  2
 spmenu.modepwlstyle:        2
 spmenu.capspwlstyle:        2
+spmenu.itempwlstyle:        2
 
 !! Misc color
 spmenu.globalcolors:        1

@@ -40,10 +40,12 @@ static int powerlineprompt             = 1; /* Enable powerline for the prompt *
 static int powerlinecount              = 1; /* Enable powerline for the match count */
 static int powerlinemode               = 1; /* Enable powerline for the mode indicator */
 static int powerlinecaps               = 1; /* Enable powerline for the caps lock indicator */
+static int powerlineitems              = 1; /* Enable powerline for the items */
 static int promptpwlstyle              = 2; /* Prompt powerline style (0: >, 1: \, 2: )) */
 static int matchcountpwlstyle          = 2; /* Match count powerline style (0: <, 1: /, 2: () */
 static int modepwlstyle                = 2; /* Mode indicator powerline style (0: <, 1: /, 2: () */
 static int capspwlstyle                = 2; /* Caps lock indicator powerline style (0: <, 1: /, 2: () */
+static int itempwlstyle                = 2; /* Item powerline style (0: <>, 1: /\, 2: ()) */
 
 /* Window properties */
 static int dockproperty                = 1; /* Set _NET_WM_WINDOW_TYPE_DOCK */
