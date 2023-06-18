@@ -27,7 +27,9 @@ display the man page.
 
 Most of the time you don't need to prepend `www` though, for example
 typing in `https://gnu.org` will open gnu.org in $BROWSER even
-without the prefix. Same goes for magnet links.
+without the prefix. If $BROWSER isn't set then $BROWSER will be set
+to xdg-open. Same goes for magnet links, although this has
+limited use.
 
 By default it also saves history, which can be viewed by calling
 `viewhistory` in your spmenu config. By default the keybind

@@ -92,7 +92,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     if (is_selected(item->index)) {
-        selitem = 1;
+        selitem = (lines ? 1 : selitem);
         bgcol = col_itemmarkedbg;
         fgcol = col_itemmarkedfg;
         fga = alpha_itemmarkedfg;
@@ -224,7 +224,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         }
 
                         if (is_selected(item->index)) {
-                            selitem = 1;
+                            selitem = (lines ? 1 : selitem);
                             bgcol = col_itemmarkedbg;
                             fgcol = col_itemmarkedfg;
                             fga = alpha_itemmarkedfg;

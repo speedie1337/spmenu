@@ -50,7 +50,8 @@ Prepending \f[V]www\f[R] will open a page in $BROWSER
 Most of the time you don\[cq]t need to prepend \f[V]www\f[R] though, for
 example typing in \f[V]https://gnu.org\f[R] will open gnu.org in
 $BROWSER even without the prefix.
-Same goes for magnet links.
+If $BROWSER isn\[cq]t set then $BROWSER will be set to xdg-open.
+Same goes for magnet links, although this has limited use.
 .PP
 By default it also saves history, which can be viewed by calling
 \f[V]viewhistory\f[R] in your spmenu config.

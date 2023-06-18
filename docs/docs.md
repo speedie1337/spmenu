@@ -4,10 +4,14 @@ spmenu
 spmenu is an X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
-In addition to this, it also serves as a run launcher through the included
-shell script `spmenu_run`, which handles both $PATH listing, .desktop entries
-and file listing. See spmenu_run(1) for more information related to
-using spmenu as a run launcher.
+Its core functionality is built around taking and parsing input and returning
+output, making it a customizable and versatile utility for use with
+shell or Python scripts.
+
+In addition to this, it also serves as a run launcher/dmenu_run replacement
+through the included shell script `spmenu_run`, which handles both
+$PATH listing, .desktop entries and file listing. See spmenu_run(1)
+for more information regarding using spmenu as a run launcher.
 
 ## Usage
 
@@ -16,11 +20,12 @@ separated by a newline (`\n`). When (by default) Enter is pressed, the selected
 item will be piped to stdout.
 
 This allows things like `printf "Apple\nOrange\nPear\n" | spmenu`. This command
-will spawn an spmenu window with three items, 'Apple', 'Orange' and 'Pear'.
-This can be used in shell scripts to create interactive menus.
+will spawn an spmenu window with three items, 'Apple', 'Orange' and 'Pear'. The
+user can select an item using the keyboard or mouse and the output can then be
+parsed. This can be used in shell scripts to create interactive menus.
 
-spmenu doesn't strictly read standard input, it can read from files too using
-the `-lf` or `--list-file` argument.
+Note that spmenu doesn't strictly read standard input, it can read from files
+too using the `-lf` or `--list-file` argument.
 
 On top of this, you can specify arguments to change the behavior of spmenu.
 See a list below for a list.
@@ -532,6 +537,9 @@ dmenu compatibility can be achieved using these arguments:
 `-sf color`
 :    Set the selected foreground color
 
+There are more options, that can be set in the configuration file but not using
+arguments passed to spmenu.
+
 ## Keybinds
 
 You can set keybinds through the config file. A default config file is available
@@ -539,40 +547,50 @@ after installing spmenu. This configuration file has identical keybindings to th
 default hardcoded keybinds.
 
 By default, the configuration file will ignore all hardcoded keybindings to
-prevent keybind conflicts, but if you do not like this behaviour you can
-simply set `ignoreglobalkeys = 1`.
+prevent keybind conflicts, but if you do not like this behavior you can
+simply set `ignoreglobalkeys = 0`.
 
 ## Modes
 
-One of the features that separate spmenu from dmenu is spmenu's different
-modes. As of version 0.2, there are two modes. Normal mode and Insert mode.
-These modes are of course similar to Vim.
+There are two modes. Normal mode and Insert mode. These modes are of
+course similar to Vim. While modes are used by default, it is possible
+to move all keybinds to Insert mode, restoring the original dmenu
+behavior.
 
 Normal mode is the mode spmenu starts in unless a mode argument is specified
 or another mode is set in the configuration file. In normal mode, all keys
 perform some action, but you cannot type any actual text to filter items.
-This mode is used for navigation, as well as quickly selecting an item.
+This mode is commonly used for navigation, general keybinds, as well as
+quickly selecting an item.
 
 Insert mode is entered through (by default) pressing `i` in normal mode. In
 this mode, most keybinds do nothing. When you are in insert mode, you
 filter items by typing text into the field. Once you're done
 with insert mode, you can press Escape to enter normal mode again.
 
-All of these keybinds can be overriden in the configuration file.
+All of these keybinds can be overriden in the configuration file. Should you
+unbind your switchmode key, you can always press `Ctrl+Alt+Delete` to
+exit spmenu, allowing you to fix your spmenu configuration.
 
 ## -p option
 
-spmenu has a -p option, which stands for prompt. It allows you to specify
+spmenu has a `-p` or `--prompt` option. It allows you to specify
 text to display next to the item list. It is displayed on the left side of the
 spmenu window. It should be noted that the prompt is purely visual though.
 
-## Images
+It may be useful when you want to display information, such as the current
+directory or what the items actually do. This is a field that can be overriden
+with almost any text.
 
-spmenu supports drawing images. This image is placed on the left side of
-the menu window. To use an image, pipe `img:///path/to/image` to spmenu.
-If you want you can specify arguments like usual. Note that you should add
-a Tab (`\t`) character after the path to the image file. Otherwise the text
-after will be interpreted as part of the filename and the image will not be drawn.
+## Displaying images
+
+spmenu supports displaying images. This image is placed on the left side of
+the menu window, as long as spmenu isn't a single line.
+
+To use an image, pipe `img:///path/to/image` to spmenu. If you want you can
+specify arguments like usual. Note that you should add a Tab (`\t`) character
+after the path to the image file. Otherwise the text after will be interpreted
+as part of the filename and the image will not be drawn.
 
 Any text after the Tab character will be interpreted as a regular item.
 In practice, drawing an image might look like this:
@@ -584,11 +602,10 @@ There are also a few image related arguments, such as:
 `-is`, `-ig`, `-it`, `-ib`, `-ic`, `-itc` and `-gc`.
 
 Vector images (such as .svg) can be displayed too in the same way. This is all
-done using `imlib2` so as long as imlib2 support it, it can be used.
+done using `imlib2` and `cairo` so as long as imlib2 support it, it can be used.
 
-NOTE: Older spmenu scripts may use the `IMG:` prefix rather than
-the newer `img://` prefix. It is recommended that you use the `img://` prefix,
-but `IMG:` may be preferred if you need compatibility with older spmenu versions.
+If the image cannot be located, isn't a valid format or cannot be displayed
+for some reason, the space where the image would be displayed is blank.
 
 ## Colored text
 
@@ -598,10 +615,13 @@ pipe practically any colored shell script straight into spmenu,
 no need to filter the output or anything.
 
 Not only does it support colored text, but it also supports colored backgrounds.
-This allows something similar to the emoji highlight patch, except even more useful.
+This allows something similar to the emoji highlight patch on the suckless website,
+except even more useful.
+
 Example: `printf "\033[0;44m😀\033[0m Emoji highlighting\n" | spmenu --columns 1`
 
-See 'SGR sequences' for more information.
+It should be noted that font sequences are not yet supported. See 'SGR sequences'
+for more information.
 
 ## SGR sequences
 
@@ -629,7 +649,7 @@ Just as a tip, you can pipe your colored spmenu output to
 `sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from
 the output. This is useful when you want to check what the output actually is.
 
-256 color sequences are also supported, but due to the complexity involved they
+256 color sequences are also supported, but due to the complexity involved, they
 will not be covered in this man page.
 
 ## Pango markup
@@ -688,7 +708,11 @@ to /usr/share/spmenu/spmenu.conf. You can copy this to your `.config/spmenu` dir
 This configuration file is loaded on startup.
 
 You can also include other configuration files in the configuration file using
-`@include "path/to/config"`.
+`@include "path/to/config"`, useful if you wish to split your config file up
+into multiple segments.
+
+Note that spmenu also has a `binds.conf` configuration file, which isn't used
+very much. This file is documented well [here](https://spmenu.speedie.site/binds.conf+documentation).
 
 ## Default keybinds
 
@@ -774,52 +798,27 @@ Programs like `pywal` do this to apply universal colorschemes.
 ## Themes
 
 You could just `@include` themes from the aforementioned `spmenu.conf`, but
-it's kind of inconvenient. For this reason, spmenu reads `.theme.conf`
-and `.config/spmenu/theme.conf` on startup as well. To apply a basic theme,
+it's kind of inconvenient. For this reason, spmenu reads `.config/spmenu/theme.conf`
+on startup as well. To apply a basic theme,
 you simply replace theme.conf with the theme you want to use.
 
 There is a [Git repository](https://git.speedie.site/speedie/spmenu-themes)
-which contains a bunch of themes written for spmenu,
-and you can use them as a template when making your own themes.
-You may also contribute to this repository if you have a theme to show.
+and [wiki article](https://spmenu.speedie.site/User+themes) which contains
+a bunch of themes written for spmenu, and you can use them as a template
+when making your own themes. You may also contribute to this repository
+if you have a theme to show.
 
 Do however note that the theme file is **not** the same as the config file.
 There are quite a lot of differences, and many options are not available.
 This is by design, as these options should be set by the user, not the theme.
 
-This is not very convenient if you have many themes because you constantly
+Not very convenient if you have many themes because you constantly
 have to replace your theme file, so theme managers exist to make this a
 bit easier. [spmenuify](https://git.speedie.site/speedie/spmenuify) is the official
 theme manager, but you could use another one or write your own.
 
-## Run launcher
-
-spmenu includes a powerful Bash script called spmenu_run. It lists
-executable programs in $PATH and displays them to the user in a list.
-Not only that but it optionally shows recently run programs first in the list.
-
-The selected option is piped to /bin/sh (by default). Unlike dmenu_run,
-spmenu_run has some cool features. For example:
-
-- Prepending `#` will spawn it in a terminal instead of just a shell.
-- Prepending `?` will run the command in a function, most of the time used to
-display the man page.
-- Prepending `magnet` will open a magnet link in $TORRENT
-- Prepending `www` will open a page in $BROWSER
-
-Most of the time you don't need to prepend `www` though, for example
-typing in `https://gnu.org` will open gnu.org in $BROWSER even
-without the prefix. Same goes for magnet links.
-
-You can also configure the run launcher through editing
-`~/.config/spmenu/run/config` which is configured in shell syntax.
-
-In addition to the $PATH listing, spmenu_run also allows listing out
-and displaying .desktop entries. It does this in style, too by displaying
-the program icon.
-
-It can be configured through editing `~/.config/spmenu/run/config`. The
-configuration file can also be moved by setting `${XDG_CONFIG_HOME}`.
+For more information on the theme.conf configuration file,
+see [this page](https://spmenu.speedie.site/theme.conf+documentation).
 
 ## spmenu commands
 
@@ -835,14 +834,12 @@ run `printf 'spmenu:version' | spmenu`. There are a few of these.
 
 ## License
 
-spmenu is licensed under the MIT license because that's the original suckless
-license. See the included LICENSE file for more information.
+spmenu is licensed under the MIT license.
 
 ## Reporting issues
 
-Please report issues on the
-[Git repository](https://git.speedie.site/speedie/spmenu) or alternatively
-email me.
+Please report issues on the [Git repository](https://git.speedie.site/speedie/spmenu)
+or the [GitHub mirror](https://github.com/speediegq/spmenu).
 
 ## See also
 
