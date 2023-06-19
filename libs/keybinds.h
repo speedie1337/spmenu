@@ -70,8 +70,8 @@ static Key keys[] = {
     { 0,       Shift,          XK_g,         moveend,         {0} },
     { 0,       0,              XK_Next,      movenext,        {0} },
     { 0,       0,              XK_Prior,     moveprev,        {0} },
-    { 0,       Alt,            XK_p,         navhistory,      {.i = -1 } },
-    { 0,       Alt,            XK_n,         navhistory,      {.i = +1 } },
+    { 0,       Ctrl,           XK_p,         navhistory,      {.i = -1 } },
+    { 0,       Ctrl,           XK_n,         navhistory,      {.i = +1 } },
 
     /* insert mode */
     { 1,       0,              XK_Escape,    switchmode,      {0} },
@@ -146,8 +146,8 @@ static WlKey wl_keys[] = {
     { 0,       WL_Shift,             XKB_KEY_g,         moveend,         {0} },
     { 0,       WL_None,              XKB_KEY_Next,      movenext,        {0} },
     { 0,       WL_None,              XKB_KEY_Prior,     moveprev,        {0} },
-    { 0,       WL_Alt,               XKB_KEY_p,         navhistory,      {.i = -1 } },
-    { 0,       WL_Alt,               XKB_KEY_n,         navhistory,      {.i = +1 } },
+    { 0,       WL_Ctrl,              XKB_KEY_p,         navhistory,      {.i = -1 } },
+    { 0,       WL_Ctrl,              XKB_KEY_n,         navhistory,      {.i = +1 } },
 
     /* insert mode */
     { 1,       WL_None,              XKB_KEY_Escape,    switchmode,      {0} },

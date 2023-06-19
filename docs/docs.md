@@ -792,8 +792,8 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | Shift              | g                  | moveend            | 0                  |
 | 0                  | 0                  | Next               | movenext           | 0                  |
 | 0                  | 0                  | Prior              | moveprev           | 0                  |
-| 0                  | Alt                | p                  | navhistory         | -1                 |
-| 0                  | Alt                | n                  | navhistory         | +1                 |
+| 0                  | Ctrl               | p                  | navhistory         | -1                 |
+| 0                  | Ctrl               | n                  | navhistory         | +1                 |
 | 1                  | 0                  | Escape             | switchmode         | 0                  |
 
 ## .Xresources
