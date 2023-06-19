@@ -289,6 +289,10 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
         ey -= menumarginv;
 
+        if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
+            ey += h;
+        }
+
         for (item = curr; item != next; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;

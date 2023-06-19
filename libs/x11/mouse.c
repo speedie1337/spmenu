@@ -69,6 +69,10 @@ void buttonpress_x11(XEvent *e) {
 
         ev->y -= menumarginv;
 
+        if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
+            ev->y += h;
+        }
+
         for (item = curr; item != next; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
