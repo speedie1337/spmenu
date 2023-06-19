@@ -251,6 +251,8 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         yp = 1;
     } else if (lines && ey < h + menumarginv && ey > menumarginv) {
         yp = 1;
+    } else if (!lines) {
+        yp = 1;
     }
 
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific

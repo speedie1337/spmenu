@@ -29,6 +29,8 @@ void buttonpress_x11(XEvent *e) {
         yp = 1;
     } else if (lines && ev->y < h + menumarginv && ev->y > menumarginv) {
         yp = 1;
+    } else if (!lines) {
+        yp = 1;
     }
 
     if (ev->window != win) return; // if incorrect or wrong window, return
