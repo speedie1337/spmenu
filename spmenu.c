@@ -249,12 +249,12 @@ static char *fonts[] = { font };
 #include "libs/rtl.h"
 #include "libs/rtl.c"
 #include "libs/sort.c"
+#include "libs/match.h"
+#include "libs/match.c"
 #include "libs/draw.c"
 #include "libs/schemes.c"
 #include "libs/argv.h"
 #include "libs/argv.c"
-#include "libs/match.h"
-#include "libs/match.c"
 
 // include x11 code
 #include "libs/x11/inc.c"
