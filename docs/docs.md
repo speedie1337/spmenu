@@ -782,7 +782,7 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | Ctrl               | u                  | moveup             | 5                  |
 | 0                  | Ctrl               | d                  | movedown           | 5                  |
 | 0                  | 0                  | u                  | togglehighlight    | 0                  |
-| 0                  | Ctrl+Shift         | h                  | viewhist           | 0                  |
+| 0                  | Shift              | h                  | viewhist           | 0                  |
 | 0                  | 0                  | d                  | clear              | 0                  |
 | 0                  | Shift              | d                  | clearins           | 0                  |
 | 0                  | 0                  | Escape             | quit               | 0                  |
