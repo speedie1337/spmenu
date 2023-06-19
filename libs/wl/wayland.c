@@ -495,7 +495,11 @@ int init_disp(struct state *state) {
     wl_display_roundtrip(state->display);
 
     assert(state->compositor != NULL);
-    assert(state->layer_shell != NULL);
+
+    if (state->layer_shell == NULL) {
+        die("spmenu: Your compositor does not implement the wlr-layer-shell protocol. Run spmenu in X11 mode.");
+    }
+
     assert(state->shm != NULL);
 
     wl_display_roundtrip(state->display);

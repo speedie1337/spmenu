@@ -76,6 +76,11 @@ void readargs(int argc, char *argv[]) {
             protocol = 0;
         }
     }
+#if USEX
+    if (getenv("GNOME_SETUP_DISPLAY")) { // This is a GNOME Wayland session which doesn't implement wlr-layer-shell
+        protocol = 0;
+    }
+#endif
 #endif
 
     // init/read xrdb
