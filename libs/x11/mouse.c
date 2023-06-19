@@ -5,11 +5,7 @@ void buttonpress_x11(XEvent *e) {
     XButtonPressedEvent *ev = &e->xbutton;
     int x = 0, y = 0, h = bh, w, item_num = 0;
     unsigned int i, click;
-    int xpad = 0;
-
-    if (!hidepowerline) {
-        x = xpad = plw;
-    }
+    int yp = 0;
 
     // margin
     x += menumarginh;
@@ -29,20 +25,26 @@ void buttonpress_x11(XEvent *e) {
     if (!strcmp(capstext, ""))
         capsWidth = 0;
 
+    if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
+        yp = 1;
+    } else if (lines && ev->y < h + menumarginv && ev->y > menumarginv) {
+        yp = 1;
+    }
+
     if (ev->window != win) return; // if incorrect or wrong window, return
 
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
 
     // check click position and override the value of click
-    if (ev->x < x + promptw + powerlineprompt ? plw : 0) { // prompt
+    if (yp && ev->x < x + promptw + powerlineprompt ? plw : 0) { // prompt
         click = ClickPrompt;
-    } else if ((ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
+    } else if (yp && (ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
         click = ClickCaps;
-    } else if (ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // mode indicator
+    } else if (yp && ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // mode indicator
         click = ClickMode;
-    } else if (ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // match count
+    } else if (yp && ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // match count
         click = ClickNumber;
-    } else { // input
+    } else if (yp && !hideinput) { // input
         w = (lines > 0 || !matches) ? mw - x : inputw;
 
         if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + promptw +
@@ -53,10 +55,18 @@ void buttonpress_x11(XEvent *e) {
         }
     }
 
+#if USEIMAGE
+    if (!hideimage && longestedge != 0) {
+        x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+    }
+#endif
+
     // item click
     if (lines > 0) {
-        // vertical list
         w = mw - x;
+
+        ev->y -= menumarginv;
+
         for (item = curr; item != next; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
@@ -66,15 +76,8 @@ void buttonpress_x11(XEvent *e) {
 
             y += h;
 
-#if USEIMAGE
-            if (!hideimage && longestedge != 0) {
-                x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
-                ev->x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
-            }
-#endif
-
             // ClickSelItem, called function doesn't matter
-            if (ev->y >= y && ev->y <= (y + h) && ev->x + (powerlineitems ? plw : 0) >= x + (powerlineitems ? plw : 0) && ev->x + (powerlineitems ? plw : 0) <= (x + w / columns) + (powerlineitems ? plw : 0)) {
+            if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? plw : 0)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
                     if (ignoreglobalmouse) break;
                     if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
