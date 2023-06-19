@@ -321,9 +321,9 @@ int drawitem(int x, int y, int w) {
         for (item = curr; item != next; item = item->right, i++) {
             x = drawitemtext(
                     item,
-                    rx + ((i / lines) *  ((mw - rx) / columns)) + (powerlineitems ? plw : 0),
+                    rx + menumarginh + ((i / lines) *  ((mw - rx) / columns)) + (powerlineitems ? plw : 0),
                     y + (((i % lines) + 1) * bh),
-                    (mw - rx) / columns - (powerlineitems ? 2 * plw : 0)
+                    (mw - rx) / columns - (powerlineitems ? 2 * plw : 0) - (2 * menumarginh)
             );
 
             if (item == sel && itemoverride) {
