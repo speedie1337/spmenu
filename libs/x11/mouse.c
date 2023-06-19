@@ -66,6 +66,13 @@ void buttonpress_x11(XEvent *e) {
 
             y += h;
 
+#if USEIMAGE
+            if (!hideimage && longestedge != 0) {
+                x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+                ev->x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+            }
+#endif
+
             // ClickSelItem, called function doesn't matter
             if (ev->y >= y && ev->y <= (y + h) && ev->x + (powerlineitems ? plw : 0) >= x + (powerlineitems ? plw : 0) && ev->x + (powerlineitems ? plw : 0) <= (x + w / columns) + (powerlineitems ? plw : 0)) {
                 for (i = 0; i < LENGTH(buttons); i++) {

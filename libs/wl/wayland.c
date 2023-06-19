@@ -281,6 +281,13 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
             y += h;
 
+#if USEIMAGE
+            if (!hideimage && longestedge != 0) {
+                x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+                ex += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+            }
+#endif
+
             // ClickSelItem, called function doesn't matter
             if (ey >= y && ey <= (y + h) && ex + (powerlineitems ? plw : 0) >= x + (powerlineitems ? plw : 0) && ex + (powerlineitems ? plw : 0) <= (x + w / columns) + (powerlineitems ? plw : 0)) {
                 for (i = 0; i < LENGTH(wl_buttons); i++) {
