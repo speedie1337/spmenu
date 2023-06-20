@@ -111,12 +111,12 @@ Finally, to install it all, run:
 or anything else`
 
 To generate documentation, which may be necessary if you're pushing new changes
-to your Git repository, run `scripts/make/generate-docs.sh` **in the current
+to your Git repository, run `scripts/spmenu_make docs` **in the current
 directory**.
 
-To generate a tarball, run `scripts/make/generate-pkg.sh` **in the current
+To generate a tarball, run `scripts/spmenu_make dist` **in the current
 directory**. If you want to generate a pacman package, run
-`scripts/make/generate-pacman-pkg.sh` instead.
+`scripts/spmenu_make pkg_arch` instead.
 
 ## Scripts
 
