@@ -1,4 +1,4 @@
-![preview](docs/spmenu-themes.gif)
+![preview](screenshots/spmenu-themes.gif)
 
 spmenu
 ======
@@ -23,6 +23,7 @@ can be themed to look identical to dmenu.
 ![typing](screenshots/typing.gif)
 ![.desktop launcher](screenshots/desktop-launcher.png)
 ![bliss](screenshots/bliss.png)
+![dmenu](screenshots/dmenu.png)
 
 ## Dependencies
 
