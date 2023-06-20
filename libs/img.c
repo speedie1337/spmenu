@@ -72,15 +72,23 @@ void drawimage(void) {
         wta += menumarginv;
 
         if (mh != bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
-            resizetoimageheight(width, height);
-        }
-
-        // we're covering all the area
-        if (fullscreen) {
-            xta = wta = leftmargin = 0;
+            resizetoimageheight(width, imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
         }
 
         drw_set_img(drw, imlib_image_get_data(), width, height);
+
+        if (fullscreen) {
+            xta = wta = leftmargin = 0;
+            drw_img(drw, (imagewidth - width) / 2, 0);
+
+            if (sel) {
+                limg = sel->image;
+            } else {
+                limg = NULL;
+            }
+
+            return;
+        }
 
         // render image on X11
         if (!imageposition && image) { // top mode = 0
@@ -164,10 +172,11 @@ void scaleimage(int *width, int *height) {
     float aspect = 1.0f;
 
     // depending on what size, we determine aspect ratio
-    if (imagewidth > *width)
+    if (imagewidth > *width) {
         aspect = (float)(*width)/imagewidth;
-    else
+    } else {
         aspect = (float)imagewidth/(*width);
+    }
 
     new_width = *width * aspect;
     new_height = *height * aspect;
@@ -315,7 +324,7 @@ void jumptoindex(unsigned int index) {
 }
 
 void resizetoimageheight(int imagewidth, int imageheight) {
-    int ih = imlib_image_get_height();
+    int ih = imageheight;
 
 #if USEX
     if (!protocol) {
