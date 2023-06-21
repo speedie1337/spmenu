@@ -259,7 +259,7 @@ void loadimagecache(const char *file, int *width, int *height) {
             if (xdg_cache || !strcmp(cachedir, "xdg"))
                 slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
             else
-                slen = snprintf(NULL, 0, "%s/.thumbnails/%s/%s.png", home, dsize, md5)+1;
+                slen = snprintf(NULL, 0, "%s/.cache/thumbnails/%s/%s.png", home, dsize, md5)+1;
         } else {
             slen = snprintf(NULL, 0, "%s/%s/%s.png", cachedir, dsize, md5)+1;
         }
@@ -273,7 +273,7 @@ void loadimagecache(const char *file, int *width, int *height) {
             if (xdg_cache)
                 sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
             else
-                sprintf(buf, "%s/.thumbnails/%s/%s.png", home, dsize, md5);
+                sprintf(buf, "%s/.cache/thumbnails/%s/%s.png", home, dsize, md5);
         } else {
                 sprintf(buf, "%s/%s/%s.png", cachedir, dsize, md5);
         }
