@@ -29,7 +29,6 @@ HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-true}"
-VALIDATE_ENTRIES="${VALIDATE_ENTRIES:-true}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
@@ -255,7 +254,6 @@ ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 MULTISELECT="true" # Allow handling multiple items, if set to false only the first line/selected item will be used.
 IMAGE="true" # Display images (true/false)
-VALIDATE_ENTRIES="true" # Validate entries using desktop-file-validate (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
 DESCRIPTION_COLOR="#999888" # Description text color
 LOGFILE="/tmp/spmenu_run.log" # Log file
@@ -504,23 +502,29 @@ print_desktop_list() {
     it_file=()
     it_term=()
 
+    # autorefreshing
+    if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
+        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' | wc -l)"
+        [ -f "$FILEFILE" ] && cached_c="$(wc -l < "$FILEFILE")" || cached_c="0"
+
+        printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
+
+        [ "$cfiles" = "true" ] && [ "$entry_c" != "$cached_c" ] && cfiles=false
+    fi
+
     # print data from entries
     if [ "$cfiles" = "false" ]; then
         printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE" && tail -n 1 "$LOGFILE"
 
         icons="$(find "${icondir[@]}" -type f)"
-        entry="$(find "${desktopdir[@]}" -type f)"
-        entry_c="$(printf "$entry\n" | wc -l)"
+        entry="$(find "${desktopdir[@]}" -type f -name '*.desktop')"
+        entry_c="$(printf "%s\n" "$entry" | wc -l)"
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
         for i in $(seq "$entry_c"); do
             cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-
-            if [ -x "$(command -v desktop-file-validate)" ] && [ "$VALIDATE_ENTRIES" != "false" ]; then
-                desktop-file-validate "$cur_file" > /dev/null || continue
-            fi
 
             # get details to display
             it_title[i]="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
@@ -549,7 +553,7 @@ print_desktop_list() {
             printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
         done
 
-        print_desktop_list
+        print_desktop_list "noc"
     else # we have entries, let's populate the arrays
         command -v desktop_pre_func > /dev/null && desktop_pre_func
 
@@ -647,7 +651,7 @@ print_desktop_menu() {
 
     HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
 
-    print_desktop_list | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
+    print_desktop_list "" | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
 
     while read -r menusel; do
         [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
