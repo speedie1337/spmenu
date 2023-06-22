@@ -192,6 +192,9 @@ print_config() {
 # 'run_post_func' after spawning spmenu, selected item passed as an argument.
 # 'desktop_pre_func' before spawning spmenu.
 # 'desktop_post_func' after spawning spmenu, selected item passed as an argument.
+# 'desktop_pre_caching_func' before caching entries.
+# 'desktop_post_caching_func' after caching entries.
+# 'desktop_file_caching_func' while caching entries. The current file that is being parsed is passed as an argument.
 # 'fm_pre_func' before spawning spmenu.
 # 'fm_post_func' after spawning spmenu, selected item passed as an argument.
 # 'fm_pre_list_func' right before listing out files.
@@ -210,7 +213,8 @@ print_config() {
 #
 # You can use anything POSIX compliant shells and Bash support, as well as programs available on the system.
 
-# misc software
+
+# Miscellanious software options
 TERMINAL="\${TERMINAL:-st -e}" # Terminal commands are spawned in
 BROWSER="\${BROWSER:-xdg-open}" # Web browser, for URLs
 TORRENT="\${TORRENT:-qbittorrent}" # Torrent client, for magnet links
@@ -222,7 +226,7 @@ WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
 
-# run launcher options
+# Run launcher argument options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
 RUNLAUNCHER_RUN_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the run launcher
 RUNLAUNCHER_DESKTOP_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the .desktop launcher
@@ -230,23 +234,23 @@ RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when 
 RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
 DMENU_COMPAT="false" # Enable dmenu compatibility (true/false)
 
-# sorting
+# Sorting
 SORT_BY_NUMBER="true" # Sort by numbers
 SORT_IN_REVERSE="true" # Sort in reverse
 SORT_BY_RECENT="false" # Sort by recent
 SORT_ARGS="" # Extra arguments passed to the sort command.
 
-# keywords
+# Keywords
 HIDDEN_KEYWORDS="spmenu" # Keywords that will be ignored, needs to be in grep -vE syntax.
 KEYWORDS="" # Keywords that will be matched, needs to be in grep -E syntax.
 
-# misc
+# Miscellanious
 STDOUT="false" # Print to stdout and exit (true/false)
 DISPLAY_DUPLICATES="false" # Display duplicates or not
 DEFAULT_FEATURE="run" # spmenu_run default feature (run/fm/desktop/help)
 HELP_COLOR="#FFFF00"
 
-# .desktop options
+# .desktop entry options
 DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications \${HOME}/.local/share/applications" # Directories for .desktop entries
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${HOME}/.local/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
@@ -263,12 +267,12 @@ EXECFILE="\${EXECFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.exec}" # File containi
 ICONFILE="\${ICONFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.icon}" # File containing the paths to the icons to display.
 FILEFILE="\${FILEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.file}" # File containing the path to the .desktop entries.
 
-# file management
+# File management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
 LS_ARGS="\${LS_ARGS:- --color=always}" # Arguments passed to /bin/ls
 USE_FULL_PATH="true" # Return full path (true/false)
 
-# function to read the man page in spmenu
+# Function to read the man page in spmenu
 read_man() {
     man "\$1" | \\
     col -b | \\
@@ -514,6 +518,7 @@ print_desktop_list() {
 
     # print data from entries
     if [ "$cfiles" = "false" ]; then
+        command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
         printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE" && tail -n 1 "$LOGFILE"
 
         icons="$(find "${icondir[@]}" -type f)"
@@ -523,6 +528,8 @@ print_desktop_list() {
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
         for i in $(seq "$entry_c"); do
+            command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
+
             cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
 
@@ -552,6 +559,8 @@ print_desktop_list() {
             printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
             printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
         done
+
+        command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
 
         print_desktop_list "noc"
     else # we have entries, let's populate the arrays
