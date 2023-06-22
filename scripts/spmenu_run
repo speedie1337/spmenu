@@ -40,7 +40,6 @@ MULTISELECT="${MULTISELECT:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${HOME}/.local/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
-TEMPORARY_DIR="${TEMPORARY_DIR:-$CONFDIR/spmenu/run/cache}"
 IMAGE="${IMAGE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
 
@@ -70,7 +69,6 @@ declare -a sort_args
 declare -a uniq_args
 
 # directories
-declare -a tmpdir
 declare -a desktopdir
 declare -a icondir
 
@@ -252,7 +250,6 @@ HELP_COLOR="#FFFF00"
 # .desktop options
 DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications \${HOME}/.local/share/applications" # Directories for .desktop entries
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${HOME}/.local/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
-TEMPORARY_DIR="\$CONFDIR/spmenu/run/cache" # Directory used to store cached entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
 AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
@@ -509,30 +506,33 @@ print_desktop_list() {
 
     # print data from entries
     if [ "$cfiles" = "false" ]; then
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE" && tail -n 1 "$LOGFILE"
 
-        entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
-        cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
-        cached="$(find "${tmpdir[@]}" -type f)";
+        icons="$(find "${icondir[@]}" -type f)"
+        entry="$(find "${desktopdir[@]}" -type f)"
+        entry_c="$(printf "$entry\n" | wc -l)"
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
-        for i in $(seq "$cached_c"); do
-            # current file
-            #[ -z "$cached" ] && break;
-            cur_file="$(printf "%s" "$cached" | sed "${i}q;d")"
-            [ ! -f "$cur_file" ] && printf "File '%s' does not exist. Skipping...\n" "$cur_file" >> "$LOGFILE" && continue
+        for i in $(seq "$entry_c"); do
+            cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+            icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
+
+            if [ -x "$(command -v desktop-file-validate)" ] && [ "$VALIDATE_ENTRIES" != "false" ]; then
+                desktop-file-validate "$cur_file" > /dev/null || continue
+            fi
 
             # get details to display
-            it_title[i]="$(sed "1q;d" "$cur_file" | sed "s/Name://g")"
-            it_desc[i]="$(sed "2q;d" "$cur_file" | sed "s/Description://g")"
-            it_icon[i]="$(sed "4q;d" "$cur_file" | sed "s/Icon://g")"
-            it_exec[i]="$(sed "3q;d" "$cur_file" | sed "s/Executable://g")"
+            it_title[i]="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+            it_desc[i]="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
+            it_icon[i]="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)"
+            it_exec[i]="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             it_file[i]="$cur_file"
             it_term[i]="false"
 
-            grep -q "Term:true" "$cur_file" && it_term[i]="true"
+            grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
 
+            # write files
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
             printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
             printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
@@ -540,6 +540,7 @@ print_desktop_list() {
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
             printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
 
+            # log it all
             printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
             printf "%d. Description - %s\n" "${i}" "${it_desc[i]}" >> "$LOGFILE"
             printf "%d. Executable - %s\n" "${i}" "${it_exec[i]}" >> "$LOGFILE"
@@ -641,10 +642,8 @@ exec_program() {
     fi
 }
 
-
 print_desktop_menu() {
     check_desktop
-    cache_desktop
 
     HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
 
@@ -665,65 +664,10 @@ print_desktop_menu() {
 }
 
 prep_desktop() {
-    mkdir -p "${tmpdir[@]}"
     printf "spmenu_run log (%s)\nFunction: Desktop\n" "$(date "+%D %T")" > "$LOGFILE"
 }
 
-cache_desktop() {
-    entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
-    cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
-
-    printf "Cached: %s\n" "$cached_c" >> "$LOGFILE"
-    printf "Entries: %s\n" "$entry_c" >> "$LOGFILE"
-
-    if [ "$AUTOREFRESH" = "true" ]; then
-        if [ "$cached_c" = "$entry_c" ] || [ "$cached_c" -gt "$entry_c" ]; then
-            return
-        fi
-    else
-        if [ "$clearcache" != "true" ] && [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$TERMFILE" ]; then
-            return;
-        fi
-    fi
-
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}"
-
-    # find
-    entry="$(find "${desktopdir[@]}" -type f)"
-    icons="$(find "${icondir[@]}" -type f)"
-    rm -rf "${tmpdir[@]}"; mkdir -p "${tmpdir[@]}"
-
-    # write new entries
-    for i in $(seq "$entry_c"); do
-        cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
-
-        if [ -x "$(command -v desktop-file-validate)" ] && [ "$VALIDATE_ENTRIES" != "false" ]; then
-            desktop-file-validate "$cur_file" > /dev/null || continue
-        fi
-
-        exec="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
-        name="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
-        desc="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
-
-        grep -q "Terminal=true" "$cur_file" && term="true" || term="false"
-
-        # icon name
-        icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-        icon="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)" && [ ! -f "$icon" ] && icon=""
-
-        # write the file
-        printf "%s\n%s\n%s\n%s\n%s\n" "Name:$name" "Description:$desc" "Executable:$exec" "Icon:$icon" "Term:$term" > "${tmpdir[*]}/$(basename "$cur_file").entry"
-        printf "Entry %s:\n%s\n%s\n%s\n%s\n%s\n\n" "$i" "Name: $name" "Description: $desc" "Executable: $exec" "Icon: $icon" "Term: $term" >> "$LOGFILE"
-    done
-
-    # scan
-    entry_c="$(find "${desktopdir[@]}" -type f | wc -l)"
-    cached_c="$(find "${tmpdir[@]}" -type f | wc -l)"
-    cached="$(find "${tmpdir[@]}" -type f)";
-}
-
 clear_cache() {
-    rm -rf "${tmpdir[*]}"
     rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}"
 }
 
@@ -763,7 +707,6 @@ main() {
     read -ra rl_desktop <<< "${RUNLAUNCHER_DESKTOP_ARGS}"
     read -ra rl_help <<< "${RUNLAUNCHER_HELP_ARGS}"
     read -ra ls_args <<< "${LS_ARGS}"
-    read -ra tmpdir <<< "${TEMPORARY_DIR}"
     read -ra desktopdir <<< "${DESKTOP_DIR}"
     read -ra icondir <<< "${ICON_DIR}"
 
