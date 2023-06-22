@@ -517,8 +517,8 @@ print_desktop_list() {
         printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE" && tail -n 1 "$LOGFILE"
 
         icons="$(find "${icondir[@]}" -type f)"
-        entry="$(find "${desktopdir[@]}" -type f -name '*.desktop')"
-        entry_c="$(printf "%s\n" "$entry" | wc -l)"
+        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop')"
+        [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | wc -l)"
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
@@ -557,31 +557,11 @@ print_desktop_list() {
     else # we have entries, let's populate the arrays
         command -v desktop_pre_func > /dev/null && desktop_pre_func
 
-        # read title
-        while read -r p; do
-            it_title+=("$p")
-        done < "$TITLEFILE"
-
-        # read icon
-        while read -r p; do
-            [ "$IMAGE" != "true" ] && it_icon+=("") && continue
-            it_icon+=("$p")
-        done < "$ICONFILE"
-
-        # read executable
-        while read -r p; do
-            it_exec+=("$p")
-        done < "$EXECFILE"
-
-        # read file
-        while read -r p; do
-            it_file+=("$p")
-        done < "$FILEFILE"
-
-        # read description
-        while read -r p; do
-            it_desc+=("$p")
-        done < "$DESCFILE"
+        mapfile -t it_title < "$TITLEFILE"
+        mapfile -t it_icon < "$ICONFILE"
+        mapfile -t it_exec < "$EXECFILE"
+        mapfile -t it_file < "$FILEFILE"
+        mapfile -t it_desc < "$DESCFILE"
 
         # finally print all of it
         for i in "${!it_title[@]}"; do
@@ -604,20 +584,9 @@ print_desktop_list() {
 }
 
 exec_program() {
-    # read title
-    while read -r p; do
-        it_title+=("$p")
-    done < "$TITLEFILE"
-
-    # read executable
-    while read -r p; do
-        it_exec+=("$p")
-    done < "$EXECFILE"
-
-    # read term
-    while read -r p; do
-        it_term+=("$p")
-    done < "$TERMFILE"
+    mapfile -t it_title < "$TITLEFILE"
+    mapfile -t it_exec < "$EXECFILE"
+    mapfile -t it_term < "$TERMFILE"
 
     # set exec
     [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
