@@ -34,7 +34,7 @@ USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
 DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
-AUTOREFRESH="${AUTOREFRESH:-false}"
+AUTOREFRESH="${AUTOREFRESH:-true}"
 MULTISELECT="${MULTISELECT:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
@@ -255,7 +255,7 @@ DESKTOP_DIR="\${DESTDIR}\${PREFIX}/share/applications \${HOME}/.local/share/appl
 ICON_DIR="\${DESTDIR}\${PREFIX}/share/icons/hicolor \${HOME}/.local/share/icons/hicolor \${DESTDIR}\${PREFIX}/share/pixmaps" # Directories for icons defined in the entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
-AUTOREFRESH="false" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
+AUTOREFRESH="true" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
 MULTISELECT="true" # Allow handling multiple items, if set to false only the first line/selected item will be used.
 IMAGE="true" # Display images (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
