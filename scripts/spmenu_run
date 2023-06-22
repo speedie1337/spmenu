@@ -36,6 +36,7 @@ DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-true}"
 MULTISELECT="${MULTISELECT:-true}"
+PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${HOME}/.local/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
@@ -186,10 +187,12 @@ print_config() {
 # This is the configuration file for the run launcher spmenu comes with.
 # It is not the configuration file for spmenu, see ~/.config/spmenu/spmenu.conf for that.
 #
-# spmenu_run also runs these functions:
+# spmenu_run also runs these functions if found in the config file:
 #
 # 'run_pre_func' before spawning spmenu.
 # 'run_post_func' after spawning spmenu, selected item passed as an argument.
+# 'run_single_char_func' while checking the value of a single character. The first character of the spmenu output is passed as an argument.
+# 'run_output_func' while checking the value of the spmenu output. spmenu output is passed as an argument.
 # 'desktop_pre_func' before spawning spmenu.
 # 'desktop_post_func' after spawning spmenu, selected item passed as an argument.
 # 'desktop_pre_caching_func' before caching entries.
@@ -261,6 +264,7 @@ IMAGE="true" # Display images (true/false)
 DISPLAY_DESCRIPTION="true" # Display description (true/false)"
 DESCRIPTION_COLOR="#999888" # Description text color
 LOGFILE="/tmp/spmenu_run.log" # Log file
+PRINT_LOGS_STDERR="true" # Print information (such as logs) to stderr (true/false)
 TITLEFILE="\${TITLEFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.title}" # File containing the different titles to display.
 DESCFILE="\${DESCFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.desc}" # File containing the description to display
 EXECFILE="\${EXECFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache}/.exec}" # File containing the different executables to run.
@@ -286,6 +290,9 @@ parse() {
     path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
 
     while read -r sout; do
+        command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
+        command -v run_output_func > /dev/null && run_output_func "${sout}"
+
         # parse
         case "${sout:0:1}" in
             "#") EXEC="term" ;;
@@ -519,7 +526,9 @@ print_desktop_list() {
     # print data from entries
     if [ "$cfiles" = "false" ]; then
         command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE" && tail -n 1 "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE"
+
+        [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
         icons="$(find "${icondir[@]}" -type f)"
         [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop')"
