@@ -19,7 +19,7 @@ void eventloop_x11(void) {
                 break;
             case Expose:
                 if (ev.xexpose.count == 0)
-                    drw_map(drw, win, 0, 0, mw, mh);
+                    draw_map(draw, win, 0, 0, sp.mw, sp.mh);
                 break;
             case FocusIn:
                 // regrab focus from parent window
@@ -28,7 +28,7 @@ void eventloop_x11(void) {
                 break;
             case KeyPress: // read key array and call functions
                 if (incremental) {
-                    puts(text);
+                    puts(tx.text);
                     fflush(stdout);
                 }
 
@@ -54,7 +54,7 @@ void eventloop_x11(void) {
             if (listchanged) {
                 match();
 
-                for (int i = 0; i < itemnumber; i++) {
+                for (int i = 0; i < sp.itemnumber; i++) {
                     if (sel && sel->right && (sel = sel->right) == next) {
                         curr = next;
                     }

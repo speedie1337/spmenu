@@ -3,27 +3,27 @@
 void buttonpress_x11(XEvent *e) {
     struct item *item;
     XButtonPressedEvent *ev = &e->xbutton;
-    int x = 0, y = 0, h = bh, w, item_num = 0;
+    int x = 0, y = 0, h = sp.bh, w, item_num = 0;
     unsigned int i, click;
     int yp = 0;
 
     // margin
     x += menumarginh;
 
-    int larrowWidth = 0;
-    int rarrowWidth = 0;
-    int numberWidth = 0;
-    int modeWidth = 0;
-    int capsWidth = 0;
+    int larroww = 0;
+    int rarroww = 0;
+    int numberw = 0;
+    int modew = 0;
+    int capsw = 0;
 
-    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
-    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
-    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
+    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
-    if (!strcmp(capstext, ""))
-        capsWidth = 0;
+    if (!strcmp(tx.capstext, ""))
+        capsw = 0;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         yp = 1;
@@ -38,19 +38,19 @@ void buttonpress_x11(XEvent *e) {
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
 
     // check click position and override the value of click
-    if (yp && ev->x < x + promptw + powerlineprompt ? plw : 0) { // prompt
+    if (yp && ev->x < x + sp.promptw + powerlineprompt ? sp.plw : 0) { // prompt
         click = ClickPrompt;
-    } else if (yp && (ev->x > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
+    } else if (yp && (ev->x > sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsw) { // caps lock indicator
         click = ClickCaps;
-    } else if (yp && ev->x > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // mode indicator
+    } else if (yp && ev->x > sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // mode indicator
         click = ClickMode;
-    } else if (yp && ev->x > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // match count
+    } else if (yp && ev->x > sp.mw - modew - numberw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // match count
         click = ClickNumber;
     } else if (yp && !hideinput) { // input
-        w = (lines > 0 || !matches) ? mw - x : inputw;
+        w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
-        if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + promptw +
-                    ((!prev || !curr->left) ? larrowWidth : 0)) ||
+        if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + sp.promptw +
+                    ((!prev || !curr->left) ? larroww : 0)) ||
                 (lines > 0 && ev->y >= y && ev->y <= y + h)) {
 
             click = ClickInput;
@@ -58,14 +58,14 @@ void buttonpress_x11(XEvent *e) {
     }
 
 #if USEIMAGE
-    if (!hideimage && longestedge != 0) {
-        x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+    if (!hideimage && img.longestedge != 0) {
+        x += MAX((imagegaps * 2) + imagewidth, indentitems ? sp.promptw : 0);
     }
 #endif
 
     // item click
     if (lines > 0) {
-        w = mw - x;
+        w = sp.mw - x;
 
         ev->y -= menumarginv;
 
@@ -83,9 +83,9 @@ void buttonpress_x11(XEvent *e) {
             y += h;
 
             // ClickSelItem, called function doesn't matter
-            if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? plw : 0)) {
+            if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
-                    if (ignoreglobalmouse) break;
+                    if (sp.ignoreglobalmouse) break;
                     if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
@@ -94,7 +94,7 @@ void buttonpress_x11(XEvent *e) {
                     }
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
-                    if (ignoreconfmouse) break;
+                    if (sp.ignoreconfmouse) break;
                     if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button) {
                         puts(item->text);
                         exit(0);
@@ -105,8 +105,8 @@ void buttonpress_x11(XEvent *e) {
             }
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
-        x += inputw;
-        w = larrowWidth;
+        x += sp.inputw;
+        w = larroww;
 
         if (prev && curr->left) {
             if (ev->x >= x && ev->x <= x + w) {
@@ -115,8 +115,8 @@ void buttonpress_x11(XEvent *e) {
         }
 
         // right arrow
-        w = rarrowWidth;
-        x = mw - w;
+        w = rarroww;
+        x = sp.mw - w;
         if (next && ev->x >= x && ev->x <= x + w) {
             click = ClickRArrow;
         }
@@ -124,14 +124,14 @@ void buttonpress_x11(XEvent *e) {
 
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(buttons); i++) {
-        if (ignoreglobalmouse) break;
+        if (sp.ignoreglobalmouse) break;
         if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button)
             buttons[i].func(&buttons[i].arg);
     }
 
     // go through mouse config array and run function
     for (i = 0; i < LENGTH(cbuttons); i++) {
-        if (ignoreconfmouse) break;
+        if (sp.ignoreconfmouse) break;
         if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button)
             cbuttons[i].func(&cbuttons[i].arg);
     }

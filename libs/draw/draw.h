@@ -30,37 +30,37 @@ typedef struct {
     cairo_surface_t *img_surface;
     cairo_t *d;
     cairo_t *img_d;
-} Drw;
+} Draw_t;
 
 /* Cairo color convertion */
 void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha);
 
 /* Cairo image drawing */
-void drw_img(Drw *drw, int x, int y);
-void drw_set_img(Drw *drw, void *data, int w, int h);
+void draw_img(Draw_t *draw, int x, int y);
+void draw_set_img(Draw_t *draw, void *data, int w, int h);
 
 /* Drawable abstraction */
-Drw *drw_create_x11(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol);
-Drw *drw_create_wl(int protocol);
-void drw_create_surface_wl(Drw *drw, void *data, int32_t w, int32_t h);
+Draw_t *draw_create_x11(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol);
+Draw_t *draw_create_wl(int protocol);
+void draw_create_surface_wl(Draw_t *draw, void *data, int32_t w, int32_t h);
 
-void drw_resize(Drw *drw, unsigned int w, unsigned int h);
-void drw_free(Drw *drw);
+void draw_resize(Draw_t *draw, unsigned int w, unsigned int h);
+void draw_free(Draw_t *draw);
 
 /* Fnt abstraction */
-Fnt *drw_font_create(Drw* drw, char *font[], size_t fontcount);
-void drw_font_free(Fnt* set);
-unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup);
-unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup);
-void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup);
+Fnt *draw_font_create(Draw_t* draw, char *font[], size_t fontcount);
+void draw_font_free(Fnt* set);
+unsigned int draw_fontset_getwidth_clamp(Draw_t *draw, const char *text, unsigned int n, Bool markup);
+unsigned int draw_font_getwidth(Draw_t *draw, const char *text, Bool markup);
+void draw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup);
 
 /* Drawing functions */
-void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
-int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
+void draw_rect(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
+int draw_text(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup, char *fgcol, char *bgcol, int fgalpha, int bgalpha);
 
 /* Map functions */
-void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);
+void draw_map(Draw_t *draw, Window win, int x, int y, unsigned int w, unsigned int h);
 
 /* Powerline functions */
-void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha);
-void drw_circle(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha);
+void draw_arrow(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha);
+void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha);

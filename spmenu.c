@@ -80,139 +80,14 @@
 #include <openssl/md5.h>
 #endif
 
+// include Xlib
+#if USEX
+#include <X11/Xlib.h>
+#endif
+
 // include macros and other defines
 #include "libs/define.c"
 
-// mode
-static int curMode; // 0 is command mode
-static int allowkeys; // whether or not to interpret a keypress as an insertion
-
-// various headers
-#include "libs/draw/draw.h"
-#include "libs/main.h"
-#include "libs/draw.h"
-#include "libs/stream.h"
-#include "libs/schemes.h"
-#include "libs/arg.h"
-#include "libs/x11/inc.h" // include x11
-#include "libs/wl/inc.h" // include wayland
-#include "libs/sort.h"
-#include "libs/history.h"
-
-// text
-static char modetext[64] = "";
-static char text[BUFSIZ] = "";
-static char numbers[NUMBERSBUFSIZE] = "";
-
-// keybinds
-#if USEX
-static int numlockmask = 0;
-#endif
-static int capslockstate = 0;
-
-static int bh, mw, mh; // height of each item, menu width, menu height
-static int reallines = 0; // temporary integer which holds lines
-static int inputw = 0; // input width
-static int promptw; // prompt width
-static int plw = 0; // powerline width
-static int lrpad; // sum of left and right padding
-static int vp; // vertical padding for bar
-static int sp; // side padding for bar
-static int cursorstate = 1; // cursor state
-static int itemnumber = 0; // item number
-static size_t cursor;
-static struct item *items = NULL, *backup_items, *list_items;
-static struct item *matches, *matchend; // matches, final match
-static struct item *prev, *curr, *next, *sel; // previous, current, next, selected
-static int hplength = 0; // high priority
-static char **hpitems = NULL; // high priority
-static int *sel_index = NULL;
-static unsigned int sel_size = 0;
-static int protocol_override = 0;
-static int itemn = 0; // item number
-
-#if USEX
-static char *embed; // X11 embed
-static int screen; // screen
-#endif
-
-// item struct
-struct item {
-    char *text;
-    char *clntext;
-#if USEIMAGE
-    char *image;
-#endif
-    char *ex;
-    struct item *left, *right;
-    int hp;
-    int index;
-    double distance;
-};
-
-// image globals
-#if USEIMAGE
-static int flip = 0;
-static int needredraw = 1;
-static int longestedge = 0;
-static int imagew = 0;
-static int imageh = 0;
-static int imageg = 0;
-static int ow = 0;
-static int oh = 0;
-#endif
-static int fullscreen = 0;
-
-// set an integer to 1 if we have rtl enabled, this saves a lot of lines and duplicate code
-#if USERTL
-static int isrtl = 1;
-#else
-static int isrtl = 0;
-#endif
-
-static int ignoreconfkeys = 0; // can be set globally if you don't want to override keybinds with config file keys
-static int ignoreglobalkeys = 0; // should be set in the config file, if 1, the Keys keys array is ignored
-static int ignoreconfmouse = 0; // same for mouse
-static int ignoreglobalmouse = 0; // same for mouse
-
-// colors
-#if USEX
-static int useargb;
-static int depth;
-static Visual *visual;
-static Colormap cmap;
-#endif
-static Drw *drw;
-
-// declare functions
-static int is_selected(size_t index);
-static void calcoffsets(void);
-static void recalculatenumbers(void);
-static void insert(const char *str, ssize_t n);
-static void cleanup(void);
-static void navigatehistfile(int dir);
-#if USEX
-static void pastesel(void);
-static void grabfocus(void);
-#endif
-static void resizeclient(void);
-static void get_width(void);
-static void get_mh(void);
-static void set_mode(void);
-static void handle(void);
-static void appenditem(struct item *item, struct item **list, struct item **last);
-static int max_textw(void);
-static size_t nextrune(int inc);
-static char * cistrstr(const char *s, const char *sub);
-static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
-static char *(*fstrstr)(const char *, const char *) = cistrstr;
-
-static char **list;
-static size_t listsize;
-static int listcount;
-static int listchanged = 0;
-
-// clicks
 enum {
     ClickWindow,
     ClickPrompt,
@@ -226,12 +101,152 @@ enum {
     ClickMode,
 };
 
+struct item {
+    char *text;
+    char *clntext;
+    char *image;
+    char *ex;
+    struct item *left, *right;
+    int hp;
+    int index;
+    double distance;
+};
+
+struct sp {
+    int bh; // height of each menu item
+    int mw; // width
+    int mh; // height
+    int vp; // vertical padding for bar
+    int sp; // side padding for bar
+    int lrpad; // sum of left and right padding
+
+    int mode; // current mode
+    int allowkeys; // interpret a keypress as an insertion?
+    int capslockstate; // caps lock state
+
+    int inputw; // input width
+    int promptw; // prompt width
+    int plw; // powerline width
+
+    int itemnumber; // item number
+
+    size_t cursor;
+
+    int ignoreconfkeys; // can be set globally if you don't want to override keybinds with config file keys
+    int ignoreglobalkeys; // should be set in the config file, if 1, the Keys keys array is ignored
+    int ignoreconfmouse; // same for mouse
+    int ignoreglobalmouse; // same for mouse
+};
+
+#if USEIMAGE
+struct img {
+    int setlines;
+    int flip;
+    int longestedge;
+    int imagew;
+    int imageh;
+    int imageg;
+    int ow;
+    int oh;
+};
+#endif
+
+struct tx {
+    char modetext[64]; // mode text
+    char text[BUFSIZ]; // input text
+    char numbers[NUMBERSBUFSIZE]; // number text
+    char capstext[64]; // caps lock text
+};
+
+#if USEX
+struct x11 {
+    int numlockmask;
+    int useargb;
+    int depth;
+    char *embed;
+    int screen;
+    Visual *visual;
+    Colormap cmap;
+};
+#endif
+
+static struct sp sp = {0};
+static struct tx tx = {0};
+#if USEIMAGE
+static struct img img = {0};
+#endif
+#if USEX
+static struct x11 x11 = {0};
+#endif
+
+static struct item *items = NULL, *backup_items, *list_items;
+static struct item *matches, *matchend;
+static struct item *prev, *curr, *next, *sel;
+
+// various headers
+#include "libs/draw/draw.h"
+#include "libs/main.h"
+#include "libs/draw.h"
+#include "libs/stream.h"
+#include "libs/schemes.h"
+#include "libs/arg.h"
+#include "libs/x11/inc.h" // include x11
+#include "libs/wl/inc.h" // include wayland
+#include "libs/sort.h"
+#include "libs/history.h"
+
+static Draw_t *draw;
+
+// high priority
+static int hplength = 0;
+static char **hpitems = NULL;
+
+static int *sel_index = NULL;
+static unsigned int sel_size = 0;
+static int protocol_override = 0;
+static int itemn = 0;
+static int fullscreen = 0;
+
+#if USERTL
+static int isrtl = 1;
+#else
+static int isrtl = 0;
+#endif
+
+// declare functions
+static int is_selected(size_t index);
+static void calcoffsets(void);
+static void recalculatenumbers(void);
+static void insert(const char *str, ssize_t n);
+static void cleanup(void);
+static void navigatehistfile(int dir);
+static void resizeclient(void);
+static void get_width(void);
+static void get_mh(void);
+static void set_mode(void);
+static void handle(void);
+static void appenditem(struct item *item, struct item **list, struct item **last);
+static int max_textw(void);
+static size_t nextrune(int inc);
+static char * cistrstr(const char *s, const char *sub);
+static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
+static char *(*fstrstr)(const char *, const char *) = cistrstr;
+
+#if USEX
+static void pastesel(void);
+static void grabfocus(void);
+#endif
+
+static char **list;
+static size_t listsize;
+static int listcount;
+static int listchanged = 0;
+
 // user configuration
 #include "libs/options.h"
 #include "libs/keybinds.h"
 #include "libs/mouse.h"
 
-static char capstext[16];
 static char *fonts[] = { font };
 
 // color array
@@ -310,9 +325,9 @@ void recalculatenumbers(void) {
     }
 
     if (selected) {
-        snprintf(numbers, NUMBERSBUFSIZE, "%d/%d/%d", numer, denom, selected);
+        snprintf(tx.numbers, NUMBERSBUFSIZE, "%d/%d/%d", numer, denom, selected);
     } else {
-        snprintf(numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
+        snprintf(tx.numbers, NUMBERSBUFSIZE, "%d/%d", numer, denom);
     }
 }
 
@@ -320,34 +335,34 @@ void calcoffsets(void) {
     int i, n;
 
     if (lines > 0)
-        n = lines * columns * bh;
+        n = lines * columns * sp.bh;
     else { // no lines, therefore the size of items must be decreased to fit the menu elements
-        int numberWidth = 0;
+        int numberw = 0;
         int modeWidth = 0;
-        int larrowWidth = 0;
+        int larroww = 0;
         int rarrowWidth = 0;
-        int capsWidth = 0;
+        int capsw = 0;
 
-        if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
-        if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
-        if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+        if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+        if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+        if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
         if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-        if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
+        if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
-        if (!strcmp(capstext, ""))
-            capsWidth = 0;
+        if (!strcmp(tx.capstext, ""))
+            capsw = 0;
 
-        n = mw - (promptw + inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + menumarginh);
+        n = sp.mw - (sp.promptw + sp.inputw + larroww + rarrowWidth + modeWidth + numberw + capsw + menumarginh);
     }
 
     // calculate which items will begin the next page
     for (i = 0, next = curr; next; next = next->right)
-        if ((i += (lines > 0) ? bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * plw : 0 : 0), n)) > n)
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), n)) > n)
             break;
 
     // calculate which items will begin the previous page
     for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
-        if ((i += (lines > 0) ? bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * plw : 0 : 0), n)) > n)
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), n)) > n)
             break;
 }
 
@@ -372,7 +387,7 @@ void cleanup(void) {
         free(hpitems[i]);
 
     // free drawing and close the display
-    drw_free(drw);
+    draw_free(draw);
 
 #if USEX
     if (!protocol) {
@@ -407,26 +422,26 @@ void grabfocus(void) {
 #endif
 
 void insert(const char *str, ssize_t n) {
-    if (strlen(text) + n > sizeof text - 1)
+    if (strlen(tx.text) + n > sizeof tx.text - 1)
         return;
 
     static char l[BUFSIZ] = "";
-    if (requirematch) memcpy(l, text, BUFSIZ);
+    if (requirematch) memcpy(l, tx.text, BUFSIZ);
 
     // move existing text out of the way, insert new text, and update cursor
-    memmove(&text[cursor + n], &text[cursor], sizeof text - cursor - MAX(n, 0));
+    memmove(&tx.text[sp.cursor + n], &tx.text[sp.cursor], sizeof tx.text - sp.cursor - MAX(n, 0));
 
     // update cursor
     if (n > 0 && str && n)
-        memcpy(&text[cursor], str, n);
+        memcpy(&tx.text[sp.cursor], str, n);
 
     // add to cursor position and continue matching
-    cursor += n;
+    sp.cursor += n;
     match();
 
     if (!matches && requirematch) {
-        memcpy(text, l, BUFSIZ);
-        cursor -= n;
+        memcpy(tx.text, l, BUFSIZ);
+        sp.cursor -= n;
         match();
     }
 }
@@ -435,7 +450,7 @@ size_t nextrune(int inc) {
     ssize_t n;
 
     // return location of next utf8 rune in the given direction (+1 or -1)
-    for (n = cursor + inc; n + inc >= 0 && (text[n] & 0xc0) == 0x80; n += inc)
+    for (n = sp.cursor + inc; n + inc >= 0 && (tx.text[n] & 0xc0) == 0x80; n += inc)
         ;
     return n;
 }
@@ -463,15 +478,15 @@ void resizeclient(void) {
 }
 
 void get_width(void) {
-    inputw = mw / 3;
+    sp.inputw = sp.mw / 3;
 }
 
 void get_mh(void) {
-    mh = (lines + 1) * bh;
-    mh += 2 * menumarginv;
+    sp.mh = (lines + 1) * sp.bh;
+    sp.mh += 2 * menumarginv;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
-        mh -= bh;
+        sp.mh -= sp.bh;
     }
 }
 
@@ -482,15 +497,15 @@ void set_mode(void) {
 
     // set default mode, must be done before the event loop or keybindings will not work
     if (mode) {
-        curMode = 1;
-        allowkeys = 1;
+        sp.mode = 1;
+        sp.allowkeys = 1;
 
-        sp_strncpy(modetext, instext, sizeof(modetext));
+        sp_strncpy(tx.modetext, instext, sizeof(tx.modetext));
     } else {
-        curMode = 0;
-        allowkeys = !curMode;
+        sp.mode = 0;
+        sp.allowkeys = !sp.mode;
 
-        sp_strncpy(modetext, normtext, sizeof(modetext));
+        sp_strncpy(tx.modetext, normtext, sizeof(tx.modetext));
     }
 }
 
@@ -499,7 +514,7 @@ void handle(void) {
 #if USEX
         handle_x11();
 
-        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+        if (!draw_font_create(draw, fonts, LENGTH(fonts))) {
             die("no fonts could be loaded.");
         }
 
@@ -537,9 +552,9 @@ void handle(void) {
         borderwidth = 0;
         managed = 0;
 
-        drw = drw_create_wl(protocol);
+        draw = draw_create_wl(protocol);
 
-        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+        if (!draw_font_create(draw, fonts, LENGTH(fonts))) {
             die("no fonts could be loaded.");
         }
 

@@ -39,72 +39,72 @@ void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
 }
 
 #if USEX
-Drw *drw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol) {
-    Drw *drw = ecalloc(1, sizeof(Drw));
+Draw_t *draw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol) {
+    Draw_t *draw = ecalloc(1, sizeof(Draw_t));
 
-    drw->protocol = protocol;
-    drw->dpy = dpy;
-    drw->screen = screen;
-    drw->root = root;
-    drw->w = w;
-    drw->h = h;
-    drw->visual = visual;
-    drw->depth = depth;
-    drw->cmap = cmap;
-    drw->drawable = XCreatePixmap(dpy, root, w, h, depth);
-    drw->gc = XCreateGC(dpy, drw->drawable, 0, NULL);
-    XSetLineAttributes(dpy, drw->gc, 1, LineSolid, CapButt, JoinMiter);
+    draw->protocol = protocol;
+    draw->dpy = dpy;
+    draw->screen = screen;
+    draw->root = root;
+    draw->w = w;
+    draw->h = h;
+    draw->visual = visual;
+    draw->depth = depth;
+    draw->cmap = cmap;
+    draw->drawable = XCreatePixmap(dpy, root, w, h, depth);
+    draw->gc = XCreateGC(dpy, draw->drawable, 0, NULL);
+    XSetLineAttributes(dpy, draw->gc, 1, LineSolid, CapButt, JoinMiter);
 
-    return drw;
+    return draw;
 }
 #endif
 
 #if USEWAYLAND
-Drw *drw_create_wl(int protocol) {
-    Drw *drw = ecalloc(1, sizeof(Drw));
+Draw_t *draw_create_wl(int protocol) {
+    Draw_t *draw = ecalloc(1, sizeof(Draw_t));
 
-    drw->protocol = protocol;
+    draw->protocol = protocol;
 
-    return drw;
+    return draw;
 }
 
-void drw_create_surface_wl(Drw *drw, void *data, int32_t w, int32_t h) {
-    drw->data = data;
-    drw->w = w;
-    drw->h = h;
-    drw->surface = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
-    drw->d = cairo_create(drw->surface);
+void draw_create_surface_wl(Draw_t *draw, void *data, int32_t w, int32_t h) {
+    draw->data = data;
+    draw->w = w;
+    draw->h = h;
+    draw->surface = cairo_image_surface_create_for_data(draw->data, CAIRO_FORMAT_ARGB32, draw->w, draw->h, draw->w * 4);
+    draw->d = cairo_create(draw->surface);
 }
 #endif
 
-void drw_resize(Drw *drw, unsigned int w, unsigned int h) {
-    if (!drw)
+void draw_resize(Draw_t *draw, unsigned int w, unsigned int h) {
+    if (!draw)
         return;
 
-    drw->w = w;
-    drw->h = h;
+    draw->w = w;
+    draw->h = h;
 
 #if USEX
-    if (drw->drawable)
-        XFreePixmap(drw->dpy, drw->drawable);
+    if (draw->drawable)
+        XFreePixmap(draw->dpy, draw->drawable);
 
-    drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, drw->depth);
+    draw->drawable = XCreatePixmap(draw->dpy, draw->root, w, h, draw->depth);
 #endif
 }
 
-void drw_free(Drw *drw) {
+void draw_free(Draw_t *draw) {
 #if USEX
-    if (!drw->protocol) {
-        XFreePixmap(drw->dpy, drw->drawable);
-        XFreeGC(drw->dpy, drw->gc);
+    if (!draw->protocol) {
+        XFreePixmap(draw->dpy, draw->drawable);
+        XFreeGC(draw->dpy, draw->gc);
     }
 #endif
 
-    drw_font_free(drw->font);
-    free(drw);
+    draw_font_free(draw->font);
+    free(draw);
 }
 
-static Fnt *font_create(Drw *drw, const char *fontname) {
+static Fnt *font_create(Draw_t *draw, const char *fontname) {
     Fnt *font;
     PangoFontMap *fontmap;
     PangoContext *context;
@@ -116,7 +116,7 @@ static Fnt *font_create(Drw *drw, const char *fontname) {
     }
 
     font = ecalloc(1, sizeof(Fnt));
-    font->dpy = drw->dpy;
+    font->dpy = draw->dpy;
 
     fontmap = pango_cairo_font_map_new();
     context = pango_font_map_create_context(fontmap);
@@ -141,25 +141,25 @@ void font_free(Fnt *font) {
     free(font);
 }
 
-Fnt* drw_font_create(Drw* drw, char *font[], size_t fontcount) {
-    if (!drw || !font)
+Fnt* draw_font_create(Draw_t* draw, char *font[], size_t fontcount) {
+    if (!draw || !font)
         return NULL;
 
     Fnt *fnt = NULL;
 
-    fnt = font_create(drw, *font);
+    fnt = font_create(draw, *font);
 
-    return (drw->font = fnt);
+    return (draw->font = fnt);
 }
 
-void drw_font_free(Fnt *font) {
+void draw_font_free(Fnt *font) {
     if (font) {
         font_free(font);
     }
 }
 
-void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha) {
-    if (!drw)
+void draw_arrow(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha) {
+    if (!draw)
         return;
 
     x = direction ? x : x + w;
@@ -169,10 +169,10 @@ void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direc
 
     cairo_surface_t *sf = NULL;
 
-    if (drw->protocol) {
-        sf = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
+    if (draw->protocol) {
+        sf = cairo_image_surface_create_for_data(draw->data, CAIRO_FORMAT_ARGB32, draw->w, draw->h, draw->w * 4);
     } else {
-        sf = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+        sf = cairo_xlib_surface_create(draw->dpy, draw->drawable, draw->visual, draw->w, draw->h);
     }
     cairo_t *cr = cairo_create(sf);
 
@@ -194,16 +194,16 @@ void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direc
     cairo_surface_destroy(sf);
 }
 
-void drw_circle(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha) {
-    if (!drw)
+void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha) {
+    if (!draw)
         return;
 
     cairo_surface_t *sf = NULL;
 
-    if (drw->protocol) {
-        sf = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
+    if (draw->protocol) {
+        sf = cairo_image_surface_create_for_data(draw->data, CAIRO_FORMAT_ARGB32, draw->w, draw->h, draw->w * 4);
     } else {
-        sf = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+        sf = cairo_xlib_surface_create(draw->dpy, draw->drawable, draw->visual, draw->w, draw->h);
     }
 
     cairo_t *cr = cairo_create(sf);
@@ -233,17 +233,17 @@ void drw_circle(Drw *drw, int x, int y, unsigned int w, unsigned int h, int dire
     cairo_surface_destroy(sf);
 }
 
-void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha) {
-    if (!drw) {
+void draw_rect(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int filled, int invert, char *fgcol, char *bgcol, int fgalpha, int bgalpha) {
+    if (!draw) {
         return;
     }
 
     cairo_surface_t *sf;
 
-    if (drw->protocol) {
-        sf = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
+    if (draw->protocol) {
+        sf = cairo_image_surface_create_for_data(draw->data, CAIRO_FORMAT_ARGB32, draw->w, draw->h, draw->w * 4);
     } else {
-        sf = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+        sf = cairo_xlib_surface_create(draw->dpy, draw->drawable, draw->visual, draw->w, draw->h);
     }
     cairo_t *cr = cairo_create(sf);
 
@@ -266,7 +266,7 @@ void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled
     cairo_surface_destroy(sf);
 }
 
-int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup, char *fgcol, char *bgcol, int fgalpha, int bgalpha) {
+int draw_text(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup, char *fgcol, char *bgcol, int fgalpha, int bgalpha) {
     char buf[1024];
     unsigned int ew = 0;
 
@@ -274,7 +274,7 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     int render = x || y || w || h;
     char *t;
 
-    if (!drw || !text || !drw->font) {
+    if (!draw || !text || !draw->font) {
         return 0;
     }
 
@@ -284,28 +284,28 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
         x += lpad;
         w -= lpad;
 
-        if (drw->protocol) {
-            drw->surface = cairo_image_surface_create_for_data(drw->data, CAIRO_FORMAT_ARGB32, drw->w, drw->h, drw->w * 4);
+        if (draw->protocol) {
+            draw->surface = cairo_image_surface_create_for_data(draw->data, CAIRO_FORMAT_ARGB32, draw->w, draw->h, draw->w * 4);
         } else {
-            drw->surface = cairo_xlib_surface_create(drw->dpy, drw->drawable, drw->visual, drw->w, drw->h);
+            draw->surface = cairo_xlib_surface_create(draw->dpy, draw->drawable, draw->visual, draw->w, draw->h);
         }
-        drw->d = cairo_create(drw->surface);
+        draw->d = cairo_create(draw->surface);
 
         // draw bg
-        cairo_set_source_hex(drw->d, invert ? fgcol : bgcol, invert ? fgalpha : bgalpha);
-        cairo_set_operator(drw->d, CAIRO_OPERATOR_SOURCE);
-        cairo_rectangle(drw->d, x - lpad, y, w + lpad, h);
-        cairo_fill(drw->d);
+        cairo_set_source_hex(draw->d, invert ? fgcol : bgcol, invert ? fgalpha : bgalpha);
+        cairo_set_operator(draw->d, CAIRO_OPERATOR_SOURCE);
+        cairo_rectangle(draw->d, x - lpad, y, w + lpad, h);
+        cairo_fill(draw->d);
     }
 
     t = strdup(text);
     len = strlen(t);
 
     if (len) {
-        drw_font_getexts(drw->font, t, len, &ew, NULL, markup);
+        draw_font_getexts(draw->font, t, len, &ew, NULL, markup);
 
         // shorten text if necessary
-        for (len = MIN(len, sizeof(buf) - 1); len && ew > w; drw_font_getexts(drw->font, t, len, &ew, NULL, markup))
+        for (len = MIN(len, sizeof(buf) - 1); len && ew > w; draw_font_getexts(draw->font, t, len, &ew, NULL, markup))
             len--;
 
         if (len) {
@@ -320,25 +320,25 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
 
             if (render) {
                 if (markup) {
-                    pango_layout_set_markup(drw->font->layout, buf, len);
+                    pango_layout_set_markup(draw->font->layout, buf, len);
                 } else {
-                    pango_layout_set_text(drw->font->layout, buf, len);
+                    pango_layout_set_text(draw->font->layout, buf, len);
                 }
 
-                pango_layout_set_single_paragraph_mode(drw->font->layout, True);
+                pango_layout_set_single_paragraph_mode(draw->font->layout, True);
 
                 // draw fg
-                cairo_set_source_hex(drw->d, fgcol, fgalpha);
-                cairo_move_to(drw->d, x, y + (h - drw->font->h) / 2);
+                cairo_set_source_hex(draw->d, fgcol, fgalpha);
+                cairo_move_to(draw->d, x, y + (h - draw->font->h) / 2);
 
                 // update and show layout
-                pango_cairo_update_layout(drw->d, drw->font->layout);
-                pango_cairo_show_layout(drw->d, drw->font->layout);
+                pango_cairo_update_layout(draw->d, draw->font->layout);
+                pango_cairo_show_layout(draw->d, draw->font->layout);
 
-                cairo_set_operator(drw->d, CAIRO_OPERATOR_SOURCE);
+                cairo_set_operator(draw->d, CAIRO_OPERATOR_SOURCE);
 
                 if (markup) // clear markup attributes
-                    pango_layout_set_attributes(drw->font->layout, NULL);
+                    pango_layout_set_attributes(draw->font->layout, NULL);
             }
 
             x += ew;
@@ -349,25 +349,25 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
     return x + (render ? w : 0);
 }
 
-void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h) {
-    if (!drw)
+void draw_map(Draw_t *draw, Window win, int x, int y, unsigned int w, unsigned int h) {
+    if (!draw)
         return;
 
 #if USEX
-    if (!drw->protocol) {
-        XCopyArea(drw->dpy, drw->drawable, win, drw->gc, x, y, w, h, x, y);
-        XSync(drw->dpy, False);
+    if (!draw->protocol) {
+        XCopyArea(draw->dpy, draw->drawable, win, draw->gc, x, y, w, h, x, y);
+        XSync(draw->dpy, False);
     }
 #endif
 }
 
-unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup) {
-    if (!drw || !drw->font || !text)
+unsigned int draw_font_getwidth(Draw_t *draw, const char *text, Bool markup) {
+    if (!draw || !draw->font || !text)
         return 0;
-    return drw_text(drw, 0, 0, 0, 0, 0, text, 0, markup, "#000000", "#000000", 255, 255);
+    return draw_text(draw, 0, 0, 0, 0, 0, text, 0, markup, "#000000", "#000000", 255, 255);
 }
 
-void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup) {
+void draw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup) {
     if (!font || !text)
         return;
 
@@ -395,31 +395,31 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
         *h = font->h;
 }
 
-void drw_set_img(Drw *drw, void *data, int w, int h) {
-    if (!w || !h || !drw) {
+void draw_set_img(Draw_t *draw, void *data, int w, int h) {
+    if (!w || !h || !draw) {
         return;
     }
 
-    drw->img_data = data;
-    drw->img_surface = cairo_image_surface_create_for_data(drw->img_data, CAIRO_FORMAT_ARGB32, w, h, w * 4);
+    draw->img_data = data;
+    draw->img_surface = cairo_image_surface_create_for_data(draw->img_data, CAIRO_FORMAT_ARGB32, w, h, w * 4);
 }
 
-void drw_img(Drw *drw, int x, int y) {
-    if (!drw) {
+void draw_img(Draw_t *draw, int x, int y) {
+    if (!draw) {
         return;
     }
 
-    cairo_set_operator(drw->d, CAIRO_OPERATOR_OVER);
+    cairo_set_operator(draw->d, CAIRO_OPERATOR_OVER);
 
-    cairo_set_source_surface(drw->d, drw->img_surface, x, y);
-    cairo_mask_surface(drw->d, drw->img_surface, x, y);
+    cairo_set_source_surface(draw->d, draw->img_surface, x, y);
+    cairo_mask_surface(draw->d, draw->img_surface, x, y);
 
-    cairo_set_source_surface(drw->d, drw->surface, drw->w, drw->h);
+    cairo_set_source_surface(draw->d, draw->surface, draw->w, draw->h);
 }
 
-unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, Bool markup) {
+unsigned int draw_fontset_getwidth_clamp(Draw_t *draw, const char *text, unsigned int n, Bool markup) {
     unsigned int tmp = 0;
-    if (drw && drw->font && text && n)
-        tmp = drw_text(drw, 0, 0, 0, 0, 0, text, n, markup, "#000000", "#000000", 255, 255);
+    if (draw && draw->font && text && n)
+        tmp = draw_text(draw, 0, 0, 0, 0, 0, text, n, markup, "#000000", "#000000", 255, 255);
     return MIN(n, tmp);
 }

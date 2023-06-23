@@ -15,7 +15,7 @@ void create_window_x11(int x, int y, int w, int h) {
 
     swa.override_redirect = managed ? False : True;
     swa.background_pixel = 0;
-    swa.colormap = cmap;
+    swa.colormap = x11.cmap;
     swa.event_mask =
         ExposureMask | // mapping the drawing
         KeyPressMask | // keypresses
@@ -25,7 +25,7 @@ void create_window_x11(int x, int y, int w, int h) {
 
     // create client
     win = XCreateWindow(dpy, root, x, y, w, h, borderwidth,
-            depth, InputOutput, visual,
+            x11.depth, InputOutput, x11.visual,
             CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &swa);
 
     return;
@@ -45,7 +45,7 @@ void set_window_x11(void) {
     col.green = g << 8;
     col.blue = b << 8;
 
-    if (!XAllocColor(dpy, cmap, &col)) {
+    if (!XAllocColor(dpy, x11.cmap, &col)) {
         die("spmenu: failed to allocate xcolor");
     }
 
@@ -70,7 +70,7 @@ void set_prop_x11(void) {
 }
 
 void resizeclient_x11(void) {
-    int omh = mh;
+    int mh = sp.mh;
     int x, y;
 #if USEXINERAMA
     int j, di, a, n, area = 0;
@@ -87,19 +87,19 @@ void resizeclient_x11(void) {
     for (item = items; item && item->text; item++)
         ic++;
 
-    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
-    reallines = lines;
+#if USEIMAGE
+    img.setlines = lines;
 
     // resize client to image height
-#if USEIMAGE
     if (image) resizetoimageheight(imagewidth, imageheight);
 #endif
 
     get_mh();
 
     if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
-        mh -= bh;
+        sp.mh -= sp.bh;
     }
 
     // init xinerama screens
@@ -134,13 +134,13 @@ void resizeclient_x11(void) {
 
         // calculate x/y position
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
-            x = info[i].x_org + ((info[i].width  - mw) / 2);
-            y = info[i].y_org + ((info[i].height - mh) / 2);
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), info[i].width);
+            x = info[i].x_org + ((info[i].width  - sp.mw) / 2);
+            y = info[i].y_org + ((info[i].height - sp.mh) / 2);
         } else { // top or bottom
             x = info[i].x_org + xpos;
-            y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
-            mw = (menuwidth>0 ? menuwidth : info[i].width);
+            y = info[i].y_org + (menuposition ? 0 : info[i].height - sp.mh - ypos);
+            sp.mw = (menuwidth>0 ? menuwidth : info[i].width);
         }
 
         XFree(info);
@@ -151,21 +151,21 @@ void resizeclient_x11(void) {
             die("spmenu: could not get embedding window attributes: 0x%lx",
                     parentwin); // die because unable to get attributes for the parent window
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
-            x = (wa.width  - mw) / 2;
-            y = (wa.height - mh) / 2;
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), wa.width);
+            x = (wa.width  - sp.mw) / 2;
+            y = (wa.height - sp.mh) / 2;
         } else { // top or bottom
             x = 0;
-            y = menuposition ? 0 : wa.height - mh - ypos;
-            mw = (menuwidth > 0 ? menuwidth : wa.width);
+            y = menuposition ? 0 : wa.height - sp.mh - ypos;
+            sp.mw = (menuwidth > 0 ? menuwidth : wa.width);
         }
     }
 
     // no window/invalid window or menu height we had before is the same as the current window height
-    if (!win || omh == mh) return;
+    if (!win || mh == sp.mh) return;
 
-    XMoveResizeWindow(dpy, win, x + sp, y + vp, mw - 2 * sp - borderwidth * 2, mh);
-    drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
+    XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
 }
 
 void xinitvisual(void) {
@@ -176,7 +176,7 @@ void xinitvisual(void) {
 
     // visual properties
     XVisualInfo tpl = {
-        .screen = screen,
+        .screen = x11.screen,
         .depth = 32,
         .class = TrueColor
     };
@@ -184,16 +184,16 @@ void xinitvisual(void) {
     long masks = VisualScreenMask | VisualDepthMask | VisualClassMask;
 
     infos = XGetVisualInfo(dpy, masks, &tpl, &nitems);
-    visual = NULL;
+    x11.visual = NULL;
 
     // create colormap
     for(i = 0; i < nitems; i ++) {
         fmt = XRenderFindVisualFormat(dpy, infos[i].visual);
         if (fmt->type == PictTypeDirect && fmt->direct.alphaMask) {
-            visual = infos[i].visual;
-            depth = infos[i].depth;
-            cmap = XCreateColormap(dpy, root, visual, AllocNone);
-            useargb = 1;
+            x11.visual = infos[i].visual;
+            x11.depth = infos[i].depth;
+            x11.cmap = XCreateColormap(dpy, root, x11.visual, AllocNone);
+            x11.useargb = 1;
             break;
         }
     }
@@ -201,9 +201,9 @@ void xinitvisual(void) {
     XFree(infos);
 
     // no alpha, reset to default
-    if (!visual || !alpha) {
-        visual = DefaultVisual(dpy, screen);
-        depth = DefaultDepth(dpy, screen);
-        cmap = DefaultColormap(dpy, screen);
+    if (!x11.visual || !alpha) {
+        x11.visual = DefaultVisual(dpy, x11.screen);
+        x11.depth = DefaultDepth(dpy, x11.screen);
+        x11.cmap = DefaultColormap(dpy, x11.screen);
     }
 }

@@ -3,8 +3,8 @@
 #define INTERSECT(x,y,w,h,r)  (MAX(0, MIN((x)+(w),(r).x_org+(r).width)  - MAX((x),(r).x_org)) \
         && MAX(0, MIN((y)+(h),(r).y_org+(r).height) - MAX((y),(r).y_org)))
 #define LENGTH(X)             (sizeof X / sizeof X[0])
-#define TEXTW(X)              (drw_font_getwidth(drw, (X), False) + lrpad)
-#define TEXTWM(X)             (drw_font_getwidth(drw, (X), True) + lrpad)
+#define TEXTW(X)              (draw_font_getwidth(draw, (X), False) + sp.lrpad)
+#define TEXTWM(X)             (draw_font_getwidth(draw, (X), True) + sp.lrpad)
 #define NUMBERSMAXDIGITS      100
 #define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
 #define MAXITEMLENGTH         1024
