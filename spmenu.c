@@ -190,7 +190,7 @@ static struct item *prev, *curr, *next, *sel;
 #include "libs/sort.h"
 #include "libs/history.h"
 
-static Drw *drw;
+static Draw_t *draw;
 
 // high priority
 static int hplength = 0;
@@ -382,7 +382,7 @@ void cleanup(void) {
         free(hpitems[i]);
 
     // free drawing and close the display
-    drw_free(drw);
+    draw_free(draw);
 
 #if USEX
     if (!protocol) {
@@ -509,7 +509,7 @@ void handle(void) {
 #if USEX
         handle_x11();
 
-        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+        if (!draw_font_create(draw, fonts, LENGTH(fonts))) {
             die("no fonts could be loaded.");
         }
 
@@ -547,9 +547,9 @@ void handle(void) {
         borderwidth = 0;
         managed = 0;
 
-        drw = drw_create_wl(protocol);
+        draw = draw_create_wl(protocol);
 
-        if (!drw_font_create(drw, fonts, LENGTH(fonts))) {
+        if (!draw_font_create(draw, fonts, LENGTH(fonts))) {
             die("no fonts could be loaded.");
         }
 

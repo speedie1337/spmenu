@@ -4,13 +4,13 @@ void prepare_window_size_wl(void) {
     sp.sp = menupaddingh;
     sp.vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
 
-    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MAX(lines, 0);
 #if USEIMAGE
     img.setlines = lines;
 #endif
 
-    sp.lrpad = drw->font->h + textpadding;
+    sp.lrpad = draw->font->h + textpadding;
 
     return;
 }

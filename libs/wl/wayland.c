@@ -429,15 +429,15 @@ void draw_sf(struct state *state) {
     // create buffer to draw on
     state->buffer = create_buffer(state);
 
-    if (drw == NULL) {
-        die("spmenu: drw == NULL");
+    if (draw == NULL) {
+        die("spmenu: draw == NULL");
     }
 
     if (state->buffer == NULL) {
         die("state->buffer == NULL");
     }
 
-    drw_create_surface_wl(drw, state->data, state->width, state->height);
+    draw_create_surface_wl(draw, state->data, state->width, state->height);
 
     drawmenu_layer();
 
@@ -540,7 +540,7 @@ void resizeclient_wl(struct state *state) {
     for (item = items; item && item->text; item++)
         ic++;
 
-    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
 #if USEIMAGE
     img.setlines = lines;
@@ -560,15 +560,15 @@ void resizeclient_wl(struct state *state) {
 
     state->buffer = create_buffer(state);
 
-    if (drw == NULL) {
-        die("spmenu: drw == NULL");
+    if (draw == NULL) {
+        die("spmenu: draw == NULL");
     }
 
     if (state->buffer == NULL) {
         die("state->buffer == null");
     }
 
-    drw_create_surface_wl(drw, state->data, state->width, state->height);
+    draw_create_surface_wl(draw, state->data, state->width, state->height);
 
     set_layer_size(state, state->width, state->height);
     wl_surface_set_buffer_scale(state->surface, 1);

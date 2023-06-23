@@ -119,7 +119,7 @@ void setupdisplay_x11(void) {
     }
 
     // resize window and draw
-    drw_resize(drw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
 
     match();
     drawmenu();
@@ -129,13 +129,13 @@ void prepare_window_size_x11(void) {
     sp.sp = menupaddingh;
     sp.vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
 
-    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MAX(lines, 0);
 #if USEIMAGE
     img.setlines = lines;
 #endif
 
-    sp.lrpad = drw->font->h + textpadding;
+    sp.lrpad = draw->font->h + textpadding;
     get_mh();
 
     return;
@@ -174,7 +174,7 @@ void handle_x11(void) {
     }
 
     xinitvisual(); // init visual and create drawable after
-    drw = drw_create_x11(dpy, x11.screen, root, wa.width, wa.height, x11.visual, x11.depth, x11.cmap, protocol);
+    draw = draw_create_x11(dpy, x11.screen, root, wa.width, wa.height, x11.visual, x11.depth, x11.cmap, protocol);
 }
 
 void cleanup_x11(Display *disp) {

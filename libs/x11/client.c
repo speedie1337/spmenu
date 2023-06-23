@@ -87,7 +87,7 @@ void resizeclient_x11(void) {
     for (item = items; item && item->text; item++)
         ic++;
 
-    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
 #if USEIMAGE
     img.setlines = lines;
@@ -165,7 +165,7 @@ void resizeclient_x11(void) {
     if (!win || mh == sp.mh) return;
 
     XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
-    drw_resize(drw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
 }
 
 void xinitvisual(void) {

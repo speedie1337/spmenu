@@ -29,7 +29,7 @@ void readstdin(void) {
         if (!(items[i].text = strdup(buf)))
             die("spmenu: cannot strdup %u bytes:", strlen(buf) + 1);
         items[i].hp = arrayhas(hpitems, hplength, items[i].text);
-        drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
+        draw_font_getexts(draw->font, buf, strlen(buf), &tmpmax, NULL, True);
         if (tmpmax > sp.inputw) {
             sp.inputw = tmpmax;
         }

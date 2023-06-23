@@ -21,8 +21,8 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
             // highlight character
             c = highlight[1];
             highlight[1] = '\0';
-            drw_text(
-                    drw,
+            draw_text(
+                    draw,
                     x + indent + (p),
                     y,
                     MIN(w - indent - sp.lrpad, TEXTW(highlight) - sp.lrpad),
@@ -118,9 +118,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
-            drw_circle(drw, x - sp.plw, y, sp.plw, sp.bh, 0, col_menu, bgcol, alpha_menu, bga);
+            draw_circle(draw, x - sp.plw, y, sp.plw, sp.bh, 0, col_menu, bgcol, alpha_menu, bga);
         } else {
-            drw_arrow(drw, x - sp.plw, y, sp.plw, sp.bh, 0, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
+            draw_arrow(draw, x - sp.plw, y, sp.plw, sp.bh, 0, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
         }
     }
 
@@ -136,7 +136,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                 }
 
                 apply_fribidi(buffer);
-                drw_text(drw, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
+                draw_text(draw, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
                 drawhighlights(item, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, leftpadding, isrtl ? fribidi_text : buffer);
 
                 // position and width
@@ -255,7 +255,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     // now draw any non-colored text
     apply_fribidi(buffer);
-    int r = drw_text(drw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
+    int r = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
     if (!hidehighlight) drawhighlights(item, x, y, w, leftpadding, buffer);
 
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
@@ -264,9 +264,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
-            drw_circle(drw, r, y, sp.plw, sp.bh, 1, col_menu, bgcol, alpha_menu, bga);
+            draw_circle(draw, r, y, sp.plw, sp.bh, 1, col_menu, bgcol, alpha_menu, bga);
         } else {
-            drw_arrow(drw, r, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
+            draw_arrow(draw, r, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
         }
     }
 
@@ -378,13 +378,13 @@ int drawitem(int x, int y, int w) {
 
 int drawprompt(int x, int y, int w) {
     if (prompt && *prompt && !hideprompt) {
-        x = drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2, prompt, 0, pango_prompt ? True : False, col_promptfg, col_promptbg, alpha_promptfg, alpha_promptbg);
+        x = draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, prompt, 0, pango_prompt ? True : False, col_promptfg, col_promptbg, alpha_promptfg, alpha_promptbg);
 
         if (!hidepowerline && powerlineprompt) {
             if (promptpwlstyle == 2) {
-                drw_circle(drw, x, y, sp.plw, sp.bh, 1, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
+                draw_circle(draw, x, y, sp.plw, sp.bh, 1, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
             } else {
-                drw_arrow(drw, x, y, sp.plw, sp.bh, 1, promptpwlstyle, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
+                draw_arrow(draw, x, y, sp.plw, sp.bh, 1, promptpwlstyle, col_menu, col_promptbg, alpha_menu, alpha_promptbg);
             }
 
             x += sp.plw;
@@ -404,7 +404,7 @@ int drawinput(int x, int y, int w) {
     if (fh > sp.bh) {
         fh = sp.bh;
     } else if (!fh) {
-        fh = drw->font->h;
+        fh = draw->font->h;
     }
 
     if (passwd) {
@@ -414,21 +414,21 @@ int drawinput(int x, int y, int w) {
             memcpy(&censort[i], password, strlen(tx.text));
 
         apply_fribidi(censort);
-        drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
+        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : censort, 0, pango_password ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
 
         curpos = TEXTW(censort) - TEXTW(&tx.text[sp.cursor]);
 
         free(censort);
     } else if (!passwd) {
         apply_fribidi(tx.text);
-        drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : tx.text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
+        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : tx.text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
 
         curpos = TEXTW(tx.text) - TEXTW(&tx.text[sp.cursor]);
     }
 
     if ((curpos += sp.lrpad / 2 - 1) < w && !hidecaret) {
         curpos += fp;
-        drw_rect(drw, x + curpos, 2 + (sp.bh - fh) / 2 + y, fw, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
+        draw_rect(draw, x + curpos, 2 + (sp.bh - fh) / 2 + y, fw, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
     }
 
     return x;
@@ -438,7 +438,7 @@ int drawlarrow(int x, int y, int w) {
     if (hidelarrow) return x;
 
     if (curr->left) { // draw left arrow
-        drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False, col_larrowfg, col_larrowbg, alpha_larrowfg, alpha_larrowbg);
+        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False, col_larrowfg, col_larrowbg, alpha_larrowfg, alpha_larrowbg);
         x += w;
     }
 
@@ -449,7 +449,7 @@ int drawrarrow(int x, int y, int w) {
     if (hiderarrow) return x;
 
     if (next) { // draw right arrow
-        drw_text(drw, sp.mw - w, y, w, sp.bh, sp.lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False, col_rarrowfg, col_rarrowbg, alpha_rarrowfg, alpha_rarrowbg);
+        draw_text(draw, sp.mw - w, y, w, sp.bh, sp.lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False, col_rarrowfg, col_rarrowbg, alpha_rarrowfg, alpha_rarrowbg);
         x += w;
     }
 
@@ -465,14 +465,14 @@ int drawnumber(int x, int y, int w) {
         powerlinewidth = sp.plw / 2;
     }
 
-    drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.numbers, 0, pango_numbers ? True : False, col_numfg, col_numbg, alpha_numfg, alpha_numbg);
+    draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.numbers, 0, pango_numbers ? True : False, col_numfg, col_numbg, alpha_numfg, alpha_numbg);
 
     // draw powerline for match count
     if (!hidepowerline && powerlinecount) {
         if (matchcountpwlstyle == 2) {
-            drw_circle(drw, x, y, sp.plw, sp.bh, 0, col_menu, col_numbg, alpha_menu, alpha_numbg);
+            draw_circle(draw, x, y, sp.plw, sp.bh, 0, col_menu, col_numbg, alpha_menu, alpha_numbg);
         } else {
-            drw_arrow(drw, x, y, sp.plw, sp.bh, 0, matchcountpwlstyle, col_menu, col_numbg, alpha_menu, alpha_numbg);
+            draw_arrow(draw, x, y, sp.plw, sp.bh, 0, matchcountpwlstyle, col_menu, col_numbg, alpha_menu, alpha_numbg);
         }
 
         x += sp.plw;
@@ -489,16 +489,16 @@ int drawmode(int x, int y, int w) {
             powerlinewidth = sp.plw / 2;
         }
 
-        drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.modetext, 0, pango_mode ? True : False, col_modefg, col_modebg, alpha_modefg, alpha_modebg);
+        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.modetext, 0, pango_mode ? True : False, col_modefg, col_modebg, alpha_modefg, alpha_modebg);
 
         // draw powerline for match count
         if (!hidepowerline && powerlinemode) {
             if (modepwlstyle == 2) {
-                drw_circle(drw, x, y, sp.plw, sp.bh, 0,
+                draw_circle(draw, x, y, sp.plw, sp.bh, 0,
                         hidematchcount ? col_menu : col_numbg, col_modebg,
                         hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
             } else {
-                drw_arrow(drw, x, y, sp.plw, sp.bh, 0, modepwlstyle,
+                draw_arrow(draw, x, y, sp.plw, sp.bh, 0, modepwlstyle,
                         hidematchcount ? col_menu : col_numbg, col_modebg,
                         hidematchcount ? alpha_menu : alpha_numbg, alpha_modebg);
             }
@@ -520,16 +520,16 @@ int drawcaps(int x, int y, int w) {
             powerlinewidth = sp.plw / 2;
         }
 
-        drw_text(drw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.capstext, 0, pango_caps ? True : False, col_capsfg, col_capsbg, alpha_capsfg, alpha_capsbg);
+        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2 + powerlinewidth, tx.capstext, 0, pango_caps ? True : False, col_capsfg, col_capsbg, alpha_capsfg, alpha_capsbg);
 
         // draw powerline for caps lock indicator
         if (!hidepowerline && powerlinecaps) {
             if (capspwlstyle == 2) {
-                drw_circle(drw, x, y, sp.plw, sp.bh, 0,
+                draw_circle(draw, x, y, sp.plw, sp.bh, 0,
                         hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
                         hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
             } else {
-                drw_arrow(drw, x, y, sp.plw, sp.bh, 0, capspwlstyle,
+                draw_arrow(draw, x, y, sp.plw, sp.bh, 0, capspwlstyle,
                         hidemode ? hidematchcount ? col_menu : col_numbg : col_modebg, col_capsbg,
                         hidemode ? hidematchcount ? alpha_menu : alpha_numbg : alpha_modebg, alpha_capsbg);
             }
@@ -580,10 +580,10 @@ void drawmenu(void) {
 
 void drawmenu_layer(void) {
     int x = 0, y = 0, w = 0;
-    sp.plw = hidepowerline ? 0 : drw->font->h / 2 + 1; // powerline size
+    sp.plw = hidepowerline ? 0 : draw->font->h / 2 + 1; // powerline size
 
     // draw menu first using menu scheme
-    drw_rect(drw, 0, 0, sp.mw, sp.mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);
+    draw_rect(draw, 0, 0, sp.mw, sp.mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);
 
     int numberWidth = 0;
     int modeWidth = 0;
@@ -647,6 +647,6 @@ void drawmenu_layer(void) {
 #if USEIMAGE
     drawimage();
 #endif
-    drw_map(drw, win, 0, 0, sp.mw, sp.mh);
+    draw_map(draw, win, 0, 0, sp.mw, sp.mh);
 #endif
     }

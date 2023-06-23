@@ -68,11 +68,11 @@ void drawimage(void) {
             resizetoimageheight(width, imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
         }
 
-        drw_set_img(drw, imlib_image_get_data(), width, height);
+        draw_set_img(draw, imlib_image_get_data(), width, height);
 
         if (fullscreen) {
             xta = wta = leftmargin = 0;
-            drw_img(drw, (imagewidth - width) / 2, 0);
+            draw_img(draw, (imagewidth - width) / 2, 0);
 
             if (sel) {
                 limg = sel->image;
@@ -88,17 +88,17 @@ void drawimage(void) {
             if (height > width)
                 width = height;
 
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, wta + leftmargin);
+            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, wta + leftmargin);
         } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
 
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
+            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
+            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
         } else if (image) { // top center
             int minh = MIN(height, sp.mh - sp.bh - leftmargin * 2);
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
+            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
         }
     }
 
@@ -424,7 +424,7 @@ void resizetoimageheight_x11(int imageheight) {
     }
 
     XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
-    drw_resize(drw, sp.mw - 2 * sp.sp - borderwidth, sp.mh);
+    draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth, sp.mh);
 
     if (olines != lines) {
         struct item *item;
@@ -476,8 +476,8 @@ void resizetoimageheight_wl(int imageheight) {
 
     state.buffer = create_buffer(&state);
 
-    if (drw == NULL) {
-        die("spmenu: drw == NULL");
+    if (draw == NULL) {
+        die("spmenu: draw == NULL");
     }
 
     if (state.buffer == NULL) {
@@ -485,7 +485,7 @@ void resizetoimageheight_wl(int imageheight) {
     }
 
     set_layer_size(&state, state.width, state.height);
-    drw_create_surface_wl(drw, state.data, state.width, state.height);
+    draw_create_surface_wl(draw, state.data, state.width, state.height);
 
     drawmenu();
 
