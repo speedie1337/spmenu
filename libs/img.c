@@ -2,7 +2,7 @@
 
 #if USEIMAGE
 void setimagesize(int width, int height) {
-    if (!image || fullscreen || hideimage || height < 5 || width < 5 || width > mw) {
+    if (!image || fullscreen || hideimage || height < 5 || width < 5 || width > sp.mw) {
         return;
     }
 
@@ -11,8 +11,7 @@ void setimagesize(int width, int height) {
 }
 
 void flipimage(void) {
-    // flip image
-    switch (flip) {
+    switch (img.flip) {
         case 1: // horizontal
             imlib_image_flip_horizontal();
             break;
@@ -23,7 +22,7 @@ void flipimage(void) {
             imlib_image_flip_diagonal();
             break;
         default:
-            flip = flip ? 1 : 0;
+            img.flip = img.flip ? 1 : 0;
             return;
     }
 }
@@ -41,19 +40,13 @@ void drawimage(void) {
 
     if (!lines || !columns || hideimage) return;
 
-    // to prevent the image from being drawn multiple times wasting resources
-    if (!needredraw) {
-        needredraw = 1;
-        return;
-    }
-
     // load image cache
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
-        if (longestedge)
+        if (img.longestedge)
             loadimagecache(sel->image, &width, &height);
     } else if ((!sel || !sel->image) && image) { // free image
         cleanupimage();
-    } if (image && longestedge && width && height) { // render the image
+    } if (image && img.longestedge && width && height) { // render the image
         flipimage();
 
         int leftmargin = imagegaps; // gaps between image and menu
@@ -62,16 +55,16 @@ void drawimage(void) {
         int xta = 0; // add to x
 
         if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
-            wtr = bh;
+            wtr = sp.bh;
         } else {
-            wta = bh;
+            wta = sp.bh;
         }
 
         // margin
         xta += menumarginh;
         wta += menumarginv;
 
-        if (mh != bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
+        if (sp.mh != sp.bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
             resizetoimageheight(width, imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
         }
 
@@ -100,11 +93,11 @@ void drawimage(void) {
             if (height > width)
                 width = height;
 
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, mh - height - leftmargin);
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
-            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (mh - wta - height) / 2 + wta);
+            drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
         } else if (image) { // top center
-            int minh = MIN(height, mh - bh - leftmargin * 2);
+            int minh = MIN(height, sp.mh - sp.bh - leftmargin * 2);
             drw_img(drw, leftmargin + (imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
         }
     }
@@ -207,7 +200,7 @@ void loadimagecache(const char *file, int *width, int *height) {
     struct passwd *pw = NULL;
 
     // just load and don't store or try cache
-    if (longestedge > maxcache) {
+    if (img.longestedge > maxcache) {
         loadimage(file, width, height);
         if (image)
             scaleimage(width, height);
@@ -227,7 +220,7 @@ void loadimagecache(const char *file, int *width, int *height) {
 
         // which cache do we try?
         dsize = "normal";
-        if (longestedge > 128)
+        if (img.longestedge > 128)
             dsize = "large";
 
         slen = snprintf(NULL, 0, "file://%s", file)+1;
@@ -341,8 +334,8 @@ void resizetoimageheight(int imagewidth, int imageheight) {
 
 #if USEX
 void resizetoimageheight_x11(int imageheight) {
-    int omh = mh, olines = lines;
-    lines = reallines;
+    int mh = sp.mh, olines = lines;
+    lines = img.setlines;
 
     int x, y;
 #if USEXINERAMA
@@ -354,11 +347,11 @@ void resizetoimageheight_x11(int imageheight) {
 #endif
     XWindowAttributes wa;
 
-    if (lines * bh < imageheight + imagegaps * 2) {
-        lines = (imageheight + imagegaps * 2) / bh;
+    if (lines * sp.bh < imageheight + imagegaps * 2) {
+        lines = (imageheight + imagegaps * 2) / sp.bh;
 
         if (fullscreen) {
-            lines = imageheight / bh - 1;
+            lines = imageheight / sp.bh - 1;
         }
     }
 
@@ -396,13 +389,13 @@ void resizetoimageheight_x11(int imageheight) {
 
         // calculate x/y position
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
-            x = info[i].x_org + ((info[i].width  - mw) / 2);
-            y = info[i].y_org + ((info[i].height - mh) / 2);
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), info[i].width);
+            x = info[i].x_org + ((info[i].width  - sp.mw) / 2);
+            y = info[i].y_org + ((info[i].height - sp.mh) / 2);
         } else { // top or bottom
             x = info[i].x_org + xpos;
-            y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
-            mw = (menuwidth > 0 ? menuwidth : info[i].width);
+            y = info[i].y_org + (menuposition ? 0 : info[i].height - sp.mh - ypos);
+            sp.mw = (menuwidth > 0 ? menuwidth : info[i].width);
         }
 
         XFree(info);
@@ -414,24 +407,24 @@ void resizetoimageheight_x11(int imageheight) {
                     parentwin); // die because unable to get attributes for the parent window
 
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
-            x = (wa.width  - mw) / 2;
-            y = (wa.height - mh) / 2;
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), wa.width);
+            x = (wa.width  - sp.mw) / 2;
+            y = (wa.height - sp.mh) / 2;
         } else { // top or bottom
             x = 0;
-            y = menuposition ? 0 : wa.height - mh - ypos;
-            mw = (menuwidth > 0 ? menuwidth : wa.width);
+            y = menuposition ? 0 : wa.height - sp.mh - ypos;
+            sp.mw = (menuwidth > 0 ? menuwidth : wa.width);
         }
     }
 
     if (
         !win ||
-        omh == mh) {
+        mh == sp.mh) {
         return;
     }
 
-    XMoveResizeWindow(dpy, win, x + sp, y + vp, mw - 2 * sp - borderwidth * 2, mh);
-    drw_resize(drw, mw - 2 * sp - borderwidth, mh);
+    XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    drw_resize(drw, sp.mw - 2 * sp.sp - borderwidth, sp.mh);
 
     if (olines != lines) {
         struct item *item;
@@ -450,20 +443,20 @@ void resizetoimageheight_x11(int imageheight) {
 
 #if USEWAYLAND
 void resizetoimageheight_wl(int imageheight) {
-    int omh = mh, olines = lines;
-    lines = reallines;
+    int mh = sp.mh, olines = lines;
+    lines = img.setlines;
 
-    if (lines * bh < imageheight + imagegaps * 2) {
-        lines = (imageheight + imagegaps * 2) / bh;
+    if (lines * sp.bh < imageheight + imagegaps * 2) {
+        lines = (imageheight + imagegaps * 2) / sp.bh;
 
         if (fullscreen) {
-            lines = imageheight / bh - 1;
+            lines = imageheight / sp.bh - 1;
         }
     }
 
     get_mh();
 
-    if (omh == mh) {
+    if (mh == sp.mh) {
         return;
     }
 
@@ -478,8 +471,8 @@ void resizetoimageheight_wl(int imageheight) {
         jumptoindex(i);
     }
 
-    state.width = mw;
-    state.height = mh;
+    state.width = sp.mw;
+    state.height = sp.mh;
 
     state.buffer = create_buffer(&state);
 
@@ -504,12 +497,12 @@ void resizetoimageheight_wl(int imageheight) {
 #endif
 
 void store_image_vars(void) {
-    longestedge = MAX(imagewidth, imageheight);
+    img.longestedge = MAX(imagewidth, imageheight);
 
-    if (!imagew || !imageh || !imageg) {
-        imagew = imagewidth;
-        imageh = imageheight;
-        imageg = imagegaps;
+    if (!img.imagew || !img.imageh || !img.imageg) {
+        img.imagew = imagewidth;
+        img.imageh = imageheight;
+        img.imageg = imagegaps;
     }
 }
 #endif

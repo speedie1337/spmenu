@@ -14,8 +14,8 @@ void setupdisplay_x11(void) {
 #endif
 
     // set prompt width based on prompt size
-    promptw = (prompt && *prompt)
-        ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - lrpad / 4 : 0; // prompt width
+    sp.promptw = (prompt && *prompt)
+        ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - sp.lrpad / 4 : 0; // prompt width
 
     // init xinerama screens
 #if USEXINERAMA
@@ -51,13 +51,13 @@ void setupdisplay_x11(void) {
 
         // calculate x/y position
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), info[i].width);
-            x = info[i].x_org + xpos + ((info[i].width  - mw) / 2);
-            y = info[i].y_org - ypos + ((info[i].height - mh) / 2);
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), info[i].width);
+            x = info[i].x_org + xpos + ((info[i].width  - sp.mw) / 2);
+            y = info[i].y_org - ypos + ((info[i].height - sp.mh) / 2);
         } else { // top or bottom
             x = info[i].x_org + xpos;
-            y = info[i].y_org + (menuposition ? 0 : info[i].height - mh - ypos);
-            mw = (menuwidth > 0 ? menuwidth : info[i].width);
+            y = info[i].y_org + (menuposition ? 0 : info[i].height - sp.mh - ypos);
+            sp.mw = (menuwidth > 0 ? menuwidth : info[i].width);
         }
 
         XFree(info);
@@ -69,22 +69,22 @@ void setupdisplay_x11(void) {
                     parentwin); // die because unable to get attributes for the parent window
 
         if (menuposition == 2) { // centered
-            mw = MIN(MAX(max_textw() + promptw, minwidth), wa.width);
-            x = (wa.width  - mw) / 2 + xpos;
-            y = (wa.height - mh) / 2 - ypos;
+            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), wa.width);
+            x = (wa.width  - sp.mw) / 2 + xpos;
+            y = (wa.height - sp.mh) / 2 - ypos;
         } else { // top or bottom
             x = 0;
-            y = menuposition ? 0 : wa.width - mh - ypos;
-            mw = (menuwidth > 0 ? menuwidth : wa.width);
+            y = menuposition ? 0 : wa.width - sp.mh - ypos;
+            sp.mw = (menuwidth > 0 ? menuwidth : wa.width);
         }
     }
 
     // create menu window and set properties for it
     create_window_x11(
-            x + sp,
-            y + vp - (menuposition == 1 ? 0 : menuposition == 2 ? borderwidth : borderwidth * 2),
-            mw - 2 * sp - borderwidth * 2,
-            mh
+            x + sp.sp,
+            y + sp.vp - (menuposition == 1 ? 0 : menuposition == 2 ? borderwidth : borderwidth * 2),
+            sp.mw - 2 * sp.sp - borderwidth * 2,
+            sp.mh
     );
 
     set_window_x11();
@@ -105,7 +105,7 @@ void setupdisplay_x11(void) {
     }
 
     // embed spmenu inside parent window
-    if (embed) {
+    if (x11.embed) {
         XReparentWindow(dpy, win, parentwin, x, y);
         XSelectInput(dpy, parentwin, FocusChangeMask | SubstructureNotifyMask);
 
@@ -119,21 +119,23 @@ void setupdisplay_x11(void) {
     }
 
     // resize window and draw
-    drw_resize(drw, mw - 2 * sp - borderwidth * 2, mh);
+    drw_resize(drw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
 
     match();
     drawmenu();
 }
 
 void prepare_window_size_x11(void) {
-    sp = menupaddingh;
-    vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
+    sp.sp = menupaddingh;
+    sp.vp = (menuposition == 1) ? menupaddingv : - menupaddingv;
 
-    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
     lines = MAX(lines, 0);
-    reallines = lines;
+#if USEIMAGE
+    img.setlines = lines;
+#endif
 
-    lrpad = drw->font->h + textpadding;
+    sp.lrpad = drw->font->h + textpadding;
     get_mh();
 
     return;
@@ -144,8 +146,8 @@ Display * opendisplay_x11(char *disp) {
 }
 
 void set_screen_x11(Display *disp) {
-    screen = DefaultScreen(disp);
-    root = RootWindow(disp, screen);
+    x11.screen = DefaultScreen(disp);
+    root = RootWindow(disp, x11.screen);
 }
 
 void handle_x11(void) {
@@ -164,7 +166,7 @@ void handle_x11(void) {
     set_screen_x11(dpy);
 
     // parent window is the root window (ie. window manager) because we're not embedding
-    if (!embed || !(parentwin = strtol(embed, NULL, 0)))
+    if (!x11.embed || !(parentwin = strtol(x11.embed, NULL, 0)))
         parentwin = root;
 
     if (!XGetWindowAttributes(dpy, parentwin, &wa)) {
@@ -172,7 +174,7 @@ void handle_x11(void) {
     }
 
     xinitvisual(); // init visual and create drawable after
-    drw = drw_create_x11(dpy, screen, root, wa.width, wa.height, visual, depth, cmap, protocol);
+    drw = drw_create_x11(dpy, x11.screen, root, wa.width, wa.height, x11.visual, x11.depth, x11.cmap, protocol);
 }
 
 void cleanup_x11(Display *disp) {

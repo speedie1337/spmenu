@@ -663,7 +663,7 @@ void conf_init(void) {
                 }
             }
 
-            config_setting_lookup_int(conf, "ignoreglobalkeys", &ignoreglobalkeys);
+            config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
         }
     }
 
@@ -730,7 +730,7 @@ void conf_init(void) {
                 }
             }
 
-            config_setting_lookup_int(conf, "ignoreglobalmouse", &ignoreglobalmouse);
+            config_setting_lookup_int(conf, "ignoreglobalmouse", &sp.ignoreglobalmouse);
         }
     }
 
@@ -868,7 +868,7 @@ void conf_init(void) {
                 }
             }
 
-            config_setting_lookup_int(conf, "ignoreglobalkeys", &ignoreglobalkeys);
+            config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
         }
     }
 
@@ -938,7 +938,7 @@ void conf_init(void) {
                 }
             }
 
-            config_setting_lookup_int(conf, "ignoreglobalmouse", &ignoreglobalmouse);
+            config_setting_lookup_int(conf, "ignoreglobalmouse", &sp.ignoreglobalmouse);
         }
     }
 

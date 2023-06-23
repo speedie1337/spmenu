@@ -4,13 +4,13 @@ void updatenumlockmask(void) {
     unsigned int i, j;
     XModifierKeymap *modmap;
 
-    numlockmask = 0;
+    x11.numlockmask = 0;
     modmap = XGetModifierMapping(dpy);
     for (i = 0; i < 8; i++)
         for (j = 0; j < modmap->max_keypermod; j++)
             if (modmap->modifiermap[i * modmap->max_keypermod + j]
                     == XKeysymToKeycode(dpy, XK_Num_Lock))
-                numlockmask = (1 << i);
+                x11.numlockmask = (1 << i);
     XFreeModifiermap(modmap);
 }
 
@@ -36,12 +36,12 @@ void keypress_x11(XEvent *e) {
         if (keysym == hkeys[0].keysym && CLEANMASK(hkeys[0].mod) == CLEANMASK(ev->state) && hkeys[0].func) hkeys[0].func(&(hkeys[0].arg));
 
         for (i = 0; i < LENGTH(keys); i++) {
-            if (ignoreglobalkeys) break;
+            if (sp.ignoreglobalkeys) break;
             if (keysym == keys[i].keysym && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state) && keys[i].func) {
-                if ((keys[i].mode && curMode) || keys[i].mode == -1) {
+                if ((keys[i].mode && sp.mode) || keys[i].mode == -1) {
                     keys[i].func(&(keys[i].arg));
                     return;
-                } else if (!keys[i].mode && !curMode) {
+                } else if (!keys[i].mode && !sp.mode) {
                     keys[i].func(&(keys[i].arg));
                 } else {
                     continue;
@@ -50,12 +50,12 @@ void keypress_x11(XEvent *e) {
         }
 
         for (i = 0; i < LENGTH(ckeys); i++) {
-            if (ignoreconfkeys) break;
+            if (sp.ignoreconfkeys) break;
             if (keysym == ckeys[i].keysym && CLEANMASK(ckeys[i].mod) == CLEANMASK(ev->state) && ckeys[i].func) {
-                if ((ckeys[i].mode && curMode) || ckeys[i].mode == -1) {
+                if ((ckeys[i].mode && sp.mode) || ckeys[i].mode == -1) {
                     ckeys[i].func(&(ckeys[i].arg));
                     return;
-                } else if (!ckeys[i].mode && !curMode) {
+                } else if (!ckeys[i].mode && !sp.mode) {
                     ckeys[i].func(&(ckeys[i].arg));
                 } else {
                     continue;
@@ -63,11 +63,11 @@ void keypress_x11(XEvent *e) {
             }
         }
 
-        if (!iscntrl(*buf) && type && curMode ) {
-            if (allowkeys) {
+        if (!iscntrl(*buf) && type && sp.mode ) {
+            if (sp.allowkeys) {
                 insert(buf, len);
             } else {
-                allowkeys = !allowkeys;
+                sp.allowkeys = !sp.allowkeys;
             }
 
             drawmenu();
@@ -80,7 +80,7 @@ void grabkeyboard_x11(void) {
     int i;
 
     // don't grab if embedded
-    if (embed || managed)
+    if (x11.embed || managed)
         return;
     // try to grab keyboard, we may have to wait for another process to ungrab
     for (i = 0; i < 1000; i++) {
@@ -98,7 +98,7 @@ void getcapsstate(void) {
     unsigned int cs = 0;
 
     XkbGetIndicatorState(dpy, XkbUseCoreKbd, &cs);
-    capslockstate = (cs & 0x01) == 1;
+    sp.capslockstate = (cs & 0x01) == 1;
 
-    strncpy(capstext, capslockstate ? capslockontext : capslockofftext, 15);
+    strncpy(tx.capstext, sp.capslockstate ? capslockontext : capslockofftext, 15);
 }

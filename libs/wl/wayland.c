@@ -87,13 +87,13 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
     }
 
     for (i = 0; i < LENGTH(wl_keys); i++) {
-        if (ignoreglobalkeys) break;
+        if (sp.ignoreglobalkeys) break;
 
         if (xkb_keysym_to_lower(sym) == wl_keys[i].keysym && !is_correct_modifier(state, wl_keys[i].modifier) && wl_keys[i].func) {
-            if ((wl_keys[i].mode && curMode) || wl_keys[i].mode == -1) {
+            if ((wl_keys[i].mode && sp.mode) || wl_keys[i].mode == -1) {
                 wl_keys[i].func(&(wl_keys[i].arg));
                 return;
-            } else if (!wl_keys[i].mode && !curMode) {
+            } else if (!wl_keys[i].mode && !sp.mode) {
                 wl_keys[i].func(&(wl_keys[i].arg));
             } else {
                 continue;
@@ -102,13 +102,13 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
     }
 
     for (i = 0; i < LENGTH(wl_ckeys); i++) {
-        if (ignoreconfkeys) break;
+        if (sp.ignoreconfkeys) break;
 
         if (xkb_keysym_to_lower(sym) == wl_ckeys[i].keysym && !is_correct_modifier(state, wl_ckeys[i].modifier) && wl_ckeys[i].func) {
-            if ((wl_ckeys[i].mode && curMode) || wl_ckeys[i].mode == -1) {
+            if ((wl_ckeys[i].mode && sp.mode) || wl_ckeys[i].mode == -1) {
                 wl_ckeys[i].func(&(wl_ckeys[i].arg));
                 return;
-            } else if (!wl_ckeys[i].mode && !curMode) {
+            } else if (!wl_ckeys[i].mode && !sp.mode) {
                 wl_ckeys[i].func(&(wl_ckeys[i].arg));
             } else {
                 continue;
@@ -120,15 +120,15 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
         return;
     }
 
-    if (!type || !curMode) {
+    if (!type || !sp.mode) {
         return;
     }
 
     if (xkb_keysym_to_utf8(sym, buf, 8)) {
-        if (allowkeys) {
+        if (sp.allowkeys) {
             insert(buf, strnlen(buf, 8));
         } else {
-            allowkeys = !allowkeys;
+            sp.allowkeys = !sp.allowkeys;
         }
 
         drawmenu();
@@ -137,18 +137,18 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
 
 void keyboard_modifiers(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group) {
 	struct state *state = data;
-    int ocapslockstate = capslockstate;
+    int ocapslockstate = sp.capslockstate;
 
 	xkb_state_update_mask(state->xkb_state, mods_depressed, mods_latched, mods_locked, 0, 0, group);
 
     if (xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_CAPS, XKB_STATE_MODS_EFFECTIVE)) {
-        capslockstate = 1;
+        sp.capslockstate = 1;
     } else {
-        capslockstate = 0;
+        sp.capslockstate = 0;
     }
 
-    if (ocapslockstate != capslockstate) {
-        strncpy(capstext, capslockstate ? capslockontext : capslockofftext, 15);
+    if (ocapslockstate != sp.capslockstate) {
+        strncpy(tx.capstext, sp.capslockstate ? capslockontext : capslockofftext, 15);
         drawmenu();
     }
 }
@@ -170,7 +170,7 @@ void keyboard_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, 
 
 	enum wl_keyboard_key_state key_state = _key_state;
 
-    strncpy(capstext, capslockstate ? capslockontext : capslockofftext, 15);
+    strncpy(tx.capstext, sp.capslockstate ? capslockontext : capslockofftext, 15);
 
 	xkb_keysym_t sym = xkb_state_key_get_one_sym(state->xkb_state, key + 8);
 	keypress_wl(state, key_state, sym);
@@ -216,7 +216,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     int x = 0;
     int y = 0;
     int w;
-    int h = bh;
+    int h = sp.bh;
     int xpad = 0;
     int item_num = 0;
     int yp = 0;
@@ -227,7 +227,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     }
 
     if (!hidepowerline) {
-        x = xpad = plw;
+        x = xpad = sp.plw;
     }
 
     x += menumarginh;
@@ -240,11 +240,11 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
     if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
     if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(numbers) : TEXTW(numbers);
-    if (!hidemode) modeWidth = pango_mode ? TEXTWM(modetext) : TEXTW(modetext);
-    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(capstext) : TEXTW(capstext);
+    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
-        if (!strcmp(capstext, ""))
+        if (!strcmp(tx.capstext, ""))
         capsWidth = 0;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
@@ -258,18 +258,18 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
 
     // check click position and override the value of click
-    if (yp && ex < x + promptw + powerlineprompt ? plw : 0) { // prompt
+    if (yp && ex < x + sp.promptw + powerlineprompt ? sp.plw : 0) { // prompt
         click = ClickPrompt;
-    } else if (yp && (ex > mw - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
+    } else if (yp && (ex > sp.mw - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
         click = ClickCaps;
-    } else if (yp && ex > mw - modeWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // mode indicator
+    } else if (yp && ex > sp.mw - modeWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) { // mode indicator
         click = ClickMode;
-    } else if (yp && ex > mw - modeWidth - numberWidth - capsWidth - 2 * sp - 2 * borderwidth - menumarginh) { // match count
+    } else if (yp && ex > sp.mw - modeWidth - numberWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) { // match count
         click = ClickNumber;
     } else if (yp && !hideinput) { // input
-        w = (lines > 0 || !matches) ? mw - x : inputw;
+        w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
-        if ((lines <= 0 && ex >= 0 && ex <= x + w + promptw +
+        if ((lines <= 0 && ex >= 0 && ex <= x + w + sp.promptw +
                     ((!prev || !curr->left) ? larrowWidth : 0)) ||
                 (lines > 0 && ey >= y && ey <= y + h)) {
 
@@ -278,14 +278,14 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     }
 
 #if USEIMAGE
-    if (!hideimage && longestedge != 0) {
-        x += MAX((imagegaps * 2) + imagewidth, indentitems ? promptw : 0);
+    if (!hideimage && img.longestedge != 0) {
+        x += MAX((imagegaps * 2) + imagewidth, indentitems ? sp.promptw : 0);
     }
 #endif
 
     // item click
     if (lines > 0) {
-        w = mw - x;
+        w = sp.mw - x;
 
         ey -= menumarginv;
 
@@ -303,9 +303,9 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             y += h;
 
             // ClickSelItem, called function doesn't matter
-            if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? plw : 0) && ex <= (x + w / columns) + (powerlineitems ? plw : 0)) {
+            if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) && ex <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 for (i = 0; i < LENGTH(buttons); i++) {
-                    if (ignoreglobalmouse) break;
+                    if (sp.ignoreglobalmouse) break;
                     if (wl_buttons[i].click == ClickSelItem && wl_buttons[i].button == button) {
                         puts(item->text);
                         exit(0);
@@ -314,7 +314,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
                     }
                 }
                 for (i = 0; i < LENGTH(cbuttons); i++) {
-                    if (ignoreconfmouse) break;
+                    if (sp.ignoreconfmouse) break;
                     if (wl_cbuttons[i].click == ClickSelItem && wl_cbuttons[i].button == button) {
                         puts(item->text);
                         exit(0);
@@ -325,7 +325,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             }
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
-        x += inputw;
+        x += sp.inputw;
         w = larrowWidth;
 
         if (prev && curr->left) {
@@ -336,7 +336,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
         // right arrow
         w = rarrowWidth;
-        x = mw - w;
+        x = sp.mw - w;
         if (next && ex >= x && ex <= x + w) {
             click = ClickRArrow;
         }
@@ -344,14 +344,14 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(wl_buttons); i++) {
-        if (ignoreglobalmouse) break;
+        if (sp.ignoreglobalmouse) break;
         if (click == wl_buttons[i].click && wl_buttons[i].func && wl_buttons[i].button == button)
             wl_buttons[i].func(&wl_buttons[i].arg);
     }
 
     // go through mouse config array and run function
     for (i = 0; i < LENGTH(wl_cbuttons); i++) {
-        if (ignoreconfmouse) break;
+        if (sp.ignoreconfmouse) break;
         if (click == wl_cbuttons[i].click && wl_cbuttons[i].func && wl_cbuttons[i].button == button)
             wl_cbuttons[i].func(&wl_cbuttons[i].arg);
     }
@@ -533,28 +533,30 @@ int init_disp(struct state *state) {
 
 void resizeclient_wl(struct state *state) {
     struct item *item;
-    int omh = mh;
+    int mh = sp.mh;
     int ic = 0;
 
     // walk through all items
     for (item = items; item && item->text; item++)
         ic++;
 
-    bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
+    sp.bh = MAX(drw->font->h, drw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
-    reallines = lines;
+#if USEIMAGE
+    img.setlines = lines;
+#endif
     get_mh();
 
     if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
-        mh -= bh;
+        sp.mh -= sp.bh;
     }
 
-    if (mh == omh) {
+    if (sp.mh == mh) {
         return;
     }
 
-    state->width = mw;
-    state->height = mh;
+    state->width = sp.mw;
+    state->height = sp.mh;
 
     state->buffer = create_buffer(state);
 

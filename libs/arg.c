@@ -89,9 +89,9 @@ void moveup(Arg *arg) {
 void complete(Arg *arg) {
     if (hideitem) return;
 
-    strncpy(text, sel->clntext, sizeof text - 1);
-    text[sizeof text - 1] = '\0';
-    cursor = strlen(text);
+    strncpy(tx.text, sel->clntext, sizeof tx.text - 1);
+    tx.text[sizeof tx.text - 1] = '\0';
+    sp.cursor = strlen(tx.text);
 
     match();
     drawmenu();
@@ -127,7 +127,7 @@ void moveitem(Arg *arg) {
 
 void movestart(Arg *arg) {
     if (sel == matches) {
-        cursor = 0;
+        sp.cursor = 0;
         drawmenu();
         return;
     }
@@ -138,8 +138,8 @@ void movestart(Arg *arg) {
 }
 
 void moveend(Arg *arg) {
-    if (text[cursor] != '\0') {
-        cursor = strlen(text);
+    if (tx.text[sp.cursor] != '\0') {
+        sp.cursor = strlen(tx.text);
         drawmenu();
         return;
     }
@@ -193,29 +193,29 @@ void viewhist(Arg *arg) {
 }
 
 void deleteword(Arg *arg) {
-    if (cursor == 0) return;
+    if (sp.cursor == 0) return;
 
-    while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
-        insert(NULL, nextrune(-1) - cursor);
-    } while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)])) {
-        insert(NULL, nextrune(-1) - cursor);
+    while (sp.cursor > 0 && strchr(worddelimiters, tx.text[nextrune(-1)])) {
+        insert(NULL, nextrune(-1) - sp.cursor);
+    } while (sp.cursor > 0 && !strchr(worddelimiters, tx.text[nextrune(-1)])) {
+        insert(NULL, nextrune(-1) - sp.cursor);
     }
 
     drawmenu();
 }
 
 void moveword(Arg *arg) {
-    if (arg->i < 0) { // move cursor to the start of the word
-        while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)])) {
-            cursor = nextrune(-1);
-        } while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)])) {
-            cursor = nextrune(-1);
+    if (arg->i < 0) { // move sp.cursor to the start of the word
+        while (sp.cursor > 0 && strchr(worddelimiters, tx.text[nextrune(-1)])) {
+            sp.cursor = nextrune(-1);
+        } while (sp.cursor > 0 && !strchr(worddelimiters, tx.text[nextrune(-1)])) {
+            sp.cursor = nextrune(-1);
         }
-    } else { // move cursor to the end of the word
-        while (text[cursor] && strchr(worddelimiters, text[cursor])) {
-            cursor = nextrune(+1);
-        } while (text[cursor] && !strchr(worddelimiters, text[cursor])) {
-            cursor = nextrune(+1);
+    } else { // move sp.cursor to the end of the word
+        while (tx.text[sp.cursor] && strchr(worddelimiters, tx.text[sp.cursor])) {
+            sp.cursor = nextrune(+1);
+        } while (tx.text[sp.cursor] && !strchr(worddelimiters, tx.text[sp.cursor])) {
+            sp.cursor = nextrune(+1);
         }
     }
 
@@ -224,12 +224,12 @@ void moveword(Arg *arg) {
 
 void movecursor(Arg *arg) {
     if (arg->i < 0) {
-        if (cursor > 0) {
-            cursor = nextrune(-1);
+        if (sp.cursor > 0) {
+            sp.cursor = nextrune(-1);
         }
     } else {
-        if (text[cursor]) {
-            cursor = nextrune(+1);
+        if (tx.text[sp.cursor]) {
+            sp.cursor = nextrune(+1);
         }
     }
 
@@ -237,10 +237,10 @@ void movecursor(Arg *arg) {
 }
 
 void backspace(Arg *arg) {
-    if (cursor == 0)
+    if (sp.cursor == 0)
         return;
 
-    insert(NULL, nextrune(-1) - cursor);
+    insert(NULL, nextrune(-1) - sp.cursor);
     drawmenu();
 }
 
@@ -280,7 +280,7 @@ void selectitem(Arg *arg) {
     if (sel && arg->i && !hideitem) {
         selection = sel->text;
     } else {
-        selection = text;
+        selection = tx.text;
     }
 
     for (int i = 0; i < sel_size; i++) {
@@ -305,22 +305,22 @@ void navhistory(Arg *arg) {
 }
 
 void restoresel(Arg *arg) {
-    text[cursor] = '\0';
+    tx.text[sp.cursor] = '\0';
     match();
     drawmenu();
 }
 
 void clear(Arg *arg) {
-    insert(NULL, 0 - cursor);
+    insert(NULL, 0 - sp.cursor);
     drawmenu();
 }
 
 void clearins(Arg *arg) {
-    insert(NULL, 0 - cursor);
+    insert(NULL, 0 - sp.cursor);
 
-    curMode = 1;
-    allowkeys = 0;
-    strncpy(modetext, instext, 15);
+    sp.mode = 1;
+    sp.allowkeys = 0;
+    strncpy(tx.modetext, instext, 15);
 
     calcoffsets();
     drawmenu();
@@ -378,7 +378,7 @@ void flipimg(Arg *arg) {
 
     if (!image) return;
 
-    flip = flip ? 0 : arg->i ? 1 : 2;
+    img.flip = img.flip ? 0 : arg->i ? 1 : 2;
 
     drawmenu();
 
@@ -431,14 +431,14 @@ void togglefullimg(Arg *arg) {
     fullscreen = image ? !fullscreen : 0;
 
     if (fullscreen) {
-        ow = imagewidth;
-        oh = imageheight;
+        img.ow = imagewidth;
+        img.oh = imageheight;
 
-        imagewidth = mw;
-        imageheight = mh;
+        imagewidth = sp.mw;
+        imageheight = sp.mh;
     } else {
-        imagewidth = ow;
-        imageheight = oh;
+        imagewidth = img.ow;
+        imageheight = img.oh;
     }
 
     drawmenu();
@@ -450,10 +450,10 @@ void defaultimg(Arg *arg) {
 
     if (hideimage || !image) return;
 
-    if (imagew) {
-        imagewidth = imagew;
-        imageheight = imageh;
-        imagegaps = imageg;
+    if (img.imagew) {
+        imagewidth = img.imagew;
+        imageheight = img.imageh;
+        imagegaps = img.imageg;
     }
 
     drawmenu();
@@ -517,12 +517,12 @@ void setprofile(Arg *arg) {
 }
 
 void switchmode(Arg *arg) {
-    curMode = !curMode;
+    sp.mode = !sp.mode;
 
-    if (!type) curMode = 0; // only normal mode allowed
+    if (!type) sp.mode = 0; // only normal mode allowed
 
-    allowkeys = !curMode;
+    sp.allowkeys = !sp.mode;
 
-    strncpy(modetext, curMode ? instext : normtext, 15);
+    strncpy(tx.modetext, sp.mode ? instext : normtext, 15);
     drawmenu();
 }

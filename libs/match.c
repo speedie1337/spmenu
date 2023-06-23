@@ -7,7 +7,7 @@ void fuzzymatch(void) {
     lhpprefix = hpprefixend = NULL;
     char c;
     int number_of_matches = 0, i, pidx, sidx, eidx;
-    int text_len = strlen(text), itext_len;
+    int text_len = strlen(tx.text), itext_len;
 
     matches = matchend = NULL;
 
@@ -21,7 +21,7 @@ void fuzzymatch(void) {
             // walk through item text
             for (i = 0; i < itext_len && (c = it->text[i]); i++) {
                 // fuzzy match pattern
-                if (!fstrncmp(&text[pidx], &c, 1)) {
+                if (!fstrncmp(&tx.text[pidx], &c, 1)) {
                     if(sidx == -1)
                         sidx = i;
                     pidx++;
@@ -92,13 +92,13 @@ void match(void) {
     static char **tokv = NULL;
     static int tokn = 0;
 
-    char buf[sizeof text], *s;
+    char buf[sizeof tx.text], *s;
     int i, tokc = 0;
     size_t len, textsize;
     struct item *item, *lhpprefix, *lprefix, *lsubstr, *hpprefixend, *prefixend, *substrend;
 
 
-    sp_strncpy(buf, text, sizeof(text));
+    sp_strncpy(buf, tx.text, sizeof(tx.text));
     // separate input text into tokens to be matched individually
     for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
         if (++tokc > tokn && !(tokv = realloc(tokv, ++tokn * sizeof *tokv)))
@@ -107,7 +107,7 @@ void match(void) {
     len = tokc ? strlen(tokv[0]) : 0;
 
     matches = lhpprefix = lprefix = lsubstr = matchend = hpprefixend = prefixend = substrend = NULL;
-    textsize = strlen(text) + 1;
+    textsize = strlen(tx.text) + 1;
     for (item = items; item && item->text; item++) {
         for (i = 0; i < tokc; i++)
             if (!fstrstr(item->text, tokv[i]))
@@ -120,7 +120,7 @@ void match(void) {
             // exact matches go first, then prefixes with high priority, then prefixes, then substrings
             if (item->hp && !fstrncmp(tokv[0], item->text, len))
                 appenditem(item, &lhpprefix, &hpprefixend);
-            else if (!tokc || !fstrncmp(text, item->text, textsize))
+            else if (!tokc || !fstrncmp(tx.text, item->text, textsize))
                 appenditem(item, &matches, &matchend);
             else if (!fstrncmp(tokv[0], item->text, len))
                 appenditem(item, &lprefix, &prefixend);

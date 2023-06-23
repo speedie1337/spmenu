@@ -305,10 +305,10 @@ void readargs(int argc, char *argv[]) {
             }
         } else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
             lines = atoi(argv[++i]);
-        } else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight")) || (!strcmp(argv[i], "--line-height"))) { // line height
+        } else if (!strcmp(argv[i], "-sp.mh") || (!strcmp(argv[i], "--lineheight")) || (!strcmp(argv[i], "--line-height"))) { // line height
             lineheight += atoi(argv[++i]);
             if (columns == 0) columns = 1;
-        } else if (!strcmp(argv[i], "-mw") || (!strcmp(argv[i], "--min-width"))) { // line height
+        } else if (!strcmp(argv[i], "-sp.mw") || (!strcmp(argv[i], "--min-width"))) { // line height
             minwidth = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-txp") || (!strcmp(argv[i], "--text-padding"))) { // text padding
             textpadding = atoi(argv[++i]);
@@ -397,7 +397,7 @@ void readargs(int argc, char *argv[]) {
             imageresize = 0;
         } else if (!strcmp(argv[i], "-w") || (!strcmp(argv[i], "--embed"))) { // embedding window id
 #if USEX
-            embed = argv[++i];
+            x11.embed = argv[++i];
 #endif
         } else if (!strcmp(argv[i], "-n") || (!strcmp(argv[i], "--preselect"))) { // preselected item
             preselected = atoi(argv[++i]);
@@ -591,8 +591,8 @@ void usage(int status) {
     fputs(": fancy dynamic menu\n\n"
             "- Arguments -\n"
             "spmenu -l,       --lines <line>                              Set line count to stdin\n"
-            "spmenu -mh,      --line-height <height>                      Set spmenu line height to <height>\n"
-            "spmenu -mw,      --min-width <width>                         Set minimum width to <width> when centered\n"
+            "spmenu -sp.mh,      --line-height <height>                      Set spmenu line height to <height>\n"
+            "spmenu -sp.mw,      --min-width <width>                         Set minimum width to <width> when centered\n"
             "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
             "spmenu -gc,      --generate-cache                            Generate image cache\n"
             "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"

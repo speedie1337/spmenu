@@ -1,12 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
 void readstdin(void) {
-    char buf[sizeof text], *p;
+    char buf[sizeof tx.text], *p;
     size_t i, itemsiz = 0;
     unsigned int tmpmax = 0;
 
     if (passwd) {
-        inputw = lines = 0;
+        sp.inputw = lines = 0;
         return;
     }
 
@@ -30,8 +30,8 @@ void readstdin(void) {
             die("spmenu: cannot strdup %u bytes:", strlen(buf) + 1);
         items[i].hp = arrayhas(hpitems, hplength, items[i].text);
         drw_font_getexts(drw->font, buf, strlen(buf), &tmpmax, NULL, True);
-        if (tmpmax > inputw) {
-            inputw = tmpmax;
+        if (tmpmax > sp.inputw) {
+            sp.inputw = tmpmax;
         }
 
         items[i].index = i;
@@ -48,7 +48,7 @@ void readstdin(void) {
     }
 
 #if USEIMAGE
-    if (!o) longestedge = imagegaps = 0;
+    if (!o) img.longestedge = imagegaps = 0;
 #endif
 
     // clean
@@ -64,7 +64,7 @@ void readstdin(void) {
 
 void readfile(void) {
     if (passwd){
-        inputw = lines = 0;
+        sp.inputw = lines = 0;
         return;
     }
 
@@ -129,7 +129,7 @@ void readfile(void) {
         lines = columns == 1 ? i : MIN(i, lines); // i = number of items
 
 #if USEIMAGE
-        if (!o) longestedge = imagegaps = 0;
+        if (!o) img.longestedge = imagegaps = 0;
 #endif
 
         if (i == listcount) {
@@ -174,7 +174,7 @@ int parsemarkup(int index) {
     }
 
     // load image cache (or generate)
-    if (generatecache && longestedge <= maxcache && items[index].image && strcmp(items[index].image, limg ? limg : "")) {
+    if (generatecache && img.longestedge <= maxcache && items[index].image && strcmp(items[index].image, limg ? limg : "")) {
         loadimagecache(items[index].image, &w, &h);
     }
 
