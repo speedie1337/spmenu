@@ -80,6 +80,11 @@
 #include <openssl/md5.h>
 #endif
 
+// include Xlib
+#if USEX
+#include <X11/Xlib.h>
+#endif
+
 // include macros and other defines
 #include "libs/define.c"
 

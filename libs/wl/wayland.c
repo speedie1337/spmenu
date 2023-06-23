@@ -304,7 +304,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
             // ClickSelItem, called function doesn't matter
             if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) && ex <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
-                for (i = 0; i < LENGTH(buttons); i++) {
+                for (i = 0; i < LENGTH(wl_buttons); i++) {
                     if (sp.ignoreglobalmouse) break;
                     if (wl_buttons[i].click == ClickSelItem && wl_buttons[i].button == button) {
                         puts(item->text);
@@ -313,7 +313,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
                         click = ClickItem;
                     }
                 }
-                for (i = 0; i < LENGTH(cbuttons); i++) {
+                for (i = 0; i < LENGTH(wl_cbuttons); i++) {
                     if (sp.ignoreconfmouse) break;
                     if (wl_cbuttons[i].click == ClickSelItem && wl_cbuttons[i].button == button) {
                         puts(item->text);
