@@ -1,8 +1,4 @@
-/* spmenu - fancy dynamic menu
- *
- * Below is a configuration file which is technically C source code.
- * See LICENSE file for copyright and license details.
- */
+/* See LICENSE file for copyright and license details. */
 
 /* spmenu options */
 static char *class                     = "spmenu"; /* Class for spmenu */

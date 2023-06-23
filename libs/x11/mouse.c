@@ -10,20 +10,20 @@ void buttonpress_x11(XEvent *e) {
     // margin
     x += menumarginh;
 
-    int larrowWidth = 0;
-    int rarrowWidth = 0;
-    int numberWidth = 0;
-    int modeWidth = 0;
-    int capsWidth = 0;
+    int larroww = 0;
+    int rarroww = 0;
+    int numberw = 0;
+    int modew = 0;
+    int capsw = 0;
 
-    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
-    if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
     if (!strcmp(tx.capstext, ""))
-        capsWidth = 0;
+        capsw = 0;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         yp = 1;
@@ -40,17 +40,17 @@ void buttonpress_x11(XEvent *e) {
     // check click position and override the value of click
     if (yp && ev->x < x + sp.promptw + powerlineprompt ? sp.plw : 0) { // prompt
         click = ClickPrompt;
-    } else if (yp && (ev->x > sp.mw - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsWidth) { // caps lock indicator
+    } else if (yp && (ev->x > sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsw) { // caps lock indicator
         click = ClickCaps;
-    } else if (yp && ev->x > sp.mw - modeWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) { // mode indicator
+    } else if (yp && ev->x > sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // mode indicator
         click = ClickMode;
-    } else if (yp && ev->x > sp.mw - modeWidth - numberWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh) { // match count
+    } else if (yp && ev->x > sp.mw - modew - numberw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // match count
         click = ClickNumber;
     } else if (yp && !hideinput) { // input
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
         if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + sp.promptw +
-                    ((!prev || !curr->left) ? larrowWidth : 0)) ||
+                    ((!prev || !curr->left) ? larroww : 0)) ||
                 (lines > 0 && ev->y >= y && ev->y <= y + h)) {
 
             click = ClickInput;
@@ -106,7 +106,7 @@ void buttonpress_x11(XEvent *e) {
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
         x += sp.inputw;
-        w = larrowWidth;
+        w = larroww;
 
         if (prev && curr->left) {
             if (ev->x >= x && ev->x <= x + w) {
@@ -115,7 +115,7 @@ void buttonpress_x11(XEvent *e) {
         }
 
         // right arrow
-        w = rarrowWidth;
+        w = rarroww;
         x = sp.mw - w;
         if (next && ev->x >= x && ev->x <= x + w) {
             click = ClickRArrow;

@@ -276,22 +276,22 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 int drawitem(int x, int y, int w) {
     struct item *item;
 
-    int numberWidth = 0;
-    int modeWidth = 0;
-    int larrowWidth = 0;
-    int rarrowWidth = 0;
-    int capsWidth = 0;
+    int numberw = 0;
+    int modew = 0;
+    int larroww = 0;
+    int rarroww = 0;
+    int capsw = 0;
 
     // add width
-    if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-    if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
-    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
     if (!strcmp(tx.capstext, ""))
-        capsWidth = 0;
+        capsw = 0;
 
 #if USEIMAGE
     int ox = 0; // original x position
@@ -339,7 +339,7 @@ int drawitem(int x, int y, int w) {
         x += sp.inputw;
 
         if (!hidelarrow) {
-            w = larrowWidth;
+            w = larroww;
             x = drawlarrow(x, y, w);
         }
 
@@ -349,10 +349,10 @@ int drawitem(int x, int y, int w) {
         for (item = curr; item != next; item = item->right) { // draw items
             x = drawitemtext(item, x + (powerlineitems ? sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
                         sp.mw - x -
-                        rarrowWidth -
-                        numberWidth -
-                        modeWidth -
-                        capsWidth -
+                        rarroww -
+                        numberw -
+                        modew -
+                        capsw -
                         menumarginh -
                         2 * sp.sp -
                         2 * borderwidth
@@ -368,7 +368,7 @@ int drawitem(int x, int y, int w) {
         }
 
         if (!hiderarrow) {
-            w = rarrowWidth + numberWidth + modeWidth + capsWidth + menumarginh + 2 * sp.sp + 2 * borderwidth;
+            w = rarroww + numberw + modew + capsw + menumarginh + 2 * sp.sp + 2 * borderwidth;
             x = drawrarrow(sp.mw - w, y, w);
         }
     }
@@ -585,21 +585,21 @@ void drawmenu_layer(void) {
     // draw menu first using menu scheme
     draw_rect(draw, 0, 0, sp.mw, sp.mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);
 
-    int numberWidth = 0;
-    int modeWidth = 0;
-    int capsWidth = 0;
+    int numberw = 0;
+    int modew = 0;
+    int capsw = 0;
 
     // add width
-    if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-    if (!hidecaps) capsWidth = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
     if (!strcmp(tx.capstext, ""))
-        capsWidth = 0;
+        capsw = 0;
 
     // calculate match count
     if (!hidematchcount) {
         recalculatenumbers();
-        numberWidth = TEXTW(tx.numbers);
+        numberw = TEXTW(tx.numbers);
     }
 
     x += menumarginh;
@@ -623,24 +623,24 @@ void drawmenu_layer(void) {
         x = drawinput(x, y, w);
     }
 
-    if (!hidemode && !fullscreen) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidemode && !fullscreen) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
 
     // draw the items, this function also calls drawrarrow() and drawlarrow()
     if (!hideitem) drawitem(x, y, w);
 
     if (!hidematchcount && !fullscreen) {
-        w = numberWidth;
-        drawnumber(sp.mw - numberWidth - modeWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        w = numberw;
+        drawnumber(sp.mw - numberw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }
 
     if (!hidemode && !fullscreen) {
-        w = modeWidth;
-        drawmode(sp.mw - modeWidth - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        w = modew;
+        drawmode(sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }
 
     if (!hidecaps && !fullscreen) {
-        w = capsWidth;
-        drawcaps(sp.mw - capsWidth - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        w = capsw;
+        drawcaps(sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }
 
 #if USEX

@@ -337,22 +337,22 @@ void calcoffsets(void) {
     if (lines > 0)
         n = lines * columns * sp.bh;
     else { // no lines, therefore the size of items must be decreased to fit the menu elements
-        int numberWidth = 0;
+        int numberw = 0;
         int modeWidth = 0;
-        int larrowWidth = 0;
+        int larroww = 0;
         int rarrowWidth = 0;
-        int capsWidth = 0;
+        int capsw = 0;
 
-        if (!hidematchcount) numberWidth = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+        if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
         if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-        if (!hidelarrow) larrowWidth = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+        if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
         if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-        if (!hidecaps) capsWidth = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+        if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
         if (!strcmp(tx.capstext, ""))
-            capsWidth = 0;
+            capsw = 0;
 
-        n = sp.mw - (sp.promptw + sp.inputw + larrowWidth + rarrowWidth + modeWidth + numberWidth + capsWidth + menumarginh);
+        n = sp.mw - (sp.promptw + sp.inputw + larroww + rarrowWidth + modeWidth + numberw + capsw + menumarginh);
     }
 
     // calculate which items will begin the next page
