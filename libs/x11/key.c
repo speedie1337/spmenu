@@ -43,8 +43,6 @@ void keypress_x11(XEvent *e) {
                     return;
                 } else if (!keys[i].mode && !sp.mode) {
                     keys[i].func(&(keys[i].arg));
-                } else {
-                    continue;
                 }
             }
         }
@@ -57,8 +55,6 @@ void keypress_x11(XEvent *e) {
                     return;
                 } else if (!ckeys[i].mode && !sp.mode) {
                     ckeys[i].func(&(ckeys[i].arg));
-                } else {
-                    continue;
                 }
             }
         }

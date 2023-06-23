@@ -95,8 +95,6 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
                 return;
             } else if (!wl_keys[i].mode && !sp.mode) {
                 wl_keys[i].func(&(wl_keys[i].arg));
-            } else {
-                continue;
             }
         }
     }
@@ -110,8 +108,6 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
                 return;
             } else if (!wl_ckeys[i].mode && !sp.mode) {
                 wl_ckeys[i].func(&(wl_ckeys[i].arg));
-            } else {
-                continue;
             }
         }
     }
