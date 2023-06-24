@@ -203,7 +203,6 @@ static int *sel_index = NULL;
 static unsigned int sel_size = 0;
 static int protocol_override = 0;
 static int itemn = 0;
-static int fullscreen = 0;
 
 #if USERTL
 static int isrtl = 1;

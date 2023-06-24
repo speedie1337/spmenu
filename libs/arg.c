@@ -426,28 +426,6 @@ void toggleimg(Arg *arg) {
 #endif
 }
 
-void togglefullimg(Arg *arg) {
-#if USEIMAGE
-    if (hideimage || !image) {
-        return;
-    }
-
-    fullscreen = !fullscreen;
-
-    if (fullscreen) {
-        img.imagewidth = sp.mw;
-        img.imageheight = sp.mh;
-        img.imagegaps = 0;
-    } else {
-        img.imagewidth = imagewidth;
-        img.imageheight = imageheight;
-        img.imagegaps = imagegaps;
-    }
-
-    drawmenu();
-#endif
-}
-
 void defaultimg(Arg *arg) {
 #if USEIMAGE
 
@@ -462,7 +440,7 @@ void defaultimg(Arg *arg) {
 }
 
 void setlines(Arg *arg) {
-    if (fullscreen || !overridelines) return;
+    if (!overridelines) return;
 
     lines += arg->i;
 
@@ -480,7 +458,7 @@ void setlines(Arg *arg) {
 }
 
 void setcolumns(Arg *arg) {
-    if (fullscreen || !overridecolumns) return;
+    if (!overridecolumns) return;
 
     columns += arg->i;
 

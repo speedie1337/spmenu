@@ -376,7 +376,6 @@ static FuncList fl[] = {
     { "setimgsize",     setimgsize },
     { "setimgsize",     setimgsize },
     { "toggleimg",      toggleimg },
-    { "togglefullimg",  togglefullimg },
     { "defaultimg",     defaultimg },
     { "flipimg",        flipimg },
     { "setimgpos",      setimgpos },

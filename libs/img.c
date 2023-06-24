@@ -2,7 +2,7 @@
 
 #if USEIMAGE
 void setimagesize(int width, int height) {
-    if (!image || fullscreen || hideimage || height < 5 || width < 5 || width > sp.mw) {
+    if (!image || hideimage || height < 5 || width < 5 || width > sp.mw) {
         return;
     }
 
@@ -38,10 +38,6 @@ void drawimage(void) {
     int width = 0, height = 0;
     char *limg = NULL;
 
-    if (fullscreen && !image) {
-        togglefullimg(NULL);
-    }
-
     if (!lines || !columns || hideimage) return;
 
     // load image cache
@@ -53,13 +49,6 @@ void drawimage(void) {
     }
 
     if (!image) {
-        if (fullscreen) {
-            fullscreen = 0;
-            img.imagewidth = imagewidth;
-            img.imageheight = imageheight;
-            img.imagegaps = imagegaps;
-        }
-
         return;
     }
 
@@ -83,23 +72,10 @@ void drawimage(void) {
         wta += menumarginv;
 
         if (sp.mh != sp.bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
-            resizetoimageheight(imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
+            resizetoimageheight(imlib_image_get_height());
         }
 
         draw_set_img(draw, imlib_image_get_data(), width, height);
-
-        if (fullscreen) {
-            xta = wta = leftmargin = 0;
-            draw_img(draw, (img.imagewidth - width) / 2, 0);
-
-            if (sel) {
-                limg = sel->image;
-            } else {
-                limg = NULL;
-            }
-
-            return;
-        }
 
         // render image on X11
         if (!imageposition) { // top mode = 0
@@ -365,10 +341,6 @@ void resizetoimageheight_x11(int imageheight) {
 
     if (lines * sp.bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / sp.bh;
-
-        if (fullscreen) {
-            lines = imageheight / sp.bh - 1;
-        }
     }
 
     get_mh();
@@ -464,10 +436,6 @@ void resizetoimageheight_wl(int imageheight) {
 
     if (lines * sp.bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / sp.bh;
-
-        if (fullscreen) {
-            lines = imageheight / sp.bh - 1;
-        }
     }
 
     get_mh();

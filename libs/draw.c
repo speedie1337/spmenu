@@ -582,6 +582,7 @@ void drawmenu_layer(void) {
     int x = 0, y = 0, w = 0;
     sp.plw = hidepowerline ? 0 : draw->font->h / 2 + 1; // powerline size
 
+
     // draw menu first using menu scheme
     draw_rect(draw, 0, 0, sp.mw, sp.mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);
 
@@ -613,32 +614,32 @@ void drawmenu_layer(void) {
         y -= sp.bh;
     }
 
-    if (!hideprompt && !fullscreen) {
+    if (!hideprompt) {
         w = sp.promptw;
         x = drawprompt(x, y, w);
     }
 
-    if (!hideinput && !fullscreen) {
+    if (!hideinput) {
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
         x = drawinput(x, y, w);
     }
 
-    if (!hidemode && !fullscreen) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
 
     // draw the items, this function also calls drawrarrow() and drawlarrow()
     if (!hideitem) drawitem(x, y, w);
 
-    if (!hidematchcount && !fullscreen) {
+    if (!hidematchcount) {
         w = numberw;
         drawnumber(sp.mw - numberw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }
 
-    if (!hidemode && !fullscreen) {
+    if (!hidemode) {
         w = modew;
         drawmode(sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }
 
-    if (!hidecaps && !fullscreen) {
+    if (!hidecaps) {
         w = capsw;
         drawcaps(sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
     }

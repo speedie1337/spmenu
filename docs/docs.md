@@ -771,7 +771,6 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | Shift              | 1                  | setimggaps         | -100               |
 | 0                  | Shift              | 2                  | setimggaps         | +100               |
 | 0                  | 0                  | t                  | toggleimg          | 0                  |
-| 0                  | 0                  | f                  | togglefullimg      | 0                  |
 | 0                  | 0                  | p                  | paste              | 2                  |
 | 0                  | 0                  | q                  | flipimg            | 1                  |
 | 0                  | 0                  | w                  | flipimg            | 0                  |
