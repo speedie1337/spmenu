@@ -38,6 +38,10 @@ void drawimage(void) {
     int width = 0, height = 0;
     char *limg = NULL;
 
+    if (fullscreen && !image) {
+        togglefullimg(NULL);
+    }
+
     if (!lines || !columns || hideimage) return;
 
     // load image cache
