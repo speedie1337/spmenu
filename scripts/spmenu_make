@@ -151,13 +151,14 @@ gen_pkg() {
 }
 
 gen_arch_pkg() {
+    [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     [ ! -x "$(command -v makepkg)" ] && printf "makepkg required for this action.\n" && exit 1
     [ -f PKGBUILD ] || exit 1
 
     gen_pkg
 
     cp -f PKGBUILD PKGBUILD.orig
-    sed -i "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD
+    sed "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD > .PKGBUILD && mv .PKGBUILD PKGBUILD
     makepkg -sfr --sign || exit 1
     rm -rf src/ pkg/
 
