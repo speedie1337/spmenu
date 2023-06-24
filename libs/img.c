@@ -50,7 +50,21 @@ void drawimage(void) {
             loadimagecache(sel->image, &width, &height);
     } else if ((!sel || !sel->image) && image) { // free image
         cleanupimage();
-    } if (image && img.longestedge && width && height) { // render the image
+    }
+
+    if (!image) {
+        if (fullscreen) {
+            fullscreen = 0;
+            img.imagewidth = imagewidth;
+            img.imageheight = imageheight;
+            img.imagegaps = imagegaps;
+        }
+
+        return;
+    }
+
+    // render the image
+    if (img.longestedge && width && height) {
         flipimage();
 
         int leftmargin = imagegaps; // gaps between image and menu
@@ -88,19 +102,19 @@ void drawimage(void) {
         }
 
         // render image on X11
-        if (!imageposition && image) { // top mode = 0
+        if (!imageposition) { // top mode = 0
             if (height > width)
                 width = height;
 
             draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, wta + leftmargin);
-        } else if (imageposition == 1 && image) { // bottom mode = 1
+        } else if (imageposition == 1) { // bottom mode = 1
             if (height > width)
                 width = height;
 
             draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
-        } else if (imageposition == 2 && image) { // center mode = 2
+        } else if (imageposition == 2) { // center mode = 2
             draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
-        } else if (image) { // top center
+        } else { // top center
             int minh = MIN(height, sp.mh - sp.bh - leftmargin * 2);
             draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
         }

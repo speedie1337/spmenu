@@ -146,8 +146,6 @@ struct img {
     int imagewidth; // current image width
     int imageheight; // current image height
     int imagegaps; // current image gaps
-    int ow; // original sp.mw
-    int oh; // original sp.mh
 };
 #endif
 

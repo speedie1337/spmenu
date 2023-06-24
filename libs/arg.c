@@ -428,17 +428,20 @@ void toggleimg(Arg *arg) {
 
 void togglefullimg(Arg *arg) {
 #if USEIMAGE
-    fullscreen = image ? !fullscreen : 0;
+    if (hideimage || !image) {
+        return;
+    }
+
+    fullscreen = !fullscreen;
 
     if (fullscreen) {
-        img.ow = img.imagewidth;
-        img.oh = img.imageheight;
-
         img.imagewidth = sp.mw;
         img.imageheight = sp.mh;
+        img.imagegaps = 0;
     } else {
-        img.imagewidth = img.ow;
-        img.imageheight = img.oh;
+        img.imagewidth = imagewidth;
+        img.imageheight = imageheight;
+        img.imagegaps = imagegaps;
     }
 
     drawmenu();
