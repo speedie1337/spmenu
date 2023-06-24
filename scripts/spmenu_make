@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # spmenu_make
 
 imlib2=${imlib2:-true}
