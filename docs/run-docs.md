@@ -1,5 +1,4 @@
-spmenu_run
-==========
+# spmenu_run
 
 spmenu includes a powerful Bash script called spmenu_run. It has several
 different components, but the run launcher component lists out
@@ -157,6 +156,7 @@ email me.
 ## See also
 
 - spmenu(1)
+- spmenu_test(1)
 - [spmenu wiki](https://spmenu.speedie.site)
 - [spmenu git repository](https://git.speedie.site/speedie/spmenu)
 - [spmenu GitHub mirror](https://github.com/speediegq/spmenu)

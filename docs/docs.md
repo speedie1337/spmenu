@@ -1,5 +1,4 @@
-spmenu
-======
+# spmenu
 
 spmenu is an X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
@@ -855,6 +854,7 @@ or the [GitHub mirror](https://github.com/speediegq/spmenu).
 ## See also
 
 - spmenu_run(1)
+- spmenu_test(1)
 - [spmenu wiki](https://spmenu.speedie.site)
 - [spmenu git repository](https://git.speedie.site/speedie/spmenu)
 - [spmenu GitHub mirror](https://github.com/speediegq/spmenu)

@@ -33,15 +33,27 @@ docs() {
     [ ! -x "$(command -v pandoc)" ] && printf "pandoc must be installed for this action.\n" && exit 1
 
     version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
-    printf "%% spmenu(1) ${version} | fancy dynamic menu\n" > .man.md
-    cat docs/docs.md >> .man.md
-    pandoc --standalone --to man .man.md -o spmenu.1
-    rm -f .man.md
 
-    printf "%% spmenu_run(1) ${version} | \$PATH/.desktop launcher and file manager\n" > .man.md
-    cat docs/run-docs.md >> .man.md
-    pandoc --standalone --to man .man.md -o spmenu_run.1
-    rm -f .man.md
+    if [ -f "docs/docs.md" ]; then
+        printf "%% spmenu(1) ${version} | fancy dynamic menu\n" > .man.md
+        cat docs/docs.md >> .man.md
+        pandoc --standalone --to man .man.md -o spmenu.1
+        rm -f .man.md
+    fi
+
+    if [ -f "docs/run-docs.md" ]; then
+        printf "%% spmenu_run(1) ${version} | \$PATH/.desktop launcher and file manager\n" > .man.md
+        cat docs/run-docs.md >> .man.md
+        pandoc --standalone --to man .man.md -o spmenu_run.1
+        rm -f .man.md
+    fi
+
+    if [ -f "docs/test-docs.md" ]; then
+        printf "%% spmenu_test(1) ${version} | spmenu test script\n" > .man.md
+        cat docs/test-docs.md >> .man.md
+        pandoc --standalone --to man .man.md -o spmenu_test.1
+        rm -f .man.md
+    fi
 }
 
 kblist() {
