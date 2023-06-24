@@ -368,7 +368,7 @@ out:
 
 void setimgsize(Arg *arg) {
 #if USEIMAGE
-    setimagesize(imagewidth + arg->i, imageheight + arg->i);
+    setimagesize(img.imagewidth + arg->i, img.imageheight + arg->i);
     drawmenu();
 #endif
 }
@@ -401,16 +401,16 @@ void setimgpos(Arg *arg) {
 
 void setimggaps(Arg *arg) {
 #if USEIMAGE
-    imagegaps += arg->i;
+    img.imagegaps += arg->i;
 
     if (!image || hideimage) return;
 
-    if (imagegaps < 0)
-        imagegaps = 0;
+    if (img.imagegaps < 0)
+        img.imagegaps = 0;
 
     // limitation to make sure we have a reasonable gap size
-    if (imagegaps > imagewidth / 2)
-        imagegaps -= arg->i;
+    if (img.imagegaps > img.imagewidth / 2)
+        img.imagegaps -= arg->i;
 
     drawmenu();
 #endif
@@ -431,14 +431,14 @@ void togglefullimg(Arg *arg) {
     fullscreen = image ? !fullscreen : 0;
 
     if (fullscreen) {
-        img.ow = imagewidth;
-        img.oh = imageheight;
+        img.ow = img.imagewidth;
+        img.oh = img.imageheight;
 
-        imagewidth = sp.mw;
-        imageheight = sp.mh;
+        img.imagewidth = sp.mw;
+        img.imageheight = sp.mh;
     } else {
-        imagewidth = img.ow;
-        imageheight = img.oh;
+        img.imagewidth = img.ow;
+        img.imageheight = img.oh;
     }
 
     drawmenu();
@@ -450,11 +450,9 @@ void defaultimg(Arg *arg) {
 
     if (hideimage || !image) return;
 
-    if (img.imagew) {
-        imagewidth = img.imagew;
-        imageheight = img.imageh;
-        imagegaps = img.imageg;
-    }
+    img.imagewidth = imagewidth;
+    img.imageheight = imageheight;
+    img.imagegaps = imagegaps;
 
     drawmenu();
 #endif

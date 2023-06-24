@@ -306,7 +306,7 @@ int drawitem(int x, int y, int w) {
 #if USEIMAGE
         if (!hideimage && img.longestedge != 0) {
             rx = ox;
-            rx += MAX((imagegaps * 2) + imagewidth + menumarginh, indentitems ? x : 0);
+            rx += MAX((imagegaps * 2) + img.imagewidth + menumarginh, indentitems ? x : 0);
         } else
 #endif
             if (!indentitems) {

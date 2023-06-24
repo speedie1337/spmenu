@@ -93,7 +93,7 @@ void resizeclient_x11(void) {
     img.setlines = lines;
 
     // resize client to image height
-    if (image) resizetoimageheight(imagewidth, imageheight);
+    if (image) resizetoimageheight(img.imageheight);
 #endif
 
     get_mh();

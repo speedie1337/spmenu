@@ -48,7 +48,7 @@ void readstdin(void) {
     }
 
 #if USEIMAGE
-    if (!o) img.longestedge = imagegaps = 0;
+    if (!o) img.longestedge = img.imagegaps = 0;
 #endif
 
     // clean
@@ -129,7 +129,7 @@ void readfile(void) {
         lines = columns == 1 ? i : MIN(i, lines); // i = number of items
 
 #if USEIMAGE
-        if (!o) img.longestedge = imagegaps = 0;
+        if (!o) img.longestedge = img.imagegaps = 0;
 #endif
 
         if (i == listcount) {

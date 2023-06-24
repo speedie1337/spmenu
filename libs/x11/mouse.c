@@ -59,7 +59,7 @@ void buttonpress_x11(XEvent *e) {
 
 #if USEIMAGE
     if (!hideimage && img.longestedge != 0) {
-        x += MAX((imagegaps * 2) + imagewidth, indentitems ? sp.promptw : 0);
+        x += MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0);
     }
 #endif
 

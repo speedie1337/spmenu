@@ -13,7 +13,7 @@ static void drawimage(void);
 static void flipimage(void);
 static void loadimage(const char *file, int *width, int *height);
 static void loadimagecache(const char *file, int *width, int *height);
-static void resizetoimageheight(int imagewidth, int imageheight);
+static void resizetoimageheight(int imageheight);
 #if USEWAYLAND
 static void resizetoimageheight_wl(int imageheight);
 #endif

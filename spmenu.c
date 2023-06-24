@@ -130,7 +130,7 @@ struct sp {
 
     int itemnumber; // item number
 
-    size_t cursor;
+    size_t cursor; // cursor width
 
     int ignoreconfkeys; // can be set globally if you don't want to override keybinds with config file keys
     int ignoreglobalkeys; // should be set in the config file, if 1, the Keys keys array is ignored
@@ -140,14 +140,14 @@ struct sp {
 
 #if USEIMAGE
 struct img {
-    int setlines;
-    int flip;
-    int longestedge;
-    int imagew;
-    int imageh;
-    int imageg;
-    int ow;
-    int oh;
+    int setlines; // actual lines
+    int flip; // %=
+    int longestedge; // MAX(imagewidth, imagheight)
+    int imagewidth; // current image width
+    int imageheight; // current image height
+    int imagegaps; // current image gaps
+    int ow; // original sp.mw
+    int oh; // original sp.mh
 };
 #endif
 

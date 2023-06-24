@@ -6,8 +6,8 @@ void setimagesize(int width, int height) {
         return;
     }
 
-    imageheight = height;
-    imagewidth = width;
+    img.imageheight = height;
+    img.imagewidth = width;
 }
 
 void flipimage(void) {
@@ -69,14 +69,14 @@ void drawimage(void) {
         wta += menumarginv;
 
         if (sp.mh != sp.bh + height + leftmargin * 2 - wtr && imageresize) { // menu height cannot be smaller than image height
-            resizetoimageheight(width, imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
+            resizetoimageheight(imlib_image_get_height() - (fullscreen ? 2 * menumarginv : 0));
         }
 
         draw_set_img(draw, imlib_image_get_data(), width, height);
 
         if (fullscreen) {
             xta = wta = leftmargin = 0;
-            draw_img(draw, (imagewidth - width) / 2, 0);
+            draw_img(draw, (img.imagewidth - width) / 2, 0);
 
             if (sel) {
                 limg = sel->image;
@@ -92,17 +92,17 @@ void drawimage(void) {
             if (height > width)
                 width = height;
 
-            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, wta + leftmargin);
+            draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, wta + leftmargin);
         } else if (imageposition == 1 && image) { // bottom mode = 1
             if (height > width)
                 width = height;
 
-            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
+            draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, sp.mh - height - leftmargin);
         } else if (imageposition == 2 && image) { // center mode = 2
-            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
+            draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, (sp.mh - wta - height) / 2 + wta);
         } else if (image) { // top center
             int minh = MIN(height, sp.mh - sp.bh - leftmargin * 2);
-            draw_img(draw, leftmargin + (imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
+            draw_img(draw, leftmargin + (img.imagewidth - width) / 2 + xta, (minh - height) / 2 + wta + leftmargin);
         }
     }
 
@@ -169,10 +169,10 @@ void scaleimage(int *width, int *height) {
     float aspect = 1.0f;
 
     // depending on what size, we determine aspect ratio
-    if (imagewidth > *width) {
-        aspect = (float)(*width)/imagewidth;
+    if (img.imagewidth > *width) {
+        aspect = (float)(*width)/img.imagewidth;
     } else {
-        aspect = (float)imagewidth/(*width);
+        aspect = (float)img.imagewidth/(*width);
     }
 
     new_width = *width * aspect;
@@ -277,10 +277,10 @@ void loadimagecache(const char *file, int *width, int *height) {
 
         loadimage(buf, width, height);
 
-        if (image && *width < imagewidth && *height < imageheight) {
+        if (image && *width < img.imagewidth && *height < img.imageheight) {
             imlib_free_image();
             image = NULL;
-        } else if(image && (*width > imagewidth || *height > imageheight)) {
+        } else if(image && (*width > img.imagewidth || *height > img.imageheight)) {
             scaleimage(width, height);
         }
 
@@ -320,19 +320,17 @@ void jumptoindex(unsigned int index) {
     }
 }
 
-void resizetoimageheight(int imagewidth, int imageheight) {
-    int ih = imageheight;
-
+void resizetoimageheight(int imageheight) {
 #if USEX
     if (!protocol) {
-        resizetoimageheight_x11(ih);
+        resizetoimageheight_x11(imageheight);
     } else {
 #if USEWAYLAND
-        resizetoimageheight_wl(ih);
+        resizetoimageheight_wl(imageheight);
 #endif
     }
 #elif USEWAYLAND
-    resizetoimageheight_wl(ih);
+    resizetoimageheight_wl(imageheight);
 #endif
 }
 
@@ -501,12 +499,10 @@ void resizetoimageheight_wl(int imageheight) {
 #endif
 
 void store_image_vars(void) {
-    img.longestedge = MAX(imagewidth, imageheight);
+    img.imagewidth = imagewidth;
+    img.imageheight = imageheight;
+    img.imagegaps = imagegaps;
 
-    if (!img.imagew || !img.imageh || !img.imageg) {
-        img.imagew = imagewidth;
-        img.imageh = imageheight;
-        img.imageg = imagegaps;
-    }
+    img.longestedge = MAX(img.imagewidth, img.imageheight);
 }
 #endif
