@@ -330,14 +330,6 @@ void resizetoimageheight_x11(int imageheight) {
     lines = img.setlines;
 
     int x, y;
-#if USEXINERAMA
-    int j, di, a, n, area = 0;
-    XineramaScreenInfo *info;
-    Window pw;
-    unsigned int du;
-    Window w, dw, *dws;
-#endif
-    XWindowAttributes wa;
 
     if (lines * sp.bh < imageheight + imagegaps * 2) {
         lines = (imageheight + imagegaps * 2) / sp.bh;
@@ -345,64 +337,14 @@ void resizetoimageheight_x11(int imageheight) {
 
     get_mh();
 
-    // init xinerama screens
-#if USEXINERAMA
-    int i = 0;
-    if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
-        XGetInputFocus(dpy, &w, &di);
-        if (mon >= 0 && mon < n) {
-            i = mon;
-        } else if (w != root && w != PointerRoot && w != None) {
-            do {
-                if (XQueryTree(dpy, (pw = w), &dw, &w, &dws, &du) && dws)
-                    XFree(dws);
-            } while (w != root && w != pw);
-            if (XGetWindowAttributes(dpy, pw, &wa)) {
-                for (j = 0; j < n; j++) {
-                    if ((a = INTERSECT(wa.x, wa.y, wa.width, wa.height, info[j])) > area) {
-                        area = a;
-                        i = j;
-                    }
-                }
-            }
-
-            if (mon < 0 && !area && XQueryPointer(dpy, root, &dw, &dw, &x, &y, &di, &di, &du)) {
-                for (i = 0; i < n; i++) {
-                    if (INTERSECT(x, y, 1, 1, info[i])) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        // calculate x/y position
-        if (menuposition == 2) { // centered
-            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), info[i].width);
-            x = info[i].x_org + ((info[i].width  - sp.mw) / 2);
-            y = info[i].y_org + ((info[i].height - sp.mh) / 2);
-        } else { // top or bottom
-            x = info[i].x_org + xpos;
-            y = info[i].y_org + (menuposition ? 0 : info[i].height - sp.mh - ypos);
-            sp.mw = (menuwidth > 0 ? menuwidth : info[i].width);
-        }
-
-        XFree(info);
-    } else
-#endif
-    {
-        if (!XGetWindowAttributes(dpy, parentwin, &wa))
-            die("spmenu: could not get embedding window attributes: 0x%lx",
-                    parentwin); // die because unable to get attributes for the parent window
-
-        if (menuposition == 2) { // centered
-            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), wa.width);
-            x = (wa.width  - sp.mw) / 2;
-            y = (wa.height - sp.mh) / 2;
-        } else { // top or bottom
-            x = 0;
-            y = menuposition ? 0 : wa.height - sp.mh - ypos;
-            sp.mw = (menuwidth > 0 ? menuwidth : wa.width);
-        }
+    if (menuposition == 2) { // centered
+        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
+        x = (mo.output_width - sp.mw) / 2 + xpos;
+        y = (mo.output_height - sp.mh) / 2 - ypos;
+    } else { // top or bottom
+        x = 0;
+        y = menuposition ? 0 : mo.output_width - sp.mh - ypos;
+        sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
     if (
