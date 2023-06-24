@@ -16,6 +16,7 @@ reconfigure=${reconfigure:-false}
 static=${static:-false}
 
 clean() {
+    clean_headers
     rm -f ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD
 }
 
@@ -117,6 +118,16 @@ headers() {
         public-code \
         protocols/xdg-output-unstable-v1.xml \
         libs/wl/xdg-output-unstable-v1-protocol.c
+}
+
+clean_headers() {
+    rm -f \
+        libs/wl/xdg-output-unstable-v1-protocol.c \
+        libs/wl/xdg-shell-protocol.c \
+        libs/wl/wlr-layer-shell-unstable-v1-protocol.c \
+        libs/wl/xdg-output-unstable-v1-client-protocol.h \
+        libs/wl/xdg-shell-client-protocol.h \
+        libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
 }
 
 gen_pkg() {
@@ -293,6 +304,7 @@ install() {
     meson install
     cd .. || exit 1
     [ "$reconfigure" = "true" ] && rm -rf build/
+    clean_headers
 }
 
 help() {
@@ -309,6 +321,7 @@ $0 pkg_arch      Create a Arch package for spmenu
 $0 theme <theme> Create a theme for spmenu based on 18 colors
 $0 docs          Generate documentation such as man pages for spmenu
 $0 headers       Generate headers using wayland-scanner
+$0 clean_headers Remove generated headers
 $0 help          Print this help
 EOF
 }
@@ -325,6 +338,7 @@ main() {
         "theme") action="theme" ;;
         "docs") action="mkdocs" ;;
         "headers") action="headers" ;;
+        "clean_headers") action="clean_headers" ;;
         "") action="build" ;;
         *) [ -z "$action" ] && action="wrong" ;;
     esac
@@ -336,6 +350,7 @@ main() {
         "clean") clean ;;
         "mkdocs") docs ;;
         "headers") headers ;;
+        "clean_headers") clean_headers ;;
         "build") build ;;
         "install") install ;;
         "arch") gen_arch_pkg ;;

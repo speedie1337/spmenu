@@ -1,2 +1,2 @@
 #!/bin/sh
-../scripts/spmenu_make headers
+scripts/spmenu_make headers

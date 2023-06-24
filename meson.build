@@ -46,6 +46,9 @@ if get_option('wayland')
   project_dependencies += [ dependency('wayland-scanner') ]
   project_dependencies += [ dependency('wayland-protocols') ]
   project_dependencies += [ dependency('xkbcommon') ]
+
+  run_command('protocols/generate.sh', check : true)
+
   project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
   project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
   project_source_files += [ 'libs/wl/xdg-output-unstable-v1-client-protocol.h' ]
@@ -53,7 +56,6 @@ if get_option('wayland')
   project_source_files += [ 'libs/wl/xdg-shell-client-protocol.h' ]
   project_source_files += [ 'libs/wl/xdg-shell-protocol.c' ]
   build_args += [ '-DWAYLAND' ]
-  run_command('protocols/generate.sh', check : false)
 endif
 
 if get_option('imlib2') and get_option('openssl')
