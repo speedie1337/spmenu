@@ -442,6 +442,8 @@ void defaultimg(Arg *arg) {
 void setlines(Arg *arg) {
     if (!overridelines) return;
 
+    sel = curr = matches;
+
     lines += arg->i;
 
     if (lines < 0) {
