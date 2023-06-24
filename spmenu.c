@@ -138,6 +138,11 @@ struct sp {
     int ignoreglobalmouse; // same for mouse
 };
 
+struct mo {
+    int output_width; // output width
+    int output_height; // output height
+};
+
 #if USEIMAGE
 struct img {
     int setlines; // actual lines
@@ -170,6 +175,7 @@ struct x11 {
 
 static struct sp sp = {0};
 static struct tx tx = {0};
+static struct mo mo = {0};
 #if USEIMAGE
 static struct img img = {0};
 #endif

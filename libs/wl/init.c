@@ -34,11 +34,14 @@ void handle_wl(void) {
 
     create_layer(&state, "spmenu");
 
-    sp.mw = (menuwidth > 0 ? menuwidth : output_width);
+    mo.output_width = output_width;
+    mo.output_height = output_height;
+
+    sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     get_mh();
 
     if (menuposition == 2) {
-        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), output_width);
+        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
     }
 
     state.width = sp.mw;

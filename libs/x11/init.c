@@ -49,16 +49,8 @@ void setupdisplay_x11(void) {
                 if (INTERSECT(x, y, 1, 1, info[i]))
                     break;
 
-        // calculate x/y position
-        if (menuposition == 2) { // centered
-            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), info[i].width);
-            x = info[i].x_org + xpos + ((info[i].width  - sp.mw) / 2);
-            y = info[i].y_org - ypos + ((info[i].height - sp.mh) / 2);
-        } else { // top or bottom
-            x = info[i].x_org + xpos;
-            y = info[i].y_org + (menuposition ? 0 : info[i].height - sp.mh - ypos);
-            sp.mw = (menuwidth > 0 ? menuwidth : info[i].width);
-        }
+        mo.output_width = info[i].width;
+        mo.output_height = info[i].height;
 
         XFree(info);
     } else
@@ -68,15 +60,18 @@ void setupdisplay_x11(void) {
             die("spmenu: could not get embedding window attributes: 0x%lx",
                     parentwin); // die because unable to get attributes for the parent window
 
-        if (menuposition == 2) { // centered
-            sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), wa.width);
-            x = (wa.width  - sp.mw) / 2 + xpos;
-            y = (wa.height - sp.mh) / 2 - ypos;
-        } else { // top or bottom
-            x = 0;
-            y = menuposition ? 0 : wa.width - sp.mh - ypos;
-            sp.mw = (menuwidth > 0 ? menuwidth : wa.width);
-        }
+        mo.output_width = wa.width;
+        mo.output_height = wa.height;
+    }
+
+    if (menuposition == 2) { // centered
+        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
+        x = (mo.output_width - sp.mw) / 2 + xpos;
+        y = (mo.output_height - sp.mh) / 2 - ypos;
+    } else { // top or bottom
+        x = 0;
+        y = menuposition ? 0 : mo.output_width - sp.mh - ypos;
+        sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
     // create menu window and set properties for it
