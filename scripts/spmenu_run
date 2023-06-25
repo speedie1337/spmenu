@@ -141,7 +141,7 @@ path() {
 print_help() {
     if [ "$DMENU_COMPAT" != "true" ]; then
         COL='\033[0;31m'
-        RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
+        RUNLAUNCHER_EX_ARGS="--lines 30 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
         read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
     fi
     cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
@@ -155,6 +155,10 @@ To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/example.
 - If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
 - If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
 
+Enter '@' to show the bookmark list. Enter '@<text>:<command>' to add a bookmark. If the bookmark is selected, the
+<command> will be executed. Enter @c to clear the bookmark list. '@<text>' is also valid, and then <text> will be
+executed instead.
+
 $(printf "%b" "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
 EOF
 }
@@ -163,18 +167,20 @@ print_cli_help() {
     cat << EOF
 spmenu_run - Run launcher for spmenu
 
-spmenu_run -x,   --run             List entries in \$PATH.
-spmenu_run -fm,  --fm <dir>        List files and directories in <dir>
-spmenu_run -d,   --desktop         List .desktop entries.
-spmenu_run -p,   --full-path       Print the full path to the file selected (-fm)
-spmenu_run -np,  --no-full-path    Don't print the full path to the file selected (-fm)
-spmenu_run -cc,  --clear-cache     Clear cache, useful if you just installed/uninstalled a program (-d)
-spmenu_run -dm,  --dmenu           Run spmenu_run using dmenu instead of spmenu
-spmenu_run -ndm, --no-dmenu        Run spmenu_run using spmenu instead of dmenu
-spmenu_run -h,   --help            Print this help
-spmenu_run -o,   --stdout          Print to standard input and do not execute the selected item
-spmenu_run -no,  --no-stdout       Don't print to standard input, execute the selected item
-spmenu_run -a,   --args <args>     Pass <args> to spmenu
+spmenu_run -x,   --run               List entries in \$PATH.
+spmenu_run -fm,  --fm <dir>          List files and directories in <dir>
+spmenu_run -d,   --desktop           List .desktop entries.
+spmenu_run -p,   --full-path         Print the full path to the file selected (-fm)
+spmenu_run -np,  --no-full-path      Don't print the full path to the file selected (-fm)
+spmenu_run -cc,  --clear-cache       Clear cache, useful if you just installed/uninstalled a program (-d)
+spmenu_run -sb,  --show-bookmarks    Show bookmarks immediately
+spmenu_run -nsb, --no-show-bookmarks Don't show bookmarks immediately
+spmenu_run -dm,  --dmenu             Run spmenu_run using dmenu instead of spmenu
+spmenu_run -ndm, --no-dmenu          Run spmenu_run using spmenu instead of dmenu
+spmenu_run -h,   --help              Print this help
+spmenu_run -o,   --stdout            Print to standard input and do not execute the selected item
+spmenu_run -no,  --no-stdout         Don't print to standard input, execute the selected item
+spmenu_run -a,   --args <args>       Pass <args> to spmenu
 
 See spmenu(1) and spmenu_run(1) for more information.
 EOF
@@ -296,7 +302,12 @@ EOF
 
 parse() {
     [ ! -f "$BOOKMARK_FILE" ] && mkdir -p "$(dirname "$BOOKMARK_FILE")" && touch "$BOOKMARK_FILE"
-    path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+
+    if [ "$SHOW_BM" != "true" ]; then
+        path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+    else
+        echo > /tmp/spmenu_out
+    fi
 
     while read -r sout; do
         command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
@@ -320,6 +331,8 @@ parse() {
             "?") EXEC="man" ;;
             "@") EXEC="mark" ;;
         esac
+
+        [ "$SHOW_BM" = "true" ] && sout="@"
 
         case "$sout" in
             "?")
@@ -418,32 +431,34 @@ read_args() {
         narg="$(printf "%s\n" "$args" | sed "$((i+1))q;d")"
 
         case "$arg" in
-            -x|-run|--run) remove_arg "$arg" && function=run ;;
-            -o|-stdout|--stdout) remove_arg "$arg" && STDOUT=true ;;
-            -no|-no-stdout) remove_arg "$arg" && STDOUT=false ;;
-            -f|-fm|--fm) remove_arg "$arg"
+            -x|--run) remove_arg "$arg" && function=run ;;
+            -o|--stdout) remove_arg "$arg" && STDOUT=true ;;
+            -no|--no-stdout) remove_arg "$arg" && STDOUT=false ;;
+            -sb|--show-bookmarks) remove_arg "$arg" && SHOW_BM=true ;;
+            -nsb|--no-show-bookmarks) remove_arg "$arg" && SHOW_BM=false ;;
+            -f|--fm) remove_arg "$arg"
                 [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                 function=fm
                 ;;
-            -c|-cc|--clear-cache) remove_arg "$arg"
+            -c|--clear-cache) remove_arg "$arg"
                 clearcache="true"
                 ;;
-            -d|-desktop|--desktop) remove_arg "$arg"
+            -d|--desktop) remove_arg "$arg"
                 function=desktop
                 ;;
-            -p|-full-path|--full-path) remove_arg "$arg"
+            -p|--full-path) remove_arg "$arg"
                 USE_FULL_PATH="true"
                 ;;
-            -np|-no-full-path|--no-full-path) remove_arg "$arg"
+            -np|--no-full-path) remove_arg "$arg"
                 USE_FULL_PATH="false"
                 ;;
-            -dm|-dmenu|--dmenu) remove_arg "$arg"
+            -dm|--dmenu) remove_arg "$arg"
                 DMENU_COMPAT="true"
                 ;;
-            -ndm|-no-dmenu|--no-dmenu) remove_arg "$arg"
+            -ndm|--no-dmenu) remove_arg "$arg"
                 DMENU_COMPAT="false"
                 ;;
-            -a|-args|--args) remove_arg "$arg"
+            -a|--args) remove_arg "$arg"
                 [ -z "$narg" ] && printf "You must specify a list of arguments to pass to %s.\n" "$RUNLAUNCHER" && exit 1
 
                 remove_arg "$narg"
