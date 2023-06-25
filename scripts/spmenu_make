@@ -18,7 +18,7 @@ static=${static:-false}
 
 clean() {
     clean_headers
-    rm -f ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD
+    rm -rf ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD build/
 }
 
 check_correct_dir() {
@@ -306,7 +306,7 @@ install() {
     meson install
     cd .. || exit 1
     [ "$reconfigure" = "true" ] && rm -rf build/
-    clean_headers
+    [ "$reconfigure" = "true" ] && clean_headers
 }
 
 help() {
