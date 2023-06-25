@@ -300,19 +300,23 @@ parse() {
         command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
         command -v run_output_func > /dev/null && run_output_func "${sout}"
 
-        # parse
-        case "${sout:0:1}" in
-            "#") EXEC="term" ;;
-            "?") EXEC="man" ;;
-            "@") EXEC="mark" ;;
-        esac
-
         printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
+
+        # check for keywords
+        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
+        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
 
         case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
             "magnet") EXEC=torrent ;;
             "www") EXEC=web ;;
             "?") ;;
+        esac
+
+        # parse
+        case "${sout:0:1}" in
+            "#") EXEC="term" ;;
+            "?") EXEC="man" ;;
+            "@") EXEC="mark" ;;
         esac
 
         case "$sout" in
@@ -333,10 +337,6 @@ parse() {
 
         printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
-        # check for keywords
-        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
-        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
-
         exec_cmd "$args"
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
@@ -347,7 +347,7 @@ bookmark_path() {
         command -v run_file_bookmark_list_func > /dev/null && \
             run_file_bookmark_list_func "$file"
 
-        printf "%s\n" "$file"
+        printf "%s\n" "${file%%:*}"
     done < "$BOOKMARKFILE"
 }
 
@@ -358,27 +358,10 @@ print_bookmarks() {
         command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
         command -v run_single_char_pre_bookmark_list_func > /dev/null && run_single_char_pre_bookmark_list_func "${sout:0:1}"
 
-        case "${sout:0:1}" in
-            "#") EXEC="term" ;;
-            "?") EXEC="man" ;;
-            "@") EXEC="mark" ;;
-        esac
-
         printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
 
-        case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
-            "magnet") EXEC=torrent ;;
-            "www") EXEC=web ;;
-            "?") ;;
-        esac
-
-        printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
-
-        # check for keywords
-        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
-        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
-
-        exec_cmd "$args"
+        sout_e="$(grep -- "$sout" "$BOOKMARKFILE" | tail -n 1)"
+        printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
 
@@ -399,7 +382,7 @@ exec_cmd() {
 
     # execute it
     case "$EXEC" in
-        "mark") printf "%s\n" "$sout" | sed "s/@//g" >> "$BOOKMARKFILE"; parse; exit 0 ;;
+        "mark") printf "%s\n" "$sout" | sed -- "s/@//g" >> "$BOOKMARKFILE"; parse; exit 0 ;;
         "shell") printf "%s" "$sout" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
         "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
