@@ -36,6 +36,7 @@ DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-true}"
 MULTISELECT="${MULTISELECT:-true}"
+BOOKMARKFILE="${BOOKMARKFILE:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.bookmarks}"
 PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
@@ -191,6 +192,10 @@ print_config() {
 #
 # 'run_pre_func' before spawning spmenu.
 # 'run_post_func' after spawning spmenu, selected item passed as an argument.
+# 'run_pre_bookmark_list_func' while listing selected/marked items. The selected item is passed as an argument.
+# 'run_post_bookmark_list_func' while listing selected/marked items. The selected item is passed as an argument.
+# 'run_file_bookmark_list_func' while reading entries from the bookmark file. The current bookmark is passed as an argument.
+# 'run_single_char_pre_bookmark_list_func' while listing selected/marked items. The first character of the spmenu output is passed as an argument.
 # 'run_single_char_func' while checking the value of a single character. The first character of the spmenu output is passed as an argument.
 # 'run_output_func' while checking the value of the spmenu output. spmenu output is passed as an argument.
 # 'desktop_pre_func' before spawning spmenu.
@@ -228,6 +233,7 @@ GENERIC="\${GENERIC:-\$TERMINAL -e \$EDITOR}" # Generic, used to open unknown fi
 WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
+BOOKMARKFILE="\${BOOKMARKFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.bookmarks}" # Bookmark file, spmenu_run must have permission to read and write to it.
 
 # Run launcher argument options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
@@ -287,7 +293,8 @@ EOF
 }
 
 parse() {
-    path | sed "s/\&/\&amp;/g" | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+    [ ! -f "$BOOKMARKFILE" ] && mkdir -p "$(dirname "$BOOKMARKFILE")" && touch "$BOOKMARKFILE"
+    path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
 
     while read -r sout; do
         command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
@@ -297,6 +304,7 @@ parse() {
         case "${sout:0:1}" in
             "#") EXEC="term" ;;
             "?") EXEC="man" ;;
+            "@") EXEC="mark" ;;
         esac
 
         printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
@@ -307,11 +315,21 @@ parse() {
             "?") ;;
         esac
 
-        if [ "$sout" = "?" ]; then
-            print_help "$@"
-            parse
-            exec_cmd
-        fi
+        case "$sout" in
+            "?")
+                print_help "$@"
+                parse
+                exec_cmd
+                ;;
+            "@")
+                print_bookmarks "$@"
+                ;;
+            "@c")
+                rm -f "$BOOKMARKFILE" && touch "$BOOKMARKFILE"
+                parse
+                exec_cmd
+                ;;
+        esac
 
         printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
@@ -324,19 +342,65 @@ parse() {
     done < /tmp/spmenu_out
 }
 
+bookmark_path() {
+    while read -r file; do
+        command -v run_file_bookmark_list_func > /dev/null && \
+            run_file_bookmark_list_func "$file"
+
+        printf "%s\n" "$file"
+    done < "$BOOKMARKFILE"
+}
+
+print_bookmarks() {
+    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+
+    while read -r sout; do
+        command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
+        command -v run_single_char_pre_bookmark_list_func > /dev/null && run_single_char_pre_bookmark_list_func "${sout:0:1}"
+
+        case "${sout:0:1}" in
+            "#") EXEC="term" ;;
+            "?") EXEC="man" ;;
+            "@") EXEC="mark" ;;
+        esac
+
+        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
+
+        case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
+            "magnet") EXEC=torrent ;;
+            "www") EXEC=web ;;
+            "?") ;;
+        esac
+
+        printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
+
+        # check for keywords
+        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
+        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+
+        exec_cmd "$args"
+        [ "$MULTISELECT" != "true" ] && break
+    done < /tmp/spmenu_out
+
+    command -v run_post_bookmark_list_func > /dev/null && run_post_bookmark_list_func
+
+    exit 0
+}
+
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
     [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
     command -v run_post_func > /dev/null && run_post_func "$sout"
 
     # when there's no read_man func because the user is retarded and removed it, this basic function will be called instead
-    read_nman() {
+    read_woman() {
         $TERMINAL -e man "$1"
     }
 
     # execute it
     case "$EXEC" in
-        "shell") printf "%s" "$sout" | sed "s/#//g" | ${SHELL:-"/bin/sh"} & ;;
+        "mark") printf "%s\n" "$sout" | sed "s/@//g" >> "$BOOKMARKFILE"; parse; exit 0 ;;
+        "shell") printf "%s" "$sout" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
         "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
         "torrent") $TORRENT "$(printf "%s" "$sout" | sed "s/magnet //g")" & ;;
@@ -346,7 +410,7 @@ exec_cmd() {
                 read_man "$exec"
                 return
             else
-                read_nman "$exec"
+                read_woman "$exec"
                 return
             fi
             ;;
