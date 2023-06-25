@@ -36,7 +36,8 @@ DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-true}"
 MULTISELECT="${MULTISELECT:-true}"
-BOOKMARKFILE="${BOOKMARKFILE:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.bookmarks}"
+BOOKMARK_FILE="${BOOKMARK_FILE:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu_run.bookmarks}"
+BOOKMARK_PROMPT="${BOOKMARK_PROMPT:-Bookmarks}"
 PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
 
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
@@ -233,7 +234,8 @@ GENERIC="\${GENERIC:-\$TERMINAL -e \$EDITOR}" # Generic, used to open unknown fi
 WEB_GREP="http:|https:|www[.]" # Needs to be in grep -E syntax
 MAGNET_GREP="magnet:?" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
-BOOKMARKFILE="\${BOOKMARKFILE:-\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.bookmarks}" # Bookmark file, spmenu_run must have permission to read and write to it.
+BOOKMARK_FILE="\${BOOKMARK_FILE:-\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu_run.bookmarks}" # Bookmark file, spmenu_run must have permission to read and write to it.
+BOOKMARK_PROMPT="Bookmarks" # Bookmark prompt (-p)
 
 # Run launcher argument options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
@@ -293,7 +295,7 @@ EOF
 }
 
 parse() {
-    [ ! -f "$BOOKMARKFILE" ] && mkdir -p "$(dirname "$BOOKMARKFILE")" && touch "$BOOKMARKFILE"
+    [ ! -f "$BOOKMARK_FILE" ] && mkdir -p "$(dirname "$BOOKMARK_FILE")" && touch "$BOOKMARK_FILE"
     path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
 
     while read -r sout; do
@@ -329,7 +331,7 @@ parse() {
                 print_bookmarks "$@"
                 ;;
             "@c")
-                rm -f "$BOOKMARKFILE" && touch "$BOOKMARKFILE"
+                rm -f "$BOOKMARK_FILE" && touch "$BOOKMARK_FILE"
                 parse
                 exec_cmd
                 ;;
@@ -348,11 +350,11 @@ bookmark_path() {
             run_file_bookmark_list_func "$file"
 
         printf "%s\n" "${file%%:*}"
-    done < "$BOOKMARKFILE"
+    done < "$BOOKMARK_FILE"
 }
 
 print_bookmarks() {
-    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_run[@]}" -p "${BOOKMARK_PROMPT}" > /tmp/spmenu_out
 
     while read -r sout; do
         command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
@@ -360,7 +362,7 @@ print_bookmarks() {
 
         printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
 
-        sout_e="$(grep -- "$sout" "$BOOKMARKFILE" | tail -n 1)"
+        sout_e="$(grep -- "$sout" "$BOOKMARK_FILE" | tail -n 1)"
         printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
@@ -382,7 +384,7 @@ exec_cmd() {
 
     # execute it
     case "$EXEC" in
-        "mark") printf "%s\n" "$sout" | sed -- "s/@//g" >> "$BOOKMARKFILE"; parse; exit 0 ;;
+        "mark") printf "%s\n" "$sout" | sed -- "s/@//g" >> "$BOOKMARK_FILE"; parse; exit 0 ;;
         "shell") printf "%s" "$sout" | ${SHELL:-"/bin/sh"} & ;;
         "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
         "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
