@@ -62,6 +62,7 @@ declare -a it_term
 
 # arrays containing arguments
 declare -a rl_fm
+declare -a rl_bm
 declare -a rl_run
 declare -a rl_desktop
 declare -a rl_help
@@ -245,7 +246,8 @@ BOOKMARK_PROMPT="Bookmarks" # Bookmark prompt (-p)
 
 # Run launcher argument options
 RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
-RUNLAUNCHER_RUN_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the run launcher
+RUNLAUNCHER_RUN_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the run launcher
+RUNLAUNCHER_BM_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the bookmark menu
 RUNLAUNCHER_DESKTOP_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the .desktop launcher
 RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
 RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
@@ -367,7 +369,7 @@ bookmark_path() {
 }
 
 print_bookmarks() {
-    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_run[@]}" -p "${BOOKMARK_PROMPT}" > /tmp/spmenu_out
+    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_bm[@]}" > /tmp/spmenu_out
 
     while read -r sout; do
         command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
@@ -736,12 +738,14 @@ main() {
     # some run launcher args
     RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
+    RUNLAUNCHER_BM_ARGS="--insert --hist-file -p Bookmarks $HISTORY $RUNLAUNCHER_BM_ARGS $MARGS"
     RUNLAUNCHER_DESKTOP_ARGS="-sgr1 $DESCRIPTION_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility
     DMENU_FM_ARGS="-l 20 $MARGS"
     DMENU_RUN_ARGS="$MARGS"
+    DMENU_BM_ARGS="$MARGS -p Bookmarks"
     DMENU_DESKTOP_ARGS="-l 20 $MARGS"
     DMENU_HELP_ARGS="-l 20 $MARGS"
     COMPAT_LS_ARGS="--color=never"
@@ -753,12 +757,14 @@ main() {
         RUNLAUNCHER_RUN_ARGS="$DMENU_RUN_ARGS"
         RUNLAUNCHER_DESKTOP_ARGS="$DMENU_DESKTOP_ARGS"
         RUNLAUNCHER_HELP_ARGS="$DMENU_HELP_ARGS"
+        RUNLAUNCHER_BM_ARGS="$DMENU_BM_ARGS"
         LS_ARGS="$COMPAT_LS_ARGS"
     fi
 
     # read to arrays
     read -ra rl_fm <<< "${RUNLAUNCHER_FM_ARGS}"
     read -ra rl_run <<< "${RUNLAUNCHER_RUN_ARGS}"
+    read -ra rl_bm <<< "${RUNLAUNCHER_BM_ARGS}"
     read -ra rl_desktop <<< "${RUNLAUNCHER_DESKTOP_ARGS}"
     read -ra rl_help <<< "${RUNLAUNCHER_HELP_ARGS}"
     read -ra ls_args <<< "${LS_ARGS}"
