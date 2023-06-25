@@ -52,6 +52,24 @@ cache (useful if you just installed/uninstalled a program) run `spmenu_run -cc`.
 **NOTE: By default it will hide any entries matching `spmenu` (for convenience)
 but you can unhide these if you wish through the configuration file.**
 
+## Bookmarking
+
+spmenu_run provides bookmarking entries or just general text if preferred. To
+view the saved bookmarks, open `spmenu_run -x` (the run launcher component) and
+type in `@`. If you have no bookmarks what you're going to get is an empty menu.
+To add bookmarks, type @ followed by a command. For example `@chromium` will
+bookmark an entry called `chromium`, which will open Chromium.
+
+If you want a longer command, you might want a shorter title to be displayed
+. In that case you can type @ followed by a name and a colon.
+Anything you type *after* the colon will be executed using a shell. For example
+`@spmenu documentation:chromium https://spmenu.speedie.site` will add an entry called
+`spmenu documentation` which when selected will open the spmenu wiki in Chromium.
+
+For traditional bookmarking, consider something like
+`@spmenu documentation:echo spmenu.speedie.site | xclip -sel clipboard`. spmenu_run
+bookmarks should be treated as shell commands.
+
 ## File manager component
 
 Finally, it also comes with a file manager component. Out of the box

@@ -77,6 +77,30 @@ run \f[V]spmenu_run -cc\f[R].
 \f[B]NOTE: By default it will hide any entries matching
 \f[VB]spmenu\f[B] (for convenience) but you can unhide these if you wish
 through the configuration file.\f[R]
+.SS Bookmarking
+.PP
+spmenu_run provides bookmarking entries or just general text if
+preferred.
+To view the saved bookmarks, open \f[V]spmenu_run -x\f[R] (the run
+launcher component) and type in \f[V]\[at]\f[R].
+If you have no bookmarks what you\[cq]re going to get is an empty menu.
+To add bookmarks, type \[at] followed by a command.
+For example \f[V]\[at]chromium\f[R] will bookmark an entry called
+\f[V]chromium\f[R], which will open Chromium.
+.PP
+If you want a longer command, you might want a shorter title to be
+displayed .
+In that case you can type \[at] followed by a name and a colon.
+Anything you type \f[I]after\f[R] the colon will be executed using a
+shell.
+For example
+\f[V]\[at]spmenu documentation:chromium https://spmenu.speedie.site\f[R]
+will add an entry called \f[V]spmenu documentation\f[R] which when
+selected will open the spmenu wiki in Chromium.
+.PP
+For traditional bookmarking, consider something like
+\f[V]\[at]spmenu documentation:echo spmenu.speedie.site | xclip -sel clipboard\f[R].
+spmenu_run bookmarks should be treated as shell commands.
 .SS File manager component
 .PP
 Finally, it also comes with a file manager component.
