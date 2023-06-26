@@ -425,7 +425,7 @@ read_args() {
     function="${DEFAULT_FEATURE:-run}" # default functionality
     dir="${DEFAULT_DIRECTORY:-$(pwd)}" # default directory
     args="$(printf "%s\n" "$@")"
-    argc="$(printf "%s\n" "$@" | wc -l)"
+    argc="$(printf "%s\n" "$@" | grep -c "")"
 
     while true; do
         i=$((i+1))
@@ -581,8 +581,8 @@ print_desktop_list() {
 
     # autorefreshing
     if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
-        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' | wc -l)"
-        [ -f "$FILEFILE" ] && cached_c="$(wc -l < "$FILEFILE")" || cached_c="0"
+        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null | grep -c "")"
+        [ -f "$FILEFILE" ] && cached_c="$(grep -c "" < "$FILEFILE")" || cached_c="0"
 
         printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
 
@@ -596,9 +596,9 @@ print_desktop_list() {
 
         [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
-        icons="$(find "${icondir[@]}" -type f)"
-        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop')"
-        [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | wc -l)"
+        icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
+        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
+        [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
 
