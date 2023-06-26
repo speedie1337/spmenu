@@ -606,6 +606,7 @@ print_desktop_list() {
             command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
 
             cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+            [ ! -f "$cur_file" ] && printf "No desktop entries found." && return
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
 
             # get details to display
