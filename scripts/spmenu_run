@@ -114,18 +114,15 @@ path() {
 
     print_menu() {
         print() {
-            printf "%s\n" "$PATH" | \
-                tr ':' '\n' | \
-                sed 's#$#/#' | \
-                xargs ls -lu --time-style=+%s 2>&1 | \
+                compgen -c | \
                 grep -vE "$HIDDEN_KEYWORDS" | \
                 grep -E "$KEYWORDS"
             }
 
             if [ "$SORT_BY_RECENT" != "false" ]; then
-                print | awk '/^(-|l)/ { print $6, $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
             else
-                print | awk '/^(-|l)/ { print $7 }' | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
             fi
         }
 
