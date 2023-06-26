@@ -537,6 +537,8 @@ prepare_dirnav() {
         esac
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
+
+    [ -z "$dir" ] && return 1
 }
 
 print_desktop_help() {
@@ -785,7 +787,7 @@ main() {
         "run")
             parse "$args"
             ;;
-        "fm") prepare_dirnav "$args"
+        "fm") prepare_dirnav "$args" && exit 0 || exit 1
             ;;
         "desktop")
             prep_desktop
