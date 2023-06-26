@@ -737,12 +737,19 @@ main() {
     read_args "$@"
     check "$args"
 
+    if [ ! -f "$HISTORY" ]; then
+        mkdir -p "$(dirname "$HISTORY")"
+        touch "$HISTORY" && HIST_ARG="--hist-file $HISTORY" || printf "spmenu_run: Failed to write history file" >> /dev/stderr
+    else
+        HIST_ARG="--hist-file $HISTORY"
+    fi
+
     # some run launcher args
-    RUNLAUNCHER_FM_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_FM_ARGS $MARGS"
-    RUNLAUNCHER_RUN_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_RUN_ARGS $MARGS"
-    RUNLAUNCHER_BM_ARGS="--insert --hist-file -p Bookmarks $HISTORY $RUNLAUNCHER_BM_ARGS $MARGS"
+    RUNLAUNCHER_FM_ARGS="--insert $HIST_ARG $RUNLAUNCHER_FM_ARGS $MARGS"
+    RUNLAUNCHER_RUN_ARGS="--insert $HIST_ARG $RUNLAUNCHER_RUN_ARGS $MARGS"
+    RUNLAUNCHER_BM_ARGS="--insert $HIST_ARG -p Bookmarks $HISTORY $RUNLAUNCHER_BM_ARGS $MARGS"
     RUNLAUNCHER_DESKTOP_ARGS="-sgr1 $DESCRIPTION_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
-    RUNLAUNCHER_HELP_ARGS="--insert --hist-file $HISTORY $RUNLAUNCHER_HELP_ARGS $MARGS"
+    RUNLAUNCHER_HELP_ARGS="--insert $HIST_ARG $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility
     DMENU_FM_ARGS="-l 20 $MARGS"
