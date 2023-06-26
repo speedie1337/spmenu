@@ -435,7 +435,7 @@ read_args() {
             -no|--no-stdout) remove_arg "$arg" && STDOUT=false ;;
             -sb|--show-bookmarks) remove_arg "$arg" && SHOW_BM=true ;;
             -nsb|--no-show-bookmarks) remove_arg "$arg" && SHOW_BM=false ;;
-            -f|--fm) remove_arg "$arg"
+            -fm|--fm) remove_arg "$arg"
                 [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                 function=fm
                 ;;
