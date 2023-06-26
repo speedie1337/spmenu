@@ -7,7 +7,7 @@ void apply_fribidi(char *str) {
     FriBidiChar visual[BUFSIZ];
     FriBidiParType base = FRIBIDI_PAR_ON;
     FriBidiCharSet charset;
-    fribidi_boolean result;
+    fribidi_boolean result = 0;
 
     fribidi_text[0] = 0;
 
