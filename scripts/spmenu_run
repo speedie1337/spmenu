@@ -246,7 +246,7 @@ RUNLAUNCHER="\${RUNLAUNCHER:-spmenu}" # Run launcher to use
 RUNLAUNCHER_RUN_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the run launcher
 RUNLAUNCHER_BM_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the bookmark menu
 RUNLAUNCHER_DESKTOP_ARGS="" # Extra rguments passed to \$RUNLAUNCHER when using the .desktop launcher
-RUNLAUNCHER_FM_ARGS="--lines 40" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
+RUNLAUNCHER_FM_ARGS="--lines 40 --columns 2" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
 RUNLAUNCHER_HELP_ARGS="" # Extra arguments passed to \$RUNLAUNCHER when using the help
 DMENU_COMPAT="false" # Enable dmenu compatibility (true/false)
 
