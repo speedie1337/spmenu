@@ -669,6 +669,7 @@ print_desktop_list() {
 }
 
 exec_program() {
+    [ ! -f "$TITLEFILE" ] || [ ! -f "$EXECFILE" ] || [ ! -f "$TERMFILE" ] && exit 1
     mapfile -t it_title < "$TITLEFILE"
     mapfile -t it_exec < "$EXECFILE"
     mapfile -t it_term < "$TERMFILE"
