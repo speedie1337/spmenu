@@ -11,7 +11,6 @@ wayland=${wayland:-true}
 x11=${x11:-true}
 prefix="${prefix:-/usr}"
 
-gen_manual=${gen_manual:-true}
 opt=${opt:--O2}
 reconfigure=${reconfigure:-false}
 static=${static:-false}
@@ -253,7 +252,6 @@ build() {
     [ -x "buildconf_dev" ] && source buildconf_dev
 
     [ ! -f "meson.build" ] && printf "meson.build does not exist.\n" && exit 1
-    [ "$gen_manual" != "false" ] && docs
 
     cp -f meson.build meson.build.orig
 
