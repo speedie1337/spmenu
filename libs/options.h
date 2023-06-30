@@ -56,6 +56,11 @@ static int generatecache               = 1; /* Generate image cache by default *
 static int maxcache                    = 512; /* Max image size to cache */
 static char *cachedir                  = "default"; /* Cache directory. Default means spmenu will determine automatically */
 
+/* Screenshot options */
+static char *screenshotfile            = NULL; /* Screenshot file path. If set to NULL, the default path will be used. */
+static char *screenshotname            = NULL; /* Screenshot file name. If set to NULL, the default name will be used. */
+static char *screenshotdir             = NULL; /* Screenshot file directory. If set to NULL, the default directory will be used. */
+
 /* Mode options */
 static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
 static char *normtext                  = "Normal"; /* Text to display for normal mode */

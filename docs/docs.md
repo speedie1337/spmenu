@@ -792,6 +792,7 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | 0                  | Prior              | moveprev           | 0                  |
 | 0                  | Ctrl               | p                  | navhistory         | -1                 |
 | 0                  | Ctrl               | n                  | navhistory         | +1                 |
+| 0                  | 0                  | Print              | screenshot         | 0                  |
 | 1                  | 0                  | Escape             | switchmode         | 0                  |
 
 ## .Xresources

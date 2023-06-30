@@ -417,6 +417,16 @@ void draw_img(Draw_t *draw, int x, int y) {
     cairo_set_source_surface(draw->d, draw->surface, draw->w, draw->h);
 }
 
+void draw_save_screen(Draw_t *draw, const char *file) {
+    if (!draw || !draw->surface) {
+        return;
+    }
+
+    if (cairo_surface_write_to_png(draw->surface, file)) {
+        fprintf(stderr, "spmenu: failed to write file %s\n", file);
+    }
+}
+
 unsigned int draw_fontset_getwidth_clamp(Draw_t *draw, const char *text, unsigned int n, Bool markup) {
     unsigned int tmp = 0;
     if (draw && draw->font && text && n)

@@ -384,6 +384,7 @@ static FuncList fl[] = {
     { "setimggaps",     setimggaps },
     { "setlines",       setlines },
     { "setlines",       setlines },
+    { "screenshot",     screenshot },
     { "setcolumns",     setcolumns },
     { "togglehighlight",togglehighlight },
     { "setprofile",     setprofile },

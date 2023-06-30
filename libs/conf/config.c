@@ -441,6 +441,18 @@ void conf_init(void) {
             if (config_setting_lookup_string(conf, "bindsfile", &dest)) {
                 bindsfile = strdup(dest);
             }
+
+            if (config_setting_lookup_string(conf, "screenshotfile", &dest) && strcmp(dest, "NULL")) {
+                screenshotfile = strdup(dest);
+            }
+
+            if (config_setting_lookup_string(conf, "screenshotname", &dest) && strcmp(dest, "NULL")) {
+                screenshotname = strdup(dest);
+            }
+
+            if (config_setting_lookup_string(conf, "screenshotdir", &dest) && strcmp(dest, "NULL")) {
+                screenshotdir = strdup(dest);
+            }
         }
     }
 

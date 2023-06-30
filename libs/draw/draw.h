@@ -64,3 +64,6 @@ void draw_map(Draw_t *draw, Window win, int x, int y, unsigned int w, unsigned i
 /* Powerline functions */
 void draw_arrow(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, int slash, char *prevcol, char *nextcol, int prevalpha, int nextalpha);
 void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int direction, char *prevcol, char *nextcol, int prevalpha, int nextalpha);
+
+/* Screenshot functions */
+void draw_save_screen(Draw_t *draw, const char *file);

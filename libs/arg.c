@@ -507,3 +507,51 @@ void switchmode(Arg *arg) {
     strncpy(tx.modetext, sp.mode ? instext : normtext, 15);
     drawmenu();
 }
+
+void screenshot(Arg *arg) {
+    char *file = NULL;
+    char *home = NULL;
+    time_t time_ = time(NULL);
+    struct tm t = *localtime(&time_);
+
+    if (!screenshotfile) {
+        if (!(home = getenv("HOME"))) {
+            fprintf(stderr, "spmenu: failed to determine home directory\n");
+            return;
+        }
+
+        if (!screenshotdir && !screenshotname) { // default
+            if (!(file = malloc(snprintf(NULL, 0, "%s/%s-%02d-%02d-%02d%s", home, "spmenu-screenshot", t.tm_hour, t.tm_min, t.tm_sec, ".png") + 1))) {
+                die("spmenu: failed to malloc screenshot file");
+            }
+
+            sprintf(file, "%s/%s-%02d-%02d-%02d%s", home, "spmenu-screenshot", t.tm_hour, t.tm_min, t.tm_sec, ".png");
+        } else if (!screenshotdir && screenshotname) { // no dir but name
+            if (!(file = malloc(snprintf(NULL, 0, "%s/%s", home, screenshotname) + 1))) {
+                die("spmenu: failed to malloc screenshot file");
+            }
+
+            sprintf(file, "%s/%s", home, screenshotname);
+        } else if (screenshotdir && !screenshotname) { // dir but no name
+            if (!(file = malloc(snprintf(NULL, 0, "%s/%s-%02d-%02d-%02d%s", screenshotdir, "spmenu-screenshot", t.tm_hour, t.tm_min, t.tm_sec, ".png") + 1))) {
+                die("spmenu: failed to malloc screenshot file");
+            }
+
+            sprintf(file, "%s/%s-%02d-%02d-%02d%s", screenshotdir, "spmenu-screenshot", t.tm_hour, t.tm_min, t.tm_sec, ".png");
+        } else { // dir and name
+            if (!(file = malloc(snprintf(NULL, 0, "%s/%s", screenshotdir, screenshotname) + 1))) {
+                die("spmenu: failed to malloc screenshot file");
+            }
+
+            sprintf(file, "%s/%s", screenshotdir, screenshotname);
+        }
+    } else { // custom file
+        if (!(file = malloc(snprintf(NULL, 0, "%s", screenshotfile) + 1))) {
+            die("spmenu: failed to malloc screenshot file");
+        }
+
+        sprintf(file, "%s", screenshotfile);
+    }
+
+    draw_save_screen(draw, file);
+}

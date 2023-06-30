@@ -43,3 +43,4 @@ static void spawn(Arg *arg);
 static void togglehighlight(Arg *arg);
 static void setprofile(Arg *arg);
 static void switchmode(Arg *arg);
+static void screenshot(Arg *arg);
