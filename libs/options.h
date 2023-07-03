@@ -261,4 +261,4 @@ static int requirematch                = 0; /* Require input text to match an it
 static int incremental                 = 0; /* Print text every time a key is pressed (0/1) */
 static int coloritems                  = 1; /* Color items (0/1) */
 static int sgr                         = 1; /* Support SGR sequences (0/1) */
-static char *worddelimiters            = " "; /* Word delimiters used for keybinds that change words, Space is default. */
+static char *worddelimiters            = " /?\"&[]"; /* Word delimiters used for keybinds that change words, Space is default. */
