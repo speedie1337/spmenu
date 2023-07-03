@@ -125,7 +125,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
 #if USEIMAGE
-    if (!imagetype && lines) {
+    if (!hideimage && !imagetype && lines) {
         draw_rect(draw, x, y, w, sp.bh, 1, 1, fgcol, bgcol, fga, bga);
         int nx = draw_icon(item, x, y + sp.lrpad / 4, sp.bh - sp.lrpad / 2, sp.bh - sp.lrpad / 2);
 
