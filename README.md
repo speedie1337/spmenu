@@ -124,16 +124,17 @@ There's a page dedicated to user scripts
 [over on the wiki](https://spmenu.speedie.site/User+scripts). Feel
 free to contribute and try scripts on there.
 
-## License
+## Simple mode
 
-spmenu is licensed under the MIT license. See the included LICENSE file for
-more information!
-
-## Wiki
-
-spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
-documentation. Contributions to the wiki are appreciated, and
-can be done through [the Git repository](https://git.speedie.site/speedie/spmenu-wiki).
+Some users may find the Vim modes confusing. If this is you, you
+can copy [this file](https://git.speedie.site/speedie/spmenu-config/raw/branch/master/binds/simple-keybinds.conf)
+to ~/.config/spmenu/binds.conf. This will restore some of
+the more traditional dmenu keybinds. Do note that many
+keybinds will be missing if you go for this, and keybinds
+in spmenu.conf will be unused. One of the changes it makes
+is removing normal mode, so insert mode will always be
+used instead. Arrow keys are used for navigation
+rather than Vim keys.
 
 ## Screenshots
 
@@ -144,6 +145,13 @@ can be done through [the Git repository](https://git.speedie.site/speedie/spmenu
 ![bliss](screenshots/layout-picker.png)
 ![dmenu](screenshots/dmenu.png)
 
-## More information
+## License
 
-See the included spmenu(1), spmenu_test(1) and spmenu_run(1) man pages.
+spmenu is licensed under the MIT license. See the included LICENSE file for
+more information!
+
+## Wiki
+
+spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
+documentation. Contributions to the wiki are appreciated, and
+can be done through [the Git repository](https://git.speedie.site/speedie/spmenu-wiki).
