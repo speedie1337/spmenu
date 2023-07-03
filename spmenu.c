@@ -264,6 +264,8 @@ static char *fonts[] = { font };
 // include functions
 #include "libs/img.h"
 #include "libs/img.c"
+#include "libs/icon.h"
+#include "libs/icon.c"
 #include "libs/rtl.h"
 #include "libs/rtl.c"
 #include "libs/sort.c"

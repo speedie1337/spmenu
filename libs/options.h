@@ -52,6 +52,7 @@ static int imageheight                 = 200; /* Default image height (px) */
 static int imageresize                 = 1; /* Allow the spmenu window to resize itself to fit the image (0/1) */
 static int imagegaps                   = 0; /* Image gaps */
 static int imageposition               = 0; /* Image position (0: Top, 1: Bottom, 2: Center, 3: Top center) */
+static int imagetype                   = 1; /* Image type (0: Icon, 1: Image) */
 static int generatecache               = 1; /* Generate image cache by default */
 static int maxcache                    = 512; /* Max image size to cache */
 static char *cachedir                  = "default"; /* Cache directory. Default means spmenu will determine automatically */

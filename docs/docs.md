@@ -339,6 +339,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-nir, --no-image-resize`
 :   Don't allow spmenu to resize itself to fit the image
 
+`-di, --display-icons`
+:   Display the images as icons
+
+`-df, --display-image`
+:   Display the images as images in the image pane
+
 `-wm, --managed, --x11-client`
 :   Spawn spmenu as a window manager controlled client/window (X11 only)
 
