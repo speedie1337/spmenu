@@ -1,8 +1,6 @@
 # spmenu
 
-![preview](screenshots/spmenu-themes.gif)
-
-spmenu is a simple X11 and Wayland menu application which takes standard input, parses
+spmenu is a X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
 In addition to this, it also serves as a run launcher and desktop launcher
@@ -21,6 +19,7 @@ can be themed to look identical to dmenu.
 
 ![typing](screenshots/typing.gif)
 ![.desktop launcher](screenshots/desktop-launcher.png)
+![.desktop launcher icons](screenshots/icons.png)
 ![bliss](screenshots/bliss.png)
 ![bliss](screenshots/layout-picker.png)
 ![dmenu](screenshots/dmenu.png)
