@@ -688,3 +688,4 @@ static ClickType ctp[] = {
 };
 
 static void conf_init(void);
+static int bind_init(void);

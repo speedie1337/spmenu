@@ -2,10 +2,219 @@
 #include <libconfig.h>
 #include "../theme/theme.c"
 
+int bind_init(void) {
+    char *xdg_conf;
+    char *bindfile = NULL;
+    char *home = NULL;
+    const char *dest;
+    int ret = 0;
+
+    if (!bindsfile || !strcmp(bindsfile, "NULL")) {
+        if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
+            home = getenv("HOME");
+
+            if (!(bindfile = malloc(snprintf(NULL, 0, "%s/%s", home, ".config/spmenu/binds.conf") + 1))) {
+                die("spmenu: failed to malloc bindfile");
+            }
+
+            sprintf(bindfile, "%s/%s", home, ".config/spmenu/binds.conf");
+        } else {
+            if (!(bindfile = malloc(snprintf(NULL, 0, "%s/%s", xdg_conf, "spmenu/binds.conf") + 1))) {
+                die("spmenu: failed to malloc bindfile");
+            }
+
+            sprintf(bindfile, "%s/%s", xdg_conf, "spmenu/binds.conf");
+        }
+    } else { // custom keys path
+        if (!(bindfile = malloc(snprintf(NULL, 0, "%s", bindsfile) + 1))) {
+            die("spmenu: failed to malloc bindfile");
+        }
+
+        sprintf(bindfile, "%s", bindsfile);
+    }
+
+    // don't bother trying to load if it doesn't exist.
+    if (access(bindfile, F_OK) != 0) {
+        return ret;
+    }
+
+    // init config
+    config_t bind;
+
+    config_init(&bind);
+
+    // attempt to read config file to cfg
+    if (!config_read_file(&bind, bindfile)) {
+        // invalid configuration, but let's try to read it anyway
+        fprintf(stderr, "spmenu: Invalid keys file.\n");
+    }
+
+    // load options binds.keys
+    config_setting_t *key_bind = config_lookup(&bind, "bind.keys");
+    if (key_bind != NULL && loadbinds) {
+        int nmode = 0;
+
+        ret = 1;
+
+        for (unsigned int i = 0; i < config_setting_length(key_bind); ++i) {
+            config_setting_t *conf = config_setting_get_elem(key_bind, i);
+
+            // look up
+            config_setting_lookup_string(conf, "modifier", &dest);
+
+#if USEX
+            for (int j = 0; j < LENGTH(ml); j++) {
+                if (!strcmp(ml[j].mod, strdup(dest))) {
+                    ckeys[i].mod = ml[j].modifier;
+                }
+            }
+#endif
+
+#if USEWAYLAND
+            for (int j = 0; j < LENGTH(wml); j++) {
+                if (!strcmp(wml[j].mod, strdup(dest))) {
+                    wl_ckeys[i].modifier = wml[j].modifier;
+                }
+            }
+#endif
+
+            if (config_setting_lookup_int(conf, "mode", &nmode)) {
+#if USEX
+                ckeys[i].mode = nmode;
+#endif
+#if USEWAYLAND
+                wl_ckeys[i].mode = nmode;
+#endif
+            }
+
+            config_setting_lookup_string(conf, "key", &dest);
+
+#if USEX
+            for (int j = 0; j < LENGTH(kl); j++) {
+                if (!strcmp(kl[j].key, strdup(dest))) {
+                    ckeys[i].keysym = kl[j].keysym;
+                }
+            }
+#endif
+
+#if USEWAYLAND
+            for (int j = 0; j < LENGTH(wkl); j++) {
+                if (!strcmp(wkl[j].key, strdup(dest))) {
+                    wl_ckeys[i].keysym = wkl[j].keysym;
+                }
+            }
+#endif
+
+            config_setting_lookup_string(conf, "function", &dest);
+
+            for (int j = 0; j < LENGTH(fl); j++) {
+                if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
+                    ckeys[i].func = fl[j].func;
+#endif
+#if USEWAYLAND
+                    wl_ckeys[i].func = fl[j].func;
+#endif
+                }
+            }
+
+            config_setting_lookup_string(conf, "argument", &dest);
+
+            for (int j = 0; j < LENGTH(al); j++) {
+                if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
+                    ckeys[i].arg = al[j].arg;
+#endif
+#if USEWAYLAND
+                    wl_ckeys[i].arg = al[j].arg;
+#endif
+                }
+            }
+
+            config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
+        }
+    }
+
+    // load options binds.mouse
+    config_setting_t *mouse_bind = config_lookup(&bind, "bind.mouse");
+    if (mouse_bind != NULL && loadbinds) {
+#if USEX
+        ret = 1;
+#endif
+        for (unsigned int i = 0; i < config_setting_length(mouse_bind); ++i) {
+            config_setting_t *conf = config_setting_get_elem(mouse_bind, i);
+
+            config_setting_lookup_string(conf, "click", &dest);
+
+            for (int j = 0; j < LENGTH(ctp); j++) {
+                if (!strcmp(ctp[j].tclick, strdup(dest))) {
+#if USEX
+                    cbuttons[i].click = ctp[j].click;
+#endif
+#if USEWAYLAND
+                    wl_cbuttons[i].click = ctp[j].click;
+#endif
+                }
+            }
+
+            config_setting_lookup_string(conf, "button", &dest);
+
+#if USEX
+            for (int j = 0; j < LENGTH(btp); j++) {
+                if (!strcmp(btp[j].click, strdup(dest))) {
+                    cbuttons[i].button = btp[j].button;
+                }
+            }
+#endif
+
+#if USEWAYLAND
+            for (int j = 0; j < LENGTH(w_btp); j++) {
+                if (!strcmp(w_btp[j].click, strdup(dest))) {
+                    wl_cbuttons[i].button = w_btp[j].button;
+                }
+            }
+#endif
+
+            config_setting_lookup_string(conf, "function", &dest);
+
+            for (int j = 0; j < LENGTH(fl); j++) {
+                if (!strcmp(fl[j].function, strdup(dest))) {
+#if USEX
+                    cbuttons[i].func = fl[j].func;
+#endif
+#if USEWAYLAND
+                    wl_cbuttons[i].func = fl[j].func;
+#endif
+                }
+            }
+
+            config_setting_lookup_string(conf, "argument", &dest);
+
+            for (int j = 0; j < LENGTH(al); j++) {
+                if (!strcmp(al[j].argument, strdup(dest))) {
+#if USEX
+                    cbuttons[i].arg = al[j].arg;
+#endif
+#if USEWAYLAND
+                    wl_cbuttons[i].arg = al[j].arg;
+#endif
+                }
+            }
+
+            config_setting_lookup_int(conf, "ignoreglobalmouse", &sp.ignoreglobalmouse);
+        }
+    }
+
+    // finally done
+    config_destroy(&bind);
+
+    return ret;
+}
+
+
 void conf_init(void) {
     char *xdg_conf;
     char *cfgfile = NULL;
-    char *bindfile = NULL;
     char *home = NULL;
     const char *dest;
 
@@ -596,12 +805,18 @@ void conf_init(void) {
         }
     }
 
+    int ret = bind_init();
+
     // load options spmenu.keys
     config_setting_t *key_setting = config_lookup(&cfg, "spmenu.keys");
     if (key_setting != NULL && loadconfig) {
         int nmode = 0;
 
         for (unsigned int i = 0; i < config_setting_length(key_setting); ++i) {
+            if (ret) {
+                break;
+            }
+
             config_setting_t *conf = config_setting_get_elem(key_setting, i);
 
             // look up
@@ -684,6 +899,10 @@ void conf_init(void) {
     config_setting_t *mouse_setting = config_lookup(&cfg, "spmenu.mouse");
     if (mouse_setting != NULL && loadconfig) {
         for (unsigned int i = 0; i < config_setting_length(mouse_setting); ++i) {
+            if (ret) {
+                break;
+            }
+
             config_setting_t *conf = config_setting_get_elem(mouse_setting, i);
 
             config_setting_lookup_string(conf, "click", &dest);
@@ -754,209 +973,6 @@ void conf_init(void) {
     if (loadtheme) {
         theme_load();
     }
-
-    if (!bindsfile || !strcmp(bindsfile, "NULL")) {
-        if (!(xdg_conf = getenv("XDG_CONFIG_HOME"))) {
-            home = getenv("HOME");
-
-            if (!(bindfile = malloc(snprintf(NULL, 0, "%s/%s", home, ".config/spmenu/binds.conf") + 1))) {
-                die("spmenu: failed to malloc bindfile");
-            }
-
-            sprintf(bindfile, "%s/%s", home, ".config/spmenu/binds.conf");
-        } else {
-            if (!(bindfile = malloc(snprintf(NULL, 0, "%s/%s", xdg_conf, "spmenu/binds.conf") + 1))) {
-                die("spmenu: failed to malloc bindfile");
-            }
-
-            sprintf(bindfile, "%s/%s", xdg_conf, "spmenu/binds.conf");
-        }
-    } else { // custom keys path
-        if (!(bindfile = malloc(snprintf(NULL, 0, "%s", bindsfile) + 1))) {
-            die("spmenu: failed to malloc bindfile");
-        }
-
-        sprintf(bindfile, "%s", bindsfile);
-    }
-
-    // don't bother trying to load if it doesn't exist.
-    if (access(bindfile, F_OK) != 0) {
-        return;
-    }
-
-    // init config
-    config_t bind;
-
-    config_init(&bind);
-
-    // attempt to read config file to cfg
-    if (!config_read_file(&bind, bindfile)) {
-        // invalid configuration, but let's try to read it anyway
-        fprintf(stderr, "spmenu: Invalid keys file.\n");
-    }
-
-    // load options binds.keys
-    config_setting_t *key_bind = config_lookup(&bind, "bind.keys");
-    if (key_bind != NULL && loadbinds) {
-        int nmode = 0;
-
-#if USEX
-        memset(ckeys, '\0', LENGTH(ckeys)-1);
-#endif
-#if USEWAYLAND
-        memset(wl_ckeys, '\0', LENGTH(wl_ckeys)-1);
-#endif
-        for (unsigned int i = 0; i < config_setting_length(key_bind); ++i) {
-            config_setting_t *conf = config_setting_get_elem(key_bind, i);
-
-            // look up
-            config_setting_lookup_string(conf, "modifier", &dest);
-
-#if USEX
-            for (int j = 0; j < LENGTH(ml); j++) {
-                if (!strcmp(ml[j].mod, strdup(dest))) {
-                    ckeys[i].mod = ml[j].modifier;
-                }
-            }
-#endif
-
-#if USEWAYLAND
-            for (int j = 0; j < LENGTH(wml); j++) {
-                if (!strcmp(wml[j].mod, strdup(dest))) {
-                    wl_ckeys[i].modifier = wml[j].modifier;
-                }
-            }
-#endif
-
-            if (config_setting_lookup_int(conf, "mode", &nmode)) {
-#if USEX
-                ckeys[i].mode = nmode;
-#endif
-#if USEWAYLAND
-                wl_ckeys[i].mode = nmode;
-#endif
-            }
-
-            config_setting_lookup_string(conf, "key", &dest);
-
-#if USEX
-            for (int j = 0; j < LENGTH(kl); j++) {
-                if (!strcmp(kl[j].key, strdup(dest))) {
-                    ckeys[i].keysym = kl[j].keysym;
-                }
-            }
-#endif
-
-#if USEWAYLAND
-            for (int j = 0; j < LENGTH(wkl); j++) {
-                if (!strcmp(wkl[j].key, strdup(dest))) {
-                    wl_ckeys[i].keysym = wkl[j].keysym;
-                }
-            }
-#endif
-
-            config_setting_lookup_string(conf, "function", &dest);
-
-            for (int j = 0; j < LENGTH(fl); j++) {
-                if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
-                    ckeys[i].func = fl[j].func;
-#endif
-#if USEWAYLAND
-                    wl_ckeys[i].func = fl[j].func;
-#endif
-                }
-            }
-
-            config_setting_lookup_string(conf, "argument", &dest);
-
-            for (int j = 0; j < LENGTH(al); j++) {
-                if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
-                    ckeys[i].arg = al[j].arg;
-#endif
-#if USEWAYLAND
-                    wl_ckeys[i].arg = al[j].arg;
-#endif
-                }
-            }
-
-            config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
-        }
-    }
-
-    // load options binds.mouse
-    config_setting_t *mouse_bind = config_lookup(&bind, "bind.mouse");
-    if (mouse_bind != NULL && loadbinds) {
-#if USEX
-        memset(cbuttons, '\0', LENGTH(cbuttons)-1);
-#endif
-        for (unsigned int i = 0; i < config_setting_length(mouse_bind); ++i) {
-            config_setting_t *conf = config_setting_get_elem(mouse_bind, i);
-
-            config_setting_lookup_string(conf, "click", &dest);
-
-            for (int j = 0; j < LENGTH(ctp); j++) {
-                if (!strcmp(ctp[j].tclick, strdup(dest))) {
-#if USEX
-                    cbuttons[i].click = ctp[j].click;
-#endif
-#if USEWAYLAND
-                    wl_cbuttons[i].click = ctp[j].click;
-#endif
-                }
-            }
-
-            config_setting_lookup_string(conf, "button", &dest);
-
-#if USEX
-            for (int j = 0; j < LENGTH(btp); j++) {
-                if (!strcmp(btp[j].click, strdup(dest))) {
-                    cbuttons[i].button = btp[j].button;
-                }
-            }
-#endif
-
-#if USEWAYLAND
-            for (int j = 0; j < LENGTH(w_btp); j++) {
-                if (!strcmp(w_btp[j].click, strdup(dest))) {
-                    wl_cbuttons[i].button = w_btp[j].button;
-                }
-            }
-#endif
-
-            config_setting_lookup_string(conf, "function", &dest);
-
-            for (int j = 0; j < LENGTH(fl); j++) {
-                if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
-                    cbuttons[i].func = fl[j].func;
-#endif
-#if USEWAYLAND
-                    wl_cbuttons[i].func = fl[j].func;
-#endif
-                }
-            }
-
-            config_setting_lookup_string(conf, "argument", &dest);
-
-            for (int j = 0; j < LENGTH(al); j++) {
-                if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
-                    cbuttons[i].arg = al[j].arg;
-#endif
-#if USEWAYLAND
-                    wl_cbuttons[i].arg = al[j].arg;
-#endif
-                }
-            }
-
-            config_setting_lookup_int(conf, "ignoreglobalmouse", &sp.ignoreglobalmouse);
-        }
-    }
-
-    // finally done
-    config_destroy(&bind);
 
     return;
 }
