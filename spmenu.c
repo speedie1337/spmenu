@@ -136,6 +136,7 @@ struct sp {
     int ignoreglobalkeys; // should be set in the config file, if 1, the Keys keys array is ignored
     int ignoreconfmouse; // same for mouse
     int ignoreglobalmouse; // same for mouse
+    int forceinsertmode;
 };
 
 struct mo {
@@ -511,6 +512,12 @@ void set_mode(void) {
         sp.allowkeys = !sp.mode;
 
         sp_strncpy(tx.modetext, normtext, sizeof(tx.modetext));
+    }
+
+    if (sp.forceinsertmode) {
+        sp.mode = 1;
+        sp.allowkeys = !sp.mode;
+        hidemode = 1;
     }
 }
 

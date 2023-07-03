@@ -132,6 +132,7 @@ int bind_init(void) {
             }
 
             config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
+            config_setting_lookup_int(conf, "forceinsertmode", &sp.forceinsertmode);
         }
     }
 

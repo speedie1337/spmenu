@@ -533,7 +533,6 @@ void readargs(int argc, char *argv[]) {
 #if !USEWAYLAND
     protocol = 0;
 #endif
-
     if (casesensitive) {
         fstrncmp = strncmp;
         fstrstr = strstr;
