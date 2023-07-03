@@ -498,6 +498,10 @@ void setprofile(Arg *arg) {
 }
 
 void switchmode(Arg *arg) {
+    if (sp.forceinsertmode) {
+        return;
+    }
+
     sp.mode = !sp.mode;
 
     if (!type) sp.mode = 0; // only normal mode allowed
