@@ -439,7 +439,7 @@ read_args() {
                 [ -d "$narg" ] && dir="$narg" && remove_arg "$narg"
                 function=fm
                 ;;
-            -c|--clear-cache) remove_arg "$arg"
+            -cc|--clear-cache) remove_arg "$arg"
                 clearcache="true"
                 ;;
             -d|--desktop) remove_arg "$arg"
