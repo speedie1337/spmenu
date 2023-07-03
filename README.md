@@ -7,22 +7,24 @@ In addition to this, it also serves as a run launcher and desktop launcher
 through the included shell script `spmenu_run`, which handles both $PATH
 listing, .desktop entries, and file listing.
 
-While spmenu is based on dmenu, and is also fully compatible with dmenu,
-spmenu introduces many new features which can be useful in shell scripting,
-and notably Wayland support. There are way too many to list, but spmenu has a
-[wiki](https://spmenu.speedie.site) which goes through features in more detail.
-
 spmenu also serves as a proper dmenu replacement for Wayland users, and
 can be themed to look identical to dmenu.
 
-## Screenshots
+## Features
 
-![typing](screenshots/typing.gif)
-![.desktop launcher](screenshots/desktop-launcher.png)
-![.desktop launcher icons](screenshots/icons.png)
-![bliss](screenshots/bliss.png)
-![bliss](screenshots/layout-picker.png)
-![dmenu](screenshots/dmenu.png)
+- X11 and Wayland support, most run launchers support only one
+- Reading entries from standard input and file
+- Image and icon support
+- Run launcher, supporting both .desktop entries and $PATH
+- fzf-like Fuzzy matching
+- Vi-like modes
+- History buffer
+- Configuration file, allowing customizable keybinds
+- Mouse binds
+- XDG base directory compliant
+- Theming
+- Written in C
+- ..and more
 
 ## Dependencies
 
@@ -122,10 +124,6 @@ There's a page dedicated to user scripts
 [over on the wiki](https://spmenu.speedie.site/User+scripts). Feel
 free to contribute and try scripts on there.
 
-## More information
-
-See the included spmenu(1) and spmenu_run(1) man pages.
-
 ## License
 
 spmenu is licensed under the MIT license. See the included LICENSE file for
@@ -136,3 +134,16 @@ more information!
 spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
 documentation. Contributions to the wiki are appreciated, and
 can be done through [the Git repository](https://git.speedie.site/speedie/spmenu-wiki).
+
+## Screenshots
+
+![typing](screenshots/typing.gif)
+![.desktop launcher](screenshots/desktop-launcher.png)
+![.desktop launcher icons](screenshots/icons.png)
+![bliss](screenshots/bliss.png)
+![bliss](screenshots/layout-picker.png)
+![dmenu](screenshots/dmenu.png)
+
+## More information
+
+See the included spmenu(1), spmenu_test(1) and spmenu_run(1) man pages.
