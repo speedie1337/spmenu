@@ -685,6 +685,9 @@ static ClickType ctp[] = {
     { "ClickNumber",  ClickNumber },
     { "ClickCaps",    ClickCaps },
     { "ClickMode",    ClickMode },
+#if USEIMAGE
+    { "ClickImage",   ClickImage },
+#endif
 };
 
 static void conf_init(void);

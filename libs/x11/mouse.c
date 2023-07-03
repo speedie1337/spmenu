@@ -102,6 +102,10 @@ void buttonpress_x11(XEvent *e) {
                         click = ClickItem;
                     }
                 }
+#if USEIMAGE
+            } else if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ev->x <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
+                click = ClickImage;
+#endif
             }
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
