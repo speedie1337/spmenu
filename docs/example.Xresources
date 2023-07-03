@@ -172,6 +172,7 @@ spmenu.imageheight:         200
 spmenu.imageresize:         1
 spmenu.imagegaps:           0
 spmenu.imageposition:       0
+spmenu.imagetype:           1
 spmenu.generatecache:       1
 spmenu.maxcache:            512
 

@@ -116,6 +116,10 @@ void readargs(int argc, char *argv[]) {
             imageposition = 2;
         } else if (!strcmp(argv[i], "-itc") || (!strcmp(argv[i], "--image-topcenter"))) { // image: top center
             imageposition = 3;
+        } else if (!strcmp(argv[i], "-di") || !(strcmp(argv[i], "--display-icons"))) { // image: display as icons
+            imagetype = 0;
+        } else if (!strcmp(argv[i], "-df") || !(strcmp(argv[i], "--display-image"))) { // image: display as an image
+            imagetype = 1;
         } else if (!strcmp(argv[i], "-b") || (!strcmp(argv[i], "--bottom"))) { // appears at the bottom of the screen
             menuposition = 0;
         } else if (!strcmp(argv[i], "-t") || (!strcmp(argv[i], "--top"))) { // appears at the top of the screen
@@ -702,6 +706,8 @@ void usage(int status) {
             "spmenu -ib,      --image-bottom                              Position the image at the bottom\n"
             "spmenu -ic,      --image-center                              Position the image in the center\n"
             "spmenu -itc,     --image-topcenter                           Position the image in the top center\n"
+            "spmenu -di,      --display-icons                             Display the images as icons\n"
+            "spmenu -df,      --display-image                             Display the images as images in the image pane\n"
             "spmenu -ir,      --image-resize                              Allow spmenu to resize itself to fit the image\n"
             "spmenu -nir,     --no-image-resize                           Don't allow spmenu to resize itself to fit the image\n"
             , status ? stderr : stdout);

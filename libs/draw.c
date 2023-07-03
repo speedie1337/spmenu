@@ -124,6 +124,18 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         }
     }
 
+#if USEIMAGE
+    if (!imagetype && lines) {
+        draw_rect(draw, x, y, w, sp.bh, 1, 1, fgcol, bgcol, fga, bga);
+        int nx = draw_icon(item, x, y + sp.lrpad / 4, sp.bh - sp.lrpad / 2, sp.bh - sp.lrpad / 2);
+
+        if (nx != x) {
+            x = nx;
+            w -= sp.bh - sp.lrpad / 2;
+        }
+    }
+#endif
+
     // parse item text
     for (wr = 0, rd = 0; item->text[rd]; rd++) {
         if (item->text[rd] == '' && item->text[rd + 1] == '[') {
@@ -304,7 +316,7 @@ int drawitem(int x, int y, int w) {
 
         // draw image first
 #if USEIMAGE
-        if (!hideimage && img.longestedge != 0) {
+        if (!hideimage && img.longestedge != 0 && imagetype) {
             rx = ox;
             rx += MAX((imagegaps * 2) + img.imagewidth + menumarginh, indentitems ? x : 0);
         } else

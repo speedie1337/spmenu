@@ -38,7 +38,7 @@ void drawimage(void) {
     int width = 0, height = 0;
     char *limg = NULL;
 
-    if (!lines || !columns || hideimage) return;
+    if (!lines || !columns || hideimage || !imagetype) return;
 
     // load image cache
     if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
@@ -311,6 +311,7 @@ void jumptoindex(unsigned int index) {
 }
 
 void resizetoimageheight(int imageheight) {
+    if (!imagetype) return;
 #if USEX
     if (!protocol) {
         resizetoimageheight_x11(imageheight);

@@ -274,7 +274,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     }
 
 #if USEIMAGE
-    if (!hideimage && img.longestedge != 0) {
+    if (!hideimage && img.longestedge != 0 && imagetype) {
         x += MAX((imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0);
     }
 #endif
