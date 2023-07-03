@@ -1,6 +1,6 @@
 # spmenu
 
-spmenu is a X11 and Wayland menu application which takes standard input, parses
+spmenu is an X11 and Wayland menu application which takes standard input, parses
 it, lets the user choose an option and sends the selected option to standard output.
 
 In addition to this, it also serves as a run launcher and desktop launcher
