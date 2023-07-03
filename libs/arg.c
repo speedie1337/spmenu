@@ -442,6 +442,7 @@ void defaultimg(Arg *arg) {
 void setlines(Arg *arg) {
     if (!overridelines) return;
 
+    insert(NULL, 0 - sp.cursor);
     sel = curr = matches;
 
     lines += arg->i;
