@@ -403,13 +403,11 @@ void setimggaps(Arg *arg) {
 #if USEIMAGE
     img.imagegaps += arg->i;
 
-    if (!image || hideimage) return;
-
     if (img.imagegaps < 0)
         img.imagegaps = 0;
 
     // limitation to make sure we have a reasonable gap size
-    if (img.imagegaps > img.imagewidth / 2)
+    if (img.imagegaps > (sp.mw - 2 * img.imagegaps) / 3)
         img.imagegaps -= arg->i;
 
     drawmenu();

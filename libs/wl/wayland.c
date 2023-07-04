@@ -275,7 +275,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
 #if USEIMAGE
     if (!hideimage && img.longestedge != 0 && imagetype) {
-        x += MAX((imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0);
+        x += MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0);
     }
 #endif
 
@@ -319,7 +319,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
                     }
                 }
 #if USEIMAGE
-            } else if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) - MAX((imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ex <= (x - MAX((imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
+            } else if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ex <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
 #endif
             }

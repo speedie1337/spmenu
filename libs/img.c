@@ -56,7 +56,7 @@ void drawimage(void) {
     if (img.longestedge && width && height) {
         flipimage();
 
-        int leftmargin = imagegaps; // gaps between image and menu
+        int leftmargin = img.imagegaps; // gaps between image and menu
         int wtr = 0; // remove from w
         int wta = 0; // add to w
         int xta = 0; // add to x
@@ -332,8 +332,8 @@ void resizetoimageheight_x11(int imageheight) {
 
     int x, y;
 
-    if (lines * sp.bh < imageheight + imagegaps * 2) {
-        lines = (imageheight + imagegaps * 2) / sp.bh;
+    if (lines * sp.bh < imageheight + img.imagegaps * 2) {
+        lines = (imageheight + img.imagegaps * 2) / sp.bh;
     }
 
     get_mh();
@@ -377,8 +377,8 @@ void resizetoimageheight_wl(int imageheight) {
     int mh = sp.mh, olines = lines;
     lines = img.setlines;
 
-    if (lines * sp.bh < imageheight + imagegaps * 2) {
-        lines = (imageheight + imagegaps * 2) / sp.bh;
+    if (lines * sp.bh < imageheight + img.imagegaps * 2) {
+        lines = (imageheight + img.imagegaps * 2) / sp.bh;
     }
 
     get_mh();
