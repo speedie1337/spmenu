@@ -40,6 +40,7 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
 
 int drawitemtext(struct item *item, int x, int y, int w) {
     char buffer[MAXITEMLENGTH]; // buffer containing item text
+    char *tbuffer = malloc(MAXITEMLENGTH+1);
     int leftpadding = sp.lrpad / 2; // padding
     int wr, rd; // character
     int fg = 7; // foreground
@@ -147,6 +148,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                     w -= item->text[rd + alen];
                 }
 
+                strcat(tbuffer, buffer);
                 apply_fribidi(buffer);
                 draw_text(draw, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
                 drawhighlights(item, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, leftpadding, isrtl ? fribidi_text : buffer);
@@ -266,13 +268,13 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     buffer[wr] = '\0';
 
     // now draw any non-colored text
+    strcat(tbuffer, buffer);
     apply_fribidi(buffer);
     int r = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
     if (!hidehighlight) drawhighlights(item, x, y, w, leftpadding, buffer);
 
     // copy current buffer to item->clntext instead of item->text, this way SGR sequences aren't drawn
-    item->clntext = malloc(sizeof(buffer));
-    memcpy(item->clntext, buffer, sizeof(buffer));
+    item->clntext = tbuffer;
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
