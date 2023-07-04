@@ -94,6 +94,7 @@ static int casesensitive               = 0; /* Case-sensitive by default? (0/1) 
 static int mark                        = 1; /* Enable marking items (multi selection) (0/1) */
 static int preselected                 = 0; /* Which line should spmenu preselect? */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
+static int regex                       = 1; /* Whether or not to enable regex matching by default */
 static char *listfile                  = NULL; /* File to read entries from instead of stdin. NULL means read from stdin instead. */
 
 /* Line options */

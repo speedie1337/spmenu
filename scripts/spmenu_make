@@ -9,6 +9,7 @@ libconfig=${libconfig:-true}
 xresources=${xresources:-true}
 wayland=${wayland:-true}
 x11=${x11:-true}
+regex=${regex:-true}
 prefix="${prefix:-/usr}"
 
 opt=${opt:--O2}
@@ -273,6 +274,7 @@ build() {
             -Dlibconfig="$libconfig" \
             -Dwayland="$wayland" \
             -Dx11="$x11" \
+            -Dregex="$regex" \
             --prefix "$prefix" \
             build || exit 1
     else
@@ -285,6 +287,7 @@ build() {
             -Dlibconfig="$libconfig" \
             -Dwayland="$wayland" \
             -Dx11="$x11" \
+            -Dregex="$regex" \
             --prefix "$prefix" \
             build || exit 1
     fi

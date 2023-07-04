@@ -83,6 +83,10 @@ if get_option('xresources') and get_option('x11')
   build_args += [ '-DXRESOURCES' ]
 endif
 
+if get_option('regex')
+  build_args += [ '-DREGEX' ]
+endif
+
 project_target = executable(
   meson.project_name(),
   project_source_files, install : true,

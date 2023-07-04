@@ -1,5 +1,26 @@
 /* See LICENSE file for copyright and license details. */
 
+#if USEREGEX
+#include "regex/regex.c"
+#endif
+
+int matchregex(const char *t, const char *itt) {
+#if USEREGEX
+    re_t reg = re_compile(t);
+    int len;
+
+    int ret = re_matchp(reg, itt, &len);
+
+    if (ret != -1) {
+        return 1;
+    } else {
+        return 0;
+    }
+#else
+    return 0;
+#endif
+}
+
 void fuzzymatch(void) {
     struct item *it;
     struct item **fuzzymatches = NULL;
@@ -18,19 +39,24 @@ void fuzzymatch(void) {
             pidx = 0; // pointer
             sidx = eidx = -1; // start of match, end of match
 
-            // walk through item text
-            for (i = 0; i < itext_len && (c = it->text[i]); i++) {
-                // fuzzy match pattern
-                if (!fstrncmp(&tx.text[pidx], &c, 1)) {
-                    if(sidx == -1)
-                        sidx = i;
-                    pidx++;
-                    if (pidx == text_len) {
-                        eidx = i;
-                        break;
+            // fuzzy match pattern
+            if (matchregex(tx.text, it->text) && regex) {
+                eidx = i;
+            } else {
+                // walk through item text
+                for (i = 0; i < itext_len && (c = it->text[i]); i++) {
+                    if (!fstrncmp(&tx.text[pidx], &c, 1)) {
+                        if(sidx == -1)
+                            sidx = i;
+                        pidx++;
+                        if (pidx == text_len) {
+                            eidx = i;
+                            break;
+                        }
                     }
                 }
             }
+
             // build list of matches
             if (eidx != -1) {
                 it->distance = log(sidx + 2) + (double)(eidx - sidx - text_len);
@@ -113,7 +139,10 @@ void match(void) {
             if (!fstrstr(item->text, tokv[i]))
                 break;
         if (i != tokc) // not all tokens match
-            continue;
+            if (!(matchregex(tx.text, item->text) && regex)) {
+                continue;
+            }
+
         if (!sortmatches)
             appenditem(item, &matches, &matchend);
         else {

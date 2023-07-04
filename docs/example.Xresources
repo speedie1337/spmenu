@@ -137,6 +137,7 @@ spmenu.caretpadding:        0
 spmenu.type:                1
 spmenu.passwd:              0
 spmenu.fuzzy:               1
+spmenu.regex:               1
 spmenu.sortmatches:         1
 spmenu.mark:                1
 spmenu.casesensitive:       0

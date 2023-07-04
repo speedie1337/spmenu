@@ -169,6 +169,7 @@ ResourcePref resources[] = {
     { "printindex",                  INTEGER, &printindex },
     { "incremental",                 INTEGER, &incremental },
     { "fuzzy",                       INTEGER, &fuzzy },
+    { "regex",                       INTEGER, &regex },
     { "pango_item",                  INTEGER, &pango_item },
     { "pango_prompt",                INTEGER, &pango_prompt },
     { "pango_input",                 INTEGER, &pango_input },

@@ -67,6 +67,13 @@
 #define USEX 1
 #endif
 
+// check if we should enable regex matching
+#ifndef REGEX
+#define USEREGEX 0
+#else
+#define USEREGEX 1
+#endif
+
 // include fribidi used for right to left language support
 #if USERTL
 #include <fribidi.h>

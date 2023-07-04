@@ -148,6 +148,10 @@ void readargs(int argc, char *argv[]) {
             fuzzy = 1;
         } else if (!strcmp(argv[i], "-NF") || (!strcmp(argv[i], "--no-fuzzy"))) {   // no fuzzy matching
             fuzzy = 0;
+        } else if (!strcmp(argv[i], "-R") || (!strcmp(argv[i], "--regex"))) {   // regex
+            regex = 1;
+        } else if (!strcmp(argv[i], "-NR") || (!strcmp(argv[i], "--no-regex"))) {   // no regex
+            regex = 0;
         } else if (!strcmp(argv[i], "-ix") || (!strcmp(argv[i], "--print-index"))) {   // print index
             printindex = 1;
         } else if (!strcmp(argv[i], "-nix") || (!strcmp(argv[i], "--no-print-index"))) {   // no print index
@@ -612,6 +616,8 @@ void usage(int status) {
             "spmenu -nma,     --no-mark-items                             Don't allow marking/selecting multiple items\n"
             "spmenu -F,       --fuzzy                                     Enable fuzzy matching\n"
             "spmenu -NF,      --no-fuzzy                                  Disable fuzzy matching\n"
+            "spmenu -R,       --regex                                     Enable regex matching\n"
+            "spmenu -NR,      --no-regex                                  Disable regex matching\n"
             "spmenu -P,       --password                                  Hide characters\n"
             "spmenu -nP,      --no-password                               Don't hide characters\n"
             "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"

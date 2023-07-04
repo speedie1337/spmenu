@@ -53,3 +53,10 @@ option(
   value : true,
   description : 'Enable configuration file support'
 )
+
+option(
+  'regex',
+  type : 'boolean',
+  value : true,
+  description : 'Enable regex matching'
+)

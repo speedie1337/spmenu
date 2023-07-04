@@ -726,6 +726,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "sort", &sortmatches); // spmenu.match.sort
             config_setting_lookup_int(conf, "casesensitive", &casesensitive); // spmenu.match.casesensitive
             config_setting_lookup_int(conf, "fuzzy", &fuzzy); // spmenu.match.fuzzy
+            config_setting_lookup_int(conf, "regex", &regex); // spmenu.match.regex
             config_setting_lookup_int(conf, "preselected", &preselected); // spmenu.match.preselected
             config_setting_lookup_int(conf, "mark", &mark); // spmenu.match.mark
             config_setting_lookup_string(conf, "delimiters", &dest); // spmenu.match.delimiters

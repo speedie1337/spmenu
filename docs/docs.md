@@ -87,6 +87,12 @@ You may use long, descriptive arguments or the shorter arguments.
 `-NF, --no-fuzzy`
 :   Disable fuzzy matching
 
+`-R, --regex`
+:   Enable regex matching
+
+`-NR, --no-regex`
+:   Disable regex matching
+
 `-P, --password`
 :   Hide characters
 
