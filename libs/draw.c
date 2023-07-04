@@ -40,7 +40,6 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
 
 int drawitemtext(struct item *item, int x, int y, int w) {
     char buffer[MAXITEMLENGTH]; // buffer containing item text
-    char *ttext;
     int leftpadding = sp.lrpad / 2; // padding
     int wr, rd; // character
     int fg = 7; // foreground
@@ -53,6 +52,10 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     char *fgcol;
     int bga;
     int fga;
+
+    int ox;
+    int oy;
+    int ow;
 
     // memcpy the correct scheme
     if (item == sel) {
@@ -137,8 +140,12 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 #endif
 
-    ttext = malloc(sizeof(buffer));
-    ttext[0] = '\0';
+    ox = x;
+    oy = y;
+    ow = w;
+
+    item->nsgrtext = malloc(sizeof(buffer));
+    item->nsgrtext[0] = '\0';
 
     // parse item text
     for (wr = 0, rd = 0; item->text[rd]; rd++) {
@@ -153,9 +160,8 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
                 apply_fribidi(buffer);
                 draw_text(draw, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
-                drawhighlights(item, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, leftpadding, isrtl ? fribidi_text : buffer);
 
-                strcat(ttext, buffer);
+                strcat(item->nsgrtext, buffer);
 
                 // position and width
                 x += MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding;
@@ -270,14 +276,14 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     buffer[wr] = '\0';
-    strcat(ttext, buffer);
-
-    item->text = ttext; // set item text to one without SGR sequences
+    strcat(item->nsgrtext, buffer);
 
     // now draw any non-colored text
     apply_fribidi(buffer);
     int r = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
-    if (!hidehighlight) drawhighlights(item, x, y, w, leftpadding, buffer);
+
+    if (!hidehighlight)
+        drawhighlights(item, ox, oy, ow, sp.lrpad / 2, item->nsgrtext);
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {

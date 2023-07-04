@@ -104,6 +104,7 @@ enum {
 
 struct item {
     char *text;
+    char *nsgrtext;
     char *image;
     char *ex;
     struct item *left, *right;
