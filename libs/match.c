@@ -39,21 +39,19 @@ void fuzzymatch(void) {
             pidx = 0; // pointer
             sidx = eidx = -1; // start of match, end of match
 
-            // fuzzy match pattern
-            if (matchregex(tx.text, it->text) && regex) {
-                eidx = i;
-            } else {
-                // walk through item text
-                for (i = 0; i < itext_len && (c = it->text[i]); i++) {
-                    if (!fstrncmp(&tx.text[pidx], &c, 1)) {
-                        if(sidx == -1)
-                            sidx = i;
-                        pidx++;
-                        if (pidx == text_len) {
-                            eidx = i;
-                            break;
-                        }
+            // walk through item text
+            for (i = 0; i < itext_len && (c = it->text[i]); i++) {
+                if (!fstrncmp(&tx.text[pidx], &c, 1)) {
+                    if(sidx == -1)
+                        sidx = i;
+                    pidx++;
+                    if (pidx == text_len) {
+                        eidx = i;
+                        break;
                     }
+                } else if (matchregex(tx.text, it->text) && regex) {
+                    eidx = i;
+                    break;
                 }
             }
 
