@@ -30,10 +30,10 @@ static Key keys[] = {
     { -1,      Ctrl|Alt|Shift, XK_h,         setcolumns,      {.i = +5 } },
     { -1,      Ctrl|Alt|Shift, XK_l,         setcolumns,      {.i = -5 } },
     { -1,      Ctrl|Shift,     XK_p,         setprofile,      {0} },
+    { -1,      0,              XK_Print,     screenshot,      {0} },
 
     /* normal mode */
     { 0,       0,              XK_i,         switchmode,      {0} },
-    { 0,       0,              XK_slash,     switchmode,      {0} },
     { 0,       Ctrl,           XK_equal,     setimgsize,      {.i = +1 } },
     { 0,       Ctrl,           XK_minus,     setimgsize,      {.i = -1 } },
     { 0,       0,              XK_equal,     setimgsize,      {.i = +10 } },
@@ -63,15 +63,12 @@ static Key keys[] = {
     { 0,       0,              XK_d,         clear,           {0} },
     { 0,       Shift,          XK_d,         clearins,        {0} },
     { 0,       0,              XK_Escape,    quit,            {0} },
-    { 0,       0,              XK_Home,      movestart,       {0} },
-    { 0,       0,              XK_End,       moveend,         {0} },
     { 0,       0,              XK_g,         movestart,       {0} },
     { 0,       Shift,          XK_g,         moveend,         {0} },
     { 0,       0,              XK_Next,      movenext,        {0} },
     { 0,       0,              XK_Prior,     moveprev,        {0} },
     { 0,       Ctrl,           XK_p,         navhistory,      {.i = -1 } },
     { 0,       Ctrl,           XK_n,         navhistory,      {.i = +1 } },
-    { 0,       0,              XK_Print,     screenshot,      {0} },
 
     /* insert mode */
     { 1,       0,              XK_Escape,    switchmode,      {0} },
@@ -106,10 +103,10 @@ static WlKey wl_keys[] = {
     { -1,      WL_CtrlAltShift,      XKB_KEY_h,         setcolumns,      {.i = +5 } },
     { -1,      WL_CtrlAltShift,      XKB_KEY_l,         setcolumns,      {.i = -5 } },
     { -1,      WL_CtrlShift,         XKB_KEY_p,         setprofile,      {0} },
+    { -1,      WL_None,              XKB_KEY_Print,     screenshot,      {0} },
 
     /* normal mode */
     { 0,       WL_None,              XKB_KEY_i,         switchmode,      {0} },
-    { 0,       WL_None,              XKB_KEY_slash,     switchmode,      {0} },
     { 0,       WL_Ctrl,              XKB_KEY_equal,     setimgsize,      {.i = +1 } },
     { 0,       WL_Ctrl,              XKB_KEY_minus,     setimgsize,      {.i = -1 } },
     { 0,       WL_None,              XKB_KEY_equal,     setimgsize,      {.i = +10 } },
@@ -147,7 +144,6 @@ static WlKey wl_keys[] = {
     { 0,       WL_None,              XKB_KEY_Prior,     moveprev,        {0} },
     { 0,       WL_Ctrl,              XKB_KEY_p,         navhistory,      {.i = -1 } },
     { 0,       WL_Ctrl,              XKB_KEY_n,         navhistory,      {.i = +1 } },
-    { 0,       WL_None,              XKB_KEY_Print,     screenshot,      {0} },
 
     /* insert mode */
     { 1,       WL_None,              XKB_KEY_Escape,    switchmode,      {0} },

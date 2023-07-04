@@ -759,8 +759,8 @@ These are the default keybinds. You can generate these yourself from a
 | -1                 | Ctrl               | l                  | setcolumns         | -1                 |
 | -1                 | Ctrl+Alt+Shift     | h                  | setcolumns         | +5                 |
 | -1                 | Ctrl+Alt+Shift     | l                  | setcolumns         | -5                 |
+| -1                 | 0                  | Print              | screenshot         | 0                  |
 | 0                  | 0                  | i                  | switchmode         | 0                  |
-| 0                  | 0                  | slash              | switchmode         | 0                  |
 | 0                  | Ctrl               | equal              | setimgsize         | +1                 |
 | 0                  | Ctrl               | minus              | setimgsize         | -1                 |
 | 0                  | 0                  | equal              | setimgsize         | +10                |
@@ -790,15 +790,12 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | 0                  | d                  | clear              | 0                  |
 | 0                  | Shift              | d                  | clearins           | 0                  |
 | 0                  | 0                  | Escape             | quit               | 0                  |
-| 0                  | 0                  | Home               | movestart          | 0                  |
-| 0                  | 0                  | End                | moveend            | 0                  |
 | 0                  | 0                  | g                  | movestart          | 0                  |
 | 0                  | Shift              | g                  | moveend            | 0                  |
 | 0                  | 0                  | Next               | movenext           | 0                  |
 | 0                  | 0                  | Prior              | moveprev           | 0                  |
 | 0                  | Ctrl               | p                  | navhistory         | -1                 |
 | 0                  | Ctrl               | n                  | navhistory         | +1                 |
-| 0                  | 0                  | Print              | screenshot         | 0                  |
 | 1                  | 0                  | Escape             | switchmode         | 0                  |
 
 ## .Xresources
