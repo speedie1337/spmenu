@@ -792,7 +792,7 @@ These are the default keybinds. You can generate these yourself from a
 
 spmenu also has .Xresources (xrdb) support built in. It reads the xrdb
 (.Xresources database) on runtime. You may disable it by passing -nxrdb,
-or enable it by padding -xrdb. You can also set this in the config file.
+or enable it by passing -xrdb. You can also set this in the config file.
 
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.
