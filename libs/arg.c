@@ -89,7 +89,7 @@ void moveup(Arg *arg) {
 void complete(Arg *arg) {
     if (hideitem) return;
 
-    strncpy(tx.text, sel->clntext, sizeof tx.text - 1);
+    strncpy(tx.text, sel->text, sizeof tx.text - 1);
     tx.text[sizeof tx.text - 1] = '\0';
     sp.cursor = strlen(tx.text);
 
