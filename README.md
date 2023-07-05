@@ -150,6 +150,8 @@ rather than Vim keys.
 spmenu is licensed under the MIT license. See the included LICENSE file for
 more information!
 
+Before contributing, please see [this article](https://spmenu.speedie.site/Contributing+to+spmenu).
+
 ## Wiki
 
 spmenu has [a wiki](https://spmenu.speedie.site) for more extensive

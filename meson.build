@@ -1,7 +1,7 @@
 project(
   'spmenu',
   'c',
-  version : '"2.3"',
+  version : '"3.0"',
   default_options : ['warning_level=3']
 )
 
