@@ -87,7 +87,21 @@ void moveup(Arg *arg) {
 }
 
 void complete(Arg *arg) {
+    int itc = 0;
+    struct item *item;
+
     if (hideitem) return;
+
+    if (matchend) {
+        itc++;
+
+        for (item = matchend; item && item->left; item = item->left)
+            itc++;
+    }
+
+    if (!itc) {
+        return;
+    }
 
     strncpy(tx.text, sel->nsgrtext, sizeof tx.text - 1);
     tx.text[sizeof tx.text - 1] = '\0';
