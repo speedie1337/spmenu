@@ -50,8 +50,12 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int priitem = 0;
     char *bgcol;
     char *fgcol;
+    char *obgcol;
+    char *ofgcol;
     int bga;
     int fga;
+    int obga;
+    int ofga;
 
     int ox;
     int oy;
@@ -119,6 +123,11 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         bga = itemn ? alpha_itemnormbg2 : alpha_itemnormbg;
         fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
     }
+
+    ofga = fga;
+    obga = bga;
+    ofgcol = fgcol;
+    obgcol = bgcol;
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
@@ -209,59 +218,10 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                     } else if (nextchar == 48) {
                         bgfg = 3;
                     } else if (nextchar == 0) {
-                        // memcpy the correct scheme
-                        if (item == sel) {
-                            selitem = 1;
-                            bgcol = col_itemselbg;
-                            fgcol = col_itemselfg;
-                            bga = alpha_itemselbg;
-                            fga = alpha_itemselfg;
-
-                            if (item->hp) {
-                                priitem = 1;
-                                bgcol = col_itemselpribg;
-                                fgcol = col_itemselprifg;
-
-                                fga = alpha_itemselprifg;
-                                bga = alpha_itemselpribg;
-                            }
-                        } else {
-                            if (itemn) {
-                                bgcol = col_itemnormbg2;
-                                fgcol = col_itemnormfg2;
-                                fga = alpha_itemnormfg2;
-                                bga = alpha_itemnormbg2;
-                            } else {
-                                bgcol = col_itemnormbg;
-                                fgcol = col_itemnormfg;
-                                fga = alpha_itemnormfg;
-                                bga = alpha_itemnormbg;
-                            }
-
-                            if (item->hp) {
-                                priitem = 1;
-                                bgcol = col_itemnormpribg;
-                                fgcol = col_itemnormprifg;
-                                fga = alpha_itemnormprifg;
-                                bga = alpha_itemnormpribg;
-                            }
-                        }
-
-                        if (is_selected(item->index)) {
-                            selitem = (lines ? 1 : selitem);
-                            bgcol = col_itemmarkedbg;
-                            fgcol = col_itemmarkedfg;
-                            fga = alpha_itemmarkedfg;
-                            bga = alpha_itemmarkedbg;
-                        }
-
-                        // don't color
-                        if (!coloritems) {
-                            bgcol = itemn ? col_itemnormbg2 : col_itemnormbg;
-                            fgcol = itemn ? col_itemnormfg2 : col_itemnormfg;
-                            bga = itemn ? alpha_itemnormbg2 : alpha_itemnormbg;
-                            fga = itemn ? alpha_itemnormfg2 : alpha_itemnormfg;
-                        }
+                        fgcol = ofgcol;
+                        bgcol = obgcol;
+                        fga = ofga;
+                        bga = obga;
                     }
                 }
 
@@ -287,9 +247,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
-            draw_circle(draw, r, y, sp.plw, sp.bh, 1, col_menu, bgcol, alpha_menu, bga);
+            draw_circle(draw, r, y, sp.plw, sp.bh, 1, col_menu, obgcol, alpha_menu, obga);
         } else {
-            draw_arrow(draw, r, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, bgcol, alpha_menu, bga);
+            draw_arrow(draw, r, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, obgcol, alpha_menu, obga);
         }
     }
 
