@@ -11,6 +11,8 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
 
     if (!(strlen(itemtext) && strlen(tx.text))) return;
 
+    if (strstr(itemtext, "</")) return;
+
     for (i = 0, highlight = itemtext; *highlight && tx.text[i];) {
         if (((fuzzy && !fstrncmp(&(*highlight), &tx.text[i], 1)) || (!fuzzy && *highlight == tx.text[i]))) {
             c = *highlight;
