@@ -376,6 +376,9 @@ void conf_init(void) {
             if (config_setting_lookup_string(conf, "insert", &dest))
                 instext = strdup(dest);
 
+            if (config_setting_lookup_string(conf, "regex", &dest))
+                regextext = strdup(dest);
+
             if (config_setting_lookup_string(conf, "input", &dest))
                 input = strdup(dest);
         }

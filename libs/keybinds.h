@@ -60,6 +60,7 @@ static Key keys[] = {
 
     /* insert mode */
     { 1,       0,              XK_Escape,    switchmode,      {0} },
+    { 1,       Ctrl,           XK_r,         toggleregex,     {0} },
 };
 #endif
 
@@ -123,5 +124,6 @@ static WlKey wl_keys[] = {
 
     /* insert mode */
     { 1,       WL_None,              XKB_KEY_Escape,    switchmode,      {0} },
+    { 1,       WL_Ctrl,              XKB_KEY_r,         toggleregex,     {0} },
 };
 #endif

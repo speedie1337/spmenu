@@ -33,6 +33,7 @@ static void quit(Arg *arg);
 static void complete(Arg *arg);
 static void setimgsize(Arg *arg);
 static void toggleimg(Arg *arg);
+static void toggleregex(Arg *arg);
 static void defaultimg(Arg *arg);
 static void flipimg(Arg *arg);
 static void setimgpos(Arg *arg);

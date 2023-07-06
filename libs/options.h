@@ -66,6 +66,7 @@ static char *screenshotdir             = NULL; /* Screenshot file directory. If 
 static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
 static char *normtext                  = "Normal"; /* Text to display for normal mode */
 static char *instext                   = "Insert"; /* Text to display for insert mode */
+static char *regextext                 = "Regex"; /* Text to display for insert mode when regex is enabled */
 static char *capslockontext            = "Caps Lock"; /* Text to display for the caps lock indicator when caps lock is on */
 static char *capslockofftext           = ""; /* Text to display for the caps lock indicator when caps lock is off */
 
@@ -94,7 +95,7 @@ static int casesensitive               = 0; /* Case-sensitive by default? (0/1) 
 static int mark                        = 1; /* Enable marking items (multi selection) (0/1) */
 static int preselected                 = 0; /* Which line should spmenu preselect? */
 static int fuzzy                       = 1; /* Whether or not to enable fuzzy matching by default */
-static int regex                       = 1; /* Whether or not to enable regex matching by default */
+static int regex                       = 0; /* Whether or not to enable regex matching by default */
 static char *listfile                  = NULL; /* File to read entries from instead of stdin. NULL means read from stdin instead. */
 
 /* Line options */

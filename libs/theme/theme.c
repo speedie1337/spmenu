@@ -150,6 +150,9 @@ void theme_load(void) {
             if (config_setting_lookup_string(conf, "capslockoff", &dest))
                 capslockofftext = strdup(dest);
 
+            if (config_setting_lookup_string(conf, "regex", &dest))
+                regextext = strdup(dest);
+
             if (config_setting_lookup_string(conf, "input", &dest))
                 input = strdup(dest);
         }

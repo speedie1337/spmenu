@@ -593,6 +593,26 @@ Set the selected foreground color
 .PP
 There are more options, that can be set in the configuration file but
 not using arguments passed to spmenu.
+.SS Matching
+.PP
+\f[V]printf \[dq]Apple\[rs]nPear\[rs]nBanana\[rs]n\[dq] | spmenu\f[R]
+.PP
+With the default configuration, typing in \f[V]Apple\f[R],
+\f[V]apple\f[R], \f[V]aPpLe\f[R] and \f[V]pple\f[R] will match
+\f[V]Apple\f[R] in this example.
+Matching is case insensitive, and fuzzy matching is enabled by default.
+You can disable fuzzy matching and enable case sensitivity using
+arguments, or by enabling it in the configuration.
+.PP
+\f[V]printf \[dq]1 Apple\[rs]nOne Apple\[rs]n\[dq] | spmenu\f[R]
+.PP
+spmenu also supports regex matching, but it is not enabled by default.
+Therefore, typing in \f[V][0-9]\f[R] will return no matches.
+In the default configuration, you can press Ctrl+r to enable regex
+matching.
+Now typing in \f[V][0-9]\f[R] will return the \f[V]1 Apple\f[R] entry,
+but not the \f[V]One Apple\f[R] entry.
+Of course, more advanced regex can be used as well.
 .SS Keybinds
 .PP
 You can set keybinds through the config file.
@@ -1323,6 +1343,17 @@ T}@T{
 Escape
 T}@T{
 switchmode
+T}@T{
+0
+T}
+T{
+1
+T}@T{
+Ctrl
+T}@T{
+r
+T}@T{
+toggleregex
 T}@T{
 0
 T}

@@ -380,6 +380,7 @@ static FuncList fl[] = {
     { "screenshot",     screenshot },
     { "setcolumns",     setcolumns },
     { "togglehighlight",togglehighlight },
+    { "toggleregex",    toggleregex },
     { "setprofile",     setprofile },
     { "switchmode",     switchmode },
     { "spawn",          spawn },

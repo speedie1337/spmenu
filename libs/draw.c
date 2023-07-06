@@ -567,6 +567,13 @@ void drawmenu_layer(void) {
     int x = 0, y = 0, w = 0;
     sp.plw = hidepowerline ? 0 : draw->font->h / 2 + 1; // powerline size
 
+    sp_strncpy(tx.modetext, sp.mode ? instext : normtext, sizeof(tx.modetext));
+
+#if USEREGEX
+    if (regex && regextext && sp.mode) {
+        sp_strncpy(tx.modetext, regextext, sizeof(tx.modetext));
+    }
+#endif
 
     // draw menu first using menu scheme
     draw_rect(draw, 0, 0, sp.mw, sp.mh, 1, 1, col_menu, col_menu, alpha_menu, alpha_menu);

@@ -510,6 +510,13 @@ void setprofile(Arg *arg) {
     }
 }
 
+void toggleregex(Arg *arg) {
+    regex = !regex;
+
+    match();
+    drawmenu();
+}
+
 void switchmode(Arg *arg) {
     if (sp.forceinsertmode) {
         return;

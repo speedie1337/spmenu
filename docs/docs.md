@@ -563,6 +563,23 @@ dmenu compatibility can be achieved using these arguments:
 There are more options, that can be set in the configuration file but not using
 arguments passed to spmenu.
 
+## Matching
+
+`printf "Apple\nPear\nBanana\n" | spmenu`
+
+With the default configuration, typing in `Apple`, `apple`, `aPpLe` and `pple`
+will match `Apple` in this example. Matching is case insensitive, and fuzzy
+matching is enabled by default. You can disable fuzzy matching and enable
+case sensitivity using arguments, or by enabling it in the configuration.
+
+`printf "1 Apple\nOne Apple\n" | spmenu`
+
+spmenu also supports regex matching, but it is not enabled by default. Therefore,
+typing in `[0-9]` will return no matches. In the default configuration, you can
+press Ctrl+r to enable regex matching. Now typing in `[0-9]` will return the
+`1 Apple` entry, but not the `One Apple` entry. Of course, more advanced
+regex can be used as well.
+
 ## Keybinds
 
 You can set keybinds through the config file. A default config file is available
@@ -791,6 +808,7 @@ These are the default keybinds. You can generate these yourself from a
 | 0                  | Ctrl               | p                  | navhistory         | -1                 |
 | 0                  | Ctrl               | n                  | navhistory         | +1                 |
 | 1                  | 0                  | Escape             | switchmode         | 0                  |
+| 1                  | Ctrl               | r                  | toggleregex        | 0                  |
 
 ## .Xresources
 
