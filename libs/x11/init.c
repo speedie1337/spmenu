@@ -70,7 +70,7 @@ void setupdisplay_x11(void) {
         y = (mo.output_height - sp.mh) / 2 - ypos;
     } else { // top or bottom
         x = 0;
-        y = menuposition ? 0 : mo.output_width - sp.mh - ypos;
+        y = menuposition ? 0 : mo.output_height - sp.mh - ypos;
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
