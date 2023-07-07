@@ -63,6 +63,8 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int oy;
     int ow;
 
+    int oleftpadding;
+
     // memcpy the correct scheme
     if (item == sel) {
         selitem = 1;
@@ -130,6 +132,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     obga = bga;
     ofgcol = fgcol;
     obgcol = bgcol;
+    oleftpadding = leftpadding;
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
@@ -245,7 +248,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int r = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
 
     if (!hidehighlight)
-        drawhighlights(item, ox, oy, ow, sp.lrpad / 2, item->nsgrtext);
+        drawhighlights(item, ox, oy, ow, oleftpadding, item->nsgrtext);
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
