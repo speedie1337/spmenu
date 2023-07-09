@@ -458,6 +458,11 @@ void insert(const char *str, ssize_t n) {
         sp.cursor -= n;
         match();
     }
+
+    if (incremental) {
+        puts(tx.text);
+        fflush(stdout);
+    }
 }
 
 size_t nextrune(int inc) {

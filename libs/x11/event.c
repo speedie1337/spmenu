@@ -27,11 +27,6 @@ void eventloop_x11(void) {
                     grabfocus();
                 break;
             case KeyPress: // read key array and call functions
-                if (incremental) {
-                    puts(tx.text);
-                    fflush(stdout);
-                }
-
                 keypress_x11(&ev);
                 break;
             case SelectionNotify: // paste selection
