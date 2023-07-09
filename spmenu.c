@@ -137,6 +137,8 @@ struct sp {
     int plw; // powerline width
 
     int itemnumber; // item number
+    int listcount;
+    int listchanged;
 
     size_t cursor; // cursor width
 
@@ -251,8 +253,6 @@ static void grabfocus(void);
 
 static char **list;
 static size_t listsize;
-static int listcount;
-static int listchanged = 0;
 
 // user configuration
 #include "libs/options.h"

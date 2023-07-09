@@ -132,11 +132,12 @@ void readfile(void) {
         if (!o) img.longestedge = img.imagegaps = 0;
 #endif
 
-        if (i == listcount) {
-            listchanged = 0;
+        if (i == sp.listcount) {
+            sp.listchanged = 0;
+            sp.listcount = i;
         } else {
-            listcount = i;
-            listchanged = 1;
+            sp.listcount = i;
+            sp.listchanged = 1;
 
             // prevents state->buffer from being NULL
             if (!protocol) {

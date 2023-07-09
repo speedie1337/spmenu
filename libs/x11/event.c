@@ -42,21 +42,5 @@ void eventloop_x11(void) {
                 drawmenu();
                 break;
         }
-
-        if (listfile) {
-            readfile();
-
-            if (listchanged) {
-                match();
-
-                for (int i = 0; i < sp.itemnumber; i++) {
-                    if (sel && sel->right && (sel = sel->right) == next) {
-                        curr = next;
-                    }
-                }
-
-                drawmenu();
-            }
-        }
     }
 }

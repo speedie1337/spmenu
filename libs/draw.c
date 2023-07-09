@@ -538,9 +538,9 @@ void drawmenu(void) {
         drawimage();
 #endif
         if (listfile) {
-            readfile();
+            readstdin();
 
-            if (listchanged) {
+            if (sp.listchanged) {
                 resizeclient();
                 match();
 
@@ -559,10 +559,25 @@ void drawmenu(void) {
         wl_surface_damage(state.surface, 0, 0, state.width, state.height);
         wl_surface_commit(state.surface);
     } else {
+#endif
+#if USEX
+        if (listfile) {
+            readstdin();
+
+            if (sp.listchanged) {
+                match();
+
+                for (int i = 0; i < sp.itemnumber; i++) {
+                    if (sel && sel->right && (sel = sel->right) == next) {
+                        curr = next;
+                    }
+                }
+            }
+        }
         drawmenu_layer();
+#endif
+#if USEWAYLAND
     }
-#elif USEX
-    drawmenu_layer();
 #endif
 }
 
