@@ -10,9 +10,9 @@ xresources=${xresources:-true}
 wayland=${wayland:-true}
 x11=${x11:-true}
 regex=${regex:-true}
+
 prefix="${prefix:-/usr}"
 
-opt=${opt:--O2}
 reconfigure=${reconfigure:-false}
 static=${static:-false}
 

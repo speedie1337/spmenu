@@ -1,62 +1,9 @@
-option(
-  'wayland',
-  type : 'boolean',
-  value : true,
-  description : 'Enable Wayland support'
-)
-
-option(
-  'x11',
-  type : 'boolean',
-  value : true,
-  description : 'Enable X11 support'
-)
-
-option(
-  'xinerama',
-  type : 'boolean',
-  value : true,
-  description : 'Enable multi-monitor support using libXinerama'
-)
-
-option(
-  'imlib2',
-  type : 'boolean',
-  value : true,
-  description : 'Enable image support'
-)
-
-option(
-  'openssl',
-  type : 'boolean',
-  value : true,
-  description : 'Enable OpenSSL, used for image support'
-)
-
-option(
-  'xresources',
-  type : 'boolean',
-  value : true,
-  description : 'Enable .Xresources/xrdb support'
-)
-
-option(
-  'fribidi',
-  type : 'boolean',
-  value : true,
-  description : 'Enable Right-to-left language support'
-)
-
-option(
-  'libconfig',
-  type : 'boolean',
-  value : true,
-  description : 'Enable configuration file support'
-)
-
-option(
-  'regex',
-  type : 'boolean',
-  value : true,
-  description : 'Enable regex matching'
-)
+option('wayland', type : 'boolean', value : true, description : 'Enable Wayland support')
+option('x11', type : 'boolean', value : true, description : 'Enable X11 support')
+option('xinerama', type : 'boolean', value : true, description : 'Enable multi-monitor support using libXinerama')
+option('imlib2', type : 'boolean', value : true, description : 'Enable image support')
+option('openssl', type : 'boolean', value : true, description : 'Enable OpenSSL, used for image support')
+option('xresources', type : 'boolean', value : true, description : 'Enable .Xresources/xrdb support')
+option('fribidi', type : 'boolean', value : true, description : 'Enable Right-to-left language support')
+option('libconfig', type : 'boolean', value : true, description : 'Enable configuration file support')
+option('regex', type : 'boolean', value : true, description : 'Enable regex matching')
