@@ -220,7 +220,6 @@ void loadimagecache(const char *file, int *width, int *height) {
         slen = snprintf(NULL, 0, "file://%s", file)+1;
 
         if(!(buf = malloc(slen))) {
-            fprintf(stderr, "spmenu: out of memory");
             return;
         }
 
@@ -252,7 +251,6 @@ void loadimagecache(const char *file, int *width, int *height) {
         }
 
         if(!(buf = malloc(slen))) {
-            fprintf(stderr, "spmenu: out of memory");
             return;
         }
 
@@ -284,8 +282,6 @@ void loadimagecache(const char *file, int *width, int *height) {
     // we din't find anything from cache, or it was just wrong
     loadimage(file, width, height);
     scaleimage(width, height);
-
-    if (!generatecache) return;
 
     if (image) imlib_image_set_format("png");
 
