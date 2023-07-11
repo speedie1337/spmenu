@@ -731,6 +731,8 @@ A basic supported SGR sequence looks like this: \f[V]\[rs]033[X;YZm\f[R]
 Here, X specifies if you want normal or bright colors.
 Y specifies if you want background or foreground.
 Z specifies the color number.
+You can add another separator and background color before Z to also
+specify a background color.
 .PP
 Foreground colors: \f[V]30\f[R] through \f[V]37\f[R] Background colors:
 \f[V]40\f[R] through \f[V]47\f[R] Reset: \f[V]0\f[R]
@@ -795,6 +797,14 @@ Small text (\f[V]<small>text is so small here</small>\f[R])
 .TP
 \f[V]<big>\f[R]
 Big text (\f[V]<big>text is so big here</big>\f[R])
+.PP
+You can also color foreground or background text using the
+\f[V]<span>\f[R] tag.
+For example
+\f[V]<span foreground=\[dq]#FFFF00\[dq] background=\[dq]#00FFFF\[dq]>text</span>\f[R]
+will color the foreground and background.
+Of course, this is a bad way to color text in spmenu because SGR
+sequences can be used instead.
 .PP
 Note that Pango markup is NOT escaped, and is piped to stdout.
 Therefore you need to parse it manually.

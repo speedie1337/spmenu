@@ -682,7 +682,9 @@ for more information.
 A basic supported SGR sequence looks like this: `\033[X;YZm`
 
 Here, X specifies if you want normal or bright colors. Y specifies if you
-want background or foreground. Z specifies the color number.
+want background or foreground. Z specifies the color number. You can add
+another separator and background color before Z to also specify a background
+color.
 
 Foreground colors: `30` through `37`
 Background colors: `40` through `47`
@@ -744,6 +746,11 @@ avoid using a `<span>` tag, such as:
 
 `<big>`
 :    Big text (`<big>text is so big here</big>`)
+
+You can also color foreground or background text using the `<span>` tag.
+For example `<span foreground="#FFFF00" background="#00FFFF">text</span>`
+will color the foreground and background. Of course, this is a bad way
+to color text in spmenu because SGR sequences can be used instead.
 
 Note that Pango markup is NOT escaped, and is piped to stdout. Therefore you
 need to parse it manually. Doing so with `sed` is very easy. For example:
