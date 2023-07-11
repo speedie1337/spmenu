@@ -97,8 +97,6 @@ project_target = executable(
 install_man('spmenu.1')
 install_man('spmenu_run.1')
 install_man('spmenu_test.1')
-install_data(sources : 'docs/docs.md', install_dir : 'share/spmenu')
-install_data(sources : 'docs/example.Xresources', install_dir : 'share/spmenu')
 install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
 install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
 install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')

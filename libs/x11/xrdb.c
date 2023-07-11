@@ -41,9 +41,6 @@ void load_xresources(void) {
         return;
     db = XrmGetStringDatabase(resm);
 
-    for (p = resources; p < resources + LENGTH(resources); p++)
-        resource_load(db, p->name, p->type, p->dst);
-
     // recognize global colors
     if (globalcolors) {
         for (p = cols; p < cols + LENGTH(cols); p++)

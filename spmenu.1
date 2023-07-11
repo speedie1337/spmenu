@@ -650,6 +650,22 @@ All of these keybinds can be overriden in the configuration file.
 Should you unbind your switchmode key, you can always press
 \f[V]Ctrl+Alt+Delete\f[R] to exit spmenu, allowing you to fix your
 spmenu configuration.
+.SS History buffer
+.PP
+spmenu allows you to specify a history file using the \f[V]-H\f[R]
+argument.
+When this argument is specified, the selected item(s) will be appended
+to the file.
+In spmenu.conf, you can specify a max number of entries, and whether you
+want duplicate entries or not.
+.PP
+To access the history buffer, call \f[V]viewhist\f[R].
+By default, the keybind for that is Shift+h in normal mode.
+You can also access it by clicking the match indicator.
+To hide the history buffer again, call \f[V]viewhist\f[R].
+.PP
+If \f[V]-H\f[R] is not specified, the history buffer will not be
+available, and calling \f[V]viewhist\f[R] will do nothing.
 .SS -p option
 .PP
 spmenu has a \f[V]-p\f[R] or \f[V]--prompt\f[R] option.
