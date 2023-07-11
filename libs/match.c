@@ -83,8 +83,8 @@ void fuzzymatch(void) {
 
             if (sortmatches && it->hp)
                 appenditem(it, &lhpprefix, &hpprefixend);
-
-            appenditem(it, &matches, &matchend);
+            else
+                appenditem(it, &matches, &matchend);
         }
         free(fuzzymatches);
     }
@@ -145,10 +145,10 @@ void match(void) {
             appenditem(item, &matches, &matchend);
         else {
             // exact matches go first, then prefixes with high priority, then prefixes, then substrings
-            if (item->hp && !fstrncmp(tokv[0], item->text, len))
-                appenditem(item, &lhpprefix, &hpprefixend);
-            else if (!tokc || !fstrncmp(tx.text, item->text, textsize))
+            if (!tokc || !fstrncmp(tx.text, item->text, textsize))
                 appenditem(item, &matches, &matchend);
+            else if (item->hp && !fstrncmp(tokv[0], item->text, len))
+                appenditem(item, &lhpprefix, &hpprefixend);
             else if (!fstrncmp(tokv[0], item->text, len))
                 appenditem(item, &lprefix, &prefixend);
             else
