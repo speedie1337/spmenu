@@ -835,6 +835,9 @@ or enable it by passing -xrdb. You can also set this in the config file.
 You can also use wildcards (such as `*`) to achieve a global colorscheme.
 Programs like `pywal` do this to apply universal colorschemes.
 
+`spmenu.color0` through `spmenu.color15` and `spmenu.font` preferences
+are read by spmenu, these alter the font and colorscheme spmenu uses.
+
 ## Themes
 
 You could just `@include` themes from the aforementioned `spmenu.conf`, but
@@ -852,29 +855,18 @@ Do however note that the theme file is **not** the same as the config file.
 There are quite a lot of differences, and many options are not available.
 This is by design, as these options should be set by the user, not the theme.
 
-Not very convenient if you have many themes because you constantly
-have to replace your theme file, so theme managers exist to make this a
-bit easier. [spmenuify](https://git.speedie.site/speedie/spmenuify) is the official
-theme manager, but you could use another one or write your own.
+Having a single theme file is not very convenient if you have many themes
+because you constantly have to replace your theme file, so theme managers
+exist to make this a bit easier. [spmenuify](https://git.speedie.site/speedie/spmenuify)
+is the official theme manager, but you could use another one or write your own.
 
 For more information on the theme.conf configuration file,
 see [this page](https://spmenu.speedie.site/theme.conf+documentation).
 
-## spmenu commands
-
-spmenu has a few special commands. These work similar to the images. For example
-to list the version, in addition to the `--version` argument you can also simply
-run `printf 'spmenu:version' | spmenu`. There are a few of these.
-
-`spmenu:version`
-:    Print the spmenu version
-
-`spmenu:license`
-:    Print the spmenu license
-
 ## License
 
-spmenu is licensed under the MIT license.
+spmenu is licensed under the MIT license. The documentation is licensed
+under the CC-BY-SA 4.0 license.
 
 ## Reporting issues
 
@@ -888,3 +880,4 @@ or the [GitHub mirror](https://github.com/speediegq/spmenu).
 - [spmenu wiki](https://spmenu.speedie.site)
 - [spmenu git repository](https://git.speedie.site/speedie/spmenu)
 - [spmenu GitHub mirror](https://github.com/speediegq/spmenu)
+- [spmenuify](https://git.speedie.site/speedie/spmenuify)

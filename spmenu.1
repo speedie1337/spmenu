@@ -1386,6 +1386,10 @@ You can also set this in the config file.
 You can also use wildcards (such as \f[V]*\f[R]) to achieve a global
 colorscheme.
 Programs like \f[V]pywal\f[R] do this to apply universal colorschemes.
+.PP
+\f[V]spmenu.color0\f[R] through \f[V]spmenu.color15\f[R] and
+\f[V]spmenu.font\f[R] preferences are read by spmenu, these alter the
+font and colorscheme spmenu uses.
 .SS Themes
 .PP
 You could just \f[V]\[at]include\f[R] themes from the aforementioned
@@ -1409,31 +1413,18 @@ available.
 This is by design, as these options should be set by the user, not the
 theme.
 .PP
-Not very convenient if you have many themes because you constantly have
-to replace your theme file, so theme managers exist to make this a bit
-easier.
+Having a single theme file is not very convenient if you have many
+themes because you constantly have to replace your theme file, so theme
+managers exist to make this a bit easier.
 spmenuify (https://git.speedie.site/speedie/spmenuify) is the official
 theme manager, but you could use another one or write your own.
 .PP
 For more information on the theme.conf configuration file, see this
 page (https://spmenu.speedie.site/theme.conf+documentation).
-.SS spmenu commands
-.PP
-spmenu has a few special commands.
-These work similar to the images.
-For example to list the version, in addition to the \f[V]--version\f[R]
-argument you can also simply run
-\f[V]printf \[aq]spmenu:version\[aq] | spmenu\f[R].
-There are a few of these.
-.TP
-\f[V]spmenu:version\f[R]
-Print the spmenu version
-.TP
-\f[V]spmenu:license\f[R]
-Print the spmenu license
 .SS License
 .PP
 spmenu is licensed under the MIT license.
+The documentation is licensed under the CC-BY-SA 4.0 license.
 .SS Reporting issues
 .PP
 Please report issues on the Git
@@ -1450,3 +1441,5 @@ spmenu wiki (https://spmenu.speedie.site)
 spmenu git repository (https://git.speedie.site/speedie/spmenu)
 .IP \[bu] 2
 spmenu GitHub mirror (https://github.com/speediegq/spmenu)
+.IP \[bu] 2
+spmenuify (https://git.speedie.site/speedie/spmenuify)

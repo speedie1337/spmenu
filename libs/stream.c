@@ -182,6 +182,12 @@ int parsemarkup(int index) {
     if(items[index].image) {
         limg = items[index].image;
     }
+
+    if (limg) {
+        return 1;
+    } else {
+        return 0;
+    }
 #else // remove the data, just for convenience
     char *data;
 
@@ -194,38 +200,5 @@ int parsemarkup(int index) {
             items[index].text += strlen("img://")+strlen(data)+1;
         }
     }
-#endif
-
-    /* TODO: use this for something
-     * current usage is not very uslful, however it's here to be used later.
-     */
-    if(!(items[index].ex = malloc(strlen(items[index].text)+1)))
-        fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));
-    if (!strncmp("spmenu:", items[index].text, strlen("spmenu:"))) {
-        if (sscanf(items[index].text, "spmenu:%[^\t]", items[index].ex)) {
-            items[index].text += strlen("spmenu:")+strlen(items[index].ex)+1;
-        }
-
-        // spmenu:version
-        if (!strncmp("version", items[index].ex, strlen("version"))) {
-            fprintf(stdout, "spmenu version %s\n", VERSION);
-            exit(0);
-        }
-
-        // spmenu:license
-        if (!strncmp("license", items[index].ex, strlen("license"))) {
-            fprintf(stdout, "spmenu is licensed under the MIT license. See the included LICENSE file for more information.\n");
-            exit(0);
-        }
-    }
-
-#if USEIMAGE
-    if (limg) {
-        return 1;
-    } else {
-        return 0;
-    }
-#else
-    return 0;
 #endif
 }
