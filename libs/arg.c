@@ -4,6 +4,11 @@ void moveleft(Arg *arg) {
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
 
+    if (!lines) {
+        moveup(arg);
+        return;
+    }
+
     if (columns > 1) {
         if (!sel)
             return;
@@ -34,6 +39,11 @@ void moveright(Arg *arg) {
     struct item *tmpsel;
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
+
+    if (!lines) {
+        movedown(arg);
+        return;
+    }
 
     if (columns > 1) {
         if (!sel)
