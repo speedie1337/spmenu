@@ -501,11 +501,23 @@ void get_width(void) {
 }
 
 void get_mh(void) {
+    int epad;
+
     sp.mh = (lines + 1) * sp.bh;
     sp.mh += 2 * menumarginv;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         sp.mh -= sp.bh;
+    }
+
+    epad = 2 * menupaddingv;
+
+    if (mo.output_height && !xpos && !ypos) {
+        sp.mh = MIN(sp.mh, mo.output_height - epad);
+
+        if (sp.mh == mo.output_height - epad) {
+            lines = ((mo.output_height - epad) / sp.bh) - 1;
+        }
     }
 }
 

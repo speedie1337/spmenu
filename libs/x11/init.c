@@ -64,6 +64,8 @@ void setupdisplay_x11(void) {
         mo.output_height = wa.height;
     }
 
+    get_mh();
+
     if (menuposition == 2) { // centered
         sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
         x = (mo.output_width - sp.mw) / 2 + xpos;
