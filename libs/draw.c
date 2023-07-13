@@ -28,7 +28,7 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
                     x + indent + (p),
                     y,
                     MIN(w - indent - sp.lrpad, TEXTW(highlight) - sp.lrpad),
-                    sp.bh, 0, highlight, 0, pango_highlight ? True : False,
+                    sp.bh, 0, highlight, 0, False,
                     item == sel ? col_hlselfg : col_hlnormfg,
                     item == sel ? col_hlselbg : col_hlnormbg,
                     item == sel ? alpha_hlselfg : alpha_hlnormfg,

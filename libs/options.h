@@ -247,7 +247,6 @@ static int alpha_capsbg                = 200; /* Alpha for the caps lock indicat
 
 /* Pango options */
 static int pango_item                  = 1; /* Enable support for pango markup for the items */
-static int pango_highlight             = 1; /* Enable support for pango markup for the highlighting */
 static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */
 static int pango_caps                  = 1; /* Enable support for pango markup for the caps lock indicator */
 static int pango_input                 = 1; /* Enable support for pango markup for user input */

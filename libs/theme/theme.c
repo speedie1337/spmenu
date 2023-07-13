@@ -460,7 +460,6 @@ void theme_load(void) {
 
             // look up
             config_setting_lookup_int(conf, "item", &pango_item); // theme.pango.input
-            config_setting_lookup_int(conf, "highlight", &pango_highlight); // theme.pango.highlight
             config_setting_lookup_int(conf, "prompt", &pango_prompt); // theme.pango.rarrow
             config_setting_lookup_int(conf, "input", &pango_input); // theme.pango.input
             config_setting_lookup_int(conf, "leftarrow", &pango_leftarrow); // theme.pango.leftarrow

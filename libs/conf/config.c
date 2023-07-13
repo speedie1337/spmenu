@@ -798,7 +798,6 @@ void conf_init(void) {
 
             // look up
             config_setting_lookup_int(conf, "item", &pango_item); // spmenu.pango.input
-            config_setting_lookup_int(conf, "highlight", &pango_highlight); // spmenu.pango.highlight
             config_setting_lookup_int(conf, "prompt", &pango_prompt); // spmenu.pango.rarrow
             config_setting_lookup_int(conf, "input", &pango_input); // spmenu.pango.input
             config_setting_lookup_int(conf, "leftarrow", &pango_leftarrow); // spmenu.pango.leftarrow
