@@ -280,7 +280,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "margin-vertical", &menumarginv); // spmenu.window.margin-vertical
             config_setting_lookup_int(conf, "margin-horizontal", &menumarginh); // spmenu.window.margin-horizontal
             config_setting_lookup_int(conf, "x", &xpos); // spmenu.window.x
-            config_setting_lookup_int(conf, "y", &xpos); // spmenu.window.y
+            config_setting_lookup_int(conf, "y", &ypos); // spmenu.window.y
             config_setting_lookup_int(conf, "width", &menuwidth); // spmenu.window.width
             config_setting_lookup_int(conf, "border", &borderwidth); // spmenu.window.border
             config_setting_lookup_int(conf, "managed", &managed); // spmenu.window.managed
@@ -333,7 +333,7 @@ void conf_init(void) {
         for (unsigned int i = 0; i < config_setting_length(center_setting); ++i) {
             config_setting_t *conf = config_setting_get_elem(center_setting, i);
 
-            config_setting_lookup_int(conf, "width", &minwidth); // spmenu.center.width
+            config_setting_lookup_int(conf, "width", &centerwidth); // spmenu.center.width
         }
     }
 

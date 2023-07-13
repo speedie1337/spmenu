@@ -113,7 +113,7 @@ void theme_load(void) {
         for (unsigned int i = 0; i < config_setting_length(center_setting); ++i) {
             config_setting_t *conf = config_setting_get_elem(center_setting, i);
 
-            config_setting_lookup_int(conf, "width", &minwidth); // theme.center.width
+            config_setting_lookup_int(conf, "width", &centerwidth); // theme.center.width
         }
     }
 

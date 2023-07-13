@@ -67,7 +67,7 @@ void setupdisplay_x11(void) {
     get_mh();
 
     if (menuposition == 2) { // centered
-        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
+        sp.mw = MIN(MAX(max_textw() + sp.promptw, centerwidth), mo.output_width);
         x = (mo.output_width - sp.mw) / 2 + xpos;
         y = (mo.output_height - sp.mh) / 2 - ypos;
     } else { // top or bottom

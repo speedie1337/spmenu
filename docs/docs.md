@@ -36,8 +36,8 @@ You may use long, descriptive arguments or the shorter arguments.
 `-mh, --line-height height`
 :   Set spmenu line height to height
 
-`-mw, --min-width width`
-:   Set minimum width to width when centered
+`-cw, --center-width width`
+:   Set width to width when centered
 
 `-g, --columns grid`
 :   Set the number of grids to grid

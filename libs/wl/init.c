@@ -41,7 +41,7 @@ void handle_wl(void) {
     get_mh();
 
     if (menuposition == 2) {
-        sp.mw = MIN(MAX(max_textw() + sp.promptw, minwidth), mo.output_width);
+        sp.mw = MIN(MAX(max_textw() + sp.promptw, centerwidth), mo.output_width);
     }
 
     state.width = sp.mw;
