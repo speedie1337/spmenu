@@ -83,6 +83,10 @@ int draw_icon(struct item *item, int x, int y, int w, int h) {
             }
         }
 
+        if (ich != h || icw != w) {
+            image = NULL;
+        }
+
         if (!image || !generatecache) {
             image = imlib_load_image(item->image);
 
