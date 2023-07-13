@@ -2,7 +2,7 @@
 
 #if USEIMAGE
 void setimagesize(int width, int height) {
-    if (!image || hideimage || height < 5 || width < 5 || width > sp.mw) {
+    if (!image || hideimage || height < 5 || width < 5 || width > sp.mw - sp.bh) {
         return;
     }
 
