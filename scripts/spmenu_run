@@ -666,7 +666,7 @@ print_desktop_list() {
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE"
 
-        for ((i=1; i < "$entry_c"; i++)); do
+        for ((i=1; i <= "$entry_c"; i++)); do
             command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
 
             cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
