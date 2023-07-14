@@ -65,6 +65,8 @@ static WlMouse wl_cbuttons[256];
 #define WL_Forward 0x115
 #define WL_Back	0x116
 #define WL_Task	0x117
+#define WL_Up 0x151
+#define WL_Down 0x150
 
 static WlKey wlhkeys[1] = { { -1, WL_CtrlAlt, XKB_KEY_Delete, quit, {0} } };
 

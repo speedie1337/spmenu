@@ -345,14 +345,14 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(wl_buttons); i++) {
         if (sp.ignoreglobalmouse) break;
-        if (click == wl_buttons[i].click && wl_buttons[i].func && wl_buttons[i].button == button)
+        if ((click == wl_buttons[i].click || wl_buttons[i].click == ClickNone) && wl_buttons[i].func && wl_buttons[i].button == button)
             wl_buttons[i].func(&wl_buttons[i].arg);
     }
 
     // go through mouse config array and run function
     for (i = 0; i < LENGTH(wl_cbuttons); i++) {
         if (sp.ignoreconfmouse) break;
-        if (click == wl_cbuttons[i].click && wl_cbuttons[i].func && wl_cbuttons[i].button == button)
+        if ((click == wl_cbuttons[i].click || wl_cbuttons[i].click == ClickNone) && wl_cbuttons[i].func && wl_cbuttons[i].button == button)
             wl_cbuttons[i].func(&wl_cbuttons[i].arg);
     }
 }

@@ -411,9 +411,6 @@ main() {
     read -ra desktopdir <<< "${DESKTOP_DIR}"
     read -ra icondir <<< "${ICON_DIR}"
 
-    # clear cache
-    [ "$clearcache" = "true" ] && clear_cache
-
     # $PATH listing
     case "$function" in
         "run")
@@ -426,6 +423,7 @@ main() {
             ;;
         "desktop")
             load_x "spmenu_desktop" || exit 1
+            [ "$clearcache" = "true" ] && clear_cache
             prep_desktop
             print_desktop_menu "$args"
             ;;

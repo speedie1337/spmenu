@@ -665,6 +665,8 @@ static ButtonType w_btp[] = {
     { "Left Click",   WL_Left },
     { "Middle Click", WL_Middle },
     { "Right Click",  WL_Right },
+    { "Scroll Up",    WL_Up },
+    { "Scroll Down",  WL_Down },
 };
 #endif
 
@@ -682,6 +684,7 @@ static ClickType ctp[] = {
 #if USEIMAGE
     { "ClickImage",   ClickImage },
 #endif
+    { "None",         ClickNone },
 };
 
 static void conf_init(void);

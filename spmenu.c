@@ -107,6 +107,7 @@ enum {
     ClickCaps,
     ClickMode,
     ClickImage,
+    ClickNone,
 };
 
 struct item {

@@ -129,14 +129,14 @@ void buttonpress_x11(XEvent *e) {
     // go through mouse button array and run function
     for (i = 0; i < LENGTH(buttons); i++) {
         if (sp.ignoreglobalmouse) break;
-        if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button)
+        if ((click == buttons[i].click || buttons[i].click == ClickNone) && buttons[i].func && buttons[i].button == ev->button)
             buttons[i].func(&buttons[i].arg);
     }
 
     // go through mouse config array and run function
     for (i = 0; i < LENGTH(cbuttons); i++) {
         if (sp.ignoreconfmouse) break;
-        if (click == cbuttons[i].click && cbuttons[i].func && cbuttons[i].button == ev->button)
+        if ((click == cbuttons[i].click || cbuttons[i].click == ClickNone) && cbuttons[i].func && cbuttons[i].button == ev->button)
             cbuttons[i].func(&cbuttons[i].arg);
     }
 }
