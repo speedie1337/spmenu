@@ -100,7 +100,7 @@ parse() {
         case "$sout" in
             "?")
                 print_help "$@"
-                parse
+                parse "$@"
                 exec_cmd
                 ;;
             "@")
@@ -151,6 +151,14 @@ print_bookmarks() {
 exec_cmd() {
     [ -z "$EXEC" ] && EXEC=shell
     [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
+
+    if [ -d "$sout" ]; then
+        load_x "spmenu_fm"
+        dir="$sout"
+        prepare_dirnav
+        return
+    fi
+
     command -v run_post_func > /dev/null && run_post_func "$sout"
 
     # when there's no read_man func because the user is retarded and removed it, this basic function will be called instead
