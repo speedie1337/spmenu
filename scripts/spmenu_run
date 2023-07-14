@@ -652,6 +652,8 @@ print_desktop_list() {
             it_exec[i]="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             it_file[i]="$cur_file"
             it_term[i]="false"
+            it_only[i]="false"
+            it_display[i]="true"
 
             if [ "$PREFERRED_LANGUAGE" != "generic" ]; then
                   t_title="$(grep "Name\[$PREFERRED_LANGUAGE\]=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
@@ -664,6 +666,8 @@ print_desktop_list() {
             fi
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
+            grep -q "NoDisplay=true" "$cur_file" && it_display[i]="false"
+            grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
 
             # write files
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
@@ -705,6 +709,9 @@ print_desktop_list() {
 
         # finally print all of it
         for i in "${!it_title[@]}"; do
+            [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
+            [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
+
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
                 printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
             elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
