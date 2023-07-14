@@ -708,14 +708,14 @@ the output. This is useful when you want to check what the output actually is.
 256 color sequences are also supported, but due to the complexity involved, they
 will not be covered in this man page.
 
-## Pango markup
+## Pango markup and text formatting
 
-If spmenu was compiled with Pango enabled (default), you should be able to
-utilize Pango markup in every part of spmenu. That is, the mode indicator,
-items, input, prompt, etc.
+Because spmenu uses Pango and Cairo for text drawing, Pango markup can be used
+to format text and other elements.
 
 Pango markup allows you to style text similar to an HTML document. It also
-provides the `<span>` tag, which can be used to do surprisingly complex things.
+provides the `<span>` tag, which can be used to do surprisingly complex things,
+such as drawing shapes.
 
 There are many convenient tags as well which can be used to
 avoid using a `<span>` tag, such as:
