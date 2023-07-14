@@ -778,7 +778,7 @@ very much. This file is documented well [here](https://spmenu.speedie.site/binds
 ## Default keybinds
 
 These are the default keybinds. You can generate these yourself from a
-`keybinds.h` using `scripts/make/generate-keybind-list.sh`.
+`keybinds.h` using `scripts/spmenu_make`.
 
 | Mode               | Modifier           | Key                | Function           | Argument           |
 | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
