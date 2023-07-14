@@ -1,0 +1,241 @@
+#!/usr/bin/env bash
+# spmenu_desktop
+# This script provides functions for handling .desktop entries
+#
+# See LICENSE file for copyright and license details.
+
+check_desktop() {
+    [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
+    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
+        print_desktop_help
+        touch "$CONFDIR/spmenu/run/.first_run"
+    fi
+}
+
+print_desktop_help() {
+    if [ "$DMENU_COMPAT" != "true" ]; then
+        COL='\033[0;31m'
+        RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --hide-caps --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
+        read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
+    fi
+    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
+Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
+To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
+To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
+
+By default, spmenu_run will cache entries for speed reasons. You can find these entries in ~/.config/spmenu/run/cache.
+If you make changes to .desktop files (not new entries, modified old entries), you need to clear the cache for the changes to appear. Simply delete the directory to do this.
+
+- Type in '?' to show this help screen at any time.
+
+$(printf "%b" "$COL")Note: This may also be displayed if you deleted your spmenu configuration directory.
+EOF
+}
+
+print_desktop_list() {
+    # should we use cached files?
+    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ] && [ -f "$ONLYFILE" ] && [ -f "$COMMENTFILE" ]; then
+        cfiles=true
+    else
+        cfiles=false
+    fi
+
+    read -ra uniq_args <<< "${UNIQ_ARGS}"
+
+    it_title=()
+    it_desc=()
+    it_icon=()
+    it_exec=()
+    it_file=()
+    it_term=()
+    it_display=()
+    it_comment=()
+    it_only=()
+
+    # autorefreshing
+    if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
+        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null | grep -c "")"
+        [ -f "$FILEFILE" ] && cached_c="$(grep -c "" < "$FILEFILE")" || cached_c="0"
+
+        printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
+
+        [ "$cfiles" = "true" ] && [ "$entry_c" != "$cached_c" ] && cfiles=false
+    fi
+
+    # print data from entries
+    if [ "$cfiles" = "false" ]; then
+        command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\nComment file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE" >> "$LOGFILE"
+
+        [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
+
+        icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
+        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
+        [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
+
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE"
+
+        for ((i=1; i <= "$entry_c"; i++)); do
+            command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
+
+            cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
+            [ ! -f "$cur_file" ] && printf "No desktop entries found." && return
+            icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
+
+            file_=$(sed '/\[Desktop Action/q' "$cur_file")
+            it_title[i]="$(awk -F'=' '/^Name=/ && !/Generic/ {gsub("Name=", ""); print; exit}' <<< "$file_")"
+            it_desc[i]="$(awk -F'=' '/GenericName=/ {gsub("GenericName=", ""); print}' <<< "$file_")"
+            it_comment[i]="$(awk -F'=' '/Comment=/ {gsub("Comment=", ""); print}' <<< "$file_")"
+            it_icon[i]="$(grep -F "/${icon_name}." <<< "$icons" | head -n 1)"
+            it_exec[i]="$(awk -F'=' '!/TryExec/ && /Exec=/ {gsub("Exec=", ""); gsub("%[UuFf]", ""); print; exit}' <<< "$file_")"
+            it_file[i]="$cur_file"
+            it_term[i]="false"
+            it_only[i]="false"
+            it_display[i]="true"
+
+            if [ "$PREFERRED_LANGUAGE" != "generic" ]; then
+                t_title="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Name\[$PREFERRED_LANGUAGE\]=" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
+                t_desc="$(sed '/\[Desktop Action/q' "$cur_file" | grep "GenericName\[$PREFERRED_LANGUAGE\]=" | sed "s/GenericName\[$PREFERRED_LANGUAGE\]=//g")"
+                t_comment="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Comment\[$PREFERRED_LANGUAGE\]=" | sed "s/Comment\[$PREFERRED_LANGUAGE\]=//g")"
+
+                [ -n "$t_title" ] && it_title[i]="$t_title"
+                [ -n "$t_desc" ] && it_desc[i]="$t_desc"
+                [ -n "$t_comment" ] && it_comment[i]="$t_comment"
+            fi
+
+            grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
+            grep -qE "NoDisplay=true|Hidden=true" "$cur_file" && it_display[i]="false"
+            grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
+
+            # write files
+            printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
+            printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
+            printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
+            printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
+            printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
+            printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
+            printf "%s\n" "${it_display[i]}" >> "$DISPLAYFILE"
+            printf "%s\n" "${it_comment[i]}" >> "$COMMENTFILE"
+            printf "%s\n" "${it_only[i]}" >> "$ONLYFILE"
+
+            # log it all
+            printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
+            printf "%d. Description - %s\n" "${i}" "${it_desc[i]}" >> "$LOGFILE"
+            printf "%d. Executable - %s\n" "${i}" "${it_exec[i]}" >> "$LOGFILE"
+            printf "%d. Icon - %s\n" "${i}" "${it_icon[i]}" >> "$LOGFILE"
+            printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
+            printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
+            printf "%d. Display - %s\n" "${i}" "${it_display[i]}" >> "$LOGFILE"
+            printf "%d. Only - %s\n" "${i}" "${it_only[i]}" >> "$LOGFILE"
+            printf "%d. Comment - %s\n" "${i}" "${it_comment[i]}" >> "$LOGFILE"
+        done
+
+        command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
+
+        print_desktop_list "noc"
+    else # we have entries, let's populate the arrays
+        command -v desktop_pre_func > /dev/null && desktop_pre_func
+
+        mapfile -t it_title < "$TITLEFILE"
+        mapfile -t it_icon < "$ICONFILE"
+        mapfile -t it_exec < "$EXECFILE"
+        mapfile -t it_file < "$FILEFILE"
+        mapfile -t it_desc < "$DESCFILE"
+        mapfile -t it_display < "$DISPLAYFILE"
+        mapfile -t it_only < "$ONLYFILE"
+        mapfile -t it_comment < "$COMMENTFILE"
+
+        d_print_array
+    fi
+}
+
+d_print_array() {
+    command -v print_array > /dev/null && print_array && return
+
+    for i in "${!it_title[@]}"; do
+        [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
+        [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
+
+        if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
+            printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
+        elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+            printf "%s" "${it_title[i]}"
+        else
+            continue
+        fi
+
+        if [ -n "${it_desc[i]}" ] && [ "$DISPLAY_DESCRIPTION" = "true" ]; then
+            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
+            printf -- "$DESCRIPTION_SEPARATOR%b%s" "${COL}" "${it_desc[i]}"
+        fi
+
+        if [ -n "${it_comment[i]}" ] && [ "$DISPLAY_COMMENT" = "true" ]; then
+            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;32m'
+            printf -- "$COMMENT_SEPARATOR%b%s" "${COL}" "${it_comment[i]}"
+        fi
+
+        printf "\n"
+    done
+}
+
+exec_program() {
+    [ ! -f "$TITLEFILE" ] || [ ! -f "$EXECFILE" ] || [ ! -f "$TERMFILE" ] && exit 1
+    mapfile -t it_title < "$TITLEFILE"
+    mapfile -t it_exec < "$EXECFILE"
+    mapfile -t it_term < "$TERMFILE"
+
+    # set exec
+    [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
+    for i in "${!it_title[@]}"; do
+        if [ "${it_title[i]}" = "$menusel" ]; then
+            exec="${it_exec[i]}"
+            term="${it_term[i]}"
+
+            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
+            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
+
+            break;
+        else
+            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
+            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
+        fi
+    done
+
+    # finally run the program
+    if [ -n "$exec" ] && [ "$term" = "false" ]; then
+        ${SHELL:-/bin/sh} -c "$exec" &
+    elif [ -n "$exec" ] && [ "$term" = "true" ]; then
+        ${TERMINAL} -e "$exec" &
+    else
+        printf "No executable found. Try clearing cache." >> "$LOGFILE"
+    fi
+}
+
+print_desktop_menu() {
+    check_desktop
+
+    HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
+
+    print_desktop_list "" | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
+
+    while read -r menusel; do
+        [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
+        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
+        [ -z "$menusel" ] && return 1 \
+            || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
+
+        # this must now be the title only
+        menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
+
+        exec_program "$@"
+        [ "$MULTISELECT" != "true" ] && break
+    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
+}
+
+prep_desktop() {
+    printf "spmenu_run log (%s)\nFunction: Desktop\n" "$(date "+%D %T")" > "$LOGFILE"
+}
+
+clear_cache() {
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}" "${DISPLAYFILE}" "${ONLYFILE}" "${COMMENTFILE}"
+}

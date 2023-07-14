@@ -103,6 +103,9 @@ install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/appli
 install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')
 install_data(sources : 'docs/spmenu.svg', install_dir : 'share/icons/hicolor/scalable/apps')
 install_data(sources : 'scripts/spmenu_run', install_dir : 'bin')
+install_data(sources : 'scripts/spmenu_path', install_dir : 'bin')
+install_data(sources : 'scripts/spmenu_fm', install_dir : 'bin')
+install_data(sources : 'scripts/spmenu_desktop', install_dir : 'bin')
 install_data(sources : 'scripts/spmenu_test', install_dir : 'bin')
 
 test('spmenu', project_target)

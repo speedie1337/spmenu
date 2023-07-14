@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# spmenu_fm
+# This script provides functions for file management
+#
+# See LICENSE file for copyright and license details.
+
+exec_file() {
+    [ "$USE_FULL_PATH" != "false" ] && DIR="$(pwd)/"
+    [ "$STDOUT" != "false" ] && printf "%s%s\n" "${DIR}" "$1" && return 0
+    command -v fm_post_func > /dev/null && fm_post_func "$1"
+
+    # some default basic parsing
+    case "$1" in
+        *.html|*.htm) $BROWSER "$1" ;;
+        *.pdf) $PDF_READER "$1" ;;
+        *.flac|*.mp3|*.wav|*.ogg) $PLAYER "$1" ;;
+        *.mp4|*.mov|*.mkv) $PLAYER "$1" ;;
+        *.theme) $EDITOR "$1" ;;
+        *)
+            if [ -x "$1" ]; then
+                $TERMINAL -e "$1"
+            else
+                $GENERIC "$1"
+            fi
+            ;;
+    esac
+}
+
+prepare_dirnav() {
+    [ ! -d "$dir" ] && return 1
+    cd "$dir" || printf "Invalid directory.. somehow\n"
+
+    # TODO: read line by line so we can append/prepend whatever we want
+    listing() {
+        command -v fm_pre_list_func > /dev/null && fm_pre_list_func
+        ls "${ls_args[@]}" > /tmp/spmenu_ls_list # this allows us SGR colors
+        printf "..\n" >> /tmp/spmenu_ls_list
+
+        while read -r l; do
+            command -v fm_line_func > /dev/null && fm_line_func "$(pwd)/$l"
+            printf "%s\n" "$l"
+        done < "/tmp/spmenu_ls_list"; rm -f /tmp/spmenu_ls_list
+
+        command -v fm_post_list_func > /dev/null && fm_post_list_func
+    }
+
+    command -v fm_pre_func > /dev/null && fm_pre_func
+
+    listing | $RUNLAUNCHER "${rl_fm[@]}" | sed -e 's/\x1b\[[0-9;]*m//g' > /tmp/spmenu_out
+
+    while read -r dir; do
+        case "$dir" in
+            *)
+                if [ -d "$dir" ]; then
+                    dir="$(pwd)/$dir"
+                    command -v fm_dir_func > /dev/null && fm_dir_func "$dir"
+                    prepare_dirnav
+                elif [ -f "$dir" ]; then
+                    exec_file "$dir"
+                else
+                    return 1
+                fi
+                ;;
+        esac
+        [ "$MULTISELECT" != "true" ] && break
+    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
+
+    [ -z "$dir" ] && return 1
+}

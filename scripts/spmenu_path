@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+# spmenu_path
+# This script provides functions for reading $PATH
+#
+# See LICENSE file for copyright and license details.
+
+path() {
+    [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
+    [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
+    SORT_ARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
+
+    read -ra uniq_args <<< "${UNIQ_ARGS}"
+    read -ra sort_args <<< "${SORT_ARGS}"
+
+    HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-NULL_ENTRY}"
+
+    print_menu() {
+        print() {
+                compgen -c | \
+                grep -vE "$HIDDEN_KEYWORDS" | \
+                grep -E "$KEYWORDS"
+            }
+
+            if [ "$SORT_BY_RECENT" != "false" ]; then
+                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+            else
+                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+            fi
+        }
+
+    # uniq
+    if [ "$DISPLAY_DUPLICATES" != "false" ]; then
+        print_menu
+    else
+        print_menu | uniq "${uniq_args[@]}"
+    fi
+
+    command -v run_pre_func && run_pre_func
+}
+
+print_help() {
+    if [ "$DMENU_COMPAT" != "true" ]; then
+        COL='\033[0;31m'
+        RUNLAUNCHER_EX_ARGS="--lines 30 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
+        read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
+    fi
+    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
+Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
+To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
+To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/spmenu.conf to $CONFDIR/spmenu/spmenu.conf and edit that.
+
+- Type in '?' to show this help screen at any time.
+- If the entry selected starts with 'www', it will instead be treated as a link and spawned in a web browser (\$BROWSER)
+- If the entry selected starts with 'magnet', it will instead be treated as a magnet link and spawned in a torrent client (\$TORRENT)
+- If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
+- If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
+
+Enter '@' to show the bookmark list. Enter '@<text>:<command>' to add a bookmark. If the bookmark is selected, the
+<command> will be executed. Enter @c to clear the bookmark list. '@<text>' is also valid, and then <text> will be
+executed instead.
+
+$(printf "%b" "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
+EOF
+}
+
+parse() {
+    [ ! -f "$BOOKMARK_FILE" ] && mkdir -p "$(dirname "$BOOKMARK_FILE")" && touch "$BOOKMARK_FILE"
+
+    if [ "$SHOW_BM" != "true" ]; then
+        path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
+    else
+        echo > /tmp/spmenu_out
+    fi
+
+    while read -r sout; do
+        command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
+        command -v run_output_func > /dev/null && run_output_func "${sout}"
+
+        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
+
+        # check for keywords
+        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
+        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
+
+        case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
+            "magnet") EXEC=torrent ;;
+            "www") EXEC=web ;;
+            "?") ;;
+        esac
+
+        # parse
+        case "${sout:0:1}" in
+            "#") EXEC="term" ;;
+            "?") EXEC="man" ;;
+            "@") EXEC="mark" ;;
+        esac
+
+        [ "$SHOW_BM" = "true" ] && sout="@"
+
+        case "$sout" in
+            "?")
+                print_help "$@"
+                parse
+                exec_cmd
+                ;;
+            "@")
+                print_bookmarks "$@"
+                ;;
+            "@c")
+                rm -f "$BOOKMARK_FILE" && touch "$BOOKMARK_FILE"
+                parse
+                exec_cmd
+                ;;
+        esac
+
+        printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
+
+        exec_cmd "$args"
+        [ "$MULTISELECT" != "true" ] && break
+    done < /tmp/spmenu_out
+}
+
+bookmark_path() {
+    while read -r file; do
+        command -v run_file_bookmark_list_func > /dev/null && \
+            run_file_bookmark_list_func "$file"
+
+        printf "%s\n" "${file%%:*}"
+    done < "$BOOKMARK_FILE"
+}
+
+print_bookmarks() {
+    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_bm[@]}" > /tmp/spmenu_out
+
+    while read -r sout; do
+        command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
+        command -v run_single_char_pre_bookmark_list_func > /dev/null && run_single_char_pre_bookmark_list_func "${sout:0:1}"
+
+        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
+
+        sout_e="$(grep -- "$sout" "$BOOKMARK_FILE" | tail -n 1)"
+        printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
+        [ "$MULTISELECT" != "true" ] && break
+    done < /tmp/spmenu_out
+
+    command -v run_post_bookmark_list_func > /dev/null && run_post_bookmark_list_func
+
+    exit 0
+}
+
+exec_cmd() {
+    [ -z "$EXEC" ] && EXEC=shell
+    [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
+    command -v run_post_func > /dev/null && run_post_func "$sout"
+
+    # when there's no read_man func because the user is retarded and removed it, this basic function will be called instead
+    read_woman() {
+        $TERMINAL -e man "$1"
+    }
+
+    # execute it
+    case "$EXEC" in
+        "mark") printf "%s\n" "$sout" | sed -- "s/@//g" >> "$BOOKMARK_FILE"; parse; exit 0 ;;
+        "shell") printf "%s" "$sout" | ${SHELL:-"/bin/sh"} & ;;
+        "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
+        "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
+        "torrent") $TORRENT "$(printf "%s" "$sout" | sed "s/magnet //g")" & ;;
+        "man") exec="$(printf "%s" "$sout" | sed "s/?//g")"
+            [ -x "$(command -v "$exec")" ] || return
+            if [ "$(command -v read_man)" ]; then
+                read_man "$exec"
+                return
+            else
+                read_woman "$exec"
+                return
+            fi
+            ;;
+    esac
+}

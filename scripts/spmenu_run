@@ -92,6 +92,12 @@ declare -a uniq_args
 declare -a desktopdir
 declare -a icondir
 
+load_x() {
+    v="$(command -v "$1")"
+    [ ! -x "$v" ] && printf "Failed to load module\n" >> /dev/stderr && exit 1
+    . "$v" && return 0
+}
+
 prepare_dirs() {
     mkdir -p \
         "$(dirname "$TITLEFILE")" \
@@ -114,73 +120,6 @@ check() {
         print_help
         touch "$CONFDIR/spmenu/run/.first_run"
     fi
-}
-
-check_desktop() {
-    [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
-    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
-        print_desktop_help
-        touch "$CONFDIR/spmenu/run/.first_run"
-    fi
-}
-
-path() {
-    [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
-    [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
-    SORT_ARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
-
-    read -ra uniq_args <<< "${UNIQ_ARGS}"
-    read -ra sort_args <<< "${SORT_ARGS}"
-
-    HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-NULL_ENTRY}"
-
-    print_menu() {
-        print() {
-                compgen -c | \
-                grep -vE "$HIDDEN_KEYWORDS" | \
-                grep -E "$KEYWORDS"
-            }
-
-            if [ "$SORT_BY_RECENT" != "false" ]; then
-                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-            else
-                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-            fi
-        }
-
-    # uniq
-    if [ "$DISPLAY_DUPLICATES" != "false" ]; then
-        print_menu
-    else
-        print_menu | uniq "${uniq_args[@]}"
-    fi
-
-    command -v run_pre_func && run_pre_func
-}
-
-print_help() {
-    if [ "$DMENU_COMPAT" != "true" ]; then
-        COL='\033[0;31m'
-        RUNLAUNCHER_EX_ARGS="--lines 30 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count --hide-caps"
-        read -ra rl_ex <<< "$RUNLAUNCHER_EX_ARGS"
-    fi
-    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
-Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
-To set spmenu options, you pass arguments to 'spmenu_run' directly. See 'spmenu --help' for a list of valid arguments.
-To configure spmenu, you may also copy ${DESTDIR}${PREFIX}/share/spmenu/spmenu.conf to $CONFDIR/spmenu/spmenu.conf and edit that.
-
-- Type in '?' to show this help screen at any time.
-- If the entry selected starts with 'www', it will instead be treated as a link and spawned in a web browser (\$BROWSER)
-- If the entry selected starts with 'magnet', it will instead be treated as a magnet link and spawned in a torrent client (\$TORRENT)
-- If the entry selected starts with '?' followed by a valid command, it will be opened as a man page in spmenu.
-- If the entry starts with '#' followed by a valid command, it will be opened in the defined terminal emulator.
-
-Enter '@' to show the bookmark list. Enter '@<text>:<command>' to add a bookmark. If the bookmark is selected, the
-<command> will be executed. Enter @c to clear the bookmark list. '@<text>' is also valid, and then <text> will be
-executed instead.
-
-$(printf "%b" "${COL}")Note: This may also be displayed if you deleted your spmenu configuration directory.
-EOF
 }
 
 print_cli_help() {
@@ -360,121 +299,6 @@ EOF
 [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
 }
 
-parse() {
-    [ ! -f "$BOOKMARK_FILE" ] && mkdir -p "$(dirname "$BOOKMARK_FILE")" && touch "$BOOKMARK_FILE"
-
-    if [ "$SHOW_BM" != "true" ]; then
-        path | $RUNLAUNCHER "${rl_run[@]}" > /tmp/spmenu_out
-    else
-        echo > /tmp/spmenu_out
-    fi
-
-    while read -r sout; do
-        command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
-        command -v run_output_func > /dev/null && run_output_func "${sout}"
-
-        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
-
-        # check for keywords
-        printf "%s" "$sout" | grep -qE "$WEB_GREP" && EXEC=web
-        printf "%s" "$sout" | grep -qE "$MAGNET_GREP" && EXEC=torrent
-
-        case "$(printf "%s" "$sout" | awk '{ print $1 }')" in
-            "magnet") EXEC=torrent ;;
-            "www") EXEC=web ;;
-            "?") ;;
-        esac
-
-        # parse
-        case "${sout:0:1}" in
-            "#") EXEC="term" ;;
-            "?") EXEC="man" ;;
-            "@") EXEC="mark" ;;
-        esac
-
-        [ "$SHOW_BM" = "true" ] && sout="@"
-
-        case "$sout" in
-            "?")
-                print_help "$@"
-                parse
-                exec_cmd
-                ;;
-            "@")
-                print_bookmarks "$@"
-                ;;
-            "@c")
-                rm -f "$BOOKMARK_FILE" && touch "$BOOKMARK_FILE"
-                parse
-                exec_cmd
-                ;;
-        esac
-
-        printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
-
-        exec_cmd "$args"
-        [ "$MULTISELECT" != "true" ] && break
-    done < /tmp/spmenu_out
-}
-
-bookmark_path() {
-    while read -r file; do
-        command -v run_file_bookmark_list_func > /dev/null && \
-            run_file_bookmark_list_func "$file"
-
-        printf "%s\n" "${file%%:*}"
-    done < "$BOOKMARK_FILE"
-}
-
-print_bookmarks() {
-    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_bm[@]}" > /tmp/spmenu_out
-
-    while read -r sout; do
-        command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
-        command -v run_single_char_pre_bookmark_list_func > /dev/null && run_single_char_pre_bookmark_list_func "${sout:0:1}"
-
-        printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
-
-        sout_e="$(grep -- "$sout" "$BOOKMARK_FILE" | tail -n 1)"
-        printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
-        [ "$MULTISELECT" != "true" ] && break
-    done < /tmp/spmenu_out
-
-    command -v run_post_bookmark_list_func > /dev/null && run_post_bookmark_list_func
-
-    exit 0
-}
-
-exec_cmd() {
-    [ -z "$EXEC" ] && EXEC=shell
-    [ "$STDOUT" != "false" ] && printf "%s\n" "$sout" && exit 1
-    command -v run_post_func > /dev/null && run_post_func "$sout"
-
-    # when there's no read_man func because the user is retarded and removed it, this basic function will be called instead
-    read_woman() {
-        $TERMINAL -e man "$1"
-    }
-
-    # execute it
-    case "$EXEC" in
-        "mark") printf "%s\n" "$sout" | sed -- "s/@//g" >> "$BOOKMARK_FILE"; parse; exit 0 ;;
-        "shell") printf "%s" "$sout" | ${SHELL:-"/bin/sh"} & ;;
-        "term") $TERMINAL -e "$(printf "%s" "$sout" | sed "s/#//g")" & ;;
-        "web") $BROWSER "$(printf "%s" "$sout" | sed "s/www //g")" & ;;
-        "torrent") $TORRENT "$(printf "%s" "$sout" | sed "s/magnet //g")" & ;;
-        "man") exec="$(printf "%s" "$sout" | sed "s/?//g")"
-            [ -x "$(command -v "$exec")" ] || return
-            if [ "$(command -v read_man)" ]; then
-                read_man "$exec"
-                return
-            else
-                read_woman "$exec"
-                return
-            fi
-            ;;
-    esac
-}
-
 remove_arg() {
     args="$(printf "%s\n" "$args" | sed "s|$1||g")"
 }
@@ -538,298 +362,6 @@ read_args() {
     args="$(printf "%s\n" "$*")"
 }
 
-exec_file() {
-    [ "$USE_FULL_PATH" != "false" ] && DIR="$(pwd)/"
-    [ "$STDOUT" != "false" ] && printf "%s%s\n" "${DIR}" "$1" && return 0
-    command -v fm_post_func > /dev/null && fm_post_func "$1"
-
-    # some default basic parsing
-    case "$1" in
-        *.html|*.htm) $BROWSER "$1" ;;
-        *.pdf) $PDF_READER "$1" ;;
-        *.flac|*.mp3|*.wav|*.ogg) $PLAYER "$1" ;;
-        *.mp4|*.mov|*.mkv) $PLAYER "$1" ;;
-        *.theme) $EDITOR "$1" ;;
-        *)
-            if [ -x "$1" ]; then
-                $TERMINAL -e "$1"
-            else
-                $GENERIC "$1"
-            fi
-            ;;
-    esac
-}
-
-prepare_dirnav() {
-    [ ! -d "$dir" ] && return 1
-    cd "$dir" || printf "Invalid directory.. somehow\n"
-
-    # TODO: read line by line so we can append/prepend whatever we want
-    listing() {
-        command -v fm_pre_list_func > /dev/null && fm_pre_list_func
-        ls "${ls_args[@]}" > /tmp/spmenu_ls_list # this allows us SGR colors
-        printf "..\n" >> /tmp/spmenu_ls_list
-
-        while read -r l; do
-            command -v fm_line_func > /dev/null && fm_line_func "$(pwd)/$l"
-            printf "%s\n" "$l"
-        done < "/tmp/spmenu_ls_list"; rm -f /tmp/spmenu_ls_list
-
-        command -v fm_post_list_func > /dev/null && fm_post_list_func
-    }
-
-    command -v fm_pre_func > /dev/null && fm_pre_func
-
-    listing | $RUNLAUNCHER "${rl_fm[@]}" | sed -e 's/\x1b\[[0-9;]*m//g' > /tmp/spmenu_out
-
-    while read -r dir; do
-        case "$dir" in
-            *)
-                if [ -d "$dir" ]; then
-                    dir="$(pwd)/$dir"
-                    command -v fm_dir_func > /dev/null && fm_dir_func "$dir"
-                    prepare_dirnav
-                elif [ -f "$dir" ]; then
-                    exec_file "$dir"
-                else
-                    return 1
-                fi
-                ;;
-        esac
-        [ "$MULTISELECT" != "true" ] && break
-    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
-
-    [ -z "$dir" ] && return 1
-}
-
-print_desktop_help() {
-    if [ "$DMENU_COMPAT" != "true" ]; then
-        COL='\033[0;31m'
-        RUNLAUNCHER_EX_ARGS="--lines 20 --columns 1 --normal --sgr1 $HELP_COLOR --hide-cursor --hide-caps --no-allow-typing --no-color-items --hide-prompt --hide-powerline --hide-input --hide-right-arrow --hide-left-arrow --hide-mode --hide-match-count"
-        read -ra rl_ex <<< "${RUNLAUNCHER_EX_ARGS}"
-    fi
-    cat << EOF | $RUNLAUNCHER "${rl_help[@]}" "${rl_ex[@]}" > /dev/null
-Start typing in keywords to list out entries. Press Enter to select an entry. The selected entry will be run through a shell.
-To set spmenu options, you modify \$RUNLAUNCHER_ARGS in the config. See 'spmenu --help' for a list of valid arguments to add to the variable.
-To configure spmenu itself, you may copy ${DESTDIR}${PREFIX}/share/spmenu.conf to ~/.config/spmenu/spmenu.conf.
-
-By default, spmenu_run will cache entries for speed reasons. You can find these entries in ~/.config/spmenu/run/cache.
-If you make changes to .desktop files (not new entries, modified old entries), you need to clear the cache for the changes to appear. Simply delete the directory to do this.
-
-- Type in '?' to show this help screen at any time.
-
-$(printf "%b" "$COL")Note: This may also be displayed if you deleted your spmenu configuration directory.
-EOF
-}
-
-print_desktop_list() {
-    # should we use cached files?
-    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ] && [ -f "$ONLYFILE" ] && [ -f "$COMMENTFILE" ]; then
-        cfiles=true
-    else
-        cfiles=false
-    fi
-
-    read -ra uniq_args <<< "${UNIQ_ARGS}"
-
-    it_title=()
-    it_desc=()
-    it_icon=()
-    it_exec=()
-    it_file=()
-    it_term=()
-    it_display=()
-    it_comment=()
-    it_only=()
-
-    # autorefreshing
-    if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
-        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null | grep -c "")"
-        [ -f "$FILEFILE" ] && cached_c="$(grep -c "" < "$FILEFILE")" || cached_c="0"
-
-        printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
-
-        [ "$cfiles" = "true" ] && [ "$entry_c" != "$cached_c" ] && cfiles=false
-    fi
-
-    # print data from entries
-    if [ "$cfiles" = "false" ]; then
-        command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\nComment file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE" >> "$LOGFILE"
-
-        [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
-
-        icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
-        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
-        [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
-
-        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE"
-
-        for ((i=1; i <= "$entry_c"; i++)); do
-            command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
-
-            cur_file="$(printf "%s" "$entry" | sed "${i}q;d")"
-            [ ! -f "$cur_file" ] && printf "No desktop entries found." && return
-            icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
-
-            file_=$(sed '/\[Desktop Action/q' "$cur_file")
-            it_title[i]="$(awk -F'=' '/^Name=/ && !/Generic/ {gsub("Name=", ""); print; exit}' <<< "$file_")"
-            it_desc[i]="$(awk -F'=' '/GenericName=/ {gsub("GenericName=", ""); print}' <<< "$file_")"
-            it_comment[i]="$(awk -F'=' '/Comment=/ {gsub("Comment=", ""); print}' <<< "$file_")"
-            it_icon[i]="$(grep -F "/${icon_name}." <<< "$icons" | head -n 1)"
-            it_exec[i]="$(awk -F'=' '!/TryExec/ && /Exec=/ {gsub("Exec=", ""); gsub("%[UuFf]", ""); print; exit}' <<< "$file_")"
-            it_file[i]="$cur_file"
-            it_term[i]="false"
-            it_only[i]="false"
-            it_display[i]="true"
-
-            if [ "$PREFERRED_LANGUAGE" != "generic" ]; then
-                t_title="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Name\[$PREFERRED_LANGUAGE\]=" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
-                t_desc="$(sed '/\[Desktop Action/q' "$cur_file" | grep "GenericName\[$PREFERRED_LANGUAGE\]=" | sed "s/GenericName\[$PREFERRED_LANGUAGE\]=//g")"
-                t_comment="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Comment\[$PREFERRED_LANGUAGE\]=" | sed "s/Comment\[$PREFERRED_LANGUAGE\]=//g")"
-
-                [ -n "$t_title" ] && it_title[i]="$t_title"
-                [ -n "$t_desc" ] && it_desc[i]="$t_desc"
-                [ -n "$t_comment" ] && it_comment[i]="$t_comment"
-            fi
-
-            grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
-            grep -qE "NoDisplay=true|Hidden=true" "$cur_file" && it_display[i]="false"
-            grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
-
-            # write files
-            printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
-            printf "%s\n" "${it_icon[i]}" >> "$ICONFILE"
-            printf "%s\n" "${it_desc[i]}" >> "$DESCFILE"
-            printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
-            printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
-            printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
-            printf "%s\n" "${it_display[i]}" >> "$DISPLAYFILE"
-            printf "%s\n" "${it_comment[i]}" >> "$COMMENTFILE"
-            printf "%s\n" "${it_only[i]}" >> "$ONLYFILE"
-
-            # log it all
-            printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
-            printf "%d. Description - %s\n" "${i}" "${it_desc[i]}" >> "$LOGFILE"
-            printf "%d. Executable - %s\n" "${i}" "${it_exec[i]}" >> "$LOGFILE"
-            printf "%d. Icon - %s\n" "${i}" "${it_icon[i]}" >> "$LOGFILE"
-            printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
-            printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
-            printf "%d. Display - %s\n" "${i}" "${it_display[i]}" >> "$LOGFILE"
-            printf "%d. Only - %s\n" "${i}" "${it_only[i]}" >> "$LOGFILE"
-            printf "%d. Comment - %s\n" "${i}" "${it_comment[i]}" >> "$LOGFILE"
-        done
-
-        command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
-
-        print_desktop_list "noc"
-    else # we have entries, let's populate the arrays
-        command -v desktop_pre_func > /dev/null && desktop_pre_func
-
-        mapfile -t it_title < "$TITLEFILE"
-        mapfile -t it_icon < "$ICONFILE"
-        mapfile -t it_exec < "$EXECFILE"
-        mapfile -t it_file < "$FILEFILE"
-        mapfile -t it_desc < "$DESCFILE"
-        mapfile -t it_display < "$DISPLAYFILE"
-        mapfile -t it_only < "$ONLYFILE"
-        mapfile -t it_comment < "$COMMENTFILE"
-
-        d_print_array
-    fi
-}
-
-d_print_array() {
-    command -v print_array > /dev/null && print_array && return
-
-    for i in "${!it_title[@]}"; do
-        [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
-        [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
-
-        if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
-            printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
-        elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-            printf "%s" "${it_title[i]}"
-        else
-            continue
-        fi
-
-        if [ -n "${it_desc[i]}" ] && [ "$DISPLAY_DESCRIPTION" = "true" ]; then
-            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
-            printf -- "$DESCRIPTION_SEPARATOR%b%s" "${COL}" "${it_desc[i]}"
-        fi
-
-        if [ -n "${it_comment[i]}" ] && [ "$DISPLAY_COMMENT" = "true" ]; then
-            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;32m'
-            printf -- "$COMMENT_SEPARATOR%b%s" "${COL}" "${it_comment[i]}"
-        fi
-
-        printf "\n"
-    done
-}
-
-exec_program() {
-    [ ! -f "$TITLEFILE" ] || [ ! -f "$EXECFILE" ] || [ ! -f "$TERMFILE" ] && exit 1
-    mapfile -t it_title < "$TITLEFILE"
-    mapfile -t it_exec < "$EXECFILE"
-    mapfile -t it_term < "$TERMFILE"
-
-    # set exec
-    [ -z "${it_exec[1]}" ] && printf "Executable array is empty.\n" >> "$LOGFILE"
-    for i in "${!it_title[@]}"; do
-        if [ "${it_title[i]}" = "$menusel" ]; then
-            exec="${it_exec[i]}"
-            term="${it_term[i]}"
-
-            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
-            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
-
-            break;
-        else
-            printf "Executable %s is: '%s'\n" "$i" "${it_exec[i]}" >> "$LOGFILE"
-            printf "Executable %s term status: '%s'\n" "$i" "${it_term[i]}" >> "$LOGFILE"
-        fi
-    done
-
-    # finally run the program
-    if [ -n "$exec" ] && [ "$term" = "false" ]; then
-        ${SHELL:-/bin/sh} -c "$exec" &
-    elif [ -n "$exec" ] && [ "$term" = "true" ]; then
-        ${TERMINAL} -e "$exec" &
-    else
-        printf "No executable found. Try clearing cache." >> "$LOGFILE"
-    fi
-}
-
-print_desktop_menu() {
-    check_desktop
-
-    HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
-
-    print_desktop_list "" | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
-
-    while read -r menusel; do
-        [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu
-        command -v desktop_post_func > /dev/null && desktop_post_func "$menusel"
-        [ -z "$menusel" ] && return 1 \
-            || printf "User input: %s\n" "$menusel" >> "$LOGFILE"
-
-        # this must now be the title only
-        menusel="$(printf "%s" "$menusel" | sed "s/ -.*//")"
-
-        exec_program "$@"
-        [ "$MULTISELECT" != "true" ] && break
-    done < /tmp/spmenu_out; rm -f /tmp/spmenu_out
-}
-
-prep_desktop() {
-    printf "spmenu_run log (%s)\nFunction: Desktop\n" "$(date "+%D %T")" > "$LOGFILE"
-}
-
-clear_cache() {
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}" "${DISPLAYFILE}" "${ONLYFILE}" "${COMMENTFILE}"
-}
-
 main() {
     rm -f "$LOGFILE"
     print_config
@@ -844,7 +376,7 @@ main() {
     fi
 
     # some run launcher args
-    RUNLAUNCHER_FM_ARGS="--insert $HIST_ARG $RUNLAUNCHER_FM_ARGS $MARGS"
+    RUNLAUNCHER_FM_ARGS="--insert --lines 20 --columns 1 $HIST_ARG $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert $HIST_ARG $RUNLAUNCHER_RUN_ARGS $MARGS"
     RUNLAUNCHER_BM_ARGS="--insert $HIST_ARG --prompt Bookmarks $RUNLAUNCHER_BM_ARGS $MARGS"
     RUNLAUNCHER_DESKTOP_ARGS="--sgr1 $DESCRIPTION_COLOR --sgr2 $COMMENT_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 --display-icons $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
@@ -885,11 +417,15 @@ main() {
     # $PATH listing
     case "$function" in
         "run")
+            load_x "spmenu_path"
             parse "$args"
             ;;
-        "fm") prepare_dirnav "$args" && exit 0 || exit 1
+        "fm")
+            load_x "spmenu_fm"
+            prepare_dirnav "$args" && exit 0 || exit 1
             ;;
         "desktop")
+            load_x "spmenu_desktop" || exit 1
             prep_desktop
             print_desktop_menu "$args"
             ;;
