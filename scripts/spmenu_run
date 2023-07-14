@@ -234,7 +234,6 @@ print_config() {
 # 'fm_post_func' after spawning spmenu, selected item passed as an argument.
 # 'fm_pre_list_func' right before listing out files.
 # 'fm_post_list_func' right after listing out files.
-# 'fm_dir_func' before changing directory to the selected directory.
 # 'fm_line_func' for each line in ls output, the line is passed as an argument, including SGR colors.
 # 'read_man' when reading a man page, selected item passed as an argument.
 # 'print_array' when printing out .desktop entries
@@ -695,7 +694,7 @@ print_desktop_list() {
             fi
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
-            grep -q "NoDisplay=true" "$cur_file" && it_display[i]="false"
+            grep -qE "NoDisplay=true|Hidden=true" "$cur_file" && it_display[i]="false"
             grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
 
             # write files
