@@ -39,6 +39,7 @@ MULTISELECT="${MULTISELECT:-true}"
 BOOKMARK_FILE="${BOOKMARK_FILE:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu/spmenu_run.bookmarks}"
 BOOKMARK_PROMPT="${BOOKMARK_PROMPT:-Bookmarks}"
 PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
+RESPECT_NODISPLAY="${RESPECT_NODISPLAY:-true}"
 
 RUNLAUNCHER_RUN_ARGS=""
 RUNLAUNCHER_BM_ARGS=""
@@ -57,6 +58,7 @@ ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_icon}"
 DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_desc}"
 FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_file}"
 TERMFILE="${TERMFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_term}"
+DISPLAYFILE="${DISPLAYFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_display}"
 
 # arrays containing entries
 declare -a it_title
@@ -65,6 +67,7 @@ declare -a it_exec
 declare -a it_file
 declare -a it_desc
 declare -a it_term
+declare -a it_display
 
 # arrays containing arguments
 declare -a rl_fm
@@ -89,6 +92,7 @@ prepare_dirs() {
         "$(dirname "$DESCFILE")" \
         "$(dirname "$FILEFILE")" \
         "$(dirname "$TERMFILE")" \
+        "$(dirname "$DISPLAYFILE")" \
         "$(dirname "$LOGFILE")" \
         "$(dirname "$HISTORY")" \
         "$(dirname "$BOOKMARK_FILE")"
@@ -281,10 +285,11 @@ ICON_DIR="$ICON_DIR" # Directories for icons defined in the entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
 AUTOREFRESH="$AUTOREFRESH" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
-MULTISELECT="$MULTISELECT" # Allow handling multiple items, if set to false only the first line/selected item will be used.
+RESPECT_NODISPLAY="$RESPECT_NODISPLAY" # Respect NoDisplay in .desktop entries. If set to true, entries with 'NoDisplay=true' will not be displayed (true/false)
+MULTISELECT="$MULTISELECT" # Allow handling multiple items, if set to false only the first line/selected item will be used. (true/false)
 IMAGE="$IMAGE" # Display images (true/false)
 DISPLAY_DESCRIPTION="$DISPLAY_DESCRIPTION" # Display description (true/false)"
-DESCRIPTION_COLOR="$DESCRIPTION_COLOR" # Description text color
+DESCRIPTION_COLOR="$DESCRIPTION_COLOR" # Description text color (#RRGGBB)
 LOGFILE="$LOGFILE" # Log file
 PRINT_LOGS_STDERR="$PRINT_LOGS_STDERR" # Print information (such as logs) to stderr (true/false)
 TITLEFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_title" # File containing the different titles to display.
@@ -573,7 +578,7 @@ EOF
 
 print_desktop_list() {
     # should we use cached files?
-    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ]; then
+    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ]; then
         cfiles=true
     else
         cfiles=false
@@ -587,6 +592,7 @@ print_desktop_list() {
     it_exec=()
     it_file=()
     it_term=()
+    it_display=()
 
     # autorefreshing
     if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
@@ -601,7 +607,7 @@ print_desktop_list() {
     # print data from entries
     if [ "$cfiles" = "false" ]; then
         command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" >> "$LOGFILE"
 
         [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
@@ -609,7 +615,7 @@ print_desktop_list() {
         [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
         [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
-        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE"
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE"
 
         for i in $(seq "$entry_c"); do
             command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
@@ -625,8 +631,10 @@ print_desktop_list() {
             it_exec[i]="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             it_file[i]="$cur_file"
             it_term[i]="false"
+            it_display[i]="true"
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
+            grep -q "NoDisplay=true" "$cur_file" && it_display[i]="false"
 
             # write files
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
@@ -635,6 +643,7 @@ print_desktop_list() {
             printf "%s\n" "${it_exec[i]}" >> "$EXECFILE"
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
             printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
+            printf "%s\n" "${it_display[i]}" >> "$DISPLAYFILE"
 
             # log it all
             printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
@@ -643,6 +652,7 @@ print_desktop_list() {
             printf "%d. Icon - %s\n" "${i}" "${it_icon[i]}" >> "$LOGFILE"
             printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
             printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
+            printf "%d. Display - %s\n" "${i}" "${it_display[i]}" >> "$LOGFILE"
         done
 
         command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
@@ -656,9 +666,11 @@ print_desktop_list() {
         mapfile -t it_exec < "$EXECFILE"
         mapfile -t it_file < "$FILEFILE"
         mapfile -t it_desc < "$DESCFILE"
+        mapfile -t it_display < "$DISPLAYFILE"
 
         # finally print all of it
         for i in "${!it_title[@]}"; do
+            [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
                 printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
             elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
@@ -736,7 +748,7 @@ prep_desktop() {
 }
 
 clear_cache() {
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}" "${DISPLAYFILE}"
 }
 
 main() {
