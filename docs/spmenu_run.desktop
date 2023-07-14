@@ -1,9 +1,12 @@
 [Desktop Entry]
 Version=1.0
 Name=spmenu (Run)
+Name[sv]=spmenu (Kör)
 Icon=spmenu
 GenericName=Run launcher
+GenericName[sv]=Kör program
 Comment=List out PATH entries.
+Comment[sv]=Visa program i PATH
 Exec=spmenu_run -x
 Terminal=false
 Categories=Utility;System;

@@ -1,9 +1,12 @@
 [Desktop Entry]
 Version=1.0
 Name=spmenu (File manager)
+Name[sv]=spmenu (Filhanterare)
 Icon=spmenu
-GenericName=Run launcher
-Comment=List out files and directories
+GenericName=Filhanterare
+GenericName[sv]=Filhanterare
+Comment=Handle files and directories
+Comment[sv]=Hantera filer och mappar
 Exec=spmenu_run -fm %F
 Terminal=false
 Type=Application

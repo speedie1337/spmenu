@@ -28,11 +28,15 @@ UNIQ_ARGS="${UNIQ_ARGS:-}"
 HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
-DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-true}"
+DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-false}"
+DISPLAY_COMMENT="${DISPLAY_COMMENT:-true}"
 LS_ARGS="${LS_ARGS:- --color=always}"
 USE_FULL_PATH="${USE_FULL_PATH:-false}"
 HELP_COLOR="${HELP_COLOR:-#FFFF00}"
 DESCRIPTION_COLOR="${DESCRIPTION_COLOR:-#999888}"
+DESCRIPTION_SEPARATOR="${DESCRIPTION_SEPARATOR:- - }"
+COMMENT_COLOR="${COMMENT_COLOR:-#999888}"
+COMMENT_SEPARATOR="${COMMENT_SEPARATOR:- - }"
 DMENU_COMPAT="${DMENU_COMPAT:-false}"
 AUTOREFRESH="${AUTOREFRESH:-true}"
 MULTISELECT="${MULTISELECT:-true}"
@@ -41,6 +45,7 @@ BOOKMARK_PROMPT="${BOOKMARK_PROMPT:-Bookmarks}"
 PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
 RESPECT_NODISPLAY="${RESPECT_NODISPLAY:-true}"
 RESPECT_ONLYSHOWIN="${RESPECT_ONLYSHOWIN:-true}"
+PREFERRED_LANGUAGE="${PREFERRED_LANGUAGE:-generic}"
 
 RUNLAUNCHER_RUN_ARGS=""
 RUNLAUNCHER_BM_ARGS=""
@@ -61,6 +66,7 @@ FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_file}"
 TERMFILE="${TERMFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_term}"
 ONLYFILE="${DISPLAYFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_only}"
 DISPLAYFILE="${DISPLAYFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_display}"
+COMMENTFILE="${COMMENTFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_comment}"
 
 # arrays containing entries
 declare -a it_title
@@ -68,9 +74,8 @@ declare -a it_icon
 declare -a it_exec
 declare -a it_file
 declare -a it_desc
+declare -a it_comment
 declare -a it_term
-declare -a it_display
-declare -a it_only
 
 # arrays containing arguments
 declare -a rl_fm
@@ -96,6 +101,7 @@ prepare_dirs() {
         "$(dirname "$FILEFILE")" \
         "$(dirname "$TERMFILE")" \
         "$(dirname "$DISPLAYFILE")" \
+        "$(dirname "$COMMENTFILE")" \
         "$(dirname "$LOGFILE")" \
         "$(dirname "$HISTORY")" \
         "$(dirname "$BOOKMARK_FILE")"
@@ -288,11 +294,17 @@ ICON_DIR="$ICON_DIR" # Directories for icons defined in the entries
 HIDDEN_ENTRY_KEYWORDS="\$HIDDEN_KEYWORDS" # Keywords that will be ignored, needs to be in grep -vE syntax.
 ENTRY_KEYWORDS="\$KEYWORDS" # Keywords that will be matched, needs to be in grep -E syntax.
 AUTOREFRESH="$AUTOREFRESH" # Refresh (clear) cache if there are more entries available than cached. May cause cache to be cleared every time in some cases. (true/false)
-RESPECT_NODISPLAY="$RESPECT_NODISPLAY" # Respect NoDisplay in .desktop entries. If set to true, entries with 'NoDisplay=true' will not be displayed (true/false)
-MULTISELECT="$MULTISELECT" # Allow handling multiple items, if set to false only the first line/selected item will be used. (true/false)
+MULTISELECT="$MULTISELECT" # Allow handling multiple items, if set to false only the first line/selected item will be used.
 IMAGE="$IMAGE" # Display images (true/false)
+DISPLAY_COMMENT="$DISPLAY_COMMENT" # Display comment (true/false)
 DISPLAY_DESCRIPTION="$DISPLAY_DESCRIPTION" # Display description (true/false)"
-DESCRIPTION_COLOR="$DESCRIPTION_COLOR" # Description text color (#RRGGBB)
+DESCRIPTION_COLOR="$DESCRIPTION_COLOR" # Description text color
+DESCRIPTION_SEPARATOR="$DESCRIPTION_SEPARATOR" # Separator between title and description
+COMMENT_COLOR="$COMMENT_COLOR" # Comment text color
+COMMENT_SEPARATOR="$COMMENT_SEPARATOR" # Separator between title and comment
+RESPECT_NODISPLAY="$RESPECT_NODISPLAY" # Respect NoDisplay in .desktop entries. If set to true, entries with 'NoDisplay=true' will not be displayed (true/false)
+RESPECT_ONLYSHOWIN="$RESPECT_ONLYSHOWIN" # Respect OnlyShowIn in .desktop entries. If set to true, entries wth 'OnlyShowIn' assigned will not be displayed (true/false)
+PREFERRED_LANGUAGE="$PREFERRED_LANGUAGE" # Preferred language for the title and description. "generic" means the default for that .desktop entry (true/false)
 LOGFILE="$LOGFILE" # Log file
 PRINT_LOGS_STDERR="$PRINT_LOGS_STDERR" # Print information (such as logs) to stderr (true/false)
 TITLEFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_title" # File containing the different titles to display.
@@ -303,6 +315,7 @@ FILEFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_file" # File contain
 TERMFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_term" # File containing the path to the terminal data
 ONLYFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_only" # File containing the path to the OnlyShowIn data
 DISPLAYFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_display" # File containing the path to the NoDisplay data
+COMMENTFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_comment" # File containing the comment to display
 
 # File management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
@@ -583,7 +596,7 @@ EOF
 
 print_desktop_list() {
     # should we use cached files?
-    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ] && [ -f "$ONLYFILE" ]; then
+    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ] && [ -f "$ONLYFILE" ] && [ -f "$COMMENTFILE" ]; then
         cfiles=true
     else
         cfiles=false
@@ -598,6 +611,7 @@ print_desktop_list() {
     it_file=()
     it_term=()
     it_display=()
+    it_comment=()
     it_only=()
 
     # autorefreshing
@@ -613,7 +627,7 @@ print_desktop_list() {
     # print data from entries
     if [ "$cfiles" = "false" ]; then
         command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\nComment file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE" >> "$LOGFILE"
 
         [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
@@ -621,7 +635,7 @@ print_desktop_list() {
         [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
         [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
-        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE"
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE"
 
         for i in $(seq "$entry_c"); do
             command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
@@ -633,16 +647,23 @@ print_desktop_list() {
             # get details to display
             it_title[i]="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
             it_desc[i]="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
+            it_comment[i]="$(grep "Comment=" "$cur_file" | sed "s/Comment=//g")"
             it_icon[i]="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)"
             it_exec[i]="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             it_file[i]="$cur_file"
             it_term[i]="false"
-            it_display[i]="true"
-            it_only[i]="false"
+
+            if [ "$PREFERRED_LANGUAGE" != "generic" ]; then
+                  t_title="$(grep "Name\[$PREFERRED_LANGUAGE\]=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
+                  t_desc="$(grep "GenericName\[$PREFERRED_LANGUAGE\]=" "$cur_file" | sed "s/GenericName\[$PREFERRED_LANGUAGE\]=//g")"
+                  t_comment="$(grep "Comment\[$PREFERRED_LANGUAGE\]=" "$cur_file" | sed "s/Comment\[$PREFERRED_LANGUAGE\]=//g")"
+
+               [ -n "$t_title" ] && it_title[i]="$t_title"
+               [ -n "$t_desc" ] && it_desc[i]="$t_desc"
+               [ -n "$t_comment" ] && it_comment[i]="$t_comment"
+            fi
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
-            grep -q "NoDisplay=true" "$cur_file" && it_display[i]="false"
-            grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
 
             # write files
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
@@ -652,6 +673,7 @@ print_desktop_list() {
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
             printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
             printf "%s\n" "${it_display[i]}" >> "$DISPLAYFILE"
+            printf "%s\n" "${it_comment[i]}" >> "$COMMENTFILE"
             printf "%s\n" "${it_only[i]}" >> "$ONLYFILE"
 
             # log it all
@@ -663,6 +685,7 @@ print_desktop_list() {
             printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
             printf "%d. Display - %s\n" "${i}" "${it_display[i]}" >> "$LOGFILE"
             printf "%d. Only - %s\n" "${i}" "${it_only[i]}" >> "$LOGFILE"
+            printf "%d. Comment - %s\n" "${i}" "${it_comment[i]}" >> "$LOGFILE"
         done
 
         command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
@@ -678,11 +701,10 @@ print_desktop_list() {
         mapfile -t it_desc < "$DESCFILE"
         mapfile -t it_display < "$DISPLAYFILE"
         mapfile -t it_only < "$ONLYFILE"
+        mapfile -t it_comment < "$COMMENTFILE"
 
         # finally print all of it
         for i in "${!it_title[@]}"; do
-            [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
-            [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
                 printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
             elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
@@ -691,12 +713,17 @@ print_desktop_list() {
                 continue
             fi
 
-            if [ -z "${it_desc[i]}" ] || [ "$DISPLAY_DESCRIPTION" = "false" ]; then
-                printf "\n"
-            else
+            if [ -n "${it_desc[i]}" ] && [ "$DISPLAY_DESCRIPTION" = "true" ]; then
                 [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
-                printf " - %b%s\n" "${COL}" "${it_desc[i]}"
+                printf -- "$DESCRIPTION_SEPARATOR%b%s" "${COL}" "${it_desc[i]}"
             fi
+
+            if [ -n "${it_comment[i]}" ] && [ "$DISPLAY_COMMENT" = "true" ]; then
+                [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;32m'
+                printf -- "$COMMENT_SEPARATOR%b%s" "${COL}" "${it_comment[i]}"
+            fi
+
+            printf "\n"
         done
     fi
 }
@@ -760,7 +787,7 @@ prep_desktop() {
 }
 
 clear_cache() {
-    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}" "${DISPLAYFILE}"
+    rm -f "${TITLEFILE}" "${FILEFILE}" "${EXECFILE}" "${ICONFILE}" "${DESCFILE}" "${TERMFILE}" "${DISPLAYFILE}" "${ONLYFILE}" "${COMMENTFILE}"
 }
 
 main() {
@@ -779,8 +806,8 @@ main() {
     # some run launcher args
     RUNLAUNCHER_FM_ARGS="--insert $HIST_ARG $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert $HIST_ARG $RUNLAUNCHER_RUN_ARGS $MARGS"
-    RUNLAUNCHER_BM_ARGS="--insert $HIST_ARG -p Bookmarks $RUNLAUNCHER_BM_ARGS $MARGS"
-    RUNLAUNCHER_DESKTOP_ARGS="-sgr1 $DESCRIPTION_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 --display-icons $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
+    RUNLAUNCHER_BM_ARGS="--insert $HIST_ARG --prompt Bookmarks $RUNLAUNCHER_BM_ARGS $MARGS"
+    RUNLAUNCHER_DESKTOP_ARGS="--sgr1 $DESCRIPTION_COLOR --sgr2 $COMMENT_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 --display-icons $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert $HIST_ARG $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility

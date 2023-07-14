@@ -1,9 +1,12 @@
 [Desktop Entry]
 Version=1.0
 Name=spmenu (Desktop)
+Name[sv]=spmenu (Skrivbord)
 Icon=spmenu
 GenericName=Run launcher
+GenericName[sv]=Kör program
 Comment=List out .desktop entries
+Comment[sv]=Visa .desktop filer
 Exec=spmenu_run -d
 Terminal=false
 Categories=Utility;System;
