@@ -40,6 +40,7 @@ BOOKMARK_FILE="${BOOKMARK_FILE:-${XDG_CACHE_HOME:-$HOME/.cache/}/spmenu/spmenu_r
 BOOKMARK_PROMPT="${BOOKMARK_PROMPT:-Bookmarks}"
 PRINT_LOGS_STDERR="${PRINT_LOGS_STDERR:-true}"
 RESPECT_NODISPLAY="${RESPECT_NODISPLAY:-true}"
+RESPECT_ONLYSHOWIN="${RESPECT_ONLYSHOWIN:-true}"
 
 RUNLAUNCHER_RUN_ARGS=""
 RUNLAUNCHER_BM_ARGS=""
@@ -58,6 +59,7 @@ ICONFILE="${ICONFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_icon}"
 DESCFILE="${DESCFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_desc}"
 FILEFILE="${FILEFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_file}"
 TERMFILE="${TERMFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_term}"
+ONLYFILE="${DISPLAYFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_only}"
 DISPLAYFILE="${DISPLAYFILE:-${XDG_CACHE_HOME:-$HOME/.cache}/spmenu/.desktop_display}"
 
 # arrays containing entries
@@ -68,6 +70,7 @@ declare -a it_file
 declare -a it_desc
 declare -a it_term
 declare -a it_display
+declare -a it_only
 
 # arrays containing arguments
 declare -a rl_fm
@@ -298,6 +301,8 @@ EXECFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_exec" # File contain
 ICONFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_icon" # File containing the paths to the icons to display.
 FILEFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_file" # File containing the path to the .desktop entries.
 TERMFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_term" # File containing the path to the terminal data
+ONLYFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_only" # File containing the path to the OnlyShowIn data
+DISPLAYFILE="\${XDG_CACHE_HOME:-\$HOME/.cache}/spmenu/.desktop_display" # File containing the path to the NoDisplay data
 
 # File management
 DEFAULT_DIRECTORY="\$(pwd)" # Directory to start -fm if none is specified.
@@ -578,7 +583,7 @@ EOF
 
 print_desktop_list() {
     # should we use cached files?
-    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ]; then
+    if [ -f "$TITLEFILE" ] && [ -f "$ICONFILE" ] && [ -f "$EXECFILE" ] && [ -f "$FILEFILE" ] && [ -f "$DESCFILE" ] && [ -f "$DISPLAYFILE" ] && [ -f "$ONLYFILE" ]; then
         cfiles=true
     else
         cfiles=false
@@ -593,6 +598,7 @@ print_desktop_list() {
     it_file=()
     it_term=()
     it_display=()
+    it_only=()
 
     # autorefreshing
     if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
@@ -607,7 +613,7 @@ print_desktop_list() {
     # print data from entries
     if [ "$cfiles" = "false" ]; then
         command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
-        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" >> "$LOGFILE"
+        printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" >> "$LOGFILE"
 
         [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
@@ -615,7 +621,7 @@ print_desktop_list() {
         [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
         [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
-        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE"
+        rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE"
 
         for i in $(seq "$entry_c"); do
             command -v desktop_file_caching_func > /dev/null && desktop_file_caching_func "$cur_file"
@@ -632,9 +638,11 @@ print_desktop_list() {
             it_file[i]="$cur_file"
             it_term[i]="false"
             it_display[i]="true"
+            it_only[i]="false"
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
             grep -q "NoDisplay=true" "$cur_file" && it_display[i]="false"
+            grep -q "OnlyShowIn=" "$cur_file" && it_only[i]="true"
 
             # write files
             printf "%s\n" "${it_title[i]}" >> "$TITLEFILE"
@@ -644,6 +652,7 @@ print_desktop_list() {
             printf "%s\n" "${it_file[i]}" >> "$FILEFILE"
             printf "%s\n" "${it_term[i]}" >> "$TERMFILE"
             printf "%s\n" "${it_display[i]}" >> "$DISPLAYFILE"
+            printf "%s\n" "${it_only[i]}" >> "$ONLYFILE"
 
             # log it all
             printf "%d. Title - %s\n" "${i}" "${it_title[i]}" >> "$LOGFILE"
@@ -653,6 +662,7 @@ print_desktop_list() {
             printf "%d. File - %s\n" "${i}" "${it_file[i]}" >> "$LOGFILE"
             printf "%d. Term - %s\n" "${i}" "${it_term[i]}" >> "$LOGFILE"
             printf "%d. Display - %s\n" "${i}" "${it_display[i]}" >> "$LOGFILE"
+            printf "%d. Only - %s\n" "${i}" "${it_only[i]}" >> "$LOGFILE"
         done
 
         command -v desktop_post_caching_func > /dev/null && desktop_post_caching_func
@@ -667,9 +677,11 @@ print_desktop_list() {
         mapfile -t it_file < "$FILEFILE"
         mapfile -t it_desc < "$DESCFILE"
         mapfile -t it_display < "$DISPLAYFILE"
+        mapfile -t it_only < "$ONLYFILE"
 
         # finally print all of it
         for i in "${!it_title[@]}"; do
+            [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
             [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
             if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
                 printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
