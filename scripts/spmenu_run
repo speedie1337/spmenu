@@ -237,6 +237,7 @@ print_config() {
 # 'fm_dir_func' before changing directory to the selected directory.
 # 'fm_line_func' for each line in ls output, the line is passed as an argument, including SGR colors.
 # 'read_man' when reading a man page, selected item passed as an argument.
+# 'print_array' when printing out .desktop entries
 #
 # You may create those functions below.
 #
@@ -327,6 +328,34 @@ read_man() {
     man "\$1" | \\
     col -b | \\
     \${RUNLAUNCHER:-spmenu} --lines 40 --columns 1 -p "man \$1"
+}
+
+# Function used to print out the .desktop entries
+print_array() {
+    for i in "\${!it_title[@]}"; do
+        [ "\$RESPECT_ONLYSHOWIN" != "false" ] && [ "\${it_only[i]}" != "false" ] && continue
+        [ "\$RESPECT_NODISPLAY" != "false" ] && [ "\${it_display[i]}" != "true" ] && continue
+
+        if [ -f "\${it_icon[i]}" ] && [ -n "\${it_title[i]}" ] && [ -n "\${it_exec[i]}" ] && [ "\$IMAGE" != "false" ]; then
+            printf "%s\\t%s" "img://\${it_icon[i]}" "\${it_title[i]}"
+        elif [ -n "\${it_title[i]}" ] && [ -n "\${it_exec[i]}" ]; then
+            printf "%s" "\${it_title[i]}"
+        else
+            continue
+        fi
+
+        if [ -n "\${it_desc[i]}" ] && [ "\$DISPLAY_DESCRIPTION" = "true" ]; then
+            [ "\$DMENU_COMPAT" != "true" ] && COL='\\033[0;31m'
+            printf -- "\$DESCRIPTION_SEPARATOR%b%s" "\${COL}" "\${it_desc[i]}"
+        fi
+
+        if [ -n "\${it_comment[i]}" ] && [ "\$DISPLAY_COMMENT" = "true" ]; then
+            [ "\$DMENU_COMPAT" != "true" ] && COL='\\033[0;32m'
+            printf -- "\$COMMENT_SEPARATOR%b%s" "\${COL}" "\${it_comment[i]}"
+        fi
+
+        printf "\n"
+    done
 }
 EOF
 [ -f "$CONFDIR/spmenu/run/config" ] && . "$CONFDIR/spmenu/run/config" && return
@@ -707,32 +736,37 @@ print_desktop_list() {
         mapfile -t it_only < "$ONLYFILE"
         mapfile -t it_comment < "$COMMENTFILE"
 
-        # finally print all of it
-        for i in "${!it_title[@]}"; do
-            [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
-            [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
-
-            if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
-                printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
-            elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
-                printf "%s" "${it_title[i]}"
-            else
-                continue
-            fi
-
-            if [ -n "${it_desc[i]}" ] && [ "$DISPLAY_DESCRIPTION" = "true" ]; then
-                [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
-                printf -- "$DESCRIPTION_SEPARATOR%b%s" "${COL}" "${it_desc[i]}"
-            fi
-
-            if [ -n "${it_comment[i]}" ] && [ "$DISPLAY_COMMENT" = "true" ]; then
-                [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;32m'
-                printf -- "$COMMENT_SEPARATOR%b%s" "${COL}" "${it_comment[i]}"
-            fi
-
-            printf "\n"
-        done
+        d_print_array
     fi
+}
+
+d_print_array() {
+    command -v print_array > /dev/null && print_array && return
+
+    for i in "${!it_title[@]}"; do
+        [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
+        [ "$RESPECT_NODISPLAY" != "false" ] && [ "${it_display[i]}" != "true" ] && continue
+
+        if [ -f "${it_icon[i]}" ] && [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ] && [ "$IMAGE" != "false" ]; then
+            printf "%s\t%s" "img://${it_icon[i]}" "${it_title[i]}"
+        elif [ -n "${it_title[i]}" ] && [ -n "${it_exec[i]}" ]; then
+            printf "%s" "${it_title[i]}"
+        else
+            continue
+        fi
+
+        if [ -n "${it_desc[i]}" ] && [ "$DISPLAY_DESCRIPTION" = "true" ]; then
+            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;31m'
+            printf -- "$DESCRIPTION_SEPARATOR%b%s" "${COL}" "${it_desc[i]}"
+        fi
+
+        if [ -n "${it_comment[i]}" ] && [ "$DISPLAY_COMMENT" = "true" ]; then
+            [ "$DMENU_COMPAT" != "true" ] && COL='\033[0;32m'
+            printf -- "$COMMENT_SEPARATOR%b%s" "${COL}" "${it_comment[i]}"
+        fi
+
+        printf "\n"
+    done
 }
 
 exec_program() {
