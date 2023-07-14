@@ -673,12 +673,12 @@ print_desktop_list() {
             [ ! -f "$cur_file" ] && printf "No desktop entries found." && return
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
 
-            # get details to display
-            it_title[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Name=" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
-            it_desc[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "GenericName=" | sed "s/GenericName=//g")"
-            it_comment[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Comment=" | sed "s/Comment=//g")"
-            it_icon[i]="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)"
-            it_exec[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep -v "TryExec" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
+            file_=$(sed '/\[Desktop Action/q' "$cur_file")
+            it_title[i]="$(awk -F'=' '/^Name=/ && !/Generic/ {gsub("Name=", ""); print; exit}' <<< "$file_")"
+            it_desc[i]="$(awk -F'=' '/GenericName=/ {gsub("GenericName=", ""); print}' <<< "$file_")"
+            it_comment[i]="$(awk -F'=' '/Comment=/ {gsub("Comment=", ""); print}' <<< "$file_")"
+            it_icon[i]="$(grep -F "/${icon_name}." <<< "$icons" | head -n 1)"
+            it_exec[i]="$(awk -F'=' '!/TryExec/ && /Exec=/ {gsub("Exec=", ""); gsub("%[UuFf]", ""); print; exit}' <<< "$file_")"
             it_file[i]="$cur_file"
             it_term[i]="false"
             it_only[i]="false"
