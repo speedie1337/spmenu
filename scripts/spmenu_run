@@ -674,24 +674,24 @@ print_desktop_list() {
             icon_name="$(grep "Icon=" "$cur_file" | head -n 1 | sed "s/Icon=//g")"
 
             # get details to display
-            it_title[i]="$(grep "Name=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
-            it_desc[i]="$(grep "GenericName=" "$cur_file" | sed "s/GenericName=//g")"
-            it_comment[i]="$(grep "Comment=" "$cur_file" | sed "s/Comment=//g")"
+            it_title[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Name=" | grep -v Generic | head -n 1 | sed "s/Name=//g")"
+            it_desc[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "GenericName=" | sed "s/GenericName=//g")"
+            it_comment[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Comment=" | sed "s/Comment=//g")"
             it_icon[i]="$(printf "%s" "$icons" | grep "/${icon_name}[.]" | head -n 1)"
-            it_exec[i]="$(grep -v "TryExec" "$cur_file" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
+            it_exec[i]="$(sed '/\[Desktop Action/q' "$cur_file" | grep -v "TryExec" | grep -m1 "Exec=" | sed "s/Exec=//g; s/%U//g; s/%F//g; s/%u//g; s/%f//g")"
             it_file[i]="$cur_file"
             it_term[i]="false"
             it_only[i]="false"
             it_display[i]="true"
 
             if [ "$PREFERRED_LANGUAGE" != "generic" ]; then
-                  t_title="$(grep "Name\[$PREFERRED_LANGUAGE\]=" "$cur_file" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
-                  t_desc="$(grep "GenericName\[$PREFERRED_LANGUAGE\]=" "$cur_file" | sed "s/GenericName\[$PREFERRED_LANGUAGE\]=//g")"
-                  t_comment="$(grep "Comment\[$PREFERRED_LANGUAGE\]=" "$cur_file" | sed "s/Comment\[$PREFERRED_LANGUAGE\]=//g")"
+                t_title="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Name\[$PREFERRED_LANGUAGE\]=" | grep -v Generic | head -n 1 | sed "s/Name\[$PREFERRED_LANGUAGE\]=//g")"
+                t_desc="$(sed '/\[Desktop Action/q' "$cur_file" | grep "GenericName\[$PREFERRED_LANGUAGE\]=" | sed "s/GenericName\[$PREFERRED_LANGUAGE\]=//g")"
+                t_comment="$(sed '/\[Desktop Action/q' "$cur_file" | grep "Comment\[$PREFERRED_LANGUAGE\]=" | sed "s/Comment\[$PREFERRED_LANGUAGE\]=//g")"
 
-               [ -n "$t_title" ] && it_title[i]="$t_title"
-               [ -n "$t_desc" ] && it_desc[i]="$t_desc"
-               [ -n "$t_comment" ] && it_comment[i]="$t_comment"
+                [ -n "$t_title" ] && it_title[i]="$t_title"
+                [ -n "$t_desc" ] && it_desc[i]="$t_desc"
+                [ -n "$t_comment" ] && it_comment[i]="$t_comment"
             fi
 
             grep -q "Terminal=true" "$cur_file" && it_term[i]="true"
