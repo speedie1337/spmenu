@@ -57,6 +57,12 @@ See a list below for a list.
 .SS Arguments
 .PP
 You may use long, descriptive arguments or the shorter arguments.
+Note that none need to be specified for a basic spmenu prompt.
+The most commonly used arguments are \f[V]-l\f[R] or \f[V]--lines\f[R]
+and \f[V]-g\f[R] or \f[V]--columns\f[R].
+All of the arguments can be defined permanently in the configuration
+file.
+Arguments take priority over settings defined in the config files.
 .TP
 \f[V]-mh, --line-height height\f[R]
 Set spmenu line height to height
@@ -823,173 +829,6 @@ Note that spmenu also has a \f[V]binds.conf\f[R] configuration file,
 which isn\[cq]t used very much.
 This file is documented well
 here (https://spmenu.speedie.site/binds.conf+documentation).
-.SS Mouse
-.PP
-spmenu supports mouse clicks.
-The following parts can be clicked on:
-.IP \[bu] 2
-\f[V]ClickWindow\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the spmenu window
-.RE
-.IP \[bu] 2
-\f[V]ClickPrompt\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the prompt
-.RE
-.IP \[bu] 2
-\f[V]ClickInput\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the input
-.RE
-.IP \[bu] 2
-\f[V]ClickLArrow\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the left arrow
-.RE
-.IP \[bu] 2
-\f[V]ClickRArrow\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the right arrow
-.RE
-.IP \[bu] 2
-\f[V]ClickItem\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the item area
-.RE
-.IP \[bu] 2
-\f[V]ClickSelItem\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on an item, function here doesn\[cq]t matter, it will always be
-selected
-.RE
-.IP \[bu] 2
-\f[V]ClickImage\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on an image
-.RE
-.IP \[bu] 2
-\f[V]ClickNumber\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the match count indicator
-.RE
-.IP \[bu] 2
-\f[V]ClickCaps\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the caps lock indicator
-.RE
-.IP \[bu] 2
-\f[V]ClickMode\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on the mode indicator
-.RE
-.IP \[bu] 2
-\f[V]None\f[R]
-.RS 2
-.IP \[bu] 2
-Any click
-.RE
-.PP
-You can set mouse binds through the config file.
-A default config file is available after installing spmenu.
-This configuration file has identical keybinds to the default hardcoded
-keybinds.
-.PP
-By default, the configuration file will ignore all hardcoded mouse binds
-to prevent conflicts, but if you do not like this behavior you can
-simply set \f[V]ignoreglobalmouse = 0\f[R].
-.PP
-These are the default mouse binds.
-Mode does not apply for mouse binds.
-.PP
-.TS
-tab(@);
-lw(17.5n) lw(17.5n) lw(17.5n) lw(17.5n).
-T{
-Click
-T}@T{
-Button
-T}@T{
-Function
-T}@T{
-Argument
-T}
-_
-T{
-ClickInput
-T}@T{
-Left Click
-T}@T{
-clear
-T}@T{
-0
-T}
-T{
-ClickPrompt
-T}@T{
-Left Click
-T}@T{
-clear
-T}@T{
-0
-T}
-T{
-ClickMode
-T}@T{
-Left Click
-T}@T{
-switchmode
-T}@T{
-0
-T}
-T{
-ClickNumber
-T}@T{
-Left Click
-T}@T{
-viewhist
-T}@T{
-0
-T}
-T{
-ClickSelItem
-T}@T{
-Left Click
-T}@T{
-Outputs the item
-T}@T{
-0
-T}
-T{
-None
-T}@T{
-Scroll Up
-T}@T{
-moveprev
-T}@T{
-0
-T}
-T{
-None
-T}@T{
-Scroll Down
-T}@T{
-movenext
-T}@T{
-0
-T}
-.TE
 .SS Keybinds
 .PP
 You can set keybinds through the config file.
@@ -1000,6 +839,11 @@ keybinds.
 By default, the configuration file will ignore all hardcoded keybinds to
 prevent keybind conflicts, but if you do not like this behavior you can
 simply set \f[V]ignoreglobalkeys = 0\f[R].
+.PP
+Note that if you do unbind your exit or switchmode key by accident and
+find that you cannot exit spmenu, press \f[V]Ctrl+Alt+Delete\f[R].
+This is a hardcoded keybind which cannot be disabled from the
+configuration file.
 .PP
 These are the default keybinds.
 .PP
@@ -1521,6 +1365,173 @@ T}@T{
 r
 T}@T{
 toggleregex
+T}@T{
+0
+T}
+.TE
+.SS Mouse
+.PP
+spmenu supports mouse clicks.
+The following parts can be clicked on:
+.IP \[bu] 2
+\f[V]ClickWindow\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the spmenu window
+.RE
+.IP \[bu] 2
+\f[V]ClickPrompt\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the prompt
+.RE
+.IP \[bu] 2
+\f[V]ClickInput\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the input
+.RE
+.IP \[bu] 2
+\f[V]ClickLArrow\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the left arrow
+.RE
+.IP \[bu] 2
+\f[V]ClickRArrow\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the right arrow
+.RE
+.IP \[bu] 2
+\f[V]ClickItem\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the item area
+.RE
+.IP \[bu] 2
+\f[V]ClickSelItem\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on an item, function here doesn\[cq]t matter, it will always be
+selected
+.RE
+.IP \[bu] 2
+\f[V]ClickImage\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on an image
+.RE
+.IP \[bu] 2
+\f[V]ClickNumber\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the match count indicator
+.RE
+.IP \[bu] 2
+\f[V]ClickCaps\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the caps lock indicator
+.RE
+.IP \[bu] 2
+\f[V]ClickMode\f[R]
+.RS 2
+.IP \[bu] 2
+Clicking on the mode indicator
+.RE
+.IP \[bu] 2
+\f[V]None\f[R]
+.RS 2
+.IP \[bu] 2
+Any click
+.RE
+.PP
+You can set mouse binds through the config file.
+A default config file is available after installing spmenu.
+This configuration file has identical keybinds to the default hardcoded
+keybinds.
+.PP
+By default, the configuration file will ignore all hardcoded mouse binds
+to prevent conflicts, but if you do not like this behavior you can
+simply set \f[V]ignoreglobalmouse = 0\f[R].
+.PP
+These are the default mouse binds.
+Mode does not apply for mouse binds.
+.PP
+.TS
+tab(@);
+lw(17.5n) lw(17.5n) lw(17.5n) lw(17.5n).
+T{
+Click
+T}@T{
+Button
+T}@T{
+Function
+T}@T{
+Argument
+T}
+_
+T{
+ClickInput
+T}@T{
+Left Click
+T}@T{
+clear
+T}@T{
+0
+T}
+T{
+ClickPrompt
+T}@T{
+Left Click
+T}@T{
+clear
+T}@T{
+0
+T}
+T{
+ClickMode
+T}@T{
+Left Click
+T}@T{
+switchmode
+T}@T{
+0
+T}
+T{
+ClickNumber
+T}@T{
+Left Click
+T}@T{
+viewhist
+T}@T{
+0
+T}
+T{
+ClickSelItem
+T}@T{
+Left Click
+T}@T{
+Outputs the item
+T}@T{
+0
+T}
+T{
+None
+T}@T{
+Scroll Up
+T}@T{
+moveprev
+T}@T{
+0
+T}
+T{
+None
+T}@T{
+Scroll Down
+T}@T{
+movenext
 T}@T{
 0
 T}

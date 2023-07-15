@@ -31,7 +31,11 @@ See a list below for a list.
 
 ## Arguments
 
-You may use long, descriptive arguments or the shorter arguments.
+You may use long, descriptive arguments or the shorter arguments. Note that none
+need to be specified for a basic spmenu prompt. The most commonly used arguments
+are `-l` or `--lines` and `-g` or `--columns`. All of the arguments can be defined
+permanently in the configuration file. Arguments take priority over settings defined
+in the config files.
 
 `-mh, --line-height height`
 :   Set spmenu line height to height
@@ -765,57 +769,6 @@ into multiple segments.
 Note that spmenu also has a `binds.conf` configuration file, which isn't used
 very much. This file is documented well [here](https://spmenu.speedie.site/binds.conf+documentation).
 
-## Mouse
-
-spmenu supports mouse clicks. The following parts can be clicked on:
-
-- `ClickWindow`
-  - Clicking on the spmenu window
-- `ClickPrompt`
-  - Clicking on the prompt
-- `ClickInput`
-  - Clicking on the input
-- `ClickLArrow`
-  - Clicking on the left arrow
-- `ClickRArrow`
-  - Clicking on the right arrow
-- `ClickItem`
-  - Clicking on the item area
-- `ClickSelItem`
-  - Clicking on an item, function here doesn't matter, it will always be selected
-- `ClickImage`
-  - Clicking on an image
-- `ClickNumber`
-  - Clicking on the match count indicator
-- `ClickCaps`
-  - Clicking on the caps lock indicator
-- `ClickMode`
-  - Clicking on the mode indicator
-- `None`
-  - Any click
-
-You can set mouse binds through the config file. A default config file is available
-after installing spmenu. This configuration file has identical keybinds to the
-default hardcoded keybinds.
-
-By default, the configuration file will ignore all hardcoded mouse binds to
-prevent conflicts, but if you do not like this behavior you can
-simply set `ignoreglobalmouse = 0`.
-
-
-These are the default mouse binds. Mode does not apply for mouse binds.
-
-| Click              | Button             | Function           | Argument           |
-| :----------------- | :----------------- | :----------------- | :----------------- |
-| ClickInput         | Left Click         | clear              | 0                  |
-| ClickPrompt        | Left Click         | clear              | 0                  |
-| ClickMode          | Left Click         | switchmode         | 0                  |
-| ClickNumber        | Left Click         | viewhist           | 0                  |
-| ClickSelItem       | Left Click         | Outputs the item   | 0                  |
-| None               | Scroll Up          | moveprev           | 0                  |
-| None               | Scroll Down        | movenext           | 0                  |
-
-
 ## Keybinds
 
 You can set keybinds through the config file. A default config file is available
@@ -825,6 +778,10 @@ default hardcoded keybinds.
 By default, the configuration file will ignore all hardcoded keybinds to
 prevent keybind conflicts, but if you do not like this behavior you can
 simply set `ignoreglobalkeys = 0`.
+
+Note that if you do unbind your exit or switchmode key by accident and find that
+you cannot exit spmenu, press `Ctrl+Alt+Delete`. This is a hardcoded keybind
+which cannot be disabled from the configuration file.
 
 These are the default keybinds.
 
@@ -876,6 +833,57 @@ These are the default keybinds.
 | 0                  | Ctrl               | n                  | navhistory         | +1                 |
 | 1                  | 0                  | Escape             | switchmode         | 0                  |
 | 1                  | Ctrl               | r                  | toggleregex        | 0                  |
+
+## Mouse
+
+spmenu supports mouse clicks. The following parts can be clicked on:
+
+- `ClickWindow`
+  - Clicking on the spmenu window
+- `ClickPrompt`
+  - Clicking on the prompt
+- `ClickInput`
+  - Clicking on the input
+- `ClickLArrow`
+  - Clicking on the left arrow
+- `ClickRArrow`
+  - Clicking on the right arrow
+- `ClickItem`
+  - Clicking on the item area
+- `ClickSelItem`
+  - Clicking on an item, function here doesn't matter, it will always be selected
+- `ClickImage`
+  - Clicking on an image
+- `ClickNumber`
+  - Clicking on the match count indicator
+- `ClickCaps`
+  - Clicking on the caps lock indicator
+- `ClickMode`
+  - Clicking on the mode indicator
+- `None`
+  - Any click
+
+You can set mouse binds through the config file. A default config file is available
+after installing spmenu. This configuration file has identical keybinds to the
+default hardcoded keybinds.
+
+By default, the configuration file will ignore all hardcoded mouse binds to
+prevent conflicts, but if you do not like this behavior you can
+simply set `ignoreglobalmouse = 0`.
+
+
+These are the default mouse binds. Mode does not apply for mouse binds.
+
+| Click              | Button             | Function           | Argument           |
+| :----------------- | :----------------- | :----------------- | :----------------- |
+| ClickInput         | Left Click         | clear              | 0                  |
+| ClickPrompt        | Left Click         | clear              | 0                  |
+| ClickMode          | Left Click         | switchmode         | 0                  |
+| ClickNumber        | Left Click         | viewhist           | 0                  |
+| ClickSelItem       | Left Click         | Outputs the item   | 0                  |
+| None               | Scroll Up          | moveprev           | 0                  |
+| None               | Scroll Down        | movenext           | 0                  |
+
 
 ## .Xresources
 
