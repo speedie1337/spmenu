@@ -580,16 +580,6 @@ press Ctrl+r to enable regex matching. Now typing in `[0-9]` will return the
 `1 Apple` entry, but not the `One Apple` entry. Of course, more advanced
 regex can be used as well.
 
-## Keybinds
-
-You can set keybinds through the config file. A default config file is available
-after installing spmenu. This configuration file has identical keybindings to the
-default hardcoded keybinds.
-
-By default, the configuration file will ignore all hardcoded keybindings to
-prevent keybind conflicts, but if you do not like this behavior you can
-simply set `ignoreglobalkeys = 0`.
-
 ## Modes
 
 There are two modes. Normal mode and Insert mode. These modes are of
@@ -775,10 +765,68 @@ into multiple segments.
 Note that spmenu also has a `binds.conf` configuration file, which isn't used
 very much. This file is documented well [here](https://spmenu.speedie.site/binds.conf+documentation).
 
-## Default keybinds
+## Mouse
 
-These are the default keybinds. You can generate these yourself from a
-`keybinds.h` using `scripts/spmenu_make`.
+spmenu supports mouse clicks. The following parts can be clicked on:
+
+- `ClickWindow`
+  - Clicking on the spmenu window
+- `ClickPrompt`
+  - Clicking on the prompt
+- `ClickInput`
+  - Clicking on the input
+- `ClickLArrow`
+  - Clicking on the left arrow
+- `ClickRArrow`
+  - Clicking on the right arrow
+- `ClickItem`
+  - Clicking on the item area
+- `ClickSelItem`
+  - Clicking on an item, function here doesn't matter, it will always be selected
+- `ClickImage`
+  - Clicking on an image
+- `ClickNumber`
+  - Clicking on the match count indicator
+- `ClickCaps`
+  - Clicking on the caps lock indicator
+- `ClickMode`
+  - Clicking on the mode indicator
+- `None`
+  - Any click
+
+You can set mouse binds through the config file. A default config file is available
+after installing spmenu. This configuration file has identical keybinds to the
+default hardcoded keybinds.
+
+By default, the configuration file will ignore all hardcoded mouse binds to
+prevent conflicts, but if you do not like this behavior you can
+simply set `ignoreglobalmouse = 0`.
+
+
+These are the default mouse binds. Mode does not apply for mouse binds.
+
+| Click              | Button             | Function           | Argument           |
+| :----------------- | :----------------- | :----------------- | :----------------- |
+| ClickInput         | Left Click         | clear              | 0                  |
+| ClickPrompt        | Left Click         | clear              | 0                  |
+| ClickMode          | Left Click         | switchmode         | 0                  |
+| ClickNumber        | Left Click         | viewhist           | 0                  |
+| ClickSelItem       | Left Click         | Outputs the item   | 0                  |
+| None               | Scroll Up          | moveprev           | 0                  |
+| None               | Scroll Down        | movenext           | 0                  |
+
+
+## Keybinds
+
+You can set keybinds through the config file. A default config file is available
+after installing spmenu. This configuration file has identical keybinds to the
+default hardcoded keybinds.
+
+By default, the configuration file will ignore all hardcoded keybinds to
+prevent keybind conflicts, but if you do not like this behavior you can
+simply set `ignoreglobalkeys = 0`.
+
+These are the default keybinds.
 
 | Mode               | Modifier           | Key                | Function           | Argument           |
 | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
