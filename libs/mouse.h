@@ -23,7 +23,7 @@ static WlMouse wl_buttons[] = {
     { ClickMode,            WL_Left,         switchmode,   {0} },
     { ClickNumber,          WL_Left,         viewhist,     {0} },
     { ClickSelItem,         WL_Left,         NULL,         {0} },
-    { ClickNone,            WL_ScrollDown,   movenext,     {0} },
-    { ClickNone,            WL_ScrollUp,     moveprev,     {0} },
+    { ClickNone,            WL_Down,         movenext,     {0} },
+    { ClickNone,            WL_Up,           moveprev,     {0} },
 };
 #endif
