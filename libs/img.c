@@ -190,8 +190,8 @@ void loadimagecache(const char *file, int *width, int *height) {
     int slen = 0, i;
     unsigned int digest_len = EVP_MD_size(EVP_md5());
     unsigned char *digest = (unsigned char *)OPENSSL_malloc(digest_len);
-    char *xdg_cache, *home = NULL, *dsize, *buf = NULL;
-    struct passwd *pw = NULL;
+    char *xdg_cache, *home = NULL, *cachesize, *buf = NULL;
+    struct passwd *user_id = NULL;
 
     // just load and don't store or try cache
     if (img.longestedge > maxcache) {
@@ -204,18 +204,20 @@ void loadimagecache(const char *file, int *width, int *height) {
     if (generatecache) {
         // try find image from cache first
         if(!(xdg_cache = getenv("XDG_CACHE_HOME"))) {
-            if(!(home = getenv("HOME")) && (pw = getpwuid(getuid())))
-                home = pw->pw_dir;
-            if(!home) {
+            if(!(home = getenv("HOME")) && (user_id = getpwuid(getuid()))) {
+                home = user_id->pw_dir;
+            }
+
+            if(!home) { // no home directory could be grabbed.. somehow
                 fprintf(stderr, "spmenu: could not find home directory");
                 return;
             }
         }
 
         // which cache do we try?
-        dsize = "normal";
+        cachesize = "normal";
         if (img.longestedge > 128)
-            dsize = "large";
+            cachesize = "large";
 
         slen = snprintf(NULL, 0, "file://%s", file)+1;
 
@@ -243,11 +245,11 @@ void loadimagecache(const char *file, int *width, int *height) {
         // path for cached thumbnail
         if (!cachedir || !strcmp(cachedir, "default")) {
             if (xdg_cache || !strcmp(cachedir, "xdg"))
-                slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5)+1;
+                slen = snprintf(NULL, 0, "%s/thumbnails/%s/%s.png", xdg_cache, cachesize, md5)+1;
             else
-                slen = snprintf(NULL, 0, "%s/.cache/thumbnails/%s/%s.png", home, dsize, md5)+1;
+                slen = snprintf(NULL, 0, "%s/.cache/thumbnails/%s/%s.png", home, cachesize, md5)+1;
         } else {
-            slen = snprintf(NULL, 0, "%s/%s/%s.png", cachedir, dsize, md5)+1;
+            slen = snprintf(NULL, 0, "%s/%s/%s.png", cachedir, cachesize, md5)+1;
         }
 
         if(!(buf = malloc(slen))) {
@@ -256,11 +258,11 @@ void loadimagecache(const char *file, int *width, int *height) {
 
         if (!cachedir || !strcmp(cachedir, "default")) {
             if (xdg_cache)
-                sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, dsize, md5);
+                sprintf(buf, "%s/thumbnails/%s/%s.png", xdg_cache, cachesize, md5);
             else
-                sprintf(buf, "%s/.cache/thumbnails/%s/%s.png", home, dsize, md5);
+                sprintf(buf, "%s/.cache/thumbnails/%s/%s.png", home, cachesize, md5);
         } else {
-                sprintf(buf, "%s/%s/%s.png", cachedir, dsize, md5);
+                sprintf(buf, "%s/%s/%s.png", cachedir, cachesize, md5);
         }
 
         loadimage(buf, width, height);
@@ -298,7 +300,7 @@ void jumptoindex(unsigned int index) {
 
     calcoffsets();
 
-    for (i = 1; i < index; ++i) {
+    for (i = 1; i < index; ++i) { // move to item index
         if(sel && sel->right && (sel = sel->right) == next) {
             curr = next;
             calcoffsets();

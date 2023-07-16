@@ -95,7 +95,7 @@
 // include macros and other defines
 #include "libs/define.c"
 
-enum {
+enum { // click enum
     ClickWindow,
     ClickPrompt,
     ClickInput,
@@ -159,7 +159,7 @@ struct mo {
 struct img {
     int setlines; // actual lines
     int flip; // %=
-    int longestedge; // MAX(imagewidth, imagheight)
+    int longestedge; // MAX(imagewidth, imageheight)
     int imagewidth; // current image width
     int imageheight; // current image height
     int imagegaps; // current image gaps
@@ -206,12 +206,12 @@ static struct item *prev, *curr, *next, *sel;
 #include "libs/stream.h"
 #include "libs/schemes.h"
 #include "libs/arg.h"
-#include "libs/x11/inc.h" // include x11
-#include "libs/wl/inc.h" // include wayland
+#include "libs/x11/inc.h"
+#include "libs/wl/inc.h"
 #include "libs/sort.h"
 #include "libs/history.h"
 
-static Draw_t *draw;
+static Draw_t *draw; // Draw_t type, see libs/draw/draw.c
 
 // high priority
 static int hplength = 0;
@@ -243,13 +243,15 @@ static void handle(void);
 static void appenditem(struct item *item, struct item **list, struct item **last);
 static int max_textw(void);
 static size_t nextrune(int inc);
+
+// matching
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 #if USEX
-static void pastesel(void);
-static void grabfocus(void);
+static void pastesel(void); // TODO: wayland clipboard
+static void grabfocus(void); // focus doesn't need to be grabbed on wayland
 #endif
 
 static char **list;
@@ -298,7 +300,7 @@ static char *fonts[] = { font };
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {
         if (sel_index[i] == index) {
-            return 1;
+            return 1; // selected item index is size_t index
         }
     }
 
@@ -319,6 +321,7 @@ void appenditem(struct item *item, struct item **list, struct item **last) {
 void recalculatenumbers(void) {
     unsigned int numer = 0, denom = 0, selected = 0;
     struct item *item;
+
     if (matchend) {
         numer++;
 
@@ -328,8 +331,9 @@ void recalculatenumbers(void) {
     }
 
     // walk through all items, matching or not and add to denom
-    for (item = items; item && item->text; item++)
+    for (item = items; item && item->text; item++) {
         denom++;
+    }
 
     for (int i = 0; i < sel_size; i++) {
         if (sel_index[i] == -1) {
@@ -347,37 +351,38 @@ void recalculatenumbers(void) {
 }
 
 void calcoffsets(void) {
-    int i, n;
+    int i, offset;
 
-    if (lines > 0)
-        n = lines * columns * sp.bh;
-    else { // no lines, therefore the size of items must be decreased to fit the menu elements
+    if (lines > 0) {
+        offset = lines * columns * sp.bh;
+    } else { // no lines, therefore the size of items must be decreased to fit the menu elements
         int numberw = 0;
-        int modeWidth = 0;
+        int modew = 0;
         int larroww = 0;
-        int rarrowWidth = 0;
+        int rarroww = 0;
         int capsw = 0;
 
         if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
-        if (!hidemode) modeWidth = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+        if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
         if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-        if (!hiderarrow) rarrowWidth = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+        if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
         if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
-        if (!strcmp(tx.capstext, ""))
+        if (!strcmp(tx.capstext, "")) {
             capsw = 0;
+        }
 
-        n = sp.mw - (sp.promptw + sp.inputw + larroww + rarrowWidth + modeWidth + numberw + capsw + menumarginh);
+        offset = sp.mw - (sp.promptw + sp.inputw + larroww + rarroww + modew + numberw + capsw + menumarginh);
     }
 
     // calculate which items will begin the next page
     for (i = 0, next = curr; next; next = next->right)
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), n)) > n)
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
             break;
 
     // calculate which items will begin the previous page
     for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), n)) > n)
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
             break;
 }
 
@@ -413,6 +418,7 @@ void cleanup(void) {
     free(sel_index);
 }
 
+// This function handles case insensitive matching
 char * cistrstr(const char *h, const char *n) {
     size_t i;
 
@@ -438,17 +444,25 @@ void grabfocus(void) {
 
 void insert(const char *str, ssize_t n) {
     if (strlen(tx.text) + n > sizeof tx.text - 1)
-        return;
+        return; // length of text should not exceed size
 
     static char l[BUFSIZ] = "";
-    if (requirematch) memcpy(l, tx.text, BUFSIZ);
+
+    if (requirematch) {
+        memcpy(l, tx.text, BUFSIZ);
+    }
 
     // move existing text out of the way, insert new text, and update cursor
-    memmove(&tx.text[sp.cursor + n], &tx.text[sp.cursor], sizeof tx.text - sp.cursor - MAX(n, 0));
+    memmove(
+            &tx.text[sp.cursor + n],
+            &tx.text[sp.cursor],
+            sizeof tx.text - sp.cursor - MAX(n, 0)
+    );
 
     // update cursor
-    if (n > 0 && str && n)
+    if (n > 0 && str && n) {
         memcpy(&tx.text[sp.cursor], str, n);
+    }
 
     // add to cursor position and continue matching
     sp.cursor += n;
@@ -460,6 +474,7 @@ void insert(const char *str, ssize_t n) {
         match();
     }
 
+    // output on insertion
     if (incremental) {
         puts(tx.text);
         fflush(stdout);
@@ -467,12 +482,13 @@ void insert(const char *str, ssize_t n) {
 }
 
 size_t nextrune(int inc) {
-    ssize_t n;
+    ssize_t rune;
 
     // return location of next utf8 rune in the given direction (+1 or -1)
-    for (n = sp.cursor + inc; n + inc >= 0 && (tx.text[n] & 0xc0) == 0x80; n += inc)
+    for (rune = sp.cursor + inc; rune + inc >= 0 && (tx.text[rune] & 0xc0) == 0x80; rune += inc)
         ;
-    return n;
+
+    return rune;
 }
 
 #if USEX
@@ -497,6 +513,10 @@ void resizeclient(void) {
 #endif
 }
 
+/* Width reserved for input when !lines is a fixed size of the menu width / 3
+ * This is reasonable, but in rare cases may cause input text to overlap
+ * items.
+ */
 void get_width(void) {
     sp.inputw = sp.mw / 3;
 }
@@ -507,12 +527,14 @@ void get_mh(void) {
     sp.mh = (lines + 1) * sp.bh;
     sp.mh += 2 * menumarginv;
 
+    // subtract 1 line if there's nothing to draw on the top line
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         sp.mh -= sp.bh;
     }
 
     epad = 2 * menupaddingv;
 
+    // the spmenu window should not exceed the screen resolution height
     if (mo.output_height && !xpos && !ypos) {
         sp.mh = MIN(sp.mh, mo.output_height - epad);
 
@@ -540,6 +562,7 @@ void set_mode(void) {
         sp_strncpy(tx.modetext, normtext, sizeof(tx.modetext));
     }
 
+    // normal mode disabled
     if (sp.forceinsertmode) {
         sp.mode = 1;
         sp.allowkeys = 1;
@@ -608,7 +631,9 @@ void handle(void) {
 int main(int argc, char *argv[]) {
     readargs(argc, argv); // start by reading arguments
 
-    // pledge limits what programs can do, so here we specify what spmenu should be allowed to do
+    /* pledge limits what programs can do, so here we specify what spmenu should be allowed to do
+     * TODO: test this on a openbsd operating system
+     */
 #ifdef __OpenBSD__
     if (pledge("stdio rpath wpath cpath", NULL) == -1)
         die("pledge");

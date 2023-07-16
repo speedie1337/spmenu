@@ -4,14 +4,17 @@ void moveleft(Arg *arg) {
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
 
+    // If we cannot move left because !lines, moving left should move to the next item. Calling moveup() does this.
     if (!lines) {
         moveup(arg);
         return;
     }
 
     if (columns > 1) {
-        if (!sel)
+        if (!sel) {
             return;
+        }
+
         tmpsel = sel;
         for (i = 0; i < lines; i++) {
             if (!tmpsel->left || tmpsel->left->right != tmpsel) {
@@ -40,7 +43,7 @@ void moveright(Arg *arg) {
     int i, offscreen = 0;
     int argu = arg->i ? arg->i : 1;
 
-    if (!lines) {
+    if (!lines) { // If we cannot move right because !lines, moving right should move to the previous item. Calling down() does this.
         movedown(arg);
         return;
     }
@@ -75,7 +78,7 @@ void movedown(Arg *arg) {
 
     for (int j = 0; j < argu; j++) {
         if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
+            curr = next; // Current item is now the next item
         }
     }
 
@@ -88,7 +91,7 @@ void moveup(Arg *arg) {
 
     for (int j = 0; j < argu; j++) {
         if (sel && sel->left && (sel = sel->left)->right == curr) {
-            curr = prev;
+            curr = prev; // Current item is now the previous item
         }
     }
 
