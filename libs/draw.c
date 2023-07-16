@@ -335,7 +335,7 @@ int drawitem(int x, int y, int w) {
         int itemoverride = 1;
 
         for (item = currentitem; item != nextitem; item = item->right) { // draw items
-            x = drawitemtext(item, x + (powerlineitems ? sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
+            x = drawitemtext(item, x + (powerlineitems ? 2 * sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
                         sp.mw - x -
                         rarroww -
                         numberw -
