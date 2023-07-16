@@ -50,7 +50,7 @@ void buttonpress_x11(XEvent *e) {
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
         if ((lines <= 0 && ev->x >= 0 && ev->x <= x + w + sp.promptw +
-                    ((!prev || !curr->left) ? larroww : 0)) ||
+                    ((!previousitem || !currentitem->left) ? larroww : 0)) ||
                 (lines > 0 && ev->y >= y && ev->y <= y + h)) {
 
             click = ClickInput;
@@ -73,7 +73,7 @@ void buttonpress_x11(XEvent *e) {
             ev->y += h;
         }
 
-        for (item = curr; item != next; item = item->right) {
+        for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
                 x += w / columns;
@@ -112,7 +112,7 @@ void buttonpress_x11(XEvent *e) {
         x += sp.inputw;
         w = larroww;
 
-        if (prev && curr->left) {
+        if (previousitem && currentitem->left) {
             if (ev->x >= x && ev->x <= x + w) {
                 click = ClickLArrow;
             }
@@ -121,7 +121,7 @@ void buttonpress_x11(XEvent *e) {
         // right arrow
         w = rarroww;
         x = sp.mw - w;
-        if (next && ev->x >= x && ev->x <= x + w) {
+        if (nextitem && ev->x >= x && ev->x <= x + w) {
             click = ClickRArrow;
         }
     }

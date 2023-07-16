@@ -29,10 +29,10 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
                     y,
                     MIN(w - indent - sp.lrpad, TEXTW(highlight) - sp.lrpad),
                     sp.bh, 0, highlight, 0, False,
-                    item == sel ? col_hlselfg : col_hlnormfg,
-                    item == sel ? col_hlselbg : col_hlnormbg,
-                    item == sel ? alpha_hlselfg : alpha_hlnormfg,
-                    item == sel ? alpha_hlselbg : alpha_hlnormbg);
+                    item == selecteditem ? col_hlselfg : col_hlnormfg,
+                    item == selecteditem ? col_hlselbg : col_hlnormbg,
+                    item == selecteditem ? alpha_hlselfg : alpha_hlnormfg,
+                    item == selecteditem ? alpha_hlselbg : alpha_hlnormbg);
             highlight[1] = c;
             i++;
         }
@@ -66,7 +66,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int oleftpadding;
 
     // memcpy the correct scheme
-    if (item == sel) {
+    if (item == selecteditem) {
         selitem = 1;
         bgcol = col_itemselbg;
         fgcol = col_itemselfg;
@@ -306,7 +306,7 @@ int drawitem(int x, int y, int w) {
         int itemoverride = 1;
         itemn = 0;
 
-        for (item = curr; item != next; item = item->right, i++) {
+        for (item = currentitem; item != nextitem; item = item->right, i++) {
             x = drawitemtext(
                     item,
                     rx + menumarginh + ((i / lines) *  ((sp.mw - rx) / columns)) + (powerlineitems ? sp.plw : 0),
@@ -314,7 +314,7 @@ int drawitem(int x, int y, int w) {
                     (sp.mw - rx) / columns - (powerlineitems ? 2 * sp.plw : 0) - (2 * menumarginh)
             );
 
-            if (item == sel && itemoverride) {
+            if (item == selecteditem && itemoverride) {
                 sp.itemnumber = i;
                 itemoverride = 0;
             }
@@ -334,7 +334,7 @@ int drawitem(int x, int y, int w) {
         sp.itemnumber = 0;
         int itemoverride = 1;
 
-        for (item = curr; item != next; item = item->right) { // draw items
+        for (item = currentitem; item != nextitem; item = item->right) { // draw items
             x = drawitemtext(item, x + (powerlineitems ? sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
                         sp.mw - x -
                         rarroww -
@@ -350,7 +350,7 @@ int drawitem(int x, int y, int w) {
                 sp.itemnumber++;
             }
 
-            if (item == sel) {
+            if (item == selecteditem) {
                 itemoverride = 0;
             }
         }
@@ -425,7 +425,7 @@ int drawinput(int x, int y, int w) {
 int drawlarrow(int x, int y, int w) {
     if (hidelarrow) return x;
 
-    if (curr->left) { // draw left arrow
+    if (currentitem->left) { // draw left arrow
         draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, leftarrow, 0, pango_leftarrow ? True : False, col_larrowfg, col_larrowbg, alpha_larrowfg, alpha_larrowbg);
         x += w;
     }
@@ -436,7 +436,7 @@ int drawlarrow(int x, int y, int w) {
 int drawrarrow(int x, int y, int w) {
     if (hiderarrow) return x;
 
-    if (next) { // draw right arrow
+    if (nextitem) { // draw right arrow
         draw_text(draw, sp.mw - w, y, w, sp.bh, sp.lrpad / 2, rightarrow, 0, pango_rightarrow ? True : False, col_rarrowfg, col_rarrowbg, alpha_rarrowfg, alpha_rarrowbg);
         x += w;
     }
@@ -545,8 +545,8 @@ void drawmenu(void) {
                 match();
 
                 for (int i = 0; i < sp.itemnumber; i++) {
-                    if (sel && sel->right && (sel = sel->right) == next) {
-                        curr = next;
+                    if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+                        currentitem = nextitem;
                     }
                 }
 
@@ -568,8 +568,8 @@ void drawmenu(void) {
                 match();
 
                 for (int i = 0; i < sp.itemnumber; i++) {
-                    if (sel && sel->right && (sel = sel->right) == next) {
-                        curr = next;
+                    if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+                        currentitem = nextitem;
                     }
                 }
             }

@@ -94,11 +94,11 @@ void fuzzymatch(void) {
         matches = lhpprefix;
     }
 
-    curr = sel = matches;
+    currentitem = selecteditem = matches;
 
     for (i = 0; i < preselected; i++) {
-        if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
+        if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+            currentitem = nextitem;
         }
     }
 
@@ -180,11 +180,12 @@ void match(void) {
             matches = lsubstr;
         matchend = substrend;
     }
-    curr = sel = matches;
+
+    currentitem = selecteditem = matches;
 
     for (i = 0; i < preselected; i++) {
-        if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
+        if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+            currentitem = nextitem;
         }
     }
 

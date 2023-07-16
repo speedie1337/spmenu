@@ -195,9 +195,16 @@ static struct img img = {0};
 static struct x11 x11 = {0};
 #endif
 
-static struct item *items = NULL, *backup_items, *list_items;
-static struct item *matches, *matchend;
-static struct item *prev, *curr, *next, *sel;
+static struct item *items = NULL;
+static struct item *history_items;
+static struct item *list_items;
+static struct item *matches;
+static struct item *matchend;
+
+static struct item *previousitem; // previous item
+static struct item *currentitem; // current item
+static struct item *nextitem; // next item
+static struct item *selecteditem; // selected item
 
 // various headers
 #include "libs/draw/draw.h"
@@ -376,14 +383,16 @@ void calcoffsets(void) {
     }
 
     // calculate which items will begin the next page
-    for (i = 0, next = curr; next; next = next->right)
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(next->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
+    for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) {
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(nextitem->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
             break;
+    }
 
     // calculate which items will begin the previous page
-    for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(prev->left->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
+    for (i = 0, previousitem = currentitem; previousitem && previousitem->left; previousitem = previousitem->left) {
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(previousitem->left->text) + (powerlineitems ? !lines ? 2 * sp.plw : 0 : 0), offset)) > offset)
             break;
+    }
 }
 
 int max_textw(void) {

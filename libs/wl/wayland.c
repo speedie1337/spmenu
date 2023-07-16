@@ -266,7 +266,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
         if ((lines <= 0 && ex >= 0 && ex <= x + w + sp.promptw +
-                    ((!prev || !curr->left) ? larroww : 0)) ||
+                    ((!previousitem || !currentitem->left) ? larroww : 0)) ||
                 (lines > 0 && ey >= y && ey <= y + h)) {
 
             click = ClickInput;
@@ -289,7 +289,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             ey += h;
         }
 
-        for (item = curr; item != next; item = item->right) {
+        for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
                 x += w / columns;
@@ -328,7 +328,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         x += sp.inputw;
         w = larroww;
 
-        if (prev && curr->left) {
+        if (previousitem && currentitem->left) {
             if (ex >= x && ex <= x + w) {
                 click = ClickLArrow;
             }
@@ -337,7 +337,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         // right arrow
         w = rarroww;
         x = sp.mw - w;
-        if (next && ex >= x && ex <= x + w) {
+        if (nextitem && ex >= x && ex <= x + w) {
             click = ClickRArrow;
         }
     }

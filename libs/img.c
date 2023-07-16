@@ -41,10 +41,10 @@ void drawimage(void) {
     if (!lines || !columns || hideimage || !imagetype) return;
 
     // load image cache
-    if (sel && sel->image && strcmp(sel->image, limg ? limg : "")) {
+    if (selecteditem && selecteditem->image && strcmp(selecteditem->image, limg ? limg : "")) {
         if (img.longestedge)
-            loadimagecache(sel->image, &width, &height);
-    } else if ((!sel || !sel->image) && image) { // free image
+            loadimagecache(selecteditem->image, &width, &height);
+    } else if ((!selecteditem || !selecteditem->image) && image) { // free image
         cleanupimage();
     }
 
@@ -96,8 +96,8 @@ void drawimage(void) {
         }
     }
 
-    if (sel) {
-        limg = sel->image;
+    if (selecteditem) {
+        limg = selecteditem->image;
     } else {
         limg = NULL;
     }
@@ -296,13 +296,13 @@ void loadimagecache(const char *file, int *width, int *height) {
 
 void jumptoindex(unsigned int index) {
     unsigned int i;
-    sel = curr = matches;
+    selecteditem = currentitem = matches;
 
     calcoffsets();
 
     for (i = 1; i < index; ++i) { // move to item index
-        if(sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
+        if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+            currentitem = nextitem;
             calcoffsets();
         }
     }
@@ -360,7 +360,7 @@ void resizetoimageheight_x11(int imageheight) {
         unsigned int i = 1;
 
         // walk through all matches
-        for (item = matches; item && item != sel; item = item->right)
+        for (item = matches; item && item != selecteditem; item = item->right)
             ++i;
 
         jumptoindex(i);
@@ -390,7 +390,7 @@ void resizetoimageheight_wl(int imageheight) {
         unsigned int i = 1;
 
         // walk through all matches
-        for (item = matches; item && item != sel; item = item->right)
+        for (item = matches; item && item != selecteditem; item = item->right)
             ++i;
 
         jumptoindex(i);

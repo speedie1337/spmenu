@@ -11,25 +11,25 @@ void moveleft(Arg *arg) {
     }
 
     if (columns > 1) {
-        if (!sel) {
+        if (!selecteditem) {
             return;
         }
 
-        tmpsel = sel;
+        tmpsel = selecteditem;
         for (i = 0; i < lines; i++) {
             if (!tmpsel->left || tmpsel->left->right != tmpsel) {
                 if (offscreen)
                     drawmenu();
                 return;
             }
-            if (tmpsel == curr)
+            if (tmpsel == currentitem)
                 offscreen = 1;
             tmpsel = tmpsel->left;
         }
-        sel = tmpsel;
+        selecteditem = tmpsel;
         if (offscreen) {
             for (int j = 0; j < argu; j++) {
-                curr = prev;
+                currentitem = previousitem;
             }
         }
 
@@ -49,9 +49,9 @@ void moveright(Arg *arg) {
     }
 
     if (columns > 1) {
-        if (!sel)
+        if (!selecteditem)
             return;
-        tmpsel = sel;
+        tmpsel = selecteditem;
         for (i = 0; i < lines; i++) {
             if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
                 if (offscreen)
@@ -59,13 +59,13 @@ void moveright(Arg *arg) {
                 return;
             }
             tmpsel = tmpsel->right;
-            if (tmpsel == next)
+            if (tmpsel == nextitem)
                 offscreen = 1;
         }
-        sel = tmpsel;
+        selecteditem = tmpsel;
         if (offscreen) {
             for (int j = 0; j < argu; j++)
-                curr = next;
+                currentitem = nextitem;
         }
         calcoffsets();
     }
@@ -77,8 +77,8 @@ void movedown(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     for (int j = 0; j < argu; j++) {
-        if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next; // Current item is now the next item
+        if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+            currentitem = nextitem; // Current item is now the next item
         }
     }
 
@@ -90,8 +90,8 @@ void moveup(Arg *arg) {
     int argu = arg->i ? arg->i : 1;
 
     for (int j = 0; j < argu; j++) {
-        if (sel && sel->left && (sel = sel->left)->right == curr) {
-            curr = prev; // Current item is now the previous item
+        if (selecteditem && selecteditem->left && (selecteditem = selecteditem->left)->right == currentitem) {
+            currentitem = previousitem; // Current item is now the previous item
         }
     }
 
@@ -116,7 +116,7 @@ void complete(Arg *arg) {
         return;
     }
 
-    strncpy(tx.text, sel->nsgrtext, sizeof tx.text - 1);
+    strncpy(tx.text, selecteditem->nsgrtext, sizeof tx.text - 1);
     tx.text[sizeof tx.text - 1] = '\0';
     sp.cursor = strlen(tx.text);
 
@@ -125,26 +125,28 @@ void complete(Arg *arg) {
 }
 
 void movenext(Arg *arg) {
-    if (!next)
+    if (!nextitem) {
         return;
+    }
 
-    sel = curr = next;
+    selecteditem = currentitem = nextitem; // next page
     drawmenu();
 }
 
 void moveprev(Arg *arg) {
-    if (!prev)
+    if (!previousitem) {
         return;
+    }
 
-    sel = curr = prev;
+    selecteditem = currentitem = previousitem; // previous page
     calcoffsets();
     drawmenu();
 }
 
 void moveitem(Arg *arg) {
     for (int i = 0; i < arg->i; i++) {
-        if (sel && sel->right && (sel = sel->right) == next) {
-            curr = next;
+        if (selecteditem && selecteditem->right && (selecteditem = selecteditem->right) == nextitem) {
+            currentitem = nextitem;
             calcoffsets();
         }
     }
@@ -153,13 +155,13 @@ void moveitem(Arg *arg) {
 }
 
 void movestart(Arg *arg) {
-    if (sel == matches) {
+    if (selecteditem == matches) {
         sp.cursor = 0;
         drawmenu();
         return;
     }
 
-    sel = curr = matches;
+    selecteditem = currentitem = matches;
     calcoffsets();
     drawmenu();
 }
@@ -171,17 +173,17 @@ void moveend(Arg *arg) {
         return;
     }
 
-    if (next) {
-        curr = matchend;
+    if (nextitem) {
+        currentitem = matchend;
         calcoffsets();
-        curr = prev;
+        currentitem = previousitem;
         calcoffsets();
 
-        while (next && (curr = curr->right))
+        while (nextitem && (currentitem = currentitem->right))
             calcoffsets();
     }
 
-    sel = matchend;
+    selecteditem = matchend;
     drawmenu();
 }
 
@@ -197,8 +199,8 @@ void viewhist(Arg *arg) {
     int i;
 
     if (histfile) {
-        if (!backup_items) {
-            backup_items = items;
+        if (!history_items) {
+            history_items = items;
             items = calloc(histsz + 1, sizeof(struct item));
 
             if (!items) {
@@ -210,8 +212,8 @@ void viewhist(Arg *arg) {
             }
         } else {
             free(items);
-            items = backup_items;
-            backup_items = NULL;
+            items = history_items;
+            history_items = NULL;
         }
     }
 
@@ -273,23 +275,23 @@ void backspace(Arg *arg) {
 
 void markitem(Arg *arg) {
     if (!mark) return;
-    if (sel && is_selected(sel->index)) {
+    if (selecteditem && is_selected(selecteditem->index)) {
         for (int i = 0; i < sel_size; i++) {
-            if (sel_index[i] == sel->index) {
+            if (sel_index[i] == selecteditem->index) {
                 sel_index[i] = -1;
             }
         }
     } else {
         for (int i = 0; i < sel_size; i++) {
             if (sel_index[i] == -1) {
-                sel_index[i] = sel->index;
+                sel_index[i] = selecteditem->index;
                 return;
             }
         }
 
         sel_size++;
         sel_index = realloc(sel_index, (sel_size + 1) * sizeof(int));
-        sel_index[sel_size - 1] = sel->index;
+        sel_index[sel_size - 1] = selecteditem->index;
     }
 }
 
@@ -297,21 +299,21 @@ void selectitem(Arg *arg) {
     char *selection;
 
     // print index
-    if (printindex && sel && arg->i) {
-        fprintf(stdout, "%d\n", sel->index);
+    if (printindex && selecteditem && arg->i) {
+        fprintf(stdout, "%d\n", selecteditem->index);
         cleanup();
         exit(0);
     }
 
     // selected item or input?
-    if (sel && arg->i && !hideitem) {
-        selection = sel->text;
+    if (selecteditem && arg->i && !hideitem) {
+        selection = selecteditem->text;
     } else {
         selection = tx.text;
     }
 
     for (int i = 0; i < sel_size; i++) {
-        if (sel_index[i] != -1 && (!sel || sel->index != sel_index[i])) {
+        if (sel_index[i] != -1 && (!selecteditem || selecteditem->index != sel_index[i])) {
             puts(items[sel_index[i]].text);
         }
     }
@@ -468,7 +470,7 @@ void setlines(Arg *arg) {
     if (!overridelines) return;
 
     insert(NULL, 0 - sp.cursor);
-    sel = curr = matches;
+    selecteditem = currentitem = matches;
 
     lines += arg->i;
 
