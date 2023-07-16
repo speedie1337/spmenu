@@ -56,6 +56,7 @@ static void spawn(Arg *arg);
 static void screenshot(Arg *arg);
 static void switchmode(Arg *arg);
 static void setprofile(Arg *arg);
+static void setlineheight(Arg *arg);
 static void quit(Arg *arg);
 
 /* toggle */

@@ -540,7 +540,6 @@ void resizeclient_wl(struct state *state) {
     for (item = items; item && item->text; item++)
         ic++;
 
-    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MIN(ic, MAX(lines, 0));
 #if USEIMAGE
     img.setlines = lines;

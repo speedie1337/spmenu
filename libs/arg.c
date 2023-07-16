@@ -395,6 +395,12 @@ out:
     free(history);
 }
 
+void setlineheight(Arg *arg) {
+    lineheight += arg->i;
+    sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
+    resizeclient();
+}
+
 void setimgsize(Arg *arg) {
 #if USEIMAGE
     setimagesize(img.imagewidth + arg->i, img.imageheight + arg->i);

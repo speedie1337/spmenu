@@ -1015,6 +1015,8 @@ bind:
   - Set lines to passed argument
 - `setcolumns`
   - Set columns to passed argument
+- `setlineheight`
+  - Set line height to passed argument
 - `setprofile`
   - Open profile menu if available
 - `switchmode`

@@ -392,6 +392,7 @@ static FuncList fl[] = {
     { "toggleregex",      toggleregex },
     { "toggleimg",        toggleimg },
     { "setprofile",       setprofile },
+    { "setlineheight",    setlineheight },
     { "switchmode",       switchmode },
     { "spawn",            spawn },
 };
