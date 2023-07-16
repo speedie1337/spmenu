@@ -384,13 +384,17 @@ void calcoffsets(void) {
 
     // calculate which items will begin the next page
     for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) {
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(nextitem->text) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
+        nextitem->nsgrtext = get_text_n_sgr(nextitem);
+
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(nextitem->nsgrtext) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
             break;
     }
 
     // calculate which items will begin the previous page
     for (i = 0, previousitem = currentitem; previousitem && previousitem->left; previousitem = previousitem->left) {
-        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(previousitem->left->text) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
+        previousitem->nsgrtext = get_text_n_sgr(previousitem);
+
+        if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(previousitem->left->nsgrtext) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
             break;
     }
 }

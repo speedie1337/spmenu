@@ -40,10 +40,41 @@ void drawhighlights(struct item *item, int x, int y, int w, int p, const char *i
     }
 }
 
+char* get_text_n_sgr(struct item *item) {
+    char buffer[MAXITEMLENGTH];
+    int character, escape;
+
+    char *sgrtext = malloc(sizeof(buffer));
+    sgrtext[0] = '\0';
+
+    for (character = 0, escape = 0; item->text[escape]; escape++) {
+        if (item->text[escape] == '' && item->text[escape + 1] == '[') {
+            size_t colindex = strspn(item->text + escape + 2, "0123456789;");
+            if (item->text[escape + colindex + 2] == 'm' && sgr) { // last character in sequence is always 'm'
+                buffer[character] = '\0';
+
+                strcat(sgrtext, buffer);
+
+                escape += colindex + 2;
+                character = 0;
+
+                continue;
+            }
+        }
+
+        buffer[character++] = item->text[escape];
+    }
+
+    buffer[character] = '\0';
+    strcat(sgrtext, buffer);
+
+    return sgrtext;
+}
+
 int drawitemtext(struct item *item, int x, int y, int w) {
     char buffer[MAXITEMLENGTH]; // buffer containing item text
+    int character, escape;
     int leftpadding = sp.lrpad / 2; // padding
-    int wr, rd; // character
     int fg = 7; // foreground
     int bg = 0; // background
     int bgfg = 0; // both
@@ -157,38 +188,31 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     ox = x;
     oy = y;
     ow = w;
-
-    item->nsgrtext = malloc(sizeof(buffer));
-    item->nsgrtext[0] = '\0';
+    int width = 0;
 
     // parse item text
-    for (wr = 0, rd = 0; item->text[rd]; rd++) {
-        if (item->text[rd] == '' && item->text[rd + 1] == '[') {
-            size_t alen = strspn(item->text + rd + 2, "0123456789;");
-            if (item->text[rd + alen + 2] == 'm' && sgr) { // last character in sequence is always 'm'
-                buffer[wr] = '\0';
-
-                if (!lines) {
-                    w -= item->text[rd + alen];
-                }
+    for (character = 0, escape = 0; item->text[escape]; escape++) {
+        if (item->text[escape] == '' && item->text[escape + 1] == '[') {
+            size_t colindex = strspn(item->text + escape + 2, "0123456789;");
+            if (item->text[escape + colindex + 2] == 'm' && sgr) { // last character in sequence is always 'm'
+                buffer[character] = '\0';
 
                 apply_fribidi(buffer);
-                draw_text(draw, x, y, MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
-
-                strcat(item->nsgrtext, buffer);
+                draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
 
                 // position and width
-                x += MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding;
-                w -= MIN(w, TEXTW(buffer) - sp.lrpad) + leftpadding;
+                x += MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
+                width += MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
+                w -= MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
 
                 // no highlighting if colored text
                 leftpadding = 0;
 
-                char *character = item->text + rd + 1; // current character
+                char *c_character = item->text + escape + 1; // current character
 
                 // parse hex colors, m is always the last character
-                while (*character != 'm') {
-                    unsigned nextchar = strtoul(character + 1, &character, 10);
+                while (*c_character != 'm') {
+                    unsigned nextchar = strtoul(c_character + 1, &c_character, 10);
                     if (ignore)
                         continue;
                     if (bgfg) {
@@ -230,18 +254,17 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                     }
                 }
 
-                rd += alen + 2;
-                wr = 0;
+                escape += colindex + 2;
+                character = 0;
 
                 continue;
             }
         }
 
-        buffer[wr++] = item->text[rd];
+        buffer[character++] = item->text[escape];
     }
 
-    buffer[wr] = '\0';
-    strcat(item->nsgrtext, buffer);
+    buffer[character] = '\0';
 
     // now draw any non-colored text
     apply_fribidi(buffer);
@@ -307,6 +330,8 @@ int drawitem(int x, int y, int w) {
         itemn = 0;
 
         for (item = currentitem; item != nextitem; item = item->right, i++) {
+            item->nsgrtext = get_text_n_sgr(item);
+
             x = drawitemtext(
                     item,
                     rx + menumarginh + ((i / lines) *  ((sp.mw - rx) / columns)) + (powerlineitems ? sp.plw : 0),
@@ -335,7 +360,9 @@ int drawitem(int x, int y, int w) {
         int itemoverride = 1;
 
         for (item = currentitem; item != nextitem; item = item->right) { // draw items
-            x = drawitemtext(item, x + (powerlineitems ? 2 * sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->text) : TEXTW(item->text),
+            item->nsgrtext = get_text_n_sgr(item);
+
+            x = drawitemtext(item, x + (powerlineitems ? 2 * sp.plw : 0), y, MIN(pango_item ? TEXTWM(item->nsgrtext) : TEXTW(item->nsgrtext),
                         sp.mw - x -
                         rarroww -
                         numberw -
