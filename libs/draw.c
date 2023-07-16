@@ -417,10 +417,8 @@ int drawinput(int x, int y, int w) {
     int fw = MAX(2, caretwidth);
     int fp = caretpadding;
 
-    if (fh > sp.bh) {
-        fh = sp.bh;
-    } else if (!fh) {
-        fh = draw->font->h;
+    if (fh > sp.bh || !fh) {
+        fh = sp.bh - sp.lrpad / 4;
     }
 
     if (passwd) {
