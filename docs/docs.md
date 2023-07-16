@@ -863,6 +863,9 @@ spmenu supports mouse clicks. The following parts can be clicked on:
 - `None`
   - Any click
 
+For information on the different functions you can pass, see the bottom of this
+man page, 'List of all configurable functions'.
+
 You can set mouse binds through the config file. A default config file is available
 after installing spmenu. This configuration file has identical keybinds to the
 default hardcoded keybinds.
@@ -883,7 +886,6 @@ These are the default mouse binds. Mode does not apply for mouse binds.
 | ClickSelItem       | Left Click         | Outputs the item   | 0                  |
 | None               | Scroll Up          | moveprev           | 0                  |
 | None               | Scroll Down        | movenext           | 0                  |
-
 
 ## .Xresources
 
@@ -923,6 +925,102 @@ is the official theme manager, but you could use another one or write your own.
 
 For more information on the theme.conf configuration file,
 see [this page](https://spmenu.speedie.site/theme.conf+documentation).
+
+## List of all configurable functions
+
+This is a list of all functions that can be called using a key or mouse
+bind:
+
+- `moveup`
+  - Move up by MAX(passed argument, 1)
+- `movedown`
+  - Move down by MAX(passed argument, 1)
+- `moveleft`
+  - Move left by MAX(passed argument, 1)
+- `moveright`
+  - Move right by MAX(passed argument, 1)
+- `movestart`
+  - Move to the first item
+- `moveend`
+  - Move to the last item
+- `movenext`
+  - Move to the next page
+- `moveprev`
+  - Move to the previous page
+- `moveitem`
+  - Move to item passed argument
+- `paste`
+  - Paste from clipboard, 0 means clipboard selection, 1 means primary selection
+- `restoresel`
+  - Move back to the first item
+- `clear`
+  - Clear input
+- `clearins`
+  - Clear input text and switch to insert mode
+- `viewhist`
+  - Toggle history and item buffer
+- `moveword`
+  - Navigate through input text by 1 word, -1 means start, +1 means end
+- `deleteword`
+  - Delete input text by 1 word
+- `movecursor`
+  - Move cursor (caret) by MAX(passed argument, 1)
+- `navhistory`
+  - Navigate through history buffer, -1 means forward, +1 means backwards
+- `backspace`
+  - Backspace 1 character from input text
+- `selectitem`
+  - Select the current selected item
+- `quit`
+  - Quit spmenu
+- `complete`
+  - Tab complete the selected item
+- `setimgsize`
+  - Set image size to passed argument
+- `defaultimg`
+  - Reset image size to the default
+- `toggleinput`
+  - Toggle input
+- `togglelarrow`
+  - Toggle left arrow
+- `togglerarrow`
+  - Toggle right arrow
+- `toggleitem`
+  - Toggle items
+- `toggleprompt`
+  - Toggle prompt
+- `togglecaps`
+  - Toggle caps lock indicator
+- `togglepowerline`
+  - Toggle powerlines
+- `togglecaret`
+  - Toggle caret (cursor)
+- `togglehighlight`
+  - Toggle highlighting
+- `togglematchcount`
+  - Toggle match count
+- `togglemode`
+  - Toggle mode
+- `toggleregex`
+  - Toggle regex mode
+- `toggleimg`
+  - Toggle images
+- `flipimg`
+  - Flip image, 0 means vertically, 1 means horizontally
+- `setimgpos`
+  - Move to the next image position
+- `setimggaps`
+  - Set image gaps to passed argument
+- `setlines`
+  - Set lines to passed argument
+- `setcolumns`
+  - Set columns to passed argument
+- `setprofile`
+  - Open profile menu if available
+- `switchmode`
+  - Switch between Normal mode and Insert mode
+- `screenshot`
+  - Take a screenshot of spmenu
 
 ## License
 

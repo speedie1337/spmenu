@@ -443,6 +443,71 @@ void setimggaps(Arg *arg) {
 #endif
 }
 
+void toggleinput(Arg *arg) {
+    hideinput = !hideinput;
+    drawmenu();
+}
+
+void togglelarrow(Arg *arg) {
+    hidelarrow = !hidelarrow;
+    drawmenu();
+}
+
+void togglerarrow(Arg *arg) {
+    hiderarrow = !hiderarrow;
+    drawmenu();
+}
+
+void toggleitem(Arg *arg) {
+    hideitem = !hideitem;
+    drawmenu();
+}
+
+void toggleprompt(Arg *arg) {
+    hideprompt = !hideprompt;
+    drawmenu();
+}
+
+void togglecaps(Arg *arg) {
+    hidecaps = !hidecaps;
+    drawmenu();
+}
+
+void togglepowerline(Arg *arg) {
+    hidepowerline = !hidepowerline;
+    drawmenu();
+}
+
+void togglecaret(Arg *arg) {
+    hidecaret = !hidecaret;
+    drawmenu();
+}
+
+void togglematchcount(Arg *arg) {
+    hidematchcount = !hidematchcount;
+    drawmenu();
+}
+
+void togglemode(Arg *arg) {
+    hidemode = !hidemode;
+    drawmenu();
+}
+
+void togglehighlight(Arg *arg) {
+    hidehighlight = !hidehighlight;
+    drawmenu();
+}
+
+void toggleregex(Arg *arg) {
+#if USEREGEX
+    regex = !regex;
+
+    match();
+    drawmenu();
+
+#endif
+}
+
 void toggleimg(Arg *arg) {
 #if USEIMAGE
 
@@ -512,24 +577,12 @@ void spawn(Arg *arg) {
         exit(0);
 }
 
-void togglehighlight(Arg *arg) {
-    hidehighlight = !hidehighlight;
-    drawmenu();
-}
-
 void setprofile(Arg *arg) {
     if (!system("command -v spmenu_profile > /dev/null && spmenu_profile --spmenu-set-profile")) {
         die("spmenu: failed to run profile menu\n");
     } else {
         exit(0);
     }
-}
-
-void toggleregex(Arg *arg) {
-    regex = !regex;
-
-    match();
-    drawmenu();
 }
 
 void switchmode(Arg *arg) {

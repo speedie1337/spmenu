@@ -1447,6 +1447,9 @@ Clicking on the mode indicator
 Any click
 .RE
 .PP
+For information on the different functions you can pass, see the bottom
+of this man page, `List of all configurable functions'.
+.PP
 You can set mouse binds through the config file.
 A default config file is available after installing spmenu.
 This configuration file has identical keybinds to the default hardcoded
@@ -1583,6 +1586,281 @@ theme manager, but you could use another one or write your own.
 .PP
 For more information on the theme.conf configuration file, see this
 page (https://spmenu.speedie.site/theme.conf+documentation).
+.SS List of all configurable functions
+.PP
+This is a list of all functions that can be called using a key or mouse
+bind:
+.IP \[bu] 2
+\f[V]moveup\f[R]
+.RS 2
+.IP \[bu] 2
+Move up by MAX(passed argument, 1)
+.RE
+.IP \[bu] 2
+\f[V]movedown\f[R]
+.RS 2
+.IP \[bu] 2
+Move down by MAX(passed argument, 1)
+.RE
+.IP \[bu] 2
+\f[V]moveleft\f[R]
+.RS 2
+.IP \[bu] 2
+Move left by MAX(passed argument, 1)
+.RE
+.IP \[bu] 2
+\f[V]moveright\f[R]
+.RS 2
+.IP \[bu] 2
+Move right by MAX(passed argument, 1)
+.RE
+.IP \[bu] 2
+\f[V]movestart\f[R]
+.RS 2
+.IP \[bu] 2
+Move to the first item
+.RE
+.IP \[bu] 2
+\f[V]moveend\f[R]
+.RS 2
+.IP \[bu] 2
+Move to the last item
+.RE
+.IP \[bu] 2
+\f[V]movenext\f[R]
+.RS 2
+.IP \[bu] 2
+Move to the next page
+.RE
+.IP \[bu] 2
+\f[V]moveprev\f[R]
+.RS 2
+.IP \[bu] 2
+Move to the previous page
+.RE
+.IP \[bu] 2
+\f[V]moveitem\f[R]
+.RS 2
+.IP \[bu] 2
+Move to item passed argument
+.RE
+.IP \[bu] 2
+\f[V]paste\f[R]
+.RS 2
+.IP \[bu] 2
+Paste from clipboard, 0 means clipboard selection, 1 means primary
+selection
+.RE
+.IP \[bu] 2
+\f[V]restoresel\f[R]
+.RS 2
+.IP \[bu] 2
+Move back to the first item
+.RE
+.IP \[bu] 2
+\f[V]clear\f[R]
+.RS 2
+.IP \[bu] 2
+Clear input
+.RE
+.IP \[bu] 2
+\f[V]clearins\f[R]
+.RS 2
+.IP \[bu] 2
+Clear input text and switch to insert mode
+.RE
+.IP \[bu] 2
+\f[V]viewhist\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle history and item buffer
+.RE
+.IP \[bu] 2
+\f[V]moveword\f[R]
+.RS 2
+.IP \[bu] 2
+Navigate through input text by 1 word, -1 means start, +1 means end
+.RE
+.IP \[bu] 2
+\f[V]deleteword\f[R]
+.RS 2
+.IP \[bu] 2
+Delete input text by 1 word
+.RE
+.IP \[bu] 2
+\f[V]movecursor\f[R]
+.RS 2
+.IP \[bu] 2
+Move cursor (caret) by MAX(passed argument, 1)
+.RE
+.IP \[bu] 2
+\f[V]navhistory\f[R]
+.RS 2
+.IP \[bu] 2
+Navigate through history buffer, -1 means forward, +1 means backwards
+.RE
+.IP \[bu] 2
+\f[V]backspace\f[R]
+.RS 2
+.IP \[bu] 2
+Backspace 1 character from input text
+.RE
+.IP \[bu] 2
+\f[V]selectitem\f[R]
+.RS 2
+.IP \[bu] 2
+Select the current selected item
+.RE
+.IP \[bu] 2
+\f[V]quit\f[R]
+.RS 2
+.IP \[bu] 2
+Quit spmenu
+.RE
+.IP \[bu] 2
+\f[V]complete\f[R]
+.RS 2
+.IP \[bu] 2
+Tab complete the selected item
+.RE
+.IP \[bu] 2
+\f[V]setimgsize\f[R]
+.RS 2
+.IP \[bu] 2
+Set image size to passed argument
+.RE
+.IP \[bu] 2
+\f[V]defaultimg\f[R]
+.RS 2
+.IP \[bu] 2
+Reset image size to the default
+.RE
+.IP \[bu] 2
+\f[V]toggleinput\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle input
+.RE
+.IP \[bu] 2
+\f[V]togglelarrow\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle left arrow
+.RE
+.IP \[bu] 2
+\f[V]togglerarrow\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle right arrow
+.RE
+.IP \[bu] 2
+\f[V]toggleitem\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle items
+.RE
+.IP \[bu] 2
+\f[V]toggleprompt\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle prompt
+.RE
+.IP \[bu] 2
+\f[V]togglecaps\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle caps lock indicator
+.RE
+.IP \[bu] 2
+\f[V]togglepowerline\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle powerlines
+.RE
+.IP \[bu] 2
+\f[V]togglecaret\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle caret (cursor)
+.RE
+.IP \[bu] 2
+\f[V]togglehighlight\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle highlighting
+.RE
+.IP \[bu] 2
+\f[V]togglematchcount\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle match count
+.RE
+.IP \[bu] 2
+\f[V]togglemode\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle mode
+.RE
+.IP \[bu] 2
+\f[V]toggleregex\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle regex mode
+.RE
+.IP \[bu] 2
+\f[V]toggleimg\f[R]
+.RS 2
+.IP \[bu] 2
+Toggle images
+.RE
+.IP \[bu] 2
+\f[V]flipimg\f[R]
+.RS 2
+.IP \[bu] 2
+Flip image, 0 means vertically, 1 means horizontally
+.RE
+.IP \[bu] 2
+\f[V]setimgpos\f[R]
+.RS 2
+.IP \[bu] 2
+Move to the next image position
+.RE
+.IP \[bu] 2
+\f[V]setimggaps\f[R]
+.RS 2
+.IP \[bu] 2
+Set image gaps to passed argument
+.RE
+.IP \[bu] 2
+\f[V]setlines\f[R]
+.RS 2
+.IP \[bu] 2
+Set lines to passed argument
+.RE
+.IP \[bu] 2
+\f[V]setcolumns\f[R]
+.RS 2
+.IP \[bu] 2
+Set columns to passed argument
+.RE
+.IP \[bu] 2
+\f[V]setprofile\f[R]
+.RS 2
+.IP \[bu] 2
+Open profile menu if available
+.RE
+.IP \[bu] 2
+\f[V]switchmode\f[R]
+.RS 2
+.IP \[bu] 2
+Switch between Normal mode and Insert mode
+.RE
+.IP \[bu] 2
+\f[V]screenshot\f[R]
+.RS 2
+.IP \[bu] 2
+Take a screenshot of spmenu
+.RE
 .SS License
 .PP
 spmenu is licensed under the MIT license.
