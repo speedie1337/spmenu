@@ -370,7 +370,8 @@ int drawitem(int x, int y, int w) {
                         capsw -
                         menumarginh -
                         2 * sp.sp -
-                        2 * borderwidth
+                        2 * borderwidth -
+                        (powerlineitems ? 2 * sp.plw : 0)
                         ));
 
             if (itemoverride) {
