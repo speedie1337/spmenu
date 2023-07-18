@@ -47,7 +47,7 @@ void readstdin(void) {
     }
 
 #if USEIMAGE
-    if (oneitem) {
+    if (!oneitem) {
         img.longestedge = img.imagegaps = 0;
     }
 #endif
