@@ -132,6 +132,7 @@ clean_headers() {
 }
 
 gen_pkg() {
+    [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 
     rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
@@ -145,12 +146,12 @@ gen_pkg() {
         gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.tar.gz
     fi
 
-    if [ -x "$(command -v md5sum)" ]l then
+    if [ -x "$(command -v md5sum)" ]; then
         md5sum *.tar.gz | cut -d ' ' -f 1 > spmenu-${version}.tar.gz.md5
     fi
 
-    if [ -x "$(command -v sha256sum)" ]l then
-        sha256 *.tar.gz | cut -d ' ' -f 1 > spmenu-${version}.tar.gz.sha256
+    if [ -x "$(command -v sha256sum)" ]; then
+        sha256sum *.tar.gz | cut -d ' ' -f 1 > spmenu-${version}.tar.gz.sha256
     fi
 }
 
