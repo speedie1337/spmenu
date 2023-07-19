@@ -168,6 +168,14 @@ gen_arch_pkg() {
     rm -rf src/ pkg/
 
     cp PKGBUILD spmenu-${version}.PKGBUILD; mv -f PKGBUILD.orig PKGBUILD
+
+    if [ -x "$(command -v md5sum)" ]; then
+        md5sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.md5
+    fi
+
+    if [ -x "$(command -v sha256sum)" ]; then
+        sha256sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.sha256
+    fi
 }
 
 generate_theme() {
