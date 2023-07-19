@@ -606,6 +606,11 @@ void switchmode(Arg *arg) {
     drawmenu();
 }
 
+void selecthover(Arg *arg) {
+    puts(items[sp.clickitemindex].text);
+    exit(0);
+}
+
 void screenshot(Arg *arg) {
     char *file = NULL;
     char *home = NULL;

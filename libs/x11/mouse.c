@@ -73,6 +73,8 @@ void buttonpress_x11(XEvent *e) {
             ev->y += h;
         }
 
+        i = 0;
+
         for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
@@ -84,29 +86,15 @@ void buttonpress_x11(XEvent *e) {
 
             // ClickSelItem, called function doesn't matter
             if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
-                for (i = 0; i < LENGTH(buttons); i++) {
-                    if (sp.ignoreglobalmouse) break;
-                    if (buttons[i].click == ClickSelItem && buttons[i].button == ev->button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (buttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
-                for (i = 0; i < LENGTH(cbuttons); i++) {
-                    if (sp.ignoreconfmouse) break;
-                    if (cbuttons[i].click == ClickSelItem && cbuttons[i].button == ev->button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (cbuttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
+                click = ClickItem;
+                sp.clickitemindex = i;
 #if USEIMAGE
             } else if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ev->x <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
 #endif
             }
+
+            i++;
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
         x += sp.inputw;

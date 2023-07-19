@@ -101,7 +101,6 @@ enum { // click enum
     ClickInput,
     ClickLArrow,
     ClickItem,
-    ClickSelItem,
     ClickRArrow,
     ClickNumber,
     ClickCaps,
@@ -140,6 +139,8 @@ struct sp {
     int itemnumber; // item number
     int listcount;
     int listchanged;
+
+    int clickitemindex;
 
     size_t cursor; // cursor width
 

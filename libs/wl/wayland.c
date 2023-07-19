@@ -289,6 +289,8 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             ey += h;
         }
 
+        i = 0;
+
         for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
@@ -298,31 +300,16 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
             y += h;
 
-            // ClickSelItem, called function doesn't matter
             if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) && ex <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
-                for (i = 0; i < LENGTH(wl_buttons); i++) {
-                    if (sp.ignoreglobalmouse) break;
-                    if (wl_buttons[i].click == ClickSelItem && wl_buttons[i].button == button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (wl_buttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
-                for (i = 0; i < LENGTH(wl_cbuttons); i++) {
-                    if (sp.ignoreconfmouse) break;
-                    if (wl_cbuttons[i].click == ClickSelItem && wl_cbuttons[i].button == button) {
-                        puts(item->text);
-                        exit(0);
-                    } else if (wl_cbuttons[i].click == ClickItem) {
-                        click = ClickItem;
-                    }
-                }
+                sp.clickitemindex = i;
+                click = ClickItem;
 #if USEIMAGE
             } else if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ex <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
 #endif
             }
+
+            i++;
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
         x += sp.inputw;

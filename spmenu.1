@@ -1407,14 +1407,7 @@ Clicking on the right arrow
 \f[V]ClickItem\f[R]
 .RS 2
 .IP \[bu] 2
-Clicking on the item area
-.RE
-.IP \[bu] 2
-\f[V]ClickSelItem\f[R]
-.RS 2
-.IP \[bu] 2
-Clicking on an item, function here doesn\[cq]t matter, it will always be
-selected
+Clicking on an item
 .RE
 .IP \[bu] 2
 \f[V]ClickImage\f[R]
@@ -1512,11 +1505,11 @@ T}@T{
 0
 T}
 T{
-ClickSelItem
+ClickItem
 T}@T{
 Left Click
 T}@T{
-Outputs the item
+selecthover
 T}@T{
 0
 T}
@@ -1844,6 +1837,12 @@ Set lines to passed argument
 Set columns to passed argument
 .RE
 .IP \[bu] 2
+\f[V]setlineheight\f[R]
+.RS 2
+.IP \[bu] 2
+Set line height to passed argument
+.RE
+.IP \[bu] 2
 \f[V]setprofile\f[R]
 .RS 2
 .IP \[bu] 2
@@ -1854,6 +1853,12 @@ Open profile menu if available
 .RS 2
 .IP \[bu] 2
 Switch between Normal mode and Insert mode
+.RE
+.IP \[bu] 2
+\f[V]selecthover\f[R]
+.RS 2
+.IP \[bu] 2
+Output the item clicked on
 .RE
 .IP \[bu] 2
 \f[V]screenshot\f[R]

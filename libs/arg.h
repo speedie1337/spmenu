@@ -73,3 +73,6 @@ static void togglemode(Arg *arg);
 static void togglehighlight(Arg *arg);
 static void toggleregex(Arg *arg);
 static void toggleimg(Arg *arg);
+
+/* hover */
+static void selecthover(Arg *arg);

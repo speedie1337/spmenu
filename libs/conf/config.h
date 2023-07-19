@@ -394,6 +394,7 @@ static FuncList fl[] = {
     { "setprofile",       setprofile },
     { "setlineheight",    setlineheight },
     { "switchmode",       switchmode },
+    { "selecthover",      selecthover },
     { "spawn",            spawn },
 };
 
@@ -687,7 +688,6 @@ static ClickType ctp[] = {
     { "ClickInput",   ClickInput },
     { "ClickLArrow",  ClickLArrow },
     { "ClickItem",    ClickItem },
-    { "ClickSelItem", ClickSelItem },
     { "ClickRArrow",  ClickRArrow },
     { "ClickNumber",  ClickNumber },
     { "ClickCaps",    ClickCaps },

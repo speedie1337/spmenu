@@ -849,9 +849,7 @@ spmenu supports mouse clicks. The following parts can be clicked on:
 - `ClickRArrow`
   - Clicking on the right arrow
 - `ClickItem`
-  - Clicking on the item area
-- `ClickSelItem`
-  - Clicking on an item, function here doesn't matter, it will always be selected
+  - Clicking on an item
 - `ClickImage`
   - Clicking on an image
 - `ClickNumber`
@@ -883,7 +881,7 @@ These are the default mouse binds. Mode does not apply for mouse binds.
 | ClickPrompt        | Left Click         | clear              | 0                  |
 | ClickMode          | Left Click         | switchmode         | 0                  |
 | ClickNumber        | Left Click         | viewhist           | 0                  |
-| ClickSelItem       | Left Click         | Outputs the item   | 0                  |
+| ClickItem          | Left Click         | selecthover        | 0                  |
 | None               | Scroll Up          | moveprev           | 0                  |
 | None               | Scroll Down        | movenext           | 0                  |
 
@@ -1021,6 +1019,8 @@ bind:
   - Open profile menu if available
 - `switchmode`
   - Switch between Normal mode and Insert mode
+- `selecthover`
+  - Output the item clicked on
 - `screenshot`
   - Take a screenshot of spmenu
 
