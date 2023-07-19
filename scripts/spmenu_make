@@ -137,7 +137,7 @@ gen_pkg() {
 
     rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
     mkdir -p spmenu-${version}
-    cp -rf LICENSE meson.build meson_options.txt *.c *.1 scripts/ docs/ libs/ protocols/ PKGBUILD "spmenu-${version}"
+    cp -rf LICENSE meson.build meson_options.txt *.c spmenu.1 spmenu_run.1 spmenu_test.1 scripts/ docs/ libs/ protocols/ PKGBUILD "spmenu-${version}"
     tar -cf spmenu-${version}.tar spmenu-${version}
     gzip spmenu-${version}.tar
     rm -rf spmenu-${version}
