@@ -41,6 +41,11 @@ md5sums=(
     'SKIP'
 )
 
+sha256sums=(
+    SHA256SUM
+    'SKIP'
+)
+
 build(){
   cd $pkgname-$pkgver
   mkdir -p build/

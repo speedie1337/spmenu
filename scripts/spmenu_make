@@ -163,7 +163,7 @@ gen_arch_pkg() {
     gen_pkg
 
     cp -f PKGBUILD PKGBUILD.orig
-    sed "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD > .PKGBUILD && mv .PKGBUILD PKGBUILD
+    sed "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g; s/SHA256SUM/$(sha256sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD > .PKGBUILD && mv .PKGBUILD PKGBUILD
     makepkg -sfr --sign || exit 1
     rm -rf src/ pkg/
 
