@@ -144,6 +144,14 @@ gen_pkg() {
     if [ -x "$(command -v gpg)" ]; then
         gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.tar.gz
     fi
+
+    if [ -x "$(command -v md5sum)" ]l then
+        md5sum *.tar.gz | cut -d ' ' -f 1 > spmenu-${version}.tar.gz.md5
+    fi
+
+    if [ -x "$(command -v sha256sum)" ]l then
+        sha256 *.tar.gz | cut -d ' ' -f 1 > spmenu-${version}.tar.gz.sha256
+    fi
 }
 
 gen_arch_pkg() {

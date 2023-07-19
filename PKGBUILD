@@ -32,8 +32,8 @@ conflicts=($pkgname)
 source=(
     "$pkgname-$pkgver.tar.gz"
     "$pkgname-$pkgver.tar.gz.sig"
-    #"https://ls.speedie.site/releases/$pkgname/$pkgname-$pkgver.tar.gz"
-    #"https://ls.speedie.site/releases/$pkgname/$pkgname-$pkgver.tar.gz.sig"
+    #"https://ls.speedie.site/releases/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz"
+    #"https://ls.speedie.site/releases/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz.sig"
 )
 
 md5sums=(
