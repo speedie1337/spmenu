@@ -188,7 +188,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     ox = x;
     oy = y;
     ow = w;
-    int width = 0;
 
     // parse item text
     for (character = 0, escape = 0; item->text[escape]; escape++) {
@@ -202,7 +201,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
                 // position and width
                 x += MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
-                width += MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
                 w -= MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
 
                 // no highlighting if colored text
@@ -237,7 +235,16 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         fg &= ~8;
                         fgcol = txtcols[fg];
                     } else if (nextchar == 38) {
-                        bgfg = 2;
+                        int r, g, b;
+
+                        strtoul(c_character + 1, &c_character, 10);
+
+                        r = strtoul(c_character + 1, &c_character, 10);
+                        g = strtoul(c_character + 1, &c_character, 10);
+                        b = strtoul(c_character + 1, &c_character, 10);
+
+                        fgcol = malloc(8 * sizeof(char));
+                        snprintf(fgcol, 8, "#%02X%02X%02X", r, g, b);
                     } else if (nextchar >= 30 && nextchar <= 37) {
                         fg = nextchar % 10 | (fg & 8);
                         fgcol = txtcols[fg];
@@ -245,7 +252,16 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         bg = nextchar % 10;
                         bgcol = txtcols[bg];
                     } else if (nextchar == 48) {
-                        bgfg = 3;
+                        int r, g, b;
+
+                        strtoul(c_character + 1, &c_character, 10);
+
+                        r = strtoul(c_character + 1, &c_character, 10);
+                        g = strtoul(c_character + 1, &c_character, 10);
+                        b = strtoul(c_character + 1, &c_character, 10);
+
+                        bgcol = malloc(8 * sizeof(char));
+                        snprintf(bgcol, 8, "#%02X%02X%02X", r, g, b);
                     } else if (nextchar == 0) {
                         fgcol = ofgcol;
                         bgcol = obgcol;
@@ -268,20 +284,20 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     // now draw any non-colored text
     apply_fribidi(buffer);
-    int r = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
+    int ret = draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
 
     if (!hidehighlight)
         drawhighlights(item, ox, oy, ow, oleftpadding, item->nsgrtext);
 
     if (!hidepowerline && powerlineitems && selitem) {
         if (itempwlstyle == 2) {
-            draw_circle(draw, r, y, sp.plw, sp.bh, 1, col_menu, obgcol, alpha_menu, obga);
+            draw_circle(draw, ret, y, sp.plw, sp.bh, 1, col_menu, obgcol, alpha_menu, obga);
         } else {
-            draw_arrow(draw, r, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, obgcol, alpha_menu, obga);
+            draw_arrow(draw, ret, y, sp.plw, sp.bh, 1, itempwlstyle, col_menu, obgcol, alpha_menu, obga);
         }
     }
 
-    return r;
+    return ret;
 }
 
 int drawitem(int x, int y, int w) {
