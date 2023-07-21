@@ -137,7 +137,7 @@ l[23]=x
 l[24]=y
 l[25]=z
 
-printf "\n<big><u>256 foreground colors</u></big>\n"
+printf "\n<big><u>256 foreground colors</u></big>\n\n"
 
 for i in {0..255}; do
     [ "$cindex" -gt "25" ] && cindex=0
@@ -146,16 +146,44 @@ for i in {0..255}; do
     cindex=$((cindex+1))
 done
 
-printf "\n\n<big><u>256 background colors</u></big>\n"
+printf "\n\n<big><u>256 background colors</u></big>\n\n"
 
 for i in {0..255}; do
     printf "\e[48;5;%dm " "$i"
     (((i+3) % 18)) || printf '\e[0m\n'
 done
 
-printf "\n\n<big><u>The End</u></big>\n"
+printf "\n\n<big><u>True color foreground colors</u></big>\n\n"
 
-printf "\nIf spmenu displayed 256 colors as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
+awk 'BEGIN{
+    for (colnum = 0; colnum < 100; colnum++) {
+        r = 255-(colnum*255/100);
+        g = (colnum*510/100);
+        b = (colnum*255/100);
+        if (g>255) g = 510-g;
+        printf "\033[38;2;%d;%d;%dm%s\033[0m", r,g,b, "█ ";
+        i++;
+    }
+    printf "\n";
+}'
+
+printf "\n<big><u>True color background colors</u></big>\n\n"
+
+awk 'BEGIN{
+    for (colnum = 0; colnum < 200; colnum++) {
+        r = 255-(colnum*255/200);
+        g = (colnum*510/200);
+        b = (colnum*255/200);
+        if (g>255) g = 510-g;
+        printf "\033[48;2;%d;%d;%dm%s\033[0m", r,g,b, " ";
+        i++;
+    }
+    printf "\n";
+}'
+
+printf "\n<big><u>The End</u></big>\n"
+
+printf "\nIf spmenu displayed 16 colors, 256 colors and true color (full RGB spectrum) as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
 }
 
-main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 40 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
+main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 41 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"

@@ -267,7 +267,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         c = strtoul(c_character + 1, NULL, 10);
 
                         if (c == 5) {
-                            bgfg = 2;
+                            bgfg = 3;
                             continue;
                         }
 
