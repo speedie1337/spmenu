@@ -235,7 +235,14 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         fg &= ~8;
                         fgcol = txtcols[fg];
                     } else if (nextchar == 38) {
-                        int r, g, b;
+                        int r, g, b, c;
+
+                        c = strtoul(c_character + 1, NULL, 10);
+
+                        if (c == 5) {
+                            bgfg = 2;
+                            continue;
+                        }
 
                         strtoul(c_character + 1, &c_character, 10);
 
@@ -245,6 +252,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
                         fgcol = malloc(8 * sizeof(char));
                         snprintf(fgcol, 8, "#%02X%02X%02X", r, g, b);
+                    } else if (nextchar == 39) {
+                        fga = ofga;
+                        fgcol = ofgcol;
                     } else if (nextchar >= 30 && nextchar <= 37) {
                         fg = nextchar % 10 | (fg & 8);
                         fgcol = txtcols[fg];
@@ -252,7 +262,14 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         bg = nextchar % 10;
                         bgcol = txtcols[bg];
                     } else if (nextchar == 48) {
-                        int r, g, b;
+                        int r, g, b, c;
+
+                        c = strtoul(c_character + 1, NULL, 10);
+
+                        if (c == 5) {
+                            bgfg = 2;
+                            continue;
+                        }
 
                         strtoul(c_character + 1, &c_character, 10);
 
@@ -262,6 +279,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
                         bgcol = malloc(8 * sizeof(char));
                         snprintf(bgcol, 8, "#%02X%02X%02X", r, g, b);
+                    } else if (nextchar == 49) {
+                        bga = obga;
+                        bgcol = obgcol;
                     } else if (nextchar == 0) {
                         fgcol = ofgcol;
                         bgcol = obgcol;
