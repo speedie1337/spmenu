@@ -65,8 +65,8 @@ static WlMouse wl_cbuttons[256];
 #define WL_Forward 0x115
 #define WL_Back	0x116
 #define WL_Task	0x117
-#define WL_Up 0x151
-#define WL_Down 0x150
+#define WL_Up 1
+#define WL_Down 0
 
 static WlKey wlhkeys[1] = { { -1, WL_CtrlAlt, XKB_KEY_Delete, quit, {0} } };
 
@@ -111,9 +111,10 @@ static int output_physical_width = 0;
 static int output_physical_height = 0;
 static int output_width = 0;
 static int output_height = 0;
-
 static int mouse_x = 0;
 static int mouse_y = 0;
+static int mouse_scroll = 0;
+static int mouse_scroll_direction = 0;
 
 static void zero();
 static void resizeclient_wl(struct state *state);
@@ -134,6 +135,7 @@ static void keyboard_repeat_info(void *data, struct wl_keyboard *wl_keyboard, in
 static void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_keysym_t sym);
 static void pointer_button_handler(void *data, struct wl_pointer *pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
 static void pointer_motion_handler(void *data, struct wl_pointer *pointer, uint32_t time, wl_fixed_t x, wl_fixed_t y);
+static void pointer_axis_handler(void *data, struct wl_pointer *pointer, uint32_t time, uint32_t axis, wl_fixed_t value);
 static void buttonpress_wl(uint32_t button, double ex, double ey);
 static int is_correct_modifier(struct state *state, char *modifier);
 static int roundtrip(struct state *state);
@@ -188,7 +190,7 @@ static const struct wl_pointer_listener pointer_listener = {
     .leave = zero,
     .motion = pointer_motion_handler,
     .button = pointer_button_handler,
-    .axis = zero,
+    .axis = pointer_axis_handler,
 };
 
 struct wl_output_listener output_listener = {

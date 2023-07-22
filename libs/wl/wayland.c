@@ -208,7 +208,6 @@ void keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t forma
 }
 
 void buttonpress_wl(uint32_t button, double ex, double ey) {
-    struct item *item;
     int x = 0;
     int y = 0;
     int w;
@@ -217,6 +216,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     int item_num = 0;
     int yp = 0;
     unsigned int i, click;
+    struct item *item;
 
     if (ex == 0 && ey == 0) {
         return; // While it is possible to click at this position, usually it means we're outside the window area.
@@ -240,7 +240,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
     if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
 
-        if (!strcmp(tx.capstext, ""))
+    if (!strcmp(tx.capstext, ""))
         capsw = 0;
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
@@ -344,6 +344,21 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 void pointer_motion_handler(void *data, struct wl_pointer *pointer, uint32_t time, wl_fixed_t x, wl_fixed_t y) {
     mouse_x = wl_fixed_to_int(x);
     mouse_y = wl_fixed_to_int(y);
+}
+
+void pointer_axis_handler(void *data, struct wl_pointer *pointer, uint32_t time, uint32_t axis, wl_fixed_t value) {
+    mouse_scroll = 1;
+
+    if (value > 0) {
+        mouse_scroll_direction = 0;
+    } else {
+        mouse_scroll_direction = 1;
+    }
+
+    buttonpress_wl(mouse_scroll_direction, mouse_x, mouse_y);
+
+    mouse_scroll = 0;
+    mouse_scroll_direction = -1;
 }
 
 void pointer_button_handler(void *data, struct wl_pointer *pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state) {
