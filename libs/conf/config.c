@@ -203,6 +203,7 @@ int bind_init(void) {
             }
 
             config_setting_lookup_int(conf, "ignoreglobalmouse", &sp.ignoreglobalmouse);
+            config_setting_lookup_int(conf, "scrolldistance", &scrolldistance);
         }
     }
 
