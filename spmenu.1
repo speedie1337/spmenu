@@ -722,38 +722,128 @@ It should be noted that font sequences are not yet supported.
 See `SGR sequences' for more information.
 .SS SGR sequences
 .PP
-A basic supported SGR sequence looks like this: \f[V]\[rs]033[X;YZm\f[R]
+SGR sequences (ANSI escape codes) can be used to set the color of spmenu
+items.
+Here\[cq]s a simple table of good SGR sequences.
+Note that sequences can also be combined, and that this isn\[cq]t the
+only way to format them.
 .PP
-Here, X specifies if you want normal or bright colors.
-Y specifies if you want background or foreground.
-Z specifies the color number.
-You can add another separator and background color before Z to also
-specify a background color.
+.TS
+tab(@);
+lw(12.7n) lw(57.3n).
+T{
+Sequence
+T}@T{
+Description
+T}
+_
+T{
+\[rs]033[0m
+T}@T{
+Reset foreground and background color and alpha
+T}
+T{
+\[rs]033[0;3nm
+T}@T{
+Set foreground color to normal color index `n' (0-7)
+T}
+T{
+\[rs]033[1;3nm
+T}@T{
+Set foreground color to bright color index `n' (0-7)
+T}
+T{
+\[rs]033[0;4nm
+T}@T{
+Set background color to normal color index `n' (0-7)
+T}
+T{
+\[rs]033[1;4nm
+T}@T{
+Set background color to bright color index `n' (0-7)
+T}
+T{
+\[rs]033[38;2;r;g;bm
+T}@T{
+Set foreground color to a specified RGB color, r is red, g is green, b
+is blue
+T}
+T{
+\[rs]033[48;2;r;g;bm
+T}@T{
+Set background color to a specified RGB color, r is red, g is green, b
+is blue
+T}
+T{
+\[rs]033[38;5;nm
+T}@T{
+Set foreground color to color index `n' (0-256)
+T}
+T{
+\[rs]033[48;5;nm
+T}@T{
+Set background color to color index `n' (0-256)
+T}
+T{
+\[rs]033[39m
+T}@T{
+Reset foreground color and alpha
+T}
+T{
+\[rs]033[49m
+T}@T{
+Reset background color and alpha
+T}
+T{
+;
+T}@T{
+Semicolon is used as a separator
+T}
+T{
+m
+T}@T{
+Ends the sequence
+T}
+.TE
 .PP
-Foreground colors: \f[V]30\f[R] through \f[V]37\f[R] Background colors:
-\f[V]40\f[R] through \f[V]47\f[R] Reset: \f[V]0\f[R]
+Other sequences \f[I]may\f[R] be supported but are not listed here.
+In any case, this allows for all RGB colors to be theoretically used all
+at the same time.
 .PP
-NOTE: \f[V];\f[R] is a separator, and in this example it separates the
-color number and normal/bright.
-\[rs]033 may also be written as \f[V]\[ha]]\f[R] or simply
-\f[V]ESC\f[R].
-The separator may be omitted for some sequences, such as
-\f[V]\[rs]033[0m\f[R] which resets the colorscheme.
+For example, to set the foreground color to red and print `Hello world',
+one could do the following:
+\f[V]printf \[aq]\[rs]033[0;31mHello world\[rs]n\[dq] | spmenu\f[R] This
+will set the foreground color to \f[V]sgr1\f[R] in the config/theme
+file.
+You can do this for \f[V]sgr0\f[R] through \f[V]sgr7\f[R].
+To access \f[V]sgr8\f[R] through \f[V]sgr15\f[R] you use
+\f[V]\[rs]033[1\f[R] rather than \f[V]\[rs]033[0\f[R], specifying that
+you want bright colors to be used.
 .PP
-spmenu supports most color sequences, although not true color by default
-(unless -sgr arguments are used).
+As for 256 colors, you simply specify a value between 0 and 256.
+These colors are built into spmenu and cannot be overridden.
+They are only really implemented into spmenu for compatibility, in
+practice you should use true color sequences instead, as they are much
+more flexible.
 .PP
-There are a few arguments, you can override SGR colors on-the-fly using
-the \f[V]-sgrX\f[R] arguments.
-See `Arguments' for more information.
+True color is slightly more complicated.
+For example, to print black text on a white background, one could do
+something like this:
+\f[V]printf \[dq]\[rs]033[48;2;255;255;255;38;2;0;0;0mTest\[rs]033[0m\[rs]n\[dq] | spmenu\f[R]
 .PP
-Just as a tip, you can pipe your colored spmenu output to
-\f[V]sed -e \[aq]s/\[rs]x1b\[rs][[0-9;]*m//g\[aq]\f[R].
-This will clear the SGR sequences from the output.
-This is useful when you want to check what the output actually is.
+This might look confusing if you aren\[cq]t familiar with these
+sequences, but it\[cq]s fairly simple.
+First we set the background color and specify that this is a true color
+sequence.
+(\f[V]48;2\f[R]) Then we set the red, green and blue channel to fully
+opaque (\f[V]255;255;255\f[R] for red;green;blue), resulting in white.
+Then we repeat this for a foreground color (\f[V]38;2\f[R]) but replace
+\f[V]255\f[R] with \f[V]0\f[R], which results in black.
+Do however note that you don\[cq]t need to specify \f[I]both\f[R] a
+foreground and background color.
 .PP
-256 color sequences are also supported, but due to the complexity
-involved, they will not be covered in this man page.
+\f[B]Note: Background colors will used until a reset sequence is
+found.\f[R]
 .SS Pango markup and text formatting
 .PP
 Because spmenu uses Pango and Cairo for text drawing, Pango markup can

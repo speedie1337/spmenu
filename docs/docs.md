@@ -673,34 +673,54 @@ for more information.
 
 ## SGR sequences
 
-A basic supported SGR sequence looks like this: `\033[X;YZm`
+SGR sequences (ANSI escape codes) can be used to set the color of spmenu items. Here's
+a simple table of good SGR sequences. Note that sequences can also be combined,
+and that this isn't the only way to format them.
 
-Here, X specifies if you want normal or bright colors. Y specifies if you
-want background or foreground. Z specifies the color number. You can add
-another separator and background color before Z to also specify a background
-color.
+| Sequence           | Description                                                                       |
+| :----------------- | :-------------------------------------------------------------------------------- |
+| \033[0m            | Reset foreground and background color and alpha                                   |
+| \033[0;3nm         | Set foreground color to normal color index 'n' (0-7)                              |
+| \033[1;3nm         | Set foreground color to bright color index 'n' (0-7)                              |
+| \033[0;4nm         | Set background color to normal color index 'n' (0-7)                              |
+| \033[1;4nm         | Set background color to bright color index 'n' (0-7)                              |
+| \033[38;2;r;g;bm   | Set foreground color to a specified RGB color, r is red, g is green, b is blue    |
+| \033[48;2;r;g;bm   | Set background color to a specified RGB color, r is red, g is green, b is blue    |
+| \033[38;5;nm       | Set foreground color to color index 'n' (0-256)                                   |
+| \033[48;5;nm       | Set background color to color index 'n' (0-256)                                   |
+| \033[39m           | Reset foreground color and alpha                                                  |
+| \033[49m           | Reset background color and alpha                                                  |
+| ;                  | Semicolon is used as a separator                                                  |
+| m                  | Ends the sequence                                                                 |
 
-Foreground colors: `30` through `37`
-Background colors: `40` through `47`
-Reset: `0`
+Other sequences *may* be supported but are not listed here. In any case, this allows
+for all RGB colors to be theoretically used all at the same time.
 
-NOTE: `;` is a separator, and in this example it separates the
-color number and normal/bright. \033 may also be written as `^]` or simply `ESC`.
-The separator may be omitted for some sequences, such as `\033[0m` which
-resets the colorscheme.
+For example, to set the foreground color to red and print 'Hello world',
+one could do the following: `printf '\033[0;31mHello world\n" | spmenu`
+This will set the foreground color to `sgr1` in the config/theme file.
+You can do this for `sgr0` through `sgr7`. To access `sgr8` through `sgr15`
+you use `\033[1` rather than `\033[0`, specifying that you want bright
+colors to be used.
 
-spmenu supports most color sequences, although not true color by default
-(unless -sgr arguments are used).
+As for 256 colors, you simply specify a value between 0 and 256. These colors
+are built into spmenu and cannot be overridden. They are only really implemented
+into spmenu for compatibility, in practice you should use true color sequences
+instead, as they are much more flexible.
 
-There are a few arguments, you can override SGR colors on-the-fly
-using the `-sgrX` arguments. See 'Arguments' for more information.
+True color is slightly more complicated. For example, to print black text on a
+white background, one could do something like this:
+`printf "\033[48;2;255;255;255;38;2;0;0;0mTest\033[0m\n" | spmenu`
 
-Just as a tip, you can pipe your colored spmenu output to
-`sed -e 's/\x1b\[[0-9;]*m//g'`. This will clear the SGR sequences from
-the output. This is useful when you want to check what the output actually is.
+This might look confusing if you aren't familiar with these sequences, but it's fairly
+simple. First we set the background color and specify that this is a true color
+sequence. (`48;2`) Then we set the red, green and blue channel to fully
+opaque (`255;255;255` for red;green;blue), resulting in white. Then we repeat this
+for a foreground color (`38;2`) but replace `255` with `0`, which results in
+black. Do however note that you don't need to specify *both* a foreground and
+background color.
 
-256 color sequences are also supported, but due to the complexity involved, they
-will not be covered in this man page.
+**Note: Background colors will used until a reset sequence is found.**
 
 ## Pango markup and text formatting
 
