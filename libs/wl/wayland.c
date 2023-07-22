@@ -102,13 +102,10 @@ char *wl_clipboard(void) {
 void paste_wl(void) {
     char *p, *q;
 
-    fprintf(stderr, "gentoo");
-
     p = wl_clipboard();
 
     insert(p, (q = strchr(p, '\n')) ? q - p : (ssize_t)strlen(p)); // insert selection
 
-    // draw the menu
     drawmenu();
 }
 
