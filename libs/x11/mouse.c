@@ -73,8 +73,6 @@ void buttonpress_x11(XEvent *e) {
             ev->y += h;
         }
 
-        i = 0;
-
         for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
@@ -87,14 +85,13 @@ void buttonpress_x11(XEvent *e) {
             // ClickSelItem, called function doesn't matter
             if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickItem;
-                sp.clickitemindex = i;
+                mouseitem = item;
 #if USEIMAGE
             } else if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ev->x <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
+                mouseitem = item;
 #endif
             }
-
-            i++;
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
         x += sp.inputw;

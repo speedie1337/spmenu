@@ -289,8 +289,6 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             ey += h;
         }
 
-        i = 0;
-
         for (item = currentitem; item != nextitem; item = item->right) {
             if (item_num++ == lines) {
                 item_num = 1;
@@ -301,15 +299,14 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             y += h;
 
             if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) && ex <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
-                sp.clickitemindex = i;
                 click = ClickItem;
+                mouseitem = item;
 #if USEIMAGE
             } else if (ey >= y && ey <= (y + h) && ex >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ex <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
+                mouseitem = item;
 #endif
             }
-
-            i++;
         }
     } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
         x += sp.inputw;

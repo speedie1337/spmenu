@@ -607,7 +607,7 @@ void switchmode(Arg *arg) {
 }
 
 void selecthover(Arg *arg) {
-    puts(items[sp.clickitemindex].text);
+    puts(mouseitem->text);
     exit(0);
 }
 

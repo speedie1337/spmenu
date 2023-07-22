@@ -140,8 +140,6 @@ struct sp {
     int listcount;
     int listchanged;
 
-    int clickitemindex;
-
     size_t cursor; // cursor width
 
     int ignoreconfkeys; // can be set globally if you don't want to override keybinds with config file keys
@@ -206,6 +204,7 @@ static struct item *previousitem; // previous item
 static struct item *currentitem; // current item
 static struct item *nextitem; // next item
 static struct item *selecteditem; // selected item
+static struct item *mouseitem; // clicked item
 
 // various headers
 #include "libs/draw/draw.h"
