@@ -11,6 +11,9 @@ static int loadtheme                   = 1; /* Load theme (~/.config/spmenu/them
 static int loadbinds                   = 1; /* Load keybind file (~/.config/spmenu/binds.conf) on runtime */
 static int mon                         = -1; /* Monitor to run spmenu on */
 
+/* Wayland options */
+static int scrolldistance              = 512; /* Distance to scroll for a scroll action to count */
+
 /* Config file options */
 #if USECONFIG
 static char *configfile                = NULL; /* Config file path. Default is ~/.config/spmenu/spmenu.conf */

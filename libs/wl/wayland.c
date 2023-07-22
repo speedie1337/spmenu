@@ -382,13 +382,18 @@ void pointer_motion_handler(void *data, struct wl_pointer *pointer, uint32_t tim
 }
 
 void pointer_axis_handler(void *data, struct wl_pointer *pointer, uint32_t time, uint32_t axis, wl_fixed_t value) {
-    mouse_scroll = 1;
-
-    if (value > 0) {
+    if (value > scrolldistance) {
         mouse_scroll_direction = 0;
-    } else {
+    } else if (value < -scrolldistance) {
         mouse_scroll_direction = 1;
+    } else {
+        mouse_scroll = 0;
+        mouse_scroll_direction = -1;
+
+        return;
     }
+
+    mouse_scroll = 1;
 
     buttonpress_wl(mouse_scroll_direction, mouse_x, mouse_y);
 
