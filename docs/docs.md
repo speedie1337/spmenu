@@ -1021,6 +1021,8 @@ bind:
   - Toggle mode
 - `toggleregex`
   - Toggle regex mode
+- `togglefuzzy`
+  - Toggle fuzzy matching
 - `toggleimg`
   - Toggle images
 - `flipimg`

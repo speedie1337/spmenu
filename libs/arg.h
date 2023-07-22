@@ -72,6 +72,7 @@ static void togglematchcount(Arg *arg);
 static void togglemode(Arg *arg);
 static void togglehighlight(Arg *arg);
 static void toggleregex(Arg *arg);
+static void togglefuzzy(Arg *arg);
 static void toggleimg(Arg *arg);
 
 /* hover */

@@ -520,6 +520,13 @@ void toggleregex(Arg *arg) {
 #endif
 }
 
+void togglefuzzy(Arg *arg) {
+    fuzzy = !fuzzy;
+
+    match();
+    drawmenu();
+}
+
 void toggleimg(Arg *arg) {
 #if USEIMAGE
 
