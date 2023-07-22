@@ -188,10 +188,16 @@ void moveend(Arg *arg) {
 }
 
 void paste(Arg *arg) {
+#if USEWAYLAND
+    if (protocol) {
+        paste_wl();
+    } else {
 #if USEX
-    if (!protocol) {
         paste_x11(arg->i);
+#endif
     }
+#elif USEX
+    paste_x11(arg->i);
 #endif
 }
 

@@ -34,6 +34,9 @@ can be themed to look identical to dmenu.
   - For Wayland support, which is optional.
 - wayland-protocols
   - For Wayland support, which is optional.
+- wl-clipboard
+  - For Wayland support, which is optional.
+  - Only required at runtime, and only if pasting is desired.
 - xkbcommon
   - For Wayland support, which is optional.
 - libX11

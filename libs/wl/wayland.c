@@ -74,6 +74,44 @@ int is_correct_modifier(struct state *state, char *modifier) {
     return 1;
 }
 
+/* This function is pretty garbage. However I don't feel like implementing all the garbage necessary to paste properly.
+ * If anyone wants to do it, feel free to pull request.
+ */
+char *wl_clipboard(void) {
+    FILE *fp;
+    char output_text[1024];
+    char *clipboard = malloc(sizeof(output_text));
+    clipboard[0] = '\0';
+
+    fp = popen("which wl-paste > /dev/null && wl-paste -t text/plain", "r");
+
+    if (fp == NULL) {
+        fprintf(stderr, "spmenu: Failed to open command\n");
+        return NULL;
+    }
+
+    while (fgets(output_text, sizeof(output_text), fp) != NULL) {
+        strcat(clipboard, output_text);
+    }
+
+    pclose(fp);
+
+    return clipboard;
+}
+
+void paste_wl(void) {
+    char *p, *q;
+
+    fprintf(stderr, "gentoo");
+
+    p = wl_clipboard();
+
+    insert(p, (q = strchr(p, '\n')) ? q - p : (ssize_t)strlen(p)); // insert selection
+
+    // draw the menu
+    drawmenu();
+}
+
 void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_keysym_t sym) {
     int i = 0;
     char buf[8];

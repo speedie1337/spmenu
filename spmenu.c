@@ -257,7 +257,7 @@ static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 #if USEX
-static void pastesel(void); // TODO: wayland clipboard
+static void pastesel(void);
 static void grabfocus(void); // focus doesn't need to be grabbed on wayland
 #endif
 

@@ -27,6 +27,10 @@ makedepends=(
     ninja
 )
 
+optdepends=(
+    'wl-clipboard: Clipboard support on Wayland'
+)
+
 provides=($pkgname)
 conflicts=($pkgname)
 source=(

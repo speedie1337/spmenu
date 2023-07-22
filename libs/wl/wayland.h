@@ -149,6 +149,8 @@ static int set_exclusive_zone(struct state *state, unsigned int val);
 static int set_keyboard(struct state *state, int interactivity);
 static int add_layer_listener(struct state *state);
 static int set_visible_layer(struct state *state);
+static char *wl_clipboard(void);
+static void paste_wl(void);
 struct wl_buffer *create_buffer(struct state *state);
 
 /* Set to 0 if the connection was successful
