@@ -24,6 +24,8 @@ void init_appearance(void) {
         alpha_itemselpribg = 255;
         alpha_inputfg = 255;
         alpha_inputbg = 255;
+        alpha_pretextfg = 255;
+        alpha_pretextbg = 255;
         alpha_menu = 255;
         alpha_promptfg = 255;
         alpha_promptbg = 255;
