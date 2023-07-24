@@ -77,4 +77,5 @@ static void toggleimg(Arg *arg);
 
 /* hover */
 static void selecthover(Arg *arg);
+static void outputhover(Arg *arg);
 static void markhover(Arg *arg);

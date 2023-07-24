@@ -395,6 +395,7 @@ static FuncList fl[] = {
     { "setprofile",       setprofile },
     { "setlineheight",    setlineheight },
     { "switchmode",       switchmode },
+    { "outputhover",      outputhover },
     { "selecthover",      selecthover },
     { "markhover",        markhover },
     { "spawn",            spawn },

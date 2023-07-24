@@ -623,7 +623,7 @@ void switchmode(Arg *arg) {
  * The only difference is "selectitem" was replaced with "mouseitem" and tx.text output
  * was removed.
  */
-void selecthover(Arg *arg) {
+void outputhover(Arg *arg) {
     char *selection;
 
     if (printindex && mouseitem && arg->i) {
@@ -648,6 +648,19 @@ void selecthover(Arg *arg) {
 
     cleanup();
     exit(0);
+}
+
+void selecthover(Arg *arg) {
+    if (selecteditem != mouseitem) {
+        selecteditem = mouseitem;
+    } else {
+        selecteditem = mouseitem;
+        outputhover(arg);
+
+        return;
+    }
+
+    drawmenu();
 }
 
 void markhover(Arg *arg) {
