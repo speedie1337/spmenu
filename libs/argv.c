@@ -214,6 +214,8 @@ void readargs(int argc, char *argv[]) {
             hiderarrow = 0;
         } else if (!strcmp(argv[i], "-hpr") || (!strcmp(argv[i], "--hide-prompt"))) {   // hide prompt
             hideprompt = 1;
+        } else if (!strcmp(argv[i], "-hpt") || (!strcmp(argv[i], "--hide-pretext"))) {   // hide pretext
+            hideprompt = 1;
         } else if (!strcmp(argv[i], "-hpl") || (!strcmp(argv[i], "--hide-powerline"))) {   // hide powerline
             hidepowerline = 1;
         } else if (!strcmp(argv[i], "-hin") || (!strcmp(argv[i], "--hide-input"))) {   // hide input
@@ -668,6 +670,7 @@ void usage(int status) {
             "spmenu -hra,     --hide-right-arrow                          Hide right arrow\n"
             "spmenu -hit,     --hide-item                                 Hide items\n"
             "spmenu -hpr,     --hide-prompt                               Hide prompt\n"
+            "spmenu -hpt,     --hide-pretext                              Hide pretext\n"
             "spmenu -hip,     --hide-input                                Hide input\n"
             "spmenu -hpl,     --hide-powerline                            Hide powerline\n"
             "spmenu -hc,      --hide-caret, --hide-cursor                 Hide caret\n"
@@ -755,6 +758,8 @@ void usage(int status) {
             "spmenu -pbg,     --prompt-background <color>                 Set the prompt background color\n"
             "spmenu -ifg,     --input-foreground <color>                  Set input foreground color\n"
             "spmenu -ibg,     --input-background <color>                  Set input background color\n"
+            "spmenu -ptfg,    --pretext-foreground <color>                Set pretext foreground color\n"
+            "spmenu -ptbg,    --pretext-background <color>                Set pretext background color\n"
             "spmenu -mnbg,    --menu-background <color>                   Set the menu background color\n"
             "spmenu -nhf,     --normal-highlight-foreground <color>       Set the normal highlight foreground color\n"
             "spmenu -nhb,     --normal-highlight-background <color>       Set the normal highlight background color\n"

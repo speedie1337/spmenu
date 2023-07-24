@@ -144,6 +144,9 @@ void theme_load(void) {
             if (config_setting_lookup_string(conf, "prompt", &dest))
                 prompt = strdup(dest);
 
+            if (config_setting_lookup_string(conf, "pretext", &dest))
+                pretext = strdup(dest);
+
             if (config_setting_lookup_string(conf, "capslockon", &dest))
                 capslockontext = strdup(dest);
 
@@ -190,6 +193,9 @@ void theme_load(void) {
 
             config_setting_lookup_int(conf, "inputfg", &alpha_inputfg); // theme.alpha.inputfg
             config_setting_lookup_int(conf, "inputbg", &alpha_inputbg); // theme.alpha.inputbg
+
+            config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg); // theme.alpha.pretextfg
+            config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg); // theme.alpha.pretextbg
 
             config_setting_lookup_int(conf, "menu", &alpha_menu); // theme.alpha.menu
 
@@ -280,6 +286,13 @@ void theme_load(void) {
 
             if (config_setting_lookup_string(conf, "inputbg", &dest))
                 sp_strncpy(col_inputbg, strdup(dest), sizeof(col_inputbg));
+
+            // pretext
+            if (config_setting_lookup_string(conf, "pretextfg", &dest))
+                sp_strncpy(col_pretextfg, strdup(dest), sizeof(col_pretextfg));
+
+            if (config_setting_lookup_string(conf, "pretextbg", &dest))
+                sp_strncpy(col_pretextbg, strdup(dest), sizeof(col_pretextbg));
 
             // menu
             if (config_setting_lookup_string(conf, "menu", &dest))
@@ -438,6 +451,7 @@ void theme_load(void) {
 
             // look up
             config_setting_lookup_int(conf, "input", &hideinput); // theme.hide.input
+            config_setting_lookup_int(conf, "pretext", &hidepretext); // theme.hide.pretext
             config_setting_lookup_int(conf, "larrow", &hidelarrow); // theme.hide.larrow
             config_setting_lookup_int(conf, "rarrow", &hiderarrow); // theme.hide.rarrow
             config_setting_lookup_int(conf, "prompt", &hideprompt); // theme.hide.prompt
@@ -462,6 +476,7 @@ void theme_load(void) {
             config_setting_lookup_int(conf, "item", &pango_item); // theme.pango.input
             config_setting_lookup_int(conf, "prompt", &pango_prompt); // theme.pango.rarrow
             config_setting_lookup_int(conf, "input", &pango_input); // theme.pango.input
+            config_setting_lookup_int(conf, "pretext", &pango_pretext); // theme.pango.pretext
             config_setting_lookup_int(conf, "leftarrow", &pango_leftarrow); // theme.pango.leftarrow
             config_setting_lookup_int(conf, "rightarrow", &pango_rightarrow); // theme.pango.rightarrow
             config_setting_lookup_int(conf, "numbers", &pango_numbers); // theme.pango.numbers

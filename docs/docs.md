@@ -226,6 +226,9 @@ in the config files.
 `-hpr, --hide-prompt`
 :   Hide prompt
 
+`-hpt, --hide-pretext`
+:   Hide pretext
+
 `-hip, --hide-input`
 :   Hide input
 
@@ -447,6 +450,12 @@ in the config files.
 
 `-ibg, --input-background color`
 :   Set input background color
+
+`-ptfg, --pretext-foreground color`
+:   Set pretext foreground color
+
+`-ptbg, --pretext-background color`
+:   Set pretext background color
 
 `-mnbg, --menu-background color`
 :   Set the menu background color

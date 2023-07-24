@@ -447,7 +447,7 @@ int drawprompt(int x, int y, int w) {
 }
 
 int drawinput(int x, int y, int w) {
-    char *censort; // censor text (password)
+    char *censort;
     unsigned int curpos = 0;
     int fh = caretheight;
     int fw = MAX(2, caretwidth);
@@ -470,10 +470,15 @@ int drawinput(int x, int y, int w) {
 
         free(censort);
     } else if (!passwd) {
-        apply_fribidi(tx.text);
-        draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : tx.text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
+        if (strlen(tx.text)) {
+            apply_fribidi(tx.text);
+            draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : tx.text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
 
-        curpos = TEXTW(tx.text) - TEXTW(&tx.text[sp.cursor]);
+            curpos = TEXTW(tx.text) - TEXTW(&tx.text[sp.cursor]);
+        } else if (!hidepretext) {
+            apply_fribidi(pretext);
+            draw_text(draw, x + fw, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : pretext, 0, pango_pretext ? True : False, col_pretextfg, col_pretextbg, alpha_pretextfg, alpha_pretextbg);
+        }
     }
 
     if ((curpos += sp.lrpad / 2 - 1) < w && !hidecaret) {

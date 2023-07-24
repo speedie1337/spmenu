@@ -365,6 +365,9 @@ void conf_init(void) {
             if (config_setting_lookup_string(conf, "prompt", &dest))
                 prompt = strdup(dest);
 
+            if (config_setting_lookup_string(conf, "pretext", &dest))
+                pretext = strdup(dest);
+
             if (config_setting_lookup_string(conf, "capslockon", &dest))
                 capslockontext = strdup(dest);
 
@@ -417,6 +420,8 @@ void conf_init(void) {
 
             config_setting_lookup_int(conf, "inputfg", &alpha_inputfg); // spmenu.alpha.inputfg
             config_setting_lookup_int(conf, "inputbg", &alpha_inputbg); // spmenu.alpha.inputbg
+            config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg); // spmenu.alpha.pretextfg
+            config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg); // spmenu.alpha.pretextbg
 
             config_setting_lookup_int(conf, "menu", &alpha_menu); // spmenu.alpha.menu
 
@@ -777,6 +782,7 @@ void conf_init(void) {
 
             // look up
             config_setting_lookup_int(conf, "input", &hideinput); // spmenu.hide.input
+            config_setting_lookup_int(conf, "pretext", &hidepretext); // spmenu.hide.pretext
             config_setting_lookup_int(conf, "larrow", &hidelarrow); // spmenu.hide.larrow
             config_setting_lookup_int(conf, "rarrow", &hiderarrow); // spmenu.hide.rarrow
             config_setting_lookup_int(conf, "prompt", &hideprompt); // spmenu.hide.prompt
@@ -801,6 +807,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "item", &pango_item); // spmenu.pango.input
             config_setting_lookup_int(conf, "prompt", &pango_prompt); // spmenu.pango.rarrow
             config_setting_lookup_int(conf, "input", &pango_input); // spmenu.pango.input
+            config_setting_lookup_int(conf, "pretext", &pango_pretext); // spmenu.pango.pretext
             config_setting_lookup_int(conf, "leftarrow", &pango_leftarrow); // spmenu.pango.leftarrow
             config_setting_lookup_int(conf, "rightarrow", &pango_rightarrow); // spmenu.pango.rightarrow
             config_setting_lookup_int(conf, "numbers", &pango_numbers); // spmenu.pango.numbers

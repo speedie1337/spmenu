@@ -89,6 +89,7 @@ static char *rightarrow                = ">"; /* Right arrow, used to indicate y
 static char *password                  = "*"; /* Password character, when the -P argument is active this will replace all characters typed */
 static char *prompt                    = NULL; /* Default prompt */
 static char *input                     = NULL; /* Default input text */
+static char *pretext                   = NULL; /* Default pretext */
 
 /* Match options */
 static int type                        = 1; /* Allow typing into spmenu or only allow keybinds. */
@@ -122,6 +123,7 @@ static int caretpadding                = 0; /* Caret padding (px) */
 
 /* Hide options */
 static int hideinput                   = 0; /* Hide input (0/1) */
+static int hidepretext                 = 0; /* Hide pretext (0/1) */
 static int hidelarrow                  = 0; /* Hide left arrow (0/1) */
 static int hiderarrow                  = 0; /* Hide right arrow (0/1) */
 static int hideitem                    = 0; /* Hide item (0/1) */
@@ -151,8 +153,12 @@ static char col_itemselprifg[]         = "#110f1f"; /* Selected foreground item 
 static char col_itemselpribg[]         = "#8e93c2"; /* Selected background item (high priority) color */
 
 /* Input colors */
-static char col_inputbg[]              = "#110f1f"; /* Input field background color */
 static char col_inputfg[]              = "#eeeeee"; /* Input field foreground color */
+static char col_inputbg[]              = "#110f1f"; /* Input field background color */
+
+/* Pretext colors */
+static char col_pretextfg[]            = "#999888"; /* Pretext foreground color */
+static char col_pretextbg[]            = "#110f1f"; /* Pretext background color */
 
 /* Menu colors */
 static char col_menu[]                 = "#110f1f"; /* Menu background color */
@@ -227,6 +233,8 @@ static int alpha_itemselprifg          = 255; /* Alpha for selected priority ite
 static int alpha_itemselpribg          = 222; /* Alpha for selected priority item background (0-255) */
 static int alpha_inputfg               = 255; /* Alpha for input foreground (0-255) */
 static int alpha_inputbg               = 222; /* Alpha for input background (0-255) */
+static int alpha_pretextfg             = 255; /* Alpha for pretext foreground (0-255) */
+static int alpha_pretextbg             = 222; /* Alpha for pretext background (0-255) */
 static int alpha_menu                  = 222; /* Alpha for menu background (0-255) */
 static int alpha_promptfg              = 255; /* Alpha for prompt foreground (0-255) */
 static int alpha_promptbg              = 222; /* Alpha for prompt background (0-255) */
@@ -252,7 +260,8 @@ static int alpha_capsbg                = 222; /* Alpha for the caps lock indicat
 static int pango_item                  = 1; /* Enable support for pango markup for the items */
 static int pango_prompt                = 1; /* Enable support for pango markup for the prompt */
 static int pango_caps                  = 1; /* Enable support for pango markup for the caps lock indicator */
-static int pango_input                 = 1; /* Enable support for pango markup for user input */
+static int pango_input                 = 1; /* Enable support for pango markup for the user input */
+static int pango_pretext               = 1; /* Enable support for pango markup for the pretext */
 static int pango_leftarrow             = 0; /* Enable support for pango markup for the left arrow */
 static int pango_rightarrow            = 0; /* Enable support for pango markup for the right arrow */
 static int pango_numbers               = 0; /* Enable support for pango markup for the match count */
