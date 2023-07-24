@@ -53,6 +53,12 @@ RUNLAUNCHER_DESKTOP_ARGS=""
 RUNLAUNCHER_FM_ARGS="--lines 40 --columns 2"
 RUNLAUNCHER_HELP_ARGS=""
 
+RUNLAUNCHER_RUN_PRETEXT="Type in keywords to search for a program.."
+RUNLAUNCHER_BM_PRETEXT="Type in keywords to search for a bookmark.."
+RUNLAUNCHER_DESKTOP_PRETEXT="Type in keywords to search for a program.."
+RUNLAUNCHER_FM_PRETEXT="Type in keywords to search for a file or directory.."
+RUNLAUNCHER_HELP_PRETEXT=""
+
 DESKTOP_DIR="${DESKTOP_DIR:-${DESTDIR}${PREFIX}/share/applications ${HOME}/.local/share/applications}"
 ICON_DIR="${ICON_DIR:-${DESTDIR}${PREFIX}/share/icons/hicolor ${HOME}/.local/share/icons/hicolor ${DESTDIR}${PREFIX}/share/pixmaps}"
 IMAGE="${IMAGE:-true}"
@@ -210,6 +216,13 @@ RUNLAUNCHER_DESKTOP_ARGS="$RUNLAUNCHER_DESKTOP_ARGS" # Extra rguments passed to 
 RUNLAUNCHER_FM_ARGS="${RUNLAUCNHER_FM_ARGS}" # Extra arguments passed to \$RUNLAUNCHER when using the file manager
 RUNLAUNCHER_HELP_ARGS="${RUNLAUNCHER_HELP_ARGS}" # Extra arguments passed to \$RUNLAUNCHER when using the help
 DMENU_COMPAT="$DMENU_COMPAT" # Enable dmenu compatibility (true/false)
+
+# Pretext
+RUNLAUNCHER_RUN_PRETEXT="$RUNLAUNCHER_RUN_PRETEXT" # Text to display when no input text
+RUNLAUNCHER_BM_PRETEXT="$RUNLAUNCHER_BM_PRETEXT" # Text to display when no input text
+RUNLAUNCHER_DESKTOP_PRETEXT="$RUNLAUNCHER_DESKTOP_PRETEXT" # Text to display when no input text
+RUNLAUNCHER_FM_PRETEXT="$RUNLAUNCHER_FM_PRETEXT" # Text to display when no input text
+RUNLAUNCHER_HELP_PRETEXT="$RUNLAUNCHER_HELP_PRETEXT" # Text to display when no input text
 
 # Sorting
 SORT_BY_NUMBER="$SORT_BY_NUMBER" # Sort by numbers
@@ -379,7 +392,7 @@ main() {
     RUNLAUNCHER_FM_ARGS="--insert --lines 20 --columns 1 $HIST_ARG $RUNLAUNCHER_FM_ARGS $MARGS"
     RUNLAUNCHER_RUN_ARGS="--insert $HIST_ARG $RUNLAUNCHER_RUN_ARGS $MARGS"
     RUNLAUNCHER_BM_ARGS="--insert $HIST_ARG --prompt Bookmarks $RUNLAUNCHER_BM_ARGS $MARGS"
-    RUNLAUNCHER_DESKTOP_ARGS="--sgr1 $DESCRIPTION_COLOR --sgr2 $COMMENT_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 --display-icons $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
+    RUNLAUNCHER_DESKTOP_ARGS="--insert --sgr1 $DESCRIPTION_COLOR --sgr2 $COMMENT_COLOR --lines 20 --columns 1 --image-size 100 --image-gaps 20 --display-icons $RUNLAUNCHER_DESKTOP_ARGS $MARGS"
     RUNLAUNCHER_HELP_ARGS="--insert $HIST_ARG $RUNLAUNCHER_HELP_ARGS $MARGS"
 
     # dmenu compatibility
@@ -410,6 +423,19 @@ main() {
     read -ra ls_args <<< "${LS_ARGS}"
     read -ra desktopdir <<< "${DESKTOP_DIR}"
     read -ra icondir <<< "${ICON_DIR}"
+
+    if [ "$DMENU_COMPAT" = "false" ]; then
+        rl_desktop+=("--pretext")
+        rl_fm+=("--pretext")
+        rl_run+=("--pretext")
+        rl_help+=("--pretext")
+        rl_bm+=("--pretext")
+        rl_desktop+=("$RUNLAUNCHER_DESKTOP_PRETEXT")
+        rl_fm+=("$RUNLAUNCHER_FM_PRETEXT")
+        rl_run+=("$RUNLAUNCHER_RUN_PRETEXT")
+        rl_help+=("$RUNLAUNCHER_HELP_PRETEXT")
+        rl_bm+=("$RUNLAUNCHER_BM_PRETEXT")
+    fi
 
     # $PATH listing
     case "$function" in
