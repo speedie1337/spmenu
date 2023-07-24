@@ -24,8 +24,8 @@ static char *bindsfile                 = NULL; /* Keybind file path. Default is 
 /* Window options */
 static int alpha                       = 1; /* Enable alpha */
 static int menuposition                = 2; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
-static int menupaddingv				   = 0; /* Vertical padding inside the menu (px) */
-static int menupaddingh				   = 0; /* Horizontal padding inside the menu (px) */
+static int menupaddingv                = 0; /* Vertical padding inside the menu (px) */
+static int menupaddingh                = 0; /* Horizontal padding inside the menu (px) */
 static int menuwidth                   = 0; /* spmenu width */
 static int menumarginv                 = 0; /* Vertical padding around the menu */
 static int menumarginh                 = 0; /* Horizontal padding around the menu */
