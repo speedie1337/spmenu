@@ -352,6 +352,8 @@ void readargs(int argc, char *argv[]) {
             menuwidth = atoi(argv[++i]);
         else if (!strcmp(argv[i], "-p") || (!strcmp(argv[i], "--prompt")))   // adds prompt to left of input field
             prompt = argv[++i];
+        else if (!strcmp(argv[i], "-pt") || (!strcmp(argv[i], "--pretext")))   // adds pretext
+            pretext = argv[++i];
         else if (!strcmp(argv[i], "-It") || (!strcmp(argv[i], "--input")))   // specify initial text
             input = argv[++i];
         else if (!strcmp(argv[i], "-fn") || (!strcmp(argv[i], "--font")))  // font or font set
@@ -623,6 +625,7 @@ void usage(int status) {
             "spmenu -P,       --password                                  Hide characters\n"
             "spmenu -nP,      --no-password                               Don't hide characters\n"
             "spmenu -p,       --prompt <text>                             Set spmenu prompt text to <text>\n"
+            "spmenu -pt,      --pretext <text>                            Set spmenu pretext to <text>\n"
             "spmenu -It,      --input <text>                              Set initial input text to <text>\n"
             "spmenu -ip,      --indent                                    Indent items to prompt width\n"
             "spmenu -nip,     --no-indent                                 Don't indent items to prompt width\n"
