@@ -106,6 +106,9 @@ in the config files.
 `-p, --prompt text`
 :   Set spmenu prompt text to text
 
+`-pt, --pretext text`
+:   Set spmenu pretext to text
+
 `-It, --input text`
 :   Set initial input text to text
 
