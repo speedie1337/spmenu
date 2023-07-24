@@ -126,6 +126,10 @@ void readargs(int argc, char *argv[]) {
             menuposition = 1;
         } else if (!strcmp(argv[i], "-c") || (!strcmp(argv[i], "--center"))) {  // appears at the center of the screen
             menuposition = 2;
+        } else if (!strcmp(argv[i], "-itt") || (!strcmp(argv[i], "--item-top"))) { // items are placed above prompt
+            itemposition = 1;
+        } else if (!strcmp(argv[i], "-itb") || (!strcmp(argv[i], "--item-bottom"))) {  // items are placed below prompt
+            menuposition = 0;
         } else if (!strcmp(argv[i], "-nm") || (!strcmp(argv[i], "--normal"))) { // normal mode
             mode = 0;
         } else if (!strcmp(argv[i], "-im") || (!strcmp(argv[i], "--insert"))) { // insert mode
@@ -663,6 +667,8 @@ void usage(int status) {
             "spmenu -t,       --top                                       Position spmenu at the top of the screen\n"
             "spmenu -b,       --bottom                                    Position spmenu at the bottom of the screen\n"
             "spmenu -c,       --center                                    Position spmenu at the center of the screen\n"
+            "spmenu -itt,     --item-top                                  Position items above all other elements\n"
+            "spmenu -itb,     --item-bottom                               Position items below all other elements\n"
             , status ? stderr : stdout);
 
     // more args

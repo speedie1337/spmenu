@@ -103,6 +103,7 @@ static int regex                       = 0; /* Whether or not to enable regex ma
 static char *listfile                  = NULL; /* File to read entries from instead of stdin. NULL means read from stdin instead. */
 
 /* Line options */
+static int itemposition                = 1; /* Item position (0: Bottom, 1: Top) */
 static int lineheight                  = 1; /* Line height (0: Calculate automatically) */
 static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */

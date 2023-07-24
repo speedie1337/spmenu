@@ -438,6 +438,7 @@ void theme_load(void) {
             config_setting_t *conf = config_setting_get_elem(line_setting, i);
 
             // look up
+            config_setting_lookup_int(conf, "itemposition", &itemposition); // theme.line.itemposition
             config_setting_lookup_int(conf, "height", &lineheight); // theme.line.height
             config_setting_lookup_int(conf, "indentitems", &indentitems); // theme.line.indentitems
         }

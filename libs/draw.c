@@ -686,39 +686,58 @@ void drawmenu_layer(void) {
     calcoffsets();
     get_mh();
 
+    int nh = 1;
+
     // sp.bh must be removed from menu height resizing later
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         y -= sp.bh;
+        nh = 0;
+    }
+
+    if (!hidemode) {
+        modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
     }
 
     if (!hideprompt) {
         w = sp.promptw;
-        x = drawprompt(x, y, w);
+        x = drawprompt(x, y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0), w);
     }
 
     if (!hideinput) {
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
-        x = drawinput(x, y, w);
+        x = drawinput(x, y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0), w);
     }
 
-    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-
     // draw the items, this function also calls drawrarrow() and drawlarrow()
-    if (!hideitem) drawitem(x, y, w);
+    if (!hideitem) {
+        drawitem(x, y - (nh ? lines ? itemposition ? sp.bh : 0 : 0 : 0), w);
+    }
 
     if (!hidematchcount) {
         w = numberw;
-        drawnumber(sp.mw - numberw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        drawnumber(
+                sp.mw - numberw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh,
+                y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0),
+                w
+        );
     }
 
     if (!hidemode) {
         w = modew;
-        drawmode(sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        drawmode(
+                sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh,
+                y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0),
+                w
+        );
     }
 
     if (!hidecaps) {
         w = capsw;
-        drawcaps(sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh, y, w);
+        drawcaps(
+                sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh,
+                y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0),
+                w
+        );
     }
 
 #if USEX

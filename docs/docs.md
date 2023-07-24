@@ -211,6 +211,12 @@ in the config files.
 `-c, --center`
 :   Position spmenu at the center of the screen
 
+`-itt, --item-top`
+:   Position items above all other elements
+
+`-itb, --item-bottom`
+:   Position items below all other elements
+
 `-hm, --hide-mode`
 :   Hide mode indicator
 

@@ -280,7 +280,9 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
     if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) && lines) {
         yp = 1;
-    } else if (lines && ey < h + menumarginv && ey > menumarginv) {
+    } else if (!itemposition && lines && ey <= h + menumarginv && ey >= menumarginv) {
+        yp = 1;
+    } else if (itemposition && lines && ey >= (sp.mh - h) + menumarginv) {
         yp = 1;
     } else if (!lines) {
         yp = 1;
@@ -320,7 +322,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 
         ey -= menumarginv;
 
-        if (hideprompt && hideinput && hidemode && hidematchcount && hidecaps) {
+        if ((hideprompt && hideinput && hidemode && hidematchcount && hidecaps) || itemposition) {
             ey += h;
         }
 

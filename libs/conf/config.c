@@ -753,6 +753,7 @@ void conf_init(void) {
             config_setting_t *conf = config_setting_get_elem(line_setting, i);
 
             // look up
+            config_setting_lookup_int(conf, "itemposition", &itemposition); // spmenu.line.itemposition
             config_setting_lookup_int(conf, "height", &lineheight); // spmenu.line.height
             config_setting_lookup_int(conf, "lines", &lines); // spmenu.line.lines
             config_setting_lookup_int(conf, "columns", &columns); // spmenu.line.columns
