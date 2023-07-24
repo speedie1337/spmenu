@@ -1061,6 +1061,8 @@ bind:
   - Switch between Normal mode and Insert mode
 - `selecthover`
   - Output the item clicked on
+- `markhover`
+  - Mark the item clicked on
 - `screenshot`
   - Take a screenshot of spmenu
 

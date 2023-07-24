@@ -396,6 +396,7 @@ static FuncList fl[] = {
     { "setlineheight",    setlineheight },
     { "switchmode",       switchmode },
     { "selecthover",      selecthover },
+    { "markhover",        markhover },
     { "spawn",            spawn },
 };
 

@@ -619,9 +619,59 @@ void switchmode(Arg *arg) {
     drawmenu();
 }
 
+/* This function is basically a copy of the selectitem function.
+ * The only difference is "selectitem" was replaced with "mouseitem" and tx.text output
+ * was removed.
+ */
 void selecthover(Arg *arg) {
-    puts(mouseitem->text);
+    char *selection;
+
+    if (printindex && mouseitem && arg->i) {
+        fprintf(stdout, "%d\n", mouseitem->index);
+        cleanup();
+        exit(0);
+    }
+
+    selection = mouseitem->text;
+
+    for (int i = 0; i < sel_size; i++) {
+        if (sel_index[i] != -1 && (!mouseitem || mouseitem->index != sel_index[i])) {
+            puts(items[sel_index[i]].text);
+        }
+    }
+
+    if (!selection)
+        return;
+
+    puts(selection);
+    savehistory(selection);
+
+    cleanup();
     exit(0);
+}
+
+void markhover(Arg *arg) {
+    if (!mark) return;
+    if (mouseitem && is_selected(mouseitem->index)) {
+        for (int i = 0; i < sel_size; i++) {
+            if (sel_index[i] == mouseitem->index) {
+                sel_index[i] = -1;
+            }
+        }
+    } else {
+        for (int i = 0; i < sel_size; i++) {
+            if (sel_index[i] == -1) {
+                sel_index[i] = mouseitem->index;
+                return;
+            }
+        }
+
+        sel_size++;
+        sel_index = realloc(sel_index, (sel_size + 1) * sizeof(int));
+        sel_index[sel_size - 1] = mouseitem->index;
+    }
+
+    drawmenu();
 }
 
 void screenshot(Arg *arg) {
