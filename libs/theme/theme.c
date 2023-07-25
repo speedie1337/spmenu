@@ -81,9 +81,9 @@ void theme_load(void) {
             config_setting_t *conf = config_setting_get_elem(caret_setting, i);
 
             // look up
-            config_setting_lookup_int(conf, "width", &caretwidth); // spmenu.caret.width
-            config_setting_lookup_int(conf, "height", &caretheight); // spmenu.caret.height
-            config_setting_lookup_int(conf, "padding", &caretpadding); // spmenu.caret.padding
+            config_setting_lookup_int(conf, "width", &caretwidth); // theme.caret.width
+            config_setting_lookup_int(conf, "height", &caretheight); // theme.caret.height
+            config_setting_lookup_int(conf, "padding", &caretpadding); // theme.caret.padding
         }
     }
 
@@ -194,8 +194,11 @@ void theme_load(void) {
             config_setting_lookup_int(conf, "inputfg", &alpha_inputfg); // theme.alpha.inputfg
             config_setting_lookup_int(conf, "inputbg", &alpha_inputbg); // theme.alpha.inputbg
 
-            config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg); // theme.alpha.pretextfg
-            config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg); // theme.alpha.pretextbg
+            if (!config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg))
+                config_setting_lookup_int(conf, "inputfg", &alpha_pretextfg); // theme.alpha.pretextfg
+
+            if (!config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg))
+                config_setting_lookup_int(conf, "inputbg", &alpha_pretextbg); // theme.alpha.pretextbg
 
             config_setting_lookup_int(conf, "menu", &alpha_menu); // theme.alpha.menu
 
@@ -290,8 +293,12 @@ void theme_load(void) {
             // pretext
             if (config_setting_lookup_string(conf, "pretextfg", &dest))
                 sp_strncpy(col_pretextfg, strdup(dest), sizeof(col_pretextfg));
+            else if (config_setting_lookup_string(conf, "inputfg", &dest))
+                sp_strncpy(col_pretextfg, strdup(dest), sizeof(col_pretextfg));
 
             if (config_setting_lookup_string(conf, "pretextbg", &dest))
+                sp_strncpy(col_pretextbg, strdup(dest), sizeof(col_pretextbg));
+            else if (config_setting_lookup_string(conf, "inputbg", &dest))
                 sp_strncpy(col_pretextbg, strdup(dest), sizeof(col_pretextbg));
 
             // menu
@@ -493,7 +500,7 @@ void theme_load(void) {
             config_setting_t *conf = config_setting_get_elem(file_setting, i);
 
             // look up
-            config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
+            config_setting_lookup_int(conf, "global", &globalcolors); // theme.file.global
         }
     }
 

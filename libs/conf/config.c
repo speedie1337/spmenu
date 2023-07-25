@@ -420,8 +420,12 @@ void conf_init(void) {
 
             config_setting_lookup_int(conf, "inputfg", &alpha_inputfg); // spmenu.alpha.inputfg
             config_setting_lookup_int(conf, "inputbg", &alpha_inputbg); // spmenu.alpha.inputbg
-            config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg); // spmenu.alpha.pretextfg
-            config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg); // spmenu.alpha.pretextbg
+
+            if (!config_setting_lookup_int(conf, "pretextfg", &alpha_pretextfg))
+                config_setting_lookup_int(conf, "inputfg", &alpha_pretextfg); // spmenu.alpha.pretextfg
+
+            if (!config_setting_lookup_int(conf, "pretextbg", &alpha_pretextbg))
+                config_setting_lookup_int(conf, "inputbg", &alpha_pretextbg); // spmenu.alpha.pretextbg
 
             config_setting_lookup_int(conf, "menu", &alpha_menu); // spmenu.alpha.menu
 
@@ -512,6 +516,17 @@ void conf_init(void) {
 
             if (config_setting_lookup_string(conf, "inputbg", &dest))
                 sp_strncpy(col_inputbg, strdup(dest), sizeof(col_inputbg));
+
+            // pretext
+            if (config_setting_lookup_string(conf, "pretextfg", &dest))
+                sp_strncpy(col_pretextfg, strdup(dest), sizeof(col_pretextfg));
+            else if (config_setting_lookup_string(conf, "inputfg", &dest))
+                sp_strncpy(col_pretextfg, strdup(dest), sizeof(col_pretextfg));
+
+            if (config_setting_lookup_string(conf, "pretextbg", &dest))
+                sp_strncpy(col_pretextbg, strdup(dest), sizeof(col_pretextbg));
+            else if (config_setting_lookup_string(conf, "inputfg", &dest))
+                sp_strncpy(col_pretextbg, strdup(dest), sizeof(col_pretextbg));
 
             // menu
             if (config_setting_lookup_string(conf, "menu", &dest))
