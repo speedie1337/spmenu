@@ -18,7 +18,7 @@ exec_file() {
         *.theme) $EDITOR "$1" ;;
         *)
             if [ -x "$1" ]; then
-                $TERMINAL -e "$1"
+                /bin/sh -c "$1"
             else
                 $GENERIC "$1"
             fi
