@@ -920,6 +920,7 @@ These are the default mouse binds. Mode does not apply for mouse binds.
 | ClickMode          | Left Click         | switchmode         | 0                  |
 | ClickNumber        | Left Click         | viewhist           | 0                  |
 | ClickItem          | Left Click         | selecthover        | 0                  |
+| ClickItem          | Right Click        | markhover          | 0                  |
 | None               | Scroll Up          | moveprev           | 0                  |
 | None               | Scroll Down        | movenext           | 0                  |
 

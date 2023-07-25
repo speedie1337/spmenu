@@ -10,6 +10,7 @@ static Mouse buttons[] = {
     { ClickMode,            Button1,         switchmode,   {0} },
     { ClickNumber,          Button1,         viewhist,     {0} },
     { ClickItem,            Button1,         selecthover,  {0} },
+    { ClickItem,            Button2,         markhover,    {0} },
     { ClickNone,            Button5,         movenext,     {0} },
     { ClickNone,            Button4,         moveprev,     {0} },
 };
@@ -23,6 +24,7 @@ static WlMouse wl_buttons[] = {
     { ClickMode,            WL_Left,         switchmode,   {0} },
     { ClickNumber,          WL_Left,         viewhist,     {0} },
     { ClickItem,            WL_Left,         selecthover,  {0} },
+    { ClickItem,            WL_Right,        markhover,    {0} },
     { ClickNone,            WL_Down,         movenext,     {0} },
     { ClickNone,            WL_Up,           moveprev,     {0} },
 };
