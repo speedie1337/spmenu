@@ -60,6 +60,8 @@ print_desktop_list() {
         printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
 
         [ "$cfiles" = "true" ] && [ "$entry_c" != "$cached_c" ] && cfiles=false
+
+	[ "$entry_c" = "0" ] && return
     fi
 
     # print data from entries
@@ -67,7 +69,7 @@ print_desktop_list() {
         command -v desktop_pre_caching_func > /dev/null && desktop_pre_caching_func
         printf "Writing cache files because none exist.\nTitle file: '%s'\nDescription file: '%s'\nIcon file: '%s'\nExec file: '%s'\nFile file: '%s'\nTerm file: '%s'\nDisplay file: '%s'\nOnly file: '%s'\nComment file: '%s'\n" "$TITLEFILE" "$DESCFILE" "$ICONFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE" >> "$LOGFILE"
 
-        [ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
+	[ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
         icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
         [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
