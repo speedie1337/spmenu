@@ -122,10 +122,6 @@ prepare_dirs() {
 check() {
     prepare_dirs
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
-    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
-        print_help
-        touch "$CONFDIR/spmenu/run/.first_run"
-    fi
 }
 
 print_cli_help() {
