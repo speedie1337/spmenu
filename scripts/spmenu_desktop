@@ -204,10 +204,10 @@ exec_program() {
     done
 
     # finally run the program
-    if [ -n "$exec" ] && [ "$term" = "false" ]; then
-        ${SHELL:-/bin/sh} -c "$exec" &
+    if [ -n "$exec" ] && [ "$term" != "true" ]; then
+        ${SHELL:-/bin/sh} -c "$exec"
     elif [ -n "$exec" ] && [ "$term" = "true" ]; then
-        ${TERMINAL} -e "$exec" &
+        ${SHELL:-/bin/sh} -c "${TERMINAL} $exec"
     else
         printf "No executable found. Try clearing cache." >> "$LOGFILE"
     fi
