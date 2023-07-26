@@ -597,12 +597,6 @@ int drawcaps(int x, int y, int w) {
 }
 
 void drawmenu(void) {
-    if (sp.isdrawing) {
-        while (sp.isdrawing != 0) {
-            ;
-        }
-    }
-
     sp.isdrawing = 1;
 #if USEWAYLAND
     if (protocol) {
