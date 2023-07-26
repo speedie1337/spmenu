@@ -71,7 +71,7 @@ EOF
 i=1
 
 while true; do
-    len="$(wc -l < /tmp/data)"
+    len="$(grep -c "" /tmp/data)"
     mode="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $1 }')")"
     mod="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $2 }')")"
     key="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $3 }')")"
@@ -222,7 +222,7 @@ theme = {
             inputbg = "${color[18]}";
             pretextfg = "${color[8]}";
             pretextbg = "${color[18]}";
-            numfg = "${color[1]}";
+            numfg = "${color[18]}";
             numbg = "${color[10]}";
             normhlfg = "${color[7]}";
             normhlbg = "${color[18]}";
@@ -230,9 +230,9 @@ theme = {
             selhlbg = "${color[1]}";
             caretfg = "${color[17]}";
             border = "${color[10]}";
-            modefg = "${color[1]}";
+            modefg = "${color[18]}";
             modebg = "${color[3]}";
-            capsfg = "${color[1]}";
+            capsfg = "${color[18]}";
             capsbg = "${color[5]}";
             sgr0 = "${color[1]}";
             sgr1 = "${color[2]}";
@@ -258,7 +258,7 @@ EOF
 }
 
 [ ! -f "$1" ] && printf "File does not exist.\n" && exit 1
-[ "$(wc -l < "$1")" != "18" ] && printf "Color list is not 18 lines long.\n" && exit 1
+[ "$(grep -c "" "$1")" != "18" ] && printf "Color list is not 18 lines long.\n" && exit 1
 
 read_colors "$1"
 write_array "$1"
