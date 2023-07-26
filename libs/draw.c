@@ -597,13 +597,15 @@ int drawcaps(int x, int y, int w) {
 }
 
 void drawmenu(void) {
+    if (sp.isdrawing) {
+        while (sp.isdrawing != 0) {
+            ;
+        }
+    }
+
+    sp.isdrawing = 1;
 #if USEWAYLAND
     if (protocol) {
-        drawmenu_layer();
-
-#if USEIMAGE
-        drawimage();
-#endif
         if (listfile) {
             readstdin();
 
@@ -616,15 +618,16 @@ void drawmenu(void) {
                         currentitem = nextitem;
                     }
                 }
-
-                drawmenu_layer();
             }
         }
 
-        wl_surface_set_buffer_scale(state.surface, 1);
-        wl_surface_attach(state.surface, state.buffer, 0, 0);
-        wl_surface_damage(state.surface, 0, 0, state.width, state.height);
-        wl_surface_commit(state.surface);
+        drawmenu_layer();
+
+#if USEIMAGE
+        drawimage();
+#endif
+
+        commit_drawable(&state);
     } else {
 #endif
 #if USEX
@@ -641,11 +644,19 @@ void drawmenu(void) {
                 }
             }
         }
+
         drawmenu_layer();
+
+#if USEIMAGE
+        drawimage();
+#endif
+        draw_map(draw, win, 0, 0, sp.mw, sp.mh);
 #endif
 #if USEWAYLAND
     }
 #endif
+
+    sp.isdrawing = 0;
 }
 
 void drawmenu_layer(void) {
@@ -739,11 +750,4 @@ void drawmenu_layer(void) {
                 w
         );
     }
-
-#if USEX
-#if USEIMAGE
-    drawimage();
-#endif
-    draw_map(draw, win, 0, 0, sp.mw, sp.mh);
-#endif
-    }
+}

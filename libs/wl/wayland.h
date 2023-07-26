@@ -124,7 +124,8 @@ static void output_geometry(void *data, struct wl_output *wl_output, int32_t x, 
 static void output_mode(void *data, struct wl_output *wl_output, uint32_t flags, int32_t width, int32_t height, int32_t refresh);
 static void layer_surface_configure(void *data, struct zwlr_layer_surface_v1 *surface, uint32_t serial, uint32_t width, uint32_t height);
 static void layer_surface_closed(void *data, struct zwlr_layer_surface_v1 *surface);
-static void draw_sf(struct state *state);
+static void create_drawable(struct state *state);
+static void commit_drawable(struct state *state);
 static void global_handler(void *data, struct wl_registry *registry, uint32_t name, const char *interface, uint32_t version);
 static void seat_capabilities(void *data, struct wl_seat *seat, enum wl_seat_capability caps);
 static void surface_enter(void *data, struct wl_surface *surface, struct wl_output *wl_output);

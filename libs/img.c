@@ -366,7 +366,7 @@ void resizetoimageheight_x11(int imageheight) {
         jumptoindex(i);
     }
 
-    drawmenu_layer();
+    drawmenu();
 }
 #endif
 

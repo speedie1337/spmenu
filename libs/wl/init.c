@@ -58,7 +58,7 @@ void handle_wl(void) {
     roundtrip(&state);
 
     match();
-    draw_sf(&state);
+    create_drawable(&state);
 
     while (wl_display_dispatch(state.display) != -1) {
     }

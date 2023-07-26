@@ -38,36 +38,36 @@ struct wl_buffer *create_buffer(struct state *state) {
  * PLEASE submit a patch if you have an improvement.
  */
 int is_correct_modifier(struct state *state, char *modifier) {
-    int altPress = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_ALT, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
-    int shiftPress = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_SHIFT, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
-    int ctrlPress = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_CTRL, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
-    int logoPress = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_LOGO, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
+    int alt_pressed = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_ALT, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
+    int shift_pressed = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_SHIFT, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
+    int ctrl_pressed = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_CTRL, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
+    int logo_pressed = xkb_state_mod_name_is_active(state->xkb_state, XKB_MOD_NAME_LOGO, XKB_STATE_MODS_DEPRESSED | XKB_STATE_MODS_LATCHED);
 
-    if (!strcmp(modifier, WL_CtrlShift) && shiftPress && ctrlPress) {
+    if (!strcmp(modifier, WL_CtrlShift) && shift_pressed && ctrl_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlShiftSuper) && shiftPress && ctrlPress && logoPress) {
+    } else if (!strcmp(modifier, WL_CtrlShiftSuper) && shift_pressed && ctrl_pressed && logo_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlSuper) && ctrlPress && logoPress) {
+    } else if (!strcmp(modifier, WL_CtrlSuper) && ctrl_pressed && logo_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlAlt) && altPress && ctrlPress) {
+    } else if (!strcmp(modifier, WL_CtrlAlt) && alt_pressed && ctrl_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlAltShift) && ctrlPress && altPress && shiftPress) {
+    } else if (!strcmp(modifier, WL_CtrlAltShift) && ctrl_pressed && alt_pressed && shift_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlAltShiftSuper) && ctrlPress && altPress && shiftPress && logoPress) {
+    } else if (!strcmp(modifier, WL_CtrlAltShiftSuper) && ctrl_pressed && alt_pressed && shift_pressed && logo_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_CtrlAltSuper) && ctrlPress && altPress && logoPress) {
+    } else if (!strcmp(modifier, WL_CtrlAltSuper) && ctrl_pressed && alt_pressed && logo_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_AltShift) && altPress && shiftPress) {
+    } else if (!strcmp(modifier, WL_AltShift) && alt_pressed && shift_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_Shift) && shiftPress) {
+    } else if (!strcmp(modifier, WL_Shift) && shift_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_Ctrl) && ctrlPress) {
+    } else if (!strcmp(modifier, WL_Ctrl) && ctrl_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_Alt) && altPress) {
+    } else if (!strcmp(modifier, WL_Alt) && alt_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_Super) && logoPress) {
+    } else if (!strcmp(modifier, WL_Super) && logo_pressed) {
         return 0;
-    } else if (!strcmp(modifier, WL_None) && !altPress && !shiftPress && !ctrlPress && !logoPress) {
+    } else if (!strcmp(modifier, WL_None) && !alt_pressed && !shift_pressed && !ctrl_pressed && !logo_pressed) {
         return 0;
     }
 
@@ -288,18 +288,18 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
         yp = 1;
     }
 
-    click = ClickWindow; // clicking anywhere, we use this and override it if we clicked on something specific
+    click = ClickWindow; // Clicking anywhere, we use this and override it if we clicked on something specific
 
-    // check click position and override the value of click
-    if (yp && ex < x + sp.promptw + powerlineprompt ? sp.plw : 0) { // prompt
+    // Check click position and override the value of click
+    if (yp && ex < x + sp.promptw + powerlineprompt ? sp.plw : 0) {
         click = ClickPrompt;
-    } else if (yp && (ex > sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsw) { // caps lock indicator
+    } else if (yp && (ex > sp.mw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) && !hidecaps && capsw) {
         click = ClickCaps;
-    } else if (yp && ex > sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // mode indicator
+    } else if (yp && ex > sp.mw - modew - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) {
         click = ClickMode;
-    } else if (yp && ex > sp.mw - modew - numberw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) { // match count
+    } else if (yp && ex > sp.mw - modew - numberw - capsw - 2 * sp.sp - 2 * borderwidth - menumarginh) {
         click = ClickNumber;
-    } else if (yp && !hideinput) { // input
+    } else if (yp && !hideinput) {
         w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
 
         if ((lines <= 0 && ex >= 0 && ex <= x + w + sp.promptw +
@@ -316,7 +316,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
     }
 #endif
 
-    // item click
+    // It's an item click
     if (lines > 0) {
         w = sp.mw - x;
 
@@ -345,7 +345,7 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
 #endif
             }
         }
-    } else if (matches) { // a single line, meaning it could be arrows too, so we check that here
+    } else if (matches) { // Single line
         x += sp.inputw;
         w = larroww;
 
@@ -355,22 +355,20 @@ void buttonpress_wl(uint32_t button, double ex, double ey) {
             }
         }
 
-        // right arrow
         w = rarroww;
         x = sp.mw - w;
+
         if (nextitem && ex >= x && ex <= x + w) {
             click = ClickRArrow;
         }
     }
 
-    // go through mouse button array and run function
     for (i = 0; i < LENGTH(wl_buttons); i++) {
         if (sp.ignoreglobalmouse) break;
         if ((click == wl_buttons[i].click || wl_buttons[i].click == ClickNone) && wl_buttons[i].func && wl_buttons[i].button == button)
             wl_buttons[i].func(&wl_buttons[i].arg);
     }
 
-    // go through mouse config array and run function
     for (i = 0; i < LENGTH(wl_cbuttons); i++) {
         if (sp.ignoreconfmouse) break;
         if ((click == wl_cbuttons[i].click || wl_cbuttons[i].click == ClickNone) && wl_cbuttons[i].func && wl_cbuttons[i].button == button)
@@ -462,7 +460,7 @@ void zero() {
     // Nothing.
 }
 
-void draw_sf(struct state *state) {
+void create_drawable(struct state *state) {
     if (!allow_draw) { // No drawing if disabled
         return;
     }
@@ -479,13 +477,7 @@ void draw_sf(struct state *state) {
     }
 
     draw_create_surface_wl(draw, state->data, state->width, state->height);
-
-    drawmenu_layer();
-
-    wl_surface_set_buffer_scale(state->surface, 1);
-	wl_surface_attach(state->surface, state->buffer, 0, 0);
-	wl_surface_damage(state->surface, 0, 0, state->width, state->height);
-	wl_surface_commit(state->surface);
+    drawmenu();
 }
 
 void global_handler(void *data, struct wl_registry *registry, uint32_t name, const char *interface, uint32_t version) {
@@ -519,7 +511,14 @@ void surface_enter(void *data, struct wl_surface *surface, struct wl_output *wl_
     state->output = wl_output_get_user_data(wl_output);
 
     match();
-    draw_sf(state);
+    create_drawable(state);
+}
+
+void commit_drawable(struct state *state) {
+    wl_surface_set_buffer_scale(state->surface, 1);
+    wl_surface_attach(state->surface, state->buffer, 0, 0);
+    wl_surface_damage(state->surface, 0, 0, state->width, state->height);
+    wl_surface_commit(state->surface);
 }
 
 int roundtrip(struct state *state) {
@@ -577,7 +576,6 @@ void resizeclient_wl(struct state *state) {
     int mh = sp.mh;
     int ic = 0;
 
-    // walk through all items
     for (item = items; item && item->text; item++)
         ic++;
 
@@ -611,10 +609,7 @@ void resizeclient_wl(struct state *state) {
     draw_create_surface_wl(draw, state->data, state->width, state->height);
 
     set_layer_size(state, state->width, state->height);
-    wl_surface_set_buffer_scale(state->surface, 1);
-	wl_surface_attach(state->surface, state->buffer, 0, 0);
-	wl_surface_damage(state->surface, 0, 0, state->width, state->height);
-	wl_surface_commit(state->surface);
+    commit_drawable(state);
 }
 
 /* It is advised you call this function right before calling init_disp()

@@ -131,6 +131,7 @@ struct sp {
     int mode; // current mode
     int allowkeys; // interpret a keypress as an insertion?
     int capslockstate; // caps lock state
+    int isdrawing;
 
     int inputw; // input width
     int promptw; // prompt width
@@ -609,6 +610,7 @@ void handle(void) {
         set_mode();
 
         init_appearance(); // init colorschemes by reading arrays
+
         setupdisplay_x11(); // set up display and create window
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
 #endif
