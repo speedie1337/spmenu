@@ -132,6 +132,7 @@ static void surface_enter(void *data, struct wl_surface *surface, struct wl_outp
 static void keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t format, int32_t fd, uint32_t size);
 static void keyboard_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t _key_state);
 static void keyboard_modifiers(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group);
+static void keyboard_repeat(struct state *state);
 static void keyboard_repeat_info(void *data, struct wl_keyboard *wl_keyboard, int32_t rate, int32_t delay);
 static void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_keysym_t sym);
 static void pointer_button_handler(void *data, struct wl_pointer *pointer, uint32_t serial, uint32_t time, uint32_t button, uint32_t state);
@@ -142,6 +143,8 @@ static int is_correct_modifier(struct state *state, char *modifier);
 static int roundtrip(struct state *state);
 static int init_disp(struct state *state);
 static int connect_display(struct state *state);
+static int disconnect_display(struct state *state);
+static int await_dispatch(struct state *state);
 static int init_keys(struct state *state);
 static int create_layer(struct state *state, char *name);
 static int anchor_layer(struct state *state, int position);

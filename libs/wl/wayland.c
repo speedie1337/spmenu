@@ -161,9 +161,9 @@ void keypress_wl(struct state *state, enum wl_keyboard_key_state key_state, xkb_
         } else {
             sp.allowkeys = !sp.allowkeys;
         }
-
-        drawmenu();
     }
+
+    drawmenu();
 }
 
 void keyboard_modifiers(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group) {
@@ -194,6 +194,17 @@ void keyboard_repeat_info(void *data, struct wl_keyboard *wl_keyboard, int32_t r
 	} else {
 		state->period = -1;
 	}
+}
+
+void keyboard_repeat(struct state *state) {
+    keypress_wl(state, state->repeat_key_state, state->repeat_sym);
+
+    struct itimerspec spec = { 0 };
+
+    spec.it_value.tv_sec = state->period / 1000;
+	spec.it_value.tv_nsec = (state->period % 1000) * 1000000l;
+
+	timerfd_settime(state->timer, 0, &spec, NULL);
 }
 
 void keyboard_key(void *data, struct wl_keyboard *wl_keyboard, uint32_t serial, uint32_t time, uint32_t key, uint32_t _key_state) {
@@ -537,6 +548,49 @@ int connect_display(struct state *state) {
     } else {
         return 1;
     }
+}
+
+int disconnect_display(struct state *state) {
+    wl_display_disconnect(state->display);
+
+    return 0;
+}
+
+int await_dispatch(struct state *state) {
+    struct pollfd fds[] = {
+        { wl_display_get_fd(state->display), POLLIN, 0 },
+		{ state->timer, POLLIN, 0 },
+	};
+
+    const int nfds = sizeof(fds) / sizeof(*fds);
+
+    for (;;) {
+        errno = 0;
+
+        do {
+			if (wl_display_flush(state->display) == -1 && errno != EAGAIN) {
+				fprintf(stderr, "spmenu: wl_display_flush failed: %s\n", strerror(errno));
+				break;
+			}
+		} while (errno == EAGAIN);
+
+        if (poll(fds, nfds, -1) < 0) {
+			fprintf(stderr, "spmenu: poll failed: %s\n", strerror(errno));
+			break;
+		}
+
+		if (fds[0].revents & POLLIN) {
+			if (wl_display_dispatch(state->display) < 0) {
+                break;
+			}
+		}
+
+		if (fds[1].revents & POLLIN) {
+			keyboard_repeat(state);
+		}
+    }
+
+    return 0;
 }
 
 /* If this function returns 1, something went wrong.

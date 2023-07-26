@@ -60,8 +60,7 @@ void handle_wl(void) {
     match();
     create_drawable(&state);
 
-    while (wl_display_dispatch(state.display) != -1) {
-    }
+    await_dispatch(&state);
 
-    wl_display_disconnect(state.display);
+    disconnect_display(&state);
 }
