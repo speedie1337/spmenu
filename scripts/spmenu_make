@@ -18,7 +18,7 @@ static=${static:-false}
 
 clean() {
     clean_headers
-    rm -rf ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD build/
+    rm -rf ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD spmenu-*.ebuild build/
 }
 
 check_correct_dir() {
@@ -137,7 +137,20 @@ gen_pkg() {
 
     rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
     mkdir -p spmenu-${version}
-    cp -rf LICENSE meson.build meson_options.txt *.c spmenu.1 spmenu_run.1 spmenu_test.1 scripts/ docs/ libs/ protocols/ PKGBUILD "spmenu-${version}"
+    cp -rf \
+	    LICENSE \
+	    meson.build \
+	    meson_options.txt \
+	    *.c \
+	    spmenu.1 \
+	    spmenu_run.1 \
+	    spmenu_test.1 \
+	    scripts/ \
+	    docs/ \
+	    libs/ \
+	    protocols/ \
+	    packaging \
+	    "spmenu-${version}"
     tar -cf spmenu-${version}.tar spmenu-${version}
     gzip spmenu-${version}.tar
     rm -rf spmenu-${version}
@@ -155,19 +168,36 @@ gen_pkg() {
     fi
 }
 
+gen_gentoo_pkg() {
+    if [ -f "packaging/spmenu.ebuild" ]; then
+	cp packaging/spmenu.ebuild spmenu-${version}.ebuild
+
+	if [ -x "$(command -v gpg)" ]; then
+	    gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.ebuild
+	fi
+
+	if [ -x "$(command -v md5sum)" ]; then
+	    md5sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.md5
+	fi
+
+	if [ -x "$(command -v sha256sum)" ]; then
+	    sha256sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.sha256
+	fi
+    fi
+}
+
 gen_arch_pkg() {
     [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     [ ! -x "$(command -v makepkg)" ] && printf "makepkg required for this action.\n" && exit 1
-    [ -f PKGBUILD ] || exit 1
+    [ -f "packaging/PKGBUILD" ] || exit 1
 
     gen_pkg
 
-    cp -f PKGBUILD PKGBUILD.orig
-    sed "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g; s/SHA256SUM/$(sha256sum *.tar.gz | cut -d ' ' -f 1)/g" PKGBUILD > .PKGBUILD && mv .PKGBUILD PKGBUILD
+    sed "s/VERSION/${version}/g; s/MD5SUM/$(md5sum *.tar.gz | cut -d ' ' -f 1)/g; s/SHA256SUM/$(sha256sum *.tar.gz | cut -d ' ' -f 1)/g" packaging/PKGBUILD > .PKGBUILD && mv .PKGBUILD PKGBUILD
     makepkg -sfr --sign || exit 1
     rm -rf src/ pkg/
 
-    cp PKGBUILD spmenu-${version}.PKGBUILD; mv -f PKGBUILD.orig PKGBUILD
+    mv PKGBUILD spmenu-${version}.PKGBUILD
 
     if [ -x "$(command -v md5sum)" ]; then
         md5sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.md5
@@ -335,6 +365,7 @@ $0 dist          Create a distro package for spmenu
 $0 arglist       Create an argument list for spmenu based on spmenu -h output
 $0 kblist        Create a keybind list in markdown column format based on keybinds.h
 $0 pkg_arch      Create a Arch package for spmenu
+$0 pkg_gentoo    Create a Gentoo package for spmenu
 $0 theme <theme> Create a theme for spmenu based on 18 colors
 $0 docs          Generate documentation such as man pages for spmenu
 $0 headers       Generate headers using wayland-scanner
@@ -350,6 +381,7 @@ main() {
         "arglist") action="arglist" ;;
         "kblist") action="kblist" ;;
         "pkg_arch") action="arch" ;;
+	"pkg_gentoo") action="gentoo" ;;
         "help") action="help" ;;
         "install") action="install" ;;
         "theme") action="theme" ;;
@@ -371,6 +403,7 @@ main() {
         "build") build ;;
         "install") install ;;
         "arch") gen_arch_pkg ;;
+	"gentoo") gen_gentoo_pkg ;;
         "theme") generate_theme "$2" ;;
         "kblist") kblist "libs/keybinds.h" ;;
         "help") help ;;
