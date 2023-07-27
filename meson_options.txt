@@ -7,3 +7,7 @@ option('xresources', type : 'boolean', value : true, description : 'Enable .Xres
 option('fribidi', type : 'boolean', value : true, description : 'Enable Right-to-left language support')
 option('libconfig', type : 'boolean', value : true, description : 'Enable configuration file support')
 option('regex', type : 'boolean', value : true, description : 'Enable regex matching')
+option('run', type : 'boolean', value : true, description : 'Install spmenu_run')
+option('test', type : 'boolean', value : true, description : 'Install spmenu_test')
+option('man', type : 'boolean', value : true, description : 'Install man page')
+option('docs', type : 'boolean', value : true, description : 'Install documentation')

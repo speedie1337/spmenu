@@ -94,18 +94,32 @@ project_target = executable(
   c_args : build_args,
 )
 
-install_man('spmenu.1')
-install_man('spmenu_run.1')
-install_man('spmenu_test.1')
-install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
-install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
-install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')
-install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')
-install_data(sources : 'docs/spmenu.svg', install_dir : 'share/icons/hicolor/scalable/apps')
-install_data(sources : 'scripts/spmenu_run', install_dir : 'bin')
-install_data(sources : 'scripts/spmenu_path', install_dir : 'bin')
-install_data(sources : 'scripts/spmenu_fm', install_dir : 'bin')
-install_data(sources : 'scripts/spmenu_desktop', install_dir : 'bin')
-install_data(sources : 'scripts/spmenu_test', install_dir : 'bin')
+if get_option('man') and get_option('docs')
+  install_man('spmenu.1')
+  install_man('spmenu_test.1')
+
+  if get_option('run') and get_option('docs')
+    install_man('spmenu_run.1')
+  endif
+endif
+
+if get_option('docs')
+  install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
+  install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
+  install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')
+  install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')
+  install_data(sources : 'docs/spmenu.svg', install_dir : 'share/icons/hicolor/scalable/apps')
+endif
+
+if get_option('run')
+  install_data(sources : 'scripts/spmenu_run', install_dir : 'bin')
+  install_data(sources : 'scripts/spmenu_path', install_dir : 'bin')
+  install_data(sources : 'scripts/spmenu_fm', install_dir : 'bin')
+  install_data(sources : 'scripts/spmenu_desktop', install_dir : 'bin')
+endif
+
+if get_option('test')
+  install_data(sources : 'scripts/spmenu_test', install_dir : 'bin')
+endif
 
 test('spmenu', project_target)
