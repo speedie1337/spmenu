@@ -19,12 +19,16 @@ void readargs(int argc, char *argv[]) {
             loadconfig = 0;
         } else if (!strcmp(argv[j], "-ltm") || (!strcmp(argv[j], "--load-theme"))) {
             loadtheme = 1;
+            theme_override = 1;
         } else if (!strcmp(argv[j], "-nltm") || (!strcmp(argv[j], "--no-load-theme"))) {
             loadtheme = 0;
+            theme_override = 1;
         } else if (!strcmp(argv[j], "-lbi") || (!strcmp(argv[j], "--load-binds"))) {
             loadbinds = 1;
+            binds_override = 1;
         } else if (!strcmp(argv[j], "-nlbi") || (!strcmp(argv[j], "--no-load-binds"))) {
             loadbinds = 0;
+            binds_override = 1;
         } else if (!strcmp(argv[j], "-x11") || (!strcmp(argv[j], "--x11"))) {
             protocol = 0;
             protocol_override = 1;

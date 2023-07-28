@@ -664,8 +664,14 @@ void conf_init(void) {
             config_setting_t *conf = config_setting_get_elem(file_setting, i);
 
             // look up
-            config_setting_lookup_int(conf, "theme", &loadtheme); // spmenu.file.theme
-            config_setting_lookup_int(conf, "binds", &loadbinds); // spmenu.file.binds
+            if (!theme_override) {
+                config_setting_lookup_int(conf, "theme", &loadtheme); // spmenu.file.theme
+            }
+
+            if (!binds_override) {
+                config_setting_lookup_int(conf, "binds", &loadbinds); // spmenu.file.binds
+            }
+
             config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
             config_setting_lookup_int(conf, "xresources", &xresources); // spmenu.file.xresources
 

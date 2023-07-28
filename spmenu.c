@@ -225,9 +225,12 @@ static Draw_t *draw; // Draw_t type, see libs/draw/draw.c
 static int hplength = 0;
 static char **hpitems = NULL;
 
+static int theme_override = 0;
+static int binds_override = 0;
+static int protocol_override = 0;
+
 static int *sel_index = NULL;
 static unsigned int sel_size = 0;
-static int protocol_override = 0;
 static int itemn = 0;
 
 #if USERTL
