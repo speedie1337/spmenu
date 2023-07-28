@@ -470,19 +470,16 @@ void insert(const char *str, ssize_t n) {
     int capsw = 0;
 
     // add width
-    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
-    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+    if (!hidelarrow) larroww = TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = TEXTW(rightarrow);
+    if (!hidemode) modew = MAX(MAX(TEXTW(normtext), TEXTW(instext)), TEXTW(regextext));
+    if (!hiderarrow) rarroww = TEXTW(rightarrow);
+    if (!hidematchcount) numberw = TEXTW(tx.numbers);
+    if (!hidecaps) capsw = MAX(TEXTW(capslockontext), TEXTW(capslockofftext));
 
-    if (!strcmp(tx.capstext, ""))
-        capsw = 0;
-
-    if (n + TEXTW(tx.text) >= sp.inputw && selecteditem) {
+    if (TEXTW(str) + TEXTW(tx.text) >= sp.inputw && selecteditem) {
         return;
-    } else if (n + TEXTW(tx.text) >= sp.mw - (sp.promptw + (!lines ? larroww : 0) + (!lines ? rarroww : 0) + modew + numberw + capsw + menumarginh)) {
+    } else if (TEXTW(str) + TEXTW(tx.text) >= sp.mw - (sp.promptw + (!lines ? larroww : 0) + (!lines ? rarroww : 0) + modew + numberw + capsw + menumarginh)) {
         return;
     }
 
