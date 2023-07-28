@@ -383,11 +383,11 @@ void calcoffsets(void) {
 
     if (lines > 0) {
         offset = lines * columns * sp.bh;
+        sp.maxlen = sp.mw - (sp.promptw + modew + numberw + capsw + menumarginh);
     } else { // no lines, therefore the size of items must be decreased to fit the menu elements
         offset = sp.mw - (sp.promptw + sp.inputw + larroww + rarroww + modew + numberw + capsw + menumarginh);
+        sp.maxlen = selecteditem ? sp.inputw : sp.mw - (sp.promptw + modew + numberw + capsw + (selecteditem ? larroww : 0) + (selecteditem ? rarroww : 0));
     }
-
-    sp.maxlen = sp.mw - (sp.promptw + modew + numberw + capsw + menumarginh);
 
     // calculate which items will begin the next page
     for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) {
