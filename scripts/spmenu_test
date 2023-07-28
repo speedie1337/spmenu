@@ -186,4 +186,4 @@ printf "\n<big><u>The End</u></big>\n"
 printf "\nIf spmenu displayed 16 colors, 256 colors and true color (full RGB spectrum) as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
 }
 
-main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 41 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>"
+main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 41 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>" > /dev/null
