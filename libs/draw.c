@@ -473,10 +473,23 @@ int drawinput(int x, int y, int w) {
         free(censort);
     } else if (!passwd) {
         if (strlen(tx.text)) {
-            apply_fribidi(tx.text);
-            draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : tx.text, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
+            char ptext[BUFSIZ];
+            char *p;
 
-            curpos = TEXTW(tx.text) - TEXTW(&tx.text[sp.cursor]);
+            memcpy(ptext, tx.text, BUFSIZ);
+
+            p = ptext;
+
+            while (TEXTW(p) > sp.maxlen) {
+                p++;
+            }
+
+            memmove(ptext, p, strlen(p) + 1);
+
+            apply_fribidi(ptext);
+            draw_text(draw, x, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : ptext, 0, pango_input ? True : False, col_inputfg, col_inputbg, alpha_inputfg, alpha_inputbg);
+
+            curpos = TEXTW(ptext) - TEXTW(&ptext[sp.cursor]);
         } else if (!hidepretext && pretext != NULL) {
             apply_fribidi(pretext);
             draw_text(draw, x + fw, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : pretext, 0, pango_pretext ? True : False, col_pretextfg, col_pretextbg, alpha_pretextfg, alpha_pretextbg);

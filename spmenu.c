@@ -141,6 +141,8 @@ struct sp {
     int listcount;
     int listchanged;
 
+    int maxlen; // max length of text
+
     size_t cursor; // cursor width
 
     int ignoreconfkeys; // can be set globally if you don't want to override keybinds with config file keys
@@ -363,28 +365,29 @@ void recalculatenumbers(void) {
 
 void calcoffsets(void) {
     int i, offset;
+    int numberw = 0;
+    int modew = 0;
+    int larroww = 0;
+    int rarroww = 0;
+    int capsw = 0;
+
+    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+
+    if (!strcmp(tx.capstext, "")) {
+        capsw = 0;
+    }
 
     if (lines > 0) {
         offset = lines * columns * sp.bh;
     } else { // no lines, therefore the size of items must be decreased to fit the menu elements
-        int numberw = 0;
-        int modew = 0;
-        int larroww = 0;
-        int rarroww = 0;
-        int capsw = 0;
-
-        if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
-        if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
-        if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
-        if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
-        if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
-
-        if (!strcmp(tx.capstext, "")) {
-            capsw = 0;
-        }
-
         offset = sp.mw - (sp.promptw + sp.inputw + larroww + rarroww + modew + numberw + capsw + menumarginh);
     }
+
+    sp.maxlen = sp.mw - (sp.promptw + modew + numberw + capsw + menumarginh);
 
     // calculate which items will begin the next page
     for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) {
@@ -462,26 +465,6 @@ void grabfocus(void) {
 void insert(const char *str, ssize_t n) {
     if (strlen(tx.text) + n > sizeof tx.text - 1)
         return; // length of text should not exceed size
-
-    int numberw = 0;
-    int modew = 0;
-    int larroww = 0;
-    int rarroww = 0;
-    int capsw = 0;
-
-    // add width
-    if (!hidelarrow) larroww = TEXTW(leftarrow);
-    if (!hiderarrow) rarroww = TEXTW(rightarrow);
-    if (!hidemode) modew = MAX(MAX(TEXTW(normtext), TEXTW(instext)), TEXTW(regextext));
-    if (!hiderarrow) rarroww = TEXTW(rightarrow);
-    if (!hidematchcount) numberw = TEXTW(tx.numbers);
-    if (!hidecaps) capsw = MAX(TEXTW(capslockontext), TEXTW(capslockofftext));
-
-    if (TEXTW(str) + TEXTW(tx.text) >= sp.inputw && selecteditem) {
-        return;
-    } else if (TEXTW(str) + TEXTW(tx.text) >= sp.mw - (sp.promptw + (!lines ? larroww : 0) + (!lines ? rarroww : 0) + modew + numberw + capsw + menumarginh)) {
-        return;
-    }
 
     static char l[BUFSIZ] = "";
 
