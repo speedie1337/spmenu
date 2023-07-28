@@ -453,7 +453,9 @@ int drawinput(int x, int y, int w) {
     int fw = MAX(2, caretwidth);
     int fp = caretpadding;
 
-    if (fh > sp.bh || !fh) {
+    if (fh > sp.bh) {
+        fh = sp.bh;
+    } else if (!fh) {
         fh = sp.bh - sp.lrpad / 4;
     }
 
