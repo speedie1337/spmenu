@@ -463,6 +463,29 @@ void insert(const char *str, ssize_t n) {
     if (strlen(tx.text) + n > sizeof tx.text - 1)
         return; // length of text should not exceed size
 
+    int numberw = 0;
+    int modew = 0;
+    int larroww = 0;
+    int rarroww = 0;
+    int capsw = 0;
+
+    // add width
+    if (!hidelarrow) larroww = pango_leftarrow ? TEXTWM(leftarrow) : TEXTW(leftarrow);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidemode) modew = pango_mode ? TEXTWM(tx.modetext) : TEXTW(tx.modetext);
+    if (!hiderarrow) rarroww = pango_rightarrow ? TEXTWM(rightarrow) : TEXTW(rightarrow);
+    if (!hidematchcount) numberw = pango_numbers ? TEXTWM(tx.numbers) : TEXTW(tx.numbers);
+    if (!hidecaps) capsw = pango_caps ? TEXTWM(tx.capstext) : TEXTW(tx.capstext);
+
+    if (!strcmp(tx.capstext, ""))
+        capsw = 0;
+
+    if (n + TEXTW(tx.text) >= sp.inputw && selecteditem) {
+        return;
+    } else if (n + TEXTW(tx.text) >= sp.mw - (sp.promptw + (!lines ? larroww : 0) + (!lines ? rarroww : 0) + modew + numberw + capsw + menumarginh)) {
+        return;
+    }
+
     static char l[BUFSIZ] = "";
 
     if (requirematch) {
