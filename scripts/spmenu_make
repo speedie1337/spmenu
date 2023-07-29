@@ -18,7 +18,7 @@ static=${static:-false}
 
 clean() {
     clean_headers
-    rm -rf ./*.zst* ./*.tar* ./*.sig* spmenu-*.PKGBUILD spmenu-*.ebuild build/
+    rm -rf ./*.zst* ./*.tar* ./*.sig* *.PKGBUILD *.ebuild build/
 }
 
 check_correct_dir() {
@@ -169,20 +169,23 @@ gen_pkg() {
 }
 
 gen_gentoo_pkg() {
+    [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
+    version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
+
     if [ -f "packaging/spmenu.ebuild" ]; then
-	cp packaging/spmenu.ebuild spmenu-${version}.ebuild
+        cp packaging/spmenu.ebuild spmenu-${version}.ebuild
 
-	if [ -x "$(command -v gpg)" ]; then
-	    gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.ebuild
-	fi
+        if [ -x "$(command -v gpg)" ]; then
+            gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.ebuild
+        fi
 
-	if [ -x "$(command -v md5sum)" ]; then
-	    md5sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.md5
-	fi
+        if [ -x "$(command -v md5sum)" ]; then
+            md5sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.md5
+        fi
 
-	if [ -x "$(command -v sha256sum)" ]; then
-	    sha256sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.sha256
-	fi
+        if [ -x "$(command -v sha256sum)" ]; then
+            sha256sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.sha256
+        fi
     fi
 }
 
