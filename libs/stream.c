@@ -1,58 +1,65 @@
 /* See LICENSE file for copyright and license details. */
 
 void readstdin(void) {
-	char *line = NULL;
-	size_t i, junk, size = 0;
-	ssize_t len;
-#if USEIMAGE
-    int oneitem = 0;
-#endif
+    char buf[sizeof tx.text], *p;
+    size_t i, itemsiz = 0;
+    unsigned int tmpmax = 0;
 
-    if (passwd) { // -P: No items should be displayed
+    if (passwd) {
         sp.inputw = lines = 0;
         return;
     }
 
-    if (listfile) { // -lf: List file is used so no need to read stdin
+    if (listfile) {
         readfile();
         return;
     }
 
-	/* read each line from stdin and add it to the item list */
-	for (i = 0; (len = getline(&line, &junk, stdin)) != -1; i++, line = NULL) {
-		if (i + 1 >= size / sizeof *items)
-			if (!(items = realloc(items, (size += BUFSIZ))))
-				die("cannot realloc %zu bytes:", size);
-		if (line[len - 1] == '\n')
-			line[len - 1] = '\0';
+    int o = 0;
 
-		items[i].text = line;
-        items[i].index = i;
+    // read each line from stdin and add it to the item list
+    for (i = 0; fgets(buf, sizeof buf, stdin); i++) {
+        if (i + 1 >= itemsiz) {
+            itemsiz += 256;
+            if (!(items = realloc(items, itemsiz * sizeof(*items))))
+                die("spmenu: cannot realloc %zu bytes:", itemsiz * sizeof(*items));
+        }
+        if ((p = strchr(buf, '\n')))
+            *p = '\0';
+        if (!(items[i].text = strdup(buf)))
+            die("spmenu: cannot strdup %u bytes:", strlen(buf) + 1);
         items[i].hp = arrayhas(hpitems, hplength, items[i].text);
-
-        if (parsemarkup(i)) {
-#if USEIMAGE
-            oneitem = 1;
-#endif
+        draw_font_getexts(draw->font, buf, strlen(buf), &tmpmax, NULL, True);
+        if (tmpmax > sp.inputw) {
+            sp.inputw = tmpmax;
         }
 
-	}
-    free(line);
+        items[i].index = i;
 
-	if (items) {
-		items[i].text = NULL;
+        if (parsemarkup(i)) {
+            o = 1;
+        }
+
+#if !USEIMAGE
+        if (o) {
+            ;
+        }
+#endif
+    }
+
+#if USEIMAGE
+    if (!o) img.longestedge = img.imagegaps = 0;
+#endif
+
+    // clean
+    if (items) {
+        items[i].text = NULL;
 #if USEIMAGE
         items[i].image = NULL;
 #endif
     }
 
-#if USEIMAGE
-    if (!oneitem) {
-        img.longestedge = img.imagegaps = 0;
-    }
-#endif
-
-	lines = MIN(lines, i);
+    lines = MIN(lines, i);
 }
 
 void readfile(void) {
@@ -193,7 +200,5 @@ int parsemarkup(int index) {
             items[index].text += strlen("img://")+strlen(data)+1;
         }
     }
-
-    return 0;
 #endif
 }
