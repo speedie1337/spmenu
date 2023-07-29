@@ -58,35 +58,6 @@ docs() {
     fi
 }
 
-kblist() {
-grep "{ " "$1" | \
-grep -v "[*]" | \
-sed "s/{.i = //g; s/{.c = //g; s/{.f = //g; s/{0} }/0/g; s/ } }//g; s/,//g; s/{ //g; s/^\s*//g; s/XK_//g; s/|/+/g" > /tmp/data
-
-cat << EOF > /tmp/wipdata
-| Mode               | Modifier           | Key                | Function           | Argument           |
-| :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
-EOF
-
-i=1
-
-while true; do
-    len="$(grep -c "" /tmp/data)"
-    mode="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $1 }')")"
-    mod="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $2 }')")"
-    key="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $3 }')")"
-    func="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $4 }')")"
-    arg="$(printf '%-18s' "$(sed -n ${i},${i}p /tmp/data | awk '{ print $5 }')")"
-cat << EOF >> /tmp/wipdata
-| $mode | $mod | $key | $func | $arg |
-EOF
-    [ "$i" = "$len" ] && break
-    i=$((i+1))
-done
-cat /tmp/wipdata
-rm -f /tmp/wipdata /tmp/data
-}
-
 headers() {
     [ ! -x "$(command -v wayland-scanner)" ] && printf "wayland-scanner must be installed for this action.\n" && exit 1
 
@@ -366,7 +337,6 @@ $0 install       Install spmenu
 $0 clean         Remove tarballs and pacman packages
 $0 dist          Create a distro package for spmenu
 $0 arglist       Create an argument list for spmenu based on spmenu -h output
-$0 kblist        Create a keybind list in markdown column format based on keybinds.h
 $0 pkg_arch      Create a Arch package for spmenu
 $0 pkg_gentoo    Create a Gentoo package for spmenu
 $0 theme <theme> Create a theme for spmenu based on 18 colors
@@ -382,7 +352,6 @@ main() {
         "clean") action="clean" ;;
         "dist") action="dist" ;;
         "arglist") action="arglist" ;;
-        "kblist") action="kblist" ;;
         "pkg_arch") action="arch" ;;
 	    "pkg_gentoo") action="gentoo" ;;
         "help") action="help" ;;
@@ -408,7 +377,6 @@ main() {
         "arch") gen_arch_pkg ;;
 	    "gentoo") gen_gentoo_pkg ;;
         "theme") generate_theme "$2" ;;
-        "kblist") kblist "libs/keybinds.h" ;;
         "help") help ;;
         "arglist") gen_arg_list ;;
         "dist") gen_pkg ;;

@@ -271,10 +271,84 @@ static size_t listsize;
 
 // user configuration
 #include "libs/options.h"
-#include "libs/keybinds.h"
-#include "libs/mouse.h"
 
 static char *fonts[] = { font };
+
+#if USEX
+static Key keys[] = {
+    { -1,      0,              XK_Return,    selectitem,      {.i = +1 } },
+    { -1,      Shift,          XK_Return,    selectitem,      {0} },
+    { -1,      Ctrl,           XK_Return,    markitem,        {0} },
+    { -1,      0,              XK_Tab,       complete,        {0} },
+    { -1,      Ctrl,           XK_v,         paste,           {.i = 2  } },
+    { -1,      0,              XK_BackSpace, backspace,       {0} },
+    { -1,      Ctrl,           XK_BackSpace, deleteword,      {0} },
+    { -1,      Ctrl|Shift,     XK_p,         setprofile,      {0} },
+    { -1,      0,              XK_Print,     screenshot,      {0} },
+    { -1,      Ctrl,           XK_equal,     setimgsize,      {.i = +10 } },
+    { -1,      Ctrl,           XK_minus,     setimgsize,      {.i = -10 } },
+    { -1,      0,              XK_Up,        moveup,          {0} },
+    { -1,      0,              XK_Down,      movedown,        {0} },
+    { -1,      0,              XK_Left,      moveleft,        {0} },
+    { -1,      0,              XK_Right,     moveright,       {0} },
+    { -1,      Ctrl,           XK_u,         moveup,          {.i = 5  } },
+    { -1,      Ctrl,           XK_d,         movedown,        {.i = 5  } },
+    { -1,      Shift,          XK_h,         viewhist,        {0} },
+    { -1,      0,              XK_Escape,    quit,            {0} },
+    { -1,      Ctrl,           XK_p,         navhistory,      {.i = -1 } },
+    { -1,      Ctrl,           XK_n,         navhistory,      {.i = +1 } },
+};
+#endif
+#if USEWAYLAND
+static WlKey wl_keys[] = {
+    { -1,      WL_None,              XKB_KEY_Return,    selectitem,      {.i = +1 } },
+    { -1,      WL_Shift,             XKB_KEY_Return,    selectitem,      {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_Return,    markitem,        {0} },
+    { -1,      WL_None,              XKB_KEY_Tab,       complete,        {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_v,         paste,           {.i = 2  } },
+    { -1,      WL_None,              XKB_KEY_BackSpace, backspace,       {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_BackSpace, deleteword,      {0} },
+    { -1,      WL_CtrlShift,         XKB_KEY_p,         setprofile,      {0} },
+    { -1,      WL_None,              XKB_KEY_Print,     screenshot,      {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_equal,     setimgsize,      {.i = +10 } },
+    { -1,      WL_Ctrl,              XKB_KEY_minus,     setimgsize,      {.i = -10 } },
+    { -1,      WL_None,              XKB_KEY_Up,        moveup,          {0} },
+    { -1,      WL_None,              XKB_KEY_Down,      movedown,        {0} },
+    { -1,      WL_None,              XKB_KEY_Left,      moveleft,        {0} },
+    { -1,      WL_None,              XKB_KEY_Right,     moveright,       {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_u,         moveup,          {.i = 5  } },
+    { -1,      WL_Ctrl,              XKB_KEY_d,         movedown,        {.i = 5  } },
+    { -1,      WL_Shift,             XKB_KEY_h,         viewhist,        {0} },
+    { -1,      WL_None,              XKB_KEY_Escape,    quit,            {0} },
+    { -1,      WL_Ctrl,              XKB_KEY_p,         navhistory,      {.i = -1 } },
+    { -1,      WL_Ctrl,              XKB_KEY_n,         navhistory,      {.i = +1 } },
+
+};
+#endif
+#if USEX
+static Mouse buttons[] = {
+    { ClickInput,           Button1,         clear,        {0} },
+    { ClickPrompt,          Button1,         clear,        {0} },
+    { ClickMode,            Button1,         switchmode,   {0} },
+    { ClickNumber,          Button1,         viewhist,     {0} },
+    { ClickItem,            Button1,         selecthover,  {0} },
+    { ClickItem,            Button2,         markhover,    {0} },
+    { ClickNone,            Button5,         movenext,     {0} },
+    { ClickNone,            Button4,         moveprev,     {0} },
+};
+#endif
+#if USEWAYLAND
+static WlMouse wl_buttons[] = {
+    { ClickInput,           WL_Left,         clear,        {0} },
+    { ClickPrompt,          WL_Left,         clear,        {0} },
+    { ClickMode,            WL_Left,         switchmode,   {0} },
+    { ClickNumber,          WL_Left,         viewhist,     {0} },
+    { ClickItem,            WL_Left,         selecthover,  {0} },
+    { ClickItem,            WL_Right,        markhover,    {0} },
+    { ClickNone,            WL_Down,         movenext,     {0} },
+    { ClickNone,            WL_Up,           moveprev,     {0} },
+};
+#endif
 
 // color array
 #include "libs/colors.h"
