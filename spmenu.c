@@ -149,7 +149,6 @@ struct sp {
     int ignoreglobalkeys; // should be set in the config file, if 1, the Keys keys array is ignored
     int ignoreconfmouse; // same for mouse
     int ignoreglobalmouse; // same for mouse
-    int forceinsertmode;
 };
 
 struct mo {
@@ -583,10 +582,9 @@ void set_mode(void) {
     }
 
     // normal mode disabled
-    if (sp.forceinsertmode) {
+    if (forceinsertmode) {
         sp.mode = 1;
         sp.allowkeys = 1;
-        hidemode = 1;
     }
 }
 
@@ -603,7 +601,6 @@ void handle(void) {
 #if USEIMAGE
         store_image_vars();
 #endif
-
         // fast (-f) means we grab keyboard before reading standard input
         if (fast && !isatty(0)) {
             grabkeyboard_x11();

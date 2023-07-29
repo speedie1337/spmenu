@@ -105,6 +105,7 @@ endif
 
 if get_option('docs')
   install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
+  install_data(sources : 'docs/binds-vim.conf', install_dir : 'share/spmenu')
   install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
   install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')
   install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')

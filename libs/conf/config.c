@@ -49,7 +49,7 @@ int bind_init(void) {
         fprintf(stderr, "spmenu: Invalid keys file.\n");
     }
 
-    // load options binds.keys
+    // load options bind.keys
     config_setting_t *key_bind = config_lookup(&bind, "bind.keys");
     if (key_bind != NULL && loadbinds) {
         int nmode = 0;
@@ -131,12 +131,12 @@ int bind_init(void) {
                 }
             }
 
+            config_setting_lookup_int(conf, "forceinsertmode", &forceinsertmode);
             config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
-            config_setting_lookup_int(conf, "forceinsertmode", &sp.forceinsertmode);
         }
     }
 
-    // load options binds.mouse
+    // load options bind.mouse
     config_setting_t *mouse_bind = config_lookup(&bind, "bind.mouse");
     if (mouse_bind != NULL && loadbinds) {
 #if USEX
@@ -925,7 +925,7 @@ void conf_init(void) {
                 }
             }
 
-            config_setting_lookup_int(conf, "forceinsertmode", &sp.forceinsertmode);
+            config_setting_lookup_int(conf, "forceinsertmode", &forceinsertmode);
             config_setting_lookup_int(conf, "ignoreglobalkeys", &sp.ignoreglobalkeys);
         }
     }
