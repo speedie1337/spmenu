@@ -381,7 +381,7 @@ main() {
         "arglist") action="arglist" ;;
         "kblist") action="kblist" ;;
         "pkg_arch") action="arch" ;;
-	"pkg_gentoo") action="gentoo" ;;
+	    "pkg_gentoo") action="gentoo" ;;
         "help") action="help" ;;
         "install") action="install" ;;
         "theme") action="theme" ;;
@@ -403,7 +403,7 @@ main() {
         "build") build ;;
         "install") install ;;
         "arch") gen_arch_pkg ;;
-	"gentoo") gen_gentoo_pkg ;;
+	    "gentoo") gen_gentoo_pkg ;;
         "theme") generate_theme "$2" ;;
         "kblist") kblist "libs/keybinds.h" ;;
         "help") help ;;

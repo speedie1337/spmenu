@@ -113,13 +113,42 @@ Finally, to install it all, run:
 `meson install -C build --prefix /usr # /usr may be overriden to /usr/local
 or anything else`
 
+## For developers
+
+For convenience, in the scripts directory is a script called `spmenu_make`.
+This script is not installed, and should be used as is. This script handles
+the creation of distro packages, documentation and the installation of spmenu
+itself. It's also useful if you don't feel like running three commands every
+time you want to rebuild spmenu.
+
+To enable/disable features, write `<feature>=<bool>` to a new file called
+`buildconf`. This must be executable or the script will not load it.
+For a list of features that can be used, look at the top of the `spmenu_make`
+script. Now, to build spmenu with it you can simply run `scripts/spmenu_make`
+with no arguments. If you want to install spmenu, you can do
+`scripts/spmenu_make install`.
+
 To generate documentation, which may be necessary if you're pushing new changes
 to your Git repository, run `scripts/spmenu_make docs` **in the current
-directory**.
+directory**. This requires the use of `pandoc`.
 
 To generate a tarball, run `scripts/spmenu_make dist` **in the current
 directory**. If you want to generate a pacman package, run
-`scripts/spmenu_make pkg_arch` instead.
+`scripts/spmenu_make pkg_arch` instead. This requires `makepkg`.
+
+When creating a release, do the following:
+
+1. Bump version in meson.build (optional)
+2. Run `scripts/spmenu_make docs`. This will generate new documentation.
+3. `git commit -a` to bump version
+4. Run `scripts/spmenu_make dist`. This will generate a tarball, along
+with the GPG signature for that and a MD5 and SHA256 hash for it.
+5. Run `scripts/spmenu_make pkg_arch`. This will create an Arch Linux
+built binary. This (again) requires `makepkg`.
+6. Run `scripts/spmenu_make pkg_gentoo`. This does **not** require any
+Gentoo Linux tools. It will output an ebuild along with the GPG signature
+for that and a MD5 and SHA256 hash for it.
+7. Create a release/host the resulting files.
 
 ## Vim like keybinds
 
