@@ -17,7 +17,7 @@ can be themed to look identical to dmenu.
 - Image and icon support
 - Run launcher, supporting both .desktop entries and $PATH
 - fzf-like Fuzzy matching
-- Vi-like modes
+- Vi-like modes (see docs/binds-vim.conf)
 - History buffer
 - Configuration file, allowing customizable keybinds
 - Mouse binds
@@ -121,23 +121,18 @@ To generate a tarball, run `scripts/spmenu_make dist` **in the current
 directory**. If you want to generate a pacman package, run
 `scripts/spmenu_make pkg_arch` instead.
 
+## Vim like keybinds
+
+For those who are familiar with Vim and like Vi-style keybinds,
+you can copy `docs/binds-vim.conf` to `~/.config/spmenu/binds.conf`.
+This will re-enable normal mode. In other words, it will restore the
+keybinds spmenu 3.1.1 had.
+
 ## Scripts
 
 There's a page dedicated to user scripts
 [over on the wiki](https://spmenu.speedie.site/User+scripts). Feel
 free to contribute and try scripts on there.
-
-## Simple mode
-
-Some users may find the Vim modes confusing. If this is you, you
-can copy [this file](https://git.speedie.site/speedie/spmenu-config/raw/branch/master/binds/simple-keybinds.conf)
-to ~/.config/spmenu/binds.conf. This will restore some of
-the more traditional dmenu keybinds. Do note that many
-keybinds will be missing if you go for this, and keybinds
-in spmenu.conf will be unused. One of the changes it makes
-is removing normal mode, so insert mode will always be
-used instead. Arrow keys are used for navigation
-rather than Vim keys.
 
 ## Screenshots
 

@@ -605,7 +605,7 @@ void setprofile(Arg *arg) {
 }
 
 void switchmode(Arg *arg) {
-    if (sp.forceinsertmode) {
+    if (forceinsertmode) {
         return;
     }
 

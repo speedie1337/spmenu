@@ -67,6 +67,7 @@ static char *screenshotdir             = NULL; /* Screenshot file directory. If 
 
 /* Mode options */
 static int mode                        = 0; /* Mode to start speedwm in (0: Normal mode, 1: Insert mode) */
+static int forceinsertmode             = 1; /* Force insert mode, meaning normal mode will be disabled (0/1) */
 static char *normtext                  = "Normal"; /* Text to display for normal mode */
 static char *instext                   = "Insert"; /* Text to display for insert mode */
 static char *regextext                 = "Regex"; /* Text to display for insert mode when regex is enabled */

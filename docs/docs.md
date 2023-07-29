@@ -610,15 +610,21 @@ to move all keybinds to Insert mode, restoring the original dmenu
 behavior.
 
 Normal mode is the mode spmenu starts in unless a mode argument is specified
-or another mode is set in the configuration file. In normal mode, all keys
-perform some action, but you cannot type any actual text to filter items.
-This mode is commonly used for navigation, general keybinds, as well as
-quickly selecting an item.
+or another mode is set in the configuration file. Note that if `forceinsertmode`
+is enabled, Normal mode cannot be used and spmenu will start in Insert mode
+instead.
 
-Insert mode is entered through (by default) pressing `i` in normal mode. In
-this mode, most keybinds do nothing. When you are in insert mode, you
-filter items by typing text into the field. Once you're done
-with insert mode, you can press Escape to enter normal mode again.
+In normal mode, all keys perform some action, but you cannot type any actual
+text to filter items. This mode is commonly used for navigation, general
+keybinds, as well as quickly selecting an item. By default though,
+this mode is not used.
+
+Insert mode is entered through (by default) pressing `i` in normal mode.
+In this mode, most keybinds do nothing. When you are in insert mode,
+you filter items by typing text into the field.
+
+Once you're done with insert mode and normal mode is enabled, you can press
+(by default) Escape to enter normal mode again.
 
 All of these keybinds can be overriden in the configuration file. Should you
 unbind your switchmode key, you can always press `Ctrl+Alt+Delete` to
