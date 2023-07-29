@@ -672,8 +672,8 @@ void conf_init(void) {
                 config_setting_lookup_int(conf, "binds", &loadbinds); // spmenu.file.binds
             }
 
-            config_setting_lookup_int(conf, "global", &globalcolors); // spmenu.file.global
             config_setting_lookup_int(conf, "xresources", &xresources); // spmenu.file.xresources
+            config_setting_lookup_int(conf, "global", &xresources); // spmenu.file.global
 
             if (config_setting_lookup_string(conf, "themefile", &dest)) {
                 themefile = strdup(dest);

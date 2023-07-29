@@ -499,8 +499,7 @@ void theme_load(void) {
         for (unsigned int i = 0; i < config_setting_length(file_setting); ++i) {
             config_setting_t *conf = config_setting_get_elem(file_setting, i);
 
-            // look up
-            config_setting_lookup_int(conf, "global", &globalcolors); // theme.file.global
+            config_setting_lookup_int(conf, "global", &xresources); // theme.file.global
         }
     }
 

@@ -67,10 +67,6 @@ void readargs(int argc, char *argv[]) {
             xresources = 1;
         } else if (!strcmp(argv[k], "-nxrdb") || (!strcmp(argv[k], "--no-xrdb"))) {
             xresources = 0;
-        } else if (!strcmp(argv[k], "-gbc") || (!strcmp(argv[k], "--global-colors"))) {
-            globalcolors = 1;
-        } else if (!strcmp(argv[k], "-ngbc") || (!strcmp(argv[k], "--no-global-colors"))) {
-            globalcolors = 0;
         }
     }
 
@@ -284,10 +280,6 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
-                        || !strcmp(argv[i], "-gbc")
-                        || !strcmp(argv[i], "-ngbc")
-                        || !strcmp(argv[i], "--global-colors")
-                        || !strcmp(argv[i], "--no-global-colors")
 #if USECONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
@@ -523,10 +515,6 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
-                        || !strcmp(argv[i], "-gbc")
-                        || !strcmp(argv[i], "-ngbc")
-                        || !strcmp(argv[i], "--global-colors")
-                        || !strcmp(argv[i], "--no-global-colors")
 #if USECONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
@@ -704,8 +692,6 @@ void usage(int status) {
             "spmenu -scl,     --show-caps                                 Show caps lock indicator\n"
             "spmenu -xrdb,    --xrdb                                      Load .Xresources on runtime (X11 only)\n"
             "spmenu -nxrdb,   --no-xrdb                                   Don't load .Xresources on runtime (X11 only)\n"
-            "spmenu -gbc,     --global-colors                             Recognize global colors (such as *.color1) on runtime (X11 only)\n"
-            "spmenu -ngbc,    --no-global-colors                          Don't recognize global colors (such as *.color1) on runtime (X11 only)\n"
             "spmenu -m,       --monitor <monitor>                         Specify a monitor to run spmenu on (X11 only)\n"
             "spmenu -w,       --embed <window id>                         Embed spmenu inside <window id> (X11 only)\n"
             "spmenu -H,       --hist-file <hist file>                     Specify a file to save the history to\n"

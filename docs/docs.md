@@ -298,12 +298,6 @@ in the config files.
 `-nxrdb, --no-xrdb`
 :   Don't load .Xresources on runtime (X11 only)
 
-`-gbc, --global-colors`
-:   Recognize global colors (such as \*.color1) on runtime (X11 only)
-
-`-ngbc, --no-global-colors`
-:   Don't recognize global colors (such as \*.color1) on runtime (X11 only)
-
 `-m, --monitor monitor`
 :   Specify a monitor to run spmenu on (X11 only)
 
