@@ -30,7 +30,7 @@ RDEPEND="
 	X? ( xrdb? ( x11-apps/xrdb ) )
 	X? ( xinerama? ( x11-libs/libXinerama ) )
 	wayland? ( dev-libs/wayland dev-util/wayland-scanner dev-libs/wayland-protocols )
-	imlib2? ( media-libs/imlib2 dev-libs/openssl )
+	imlib2? ( media-libs/imlib2 )
 	ssl? ( dev-libs/openssl )
 	fribidi? ( dev-libs/fribidi )
 	x11-libs/pango
