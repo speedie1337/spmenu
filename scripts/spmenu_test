@@ -2,8 +2,6 @@
 # spmenu test script
 # See LICENSE file for copyright and license details.
 
-PREFIX="${PREFIX:-/usr}"
-
 # reset sequence
 reset='\033[0m'
 
@@ -76,19 +74,27 @@ protocol='Unknown'
 [ -n "$WAYLAND_DISPLAY" ] && protocol='Wayland' && protocol_arg="-wl"
 
 main() {
+cat << EOF
+
+                         ████████████████████████████████
+                         ████████████████████████████████
+                         ████████████████████████████████
+                         ██████                    ██████
+                         ██████                    ██████
+                         ██████                    ██████
+                         ██████       ███████████████████
+                         ██████       ███████████████████
+                         ██████       ███████████████████
+                         ██████
+                         ██████
+███████████████████████████████
+███████████████████████████████
+███████████████████████████████
+
+EOF
 printf "${v2}s${v3}p${v4}m${v5}e${v6}n${v7}u${v8} $(${RUNLAUNCHER:-spmenu} -v | sed 's/spmenu-//g') ${reset}(using protocol $protocol)\n\
-\n<big><u>Formatting</u></big>\n\n\
-abcdefghijklmnopqrstuvwxyz\n\
-<b>abcdefghijklmnopqrstuvwxyz</b> - b\n\
-<i>abcdefghijklmnopqrstuvwxyz</i> - i\n\
-<s>abcdefghijklmnopqrstuvwxyz</s> - s\n\
-<u>abcdefghijklmnopqrstuvwxyz</u> - u\n\
-<sub>abcdefghijklmnopqrstuvwxyz - sub</sub>\n\
-<sup>abcdefghijklmnopqrstuvwxyz - sup</sup>\n\
-<tt>abcdefghijklmnopqrstuvwxyz</tt> - tt\n\
-<small>abcdefghijklmnopqrstuvwxyz</small> - small\n\
-<big>abcdefghijklmnopqrstuvwxyz</big> - big\n\
-\n<big><u>16 foreground colors</u></big>\n\n\
+Press ${v3}↓${reset} or scroll to navigate, Press ${v3}Ctrl + Shift + P${reset} to change theme.\n\n\
+<big><u>16 foreground colors</u></big>\n\n\
 ${v1}a${v2}b${v3}c${v4}d${v5}e${v6}f${v7}g${v8}h${v9}i${v10}j${v11}k${v12}j${v13}m${v14}n${v15}o${v16}p\n\
 \n<big><u>16 background colors</u></big>\n\n\
 ${b1}\n\
@@ -161,7 +167,25 @@ awk 'BEGIN{
         g = (colnum*510/100);
         b = (colnum*255/100);
         if (g>255) g = 510-g;
-        printf "\033[38;2;%d;%d;%dm%s\033[0m", r,g,b, "█ ";
+            printf "\033[38;2;%d;%d;%dm%s\033[0m", r,g,b, "a";
+        i++;
+    }
+    printf "\n";
+    for (colnum = 0; colnum < 100; colnum++) {
+        r = 255-(colnum*255/100);
+        g = (colnum*510/100);
+        b = (colnum*255/100);
+        if (g>255) g = 510-g;
+            printf "\033[38;2;%d;%d;%dm%s\033[0m", r,g,b, "b";
+        i++;
+    }
+    printf "\n";
+    for (colnum = 0; colnum < 100; colnum++) {
+        r = 255-(colnum*255/100);
+        g = (colnum*510/100);
+        b = (colnum*255/100);
+        if (g>255) g = 510-g;
+            printf "\033[38;2;%d;%d;%dm%s\033[0m", r,g,b, "c";
         i++;
     }
     printf "\n";
@@ -179,11 +203,60 @@ awk 'BEGIN{
         i++;
     }
     printf "\n";
+    for (colnum = 0; colnum < 200; colnum++) {
+        r = 255-(colnum*255/200);
+        g = (colnum*510/200);
+        b = (colnum*255/200);
+        if (g>255) g = 510-g;
+        printf "\033[48;2;%d;%d;%dm%s\033[0m", r,g,b, " ";
+        i++;
+    }
+    printf "\n";
 }'
+
+printf "\n\
+<big><u>Formatting</u></big>\n\n\
+abcdefghijklmnopqrstuvwxyz\n\
+<b>abcdefghijklmnopqrstuvwxyz</b> - b\n\
+<i>abcdefghijklmnopqrstuvwxyz</i> - i\n\
+<s>abcdefghijklmnopqrstuvwxyz</s> - s\n\
+<u>abcdefghijklmnopqrstuvwxyz</u> - u\n\
+<sub>abcdefghijklmnopqrstuvwxyz - sub</sub>\n\
+<sup>abcdefghijklmnopqrstuvwxyz - sup</sup>\n\
+<tt>abcdefghijklmnopqrstuvwxyz</tt> - tt\n\
+<small>abcdefghijklmnopqrstuvwxyz</small> - small\n\
+<big>abcdefghijklmnopqrstuvwxyz</big> - big\n\
+\n"
+
+printf "\n\
+<big><u>Emojis</u></big>\n\nThe emojis are: Black Square, Red Square and Pirate Flag\n\
+⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛\n\
+🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥\n\
+🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️🏴‍☠️\n\
+\n"
 
 printf "\n<big><u>The End</u></big>\n"
 
-printf "\nIf spmenu displayed 16 colors, 256 colors and true color (full RGB spectrum) as well as various forms of formatted text, everything works fine.\nOtherwise, please file a bug report.\n"
+printf "\nIf spmenu displayed 16 colors, 256 colors and true color (full RGB spectrum) as well as various forms of formatted text, everything works fine.\n"
+printf "Otherwise please file a bug report. Click \033[38;2;00;00;238mhere${reset} to file a bug report.\n"
 }
 
-main "$@" | ${RUNLAUNCHER:-spmenu} --no-alpha --lines 41 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>" > /dev/null
+open_bug_report() {
+    [ -x "$(command -v $BROWSER)" ] && {
+        $BROWSER "https://git.speedie.site/speedie/spmenu/issues"
+        return 0
+    }
+
+    [ -x "$(command -v xdg-open)" ] && {
+        xdg-open "https://git.speedie.site/speedie/spmenu/issues"
+        return 0
+    }
+
+    return 1
+}
+
+text="$(main "$@" | ${RUNLAUNCHER:-spmenu} --pretext "https://spmenu.speedie.site" --hide-caret --no-allow-typing --top --lines 9000 $protocol_arg "$@" --columns 1 --prompt "<big>spmenu <i>test</i> <small>script</small></big>")"
+
+printf "%s" "$text" | grep -q "Otherwise please file a bug report." && open_bug_report
+
+exit $?
