@@ -491,6 +491,10 @@ int drawinput(int x, int y, int w) {
 
             curpos = TEXTW(ptext) - TEXTW(&ptext[sp.cursor]);
         } else if (pretext != NULL) {
+	    if (hidepretext) {
+		pretext = "";
+	    }
+
             apply_fribidi(pretext);
             draw_text(draw, x + fw, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : pretext, 0, pango_pretext ? True : False, col_pretextfg, col_pretextbg, alpha_pretextfg, alpha_pretextbg);
         }
