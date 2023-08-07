@@ -80,7 +80,7 @@ void resizeclient_x11(void) {
         ic++;
 
     lines = MIN(ic, MAX(lines, 0));
-#if USEIMAGE
+#if IMAGE
     img.setlines = lines;
 
     // resize client to image height

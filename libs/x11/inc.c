@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USEX
+#if X11
 #include "xim.c"
 #include "key.c"
 #include "mouse.c"

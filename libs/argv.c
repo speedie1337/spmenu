@@ -9,8 +9,8 @@ void readargs(int argc, char *argv[]) {
     int j = 0;
     int k = 0;
 
-#if !USEX
-#if !USEWAYLAND
+#if !X11
+#if !WAYLAND
     die("Why did you think it was a good idea to compile me without support for any display server? You're an idiot. :)");
 #endif
 #endif
@@ -40,7 +40,7 @@ void readargs(int argc, char *argv[]) {
         } else if (!strcmp(argv[j], "-wl") || (!strcmp(argv[j], "--wayland"))) {
             protocol = 1;
             protocol_override = 1;
-#if USECONFIG
+#if CONFIG
         } else if (!strcmp(argv[j], "-cf") || (!strcmp(argv[j], "--config-file"))) { // specify a config file
             if (argv[j+1]) {
                 configfile = argv[++j];
@@ -63,7 +63,7 @@ void readargs(int argc, char *argv[]) {
         }
     }
 
-#if USECONFIG
+#if CONFIG
     conf_init();
 #endif
 
@@ -75,13 +75,13 @@ void readargs(int argc, char *argv[]) {
         }
     }
 
-#if USEWAYLAND
+#if WAYLAND
     if (protocol) {
         if (connect_display(&state)) {
             protocol = 0;
         }
     }
-#if USEX
+#if X11
     if (getenv("GNOME_SETUP_DISPLAY")) { // This is a GNOME Wayland session which doesn't implement wlr-layer-shell
         protocol = 0;
     }
@@ -89,9 +89,9 @@ void readargs(int argc, char *argv[]) {
 #endif
 
     // init/read xrdb
-#if USEX
+#if X11
     if (xresources && !protocol) {
-#if USEXRESOURCES
+#if XRESOURCES
         XrmInitialize();
         load_xresources();
 #else
@@ -285,7 +285,7 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
-#if USECONFIG
+#if CONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
                         || (configfile && !strcmp(argv[i], configfile))
@@ -413,7 +413,7 @@ void readargs(int argc, char *argv[]) {
         } else if (!strcmp(argv[i], "-nir") || (!strcmp(argv[i], "--no-image-resize"))) { // no image resize
             imageresize = 0;
         } else if (!strcmp(argv[i], "-w") || (!strcmp(argv[i], "--embed"))) { // embedding window id
-#if USEX
+#if X11
             x11.embed = argv[++i];
 #endif
         } else if (!strcmp(argv[i], "-n") || (!strcmp(argv[i], "--preselect"))) { // preselected item
@@ -520,7 +520,7 @@ void readargs(int argc, char *argv[]) {
                         || !strcmp(argv[i], "--x11")
                         || !strcmp(argv[i], "--load-binds")
                         || !strcmp(argv[i], "--no-load-binds")
-#if USECONFIG
+#if CONFIG
                         || !strcmp(argv[i], "-cf")
                         || !strcmp(argv[i], "--config-file")
                         || (configfile && !strcmp(argv[i], configfile))
@@ -536,10 +536,10 @@ void readargs(int argc, char *argv[]) {
             else
                 fprintf(stderr, "spmenu: Invalid argument: '%s'\n", argv[i]);
 
-#if !USEX
+#if !X11
     protocol = 1;
 #endif
-#if !USEWAYLAND
+#if !WAYLAND
     protocol = 0;
 #endif
     if (casesensitive) {
@@ -559,37 +559,37 @@ void readargs(int argc, char *argv[]) {
 }
 
 void comp_opts(void) {
-#if USEWAYLAND
+#if WAYLAND
     fprintf(stdout, "Wayland: Supported\n");
 #else
     fprintf(stdout, "Wayland: Unsupported\n");
 #endif
-#if USEX
+#if X11
     fprintf(stdout, "X11: Supported\n");
 #else
     fprintf(stdout, "X11: Unsupported\n");
 #endif
-#if USERTL
+#if RTL
     fprintf(stdout, "RTL: Supported\n");
 #else
     fprintf(stdout, "RTL: Unsupported\n");
 #endif
-#if USEIMAGE
+#if IMAGE
     fprintf(stdout, "Images: Supported\n");
 #else
     fprintf(stdout, "Images: Unsupported\n");
 #endif
-#if USEXINERAMA
+#if XINERAMA
     fprintf(stdout, "Xinerama: Supported\n");
 #else
     fprintf(stdout, "Xinerama: Unsupported\n");
 #endif
-#if USECONFIG
+#if CONFIG
     fprintf(stdout, "Config: Supported\n");
 #else
     fprintf(stdout, "Config: Unsupported\n");
 #endif
-#if USEXRESOURCES
+#if XRESOURCES
     fprintf(stdout, "xrdb: Supported\n");
 #else
     fprintf(stdout, "xrdb: Unsupported\n");

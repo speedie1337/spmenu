@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-#if USEX
+#if X11
 #include "lib.h"
 
 #include "init.h"

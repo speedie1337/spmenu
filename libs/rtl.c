@@ -1,13 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USERTL
+#if RTL
 #include <fribidi.h>
 #endif
 
 static char fribidi_text[BUFSIZ] = "";
 static void apply_fribidi(char *str);
 
-#if USERTL
+#if RTL
 void apply_fribidi(char *str) {
     FriBidiStrIndex len = strlen(str);
     FriBidiChar logical[BUFSIZ];

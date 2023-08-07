@@ -59,7 +59,7 @@ void buttonpress_x11(XEvent *e) {
         }
     }
 
-#if USEIMAGE
+#if IMAGE
     if (!hideimage && img.longestedge != 0 && imagetype) {
         x += MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0);
     }
@@ -88,7 +88,7 @@ void buttonpress_x11(XEvent *e) {
             if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) && ev->x <= (x + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickItem;
                 mouseitem = item;
-#if USEIMAGE
+#if IMAGE
             } else if (ev->y >= y && ev->y <= (y + h) && ev->x >= x + (powerlineitems ? sp.plw : 0) - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) && ev->x <= (x - MAX((img.imagegaps * 2) + img.imagewidth, indentitems ? sp.promptw : 0) + w / columns) + (powerlineitems ? sp.plw : 0)) {
                 click = ClickImage;
                 mouseitem = item;

@@ -15,54 +15,6 @@
 #define VERSION "unknown"
 #endif
 
-#ifndef RTL
-#define USERTL 0
-#else
-#define USERTL 1
-#endif
-
-#ifndef IMAGE
-#define USEIMAGE 0
-#else
-#define USEIMAGE 1
-#endif
-
-#ifndef XINERAMA
-#define USEXINERAMA 0
-#else
-#define USEXINERAMA 1
-#endif
-
-#ifndef CONFIG
-#define USECONFIG 0
-#else
-#define USECONFIG 1
-#endif
-
-#ifndef XRESOURCES
-#define USEXRESOURCES 0
-#else
-#define USEXRESOURCES 1
-#endif
-
-#ifndef WAYLAND
-#define USEWAYLAND 0
-#else
-#define USEWAYLAND 1
-#endif
-
-#ifndef X11
-#define USEX 0
-#else
-#define USEX 1
-#endif
-
-#ifndef REGEX
-#define USEREGEX 0
-#else
-#define USEREGEX 1
-#endif
-
 enum {
     ClickWindow,
     ClickPrompt,
@@ -124,7 +76,7 @@ struct mo {
     int output_height; // output height
 };
 
-#if USEIMAGE
+#if IMAGE
 struct img {
     int setlines; // actual lines
     int flip; // %=
@@ -142,7 +94,7 @@ struct tx {
     char capstext[64]; // caps lock text
 };
 
-#if USEX
+#if X11
 struct x11 {
     int numlockmask;
     int useargb;
@@ -157,10 +109,10 @@ struct x11 {
 static struct sp sp = {0};
 static struct tx tx = {0};
 static struct mo mo = {0};
-#if USEIMAGE
+#if IMAGE
 static struct img img = {0};
 #endif
-#if USEX
+#if X11
 static struct x11 x11 = {0};
 #endif
 
@@ -190,7 +142,7 @@ static int *sel_index = NULL;
 static unsigned int sel_size = 0;
 static int itemn = 0;
 
-#if USERTL
+#if RTL
 static int isrtl = 1;
 #else
 static int isrtl = 0;
@@ -246,7 +198,7 @@ static char *fonts[] = { font };
 #include "libs/arg.c"
 #include "libs/stream.c"
 
-#if USEX
+#if X11
 static Key keys[] = {
     { -1,      0,              XK_Return,    selectitem,      {.i = +1 } },
     { -1,      Shift,          XK_Return,    selectitem,      {0} },
@@ -271,7 +223,7 @@ static Key keys[] = {
     { -1,      Ctrl,           XK_n,         navhistory,      {.i = +1 } },
 };
 #endif
-#if USEWAYLAND
+#if WAYLAND
 static WlKey wl_keys[] = {
     { -1,      WL_None,              XKB_KEY_Return,    selectitem,      {.i = +1 } },
     { -1,      WL_Shift,             XKB_KEY_Return,    selectitem,      {0} },
@@ -297,7 +249,7 @@ static WlKey wl_keys[] = {
 
 };
 #endif
-#if USEX
+#if X11
 static Mouse buttons[] = {
     { ClickInput,           Button1,         clear,        {0} },
     { ClickPrompt,          Button1,         clear,        {0} },
@@ -309,7 +261,7 @@ static Mouse buttons[] = {
     { ClickNone,            Button4,         moveprev,     {0} },
 };
 #endif
-#if USEWAYLAND
+#if WAYLAND
 static WlMouse wl_buttons[] = {
     { ClickInput,           WL_Left,         clear,        {0} },
     { ClickPrompt,          WL_Left,         clear,        {0} },
@@ -433,7 +385,7 @@ int max_textw(void) {
 void cleanup(void) {
     size_t i;
 
-#if USEIMAGE
+#if IMAGE
     cleanupimage(); // function frees images
 #endif
 
@@ -444,7 +396,7 @@ void cleanup(void) {
     // free drawing and close the display
     draw_free(draw);
 
-#if USEX
+#if X11
     if (!protocol) {
         cleanup_x11(dpy);
     }
@@ -521,15 +473,15 @@ size_t nextrune(int inc) {
 }
 
 void resizeclient(void) {
-#if USEWAYLAND
+#if WAYLAND
     if (protocol) {
         resizeclient_wl(&state);
     } else {
-#if USEX
+#if X11
         resizeclient_x11();
 #endif
     }
-#elif USEX
+#elif X11
     resizeclient_x11();
 #endif
 }
@@ -592,7 +544,7 @@ void set_mode(void) {
 
 void handle(void) {
     if (!protocol) {
-#if USEX
+#if X11
         handle_x11();
 
         if (!draw_font_create(draw, fonts, LENGTH(fonts))) {
@@ -600,7 +552,7 @@ void handle(void) {
         }
 
         loadhistory(); // read history entries
-#if USEIMAGE
+#if IMAGE
         store_image_vars();
 #endif
         // fast (-f) means we grab keyboard before reading standard input
@@ -619,10 +571,10 @@ void handle(void) {
         setupdisplay_x11(); // set up display and create window
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
 #endif
-#if USEWAYLAND
+#if WAYLAND
     } else {
         loadhistory();
-#if USEIMAGE
+#if IMAGE
         store_image_vars();
         setimageopts();
 #endif

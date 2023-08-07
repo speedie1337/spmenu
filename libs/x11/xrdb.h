@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USEXRESOURCES
+#if XRESOURCES
 enum resource_type {
     STRING = 0,
     INTEGER = 1,

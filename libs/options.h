@@ -14,7 +14,7 @@ static int mon                         = -1; /* Monitor to run spmenu on */
 static int scrolldistance              = 512; /* Distance to scroll for a scroll action to count */
 
 /* Config file options */
-#if USECONFIG
+#if CONFIG
 static char *configfile                = NULL; /* Config file path. Default is ~/.config/spmenu/spmenu.conf */
 static char *themefile                 = NULL; /* Theme file path. Default is ~/.config/spmenu/theme.conf */
 static char *bindsfile                 = NULL; /* Keybind file path. Default is ~/.config/spmenu/binds.conf */

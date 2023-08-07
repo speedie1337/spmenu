@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-#if USECONFIG
+#if CONFIG
 #include <libconfig.h>
 #include "config.h"
 
@@ -63,7 +63,7 @@ int bind_init(void) {
             // look up
             config_setting_lookup_string(conf, "modifier", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(ml); j++) {
                 if (!strcmp(ml[j].mod, strdup(dest))) {
                     ckeys[i].mod = ml[j].modifier;
@@ -71,7 +71,7 @@ int bind_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(wml); j++) {
                 if (!strcmp(wml[j].mod, strdup(dest))) {
                     wl_ckeys[i].modifier = wml[j].modifier;
@@ -80,17 +80,17 @@ int bind_init(void) {
 #endif
 
             if (config_setting_lookup_int(conf, "mode", &nmode)) {
-#if USEX
+#if X11
                 ckeys[i].mode = nmode;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                 wl_ckeys[i].mode = nmode;
 #endif
             }
 
             config_setting_lookup_string(conf, "key", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(kl); j++) {
                 if (!strcmp(kl[j].key, strdup(dest))) {
                     ckeys[i].keysym = kl[j].keysym;
@@ -98,7 +98,7 @@ int bind_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(wkl); j++) {
                 if (!strcmp(wkl[j].key, strdup(dest))) {
                     wl_ckeys[i].keysym = wkl[j].keysym;
@@ -110,10 +110,10 @@ int bind_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
+#if X11
                     ckeys[i].func = fl[j].func;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_ckeys[i].func = fl[j].func;
 #endif
                 }
@@ -123,10 +123,10 @@ int bind_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
+#if X11
                     ckeys[i].arg = al[j].arg;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_ckeys[i].arg = al[j].arg;
 #endif
                 }
@@ -140,7 +140,7 @@ int bind_init(void) {
     // load options bind.mouse
     config_setting_t *mouse_bind = config_lookup(&bind, "bind.mouse");
     if (mouse_bind != NULL && loadbinds) {
-#if USEX
+#if X11
         ret = 1;
 #endif
         for (unsigned int i = 0; i < config_setting_length(mouse_bind); ++i) {
@@ -150,10 +150,10 @@ int bind_init(void) {
 
             for (int j = 0; j < LENGTH(ctp); j++) {
                 if (!strcmp(ctp[j].tclick, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].click = ctp[j].click;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].click = ctp[j].click;
 #endif
                 }
@@ -161,7 +161,7 @@ int bind_init(void) {
 
             config_setting_lookup_string(conf, "button", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(btp); j++) {
                 if (!strcmp(btp[j].click, strdup(dest))) {
                     cbuttons[i].button = btp[j].button;
@@ -169,7 +169,7 @@ int bind_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(w_btp); j++) {
                 if (!strcmp(w_btp[j].click, strdup(dest))) {
                     wl_cbuttons[i].button = w_btp[j].button;
@@ -181,10 +181,10 @@ int bind_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].func = fl[j].func;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].func = fl[j].func;
 #endif
                 }
@@ -194,10 +194,10 @@ int bind_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].arg = al[j].arg;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].arg = al[j].arg;
 #endif
                 }
@@ -857,7 +857,7 @@ void conf_init(void) {
             // look up
             config_setting_lookup_string(conf, "modifier", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(ml); j++) {
                 if (!strcmp(ml[j].mod, strdup(dest))) {
                     ckeys[i].mod = ml[j].modifier;
@@ -865,7 +865,7 @@ void conf_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(wml); j++) {
                 if (!strcmp(wml[j].mod, strdup(dest))) {
                     wl_ckeys[i].modifier = wml[j].modifier;
@@ -874,17 +874,17 @@ void conf_init(void) {
 #endif
 
             if (config_setting_lookup_int(conf, "mode", &nmode)) {
-#if USEX
+#if X11
                 ckeys[i].mode = nmode;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                 wl_ckeys[i].mode = nmode;
 #endif
             }
 
             config_setting_lookup_string(conf, "key", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(kl); j++) {
                 if (!strcmp(kl[j].key, strdup(dest))) {
                     ckeys[i].keysym = kl[j].keysym;
@@ -892,7 +892,7 @@ void conf_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(wkl); j++) {
                 if (!strcmp(wkl[j].key, strdup(dest))) {
                     wl_ckeys[i].keysym = wkl[j].keysym;
@@ -904,10 +904,10 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
+#if X11
                     ckeys[i].func = fl[j].func;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_ckeys[i].func = fl[j].func;
 #endif
                 }
@@ -917,10 +917,10 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
+#if X11
                     ckeys[i].arg = al[j].arg;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_ckeys[i].arg = al[j].arg;
 #endif
                 }
@@ -945,10 +945,10 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(ctp); j++) {
                 if (!strcmp(ctp[j].tclick, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].click = ctp[j].click;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].click = ctp[j].click;
 #endif
                 }
@@ -956,7 +956,7 @@ void conf_init(void) {
 
             config_setting_lookup_string(conf, "button", &dest);
 
-#if USEX
+#if X11
             for (int j = 0; j < LENGTH(btp); j++) {
                 if (!strcmp(btp[j].click, strdup(dest))) {
                     cbuttons[i].button = btp[j].button;
@@ -964,7 +964,7 @@ void conf_init(void) {
             }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
             for (int j = 0; j < LENGTH(w_btp); j++) {
                 if (!strcmp(w_btp[j].click, strdup(dest))) {
                     wl_cbuttons[i].button = w_btp[j].button;
@@ -976,10 +976,10 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(fl); j++) {
                 if (!strcmp(fl[j].function, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].func = fl[j].func;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].func = fl[j].func;
 #endif
                 }
@@ -989,10 +989,10 @@ void conf_init(void) {
 
             for (int j = 0; j < LENGTH(al); j++) {
                 if (!strcmp(al[j].argument, strdup(dest))) {
-#if USEX
+#if X11
                     cbuttons[i].arg = al[j].arg;
 #endif
-#if USEWAYLAND
+#if WAYLAND
                     wl_cbuttons[i].arg = al[j].arg;
 #endif
                 }

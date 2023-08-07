@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USEIMAGE
+#if IMAGE
 static int draw_icon(struct item *item, int x, int y, int w, int h);
 
 int draw_icon(struct item *item, int x, int y, int w, int h) {

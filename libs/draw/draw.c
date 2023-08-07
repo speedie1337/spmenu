@@ -10,18 +10,18 @@
 #include "draw.h"
 
 #ifndef X11
-#define USEX 0
+#define X11 0
 #else
-#define USEX 1
+#define X11 1
 #endif
 
 #ifndef WAYLAND
-#define USEWAYLAND 0
+#define WAYLAND 0
 #else
-#define USEWAYLAND 1
+#define WAYLAND 1
 #endif
 
-#if USEX
+#if X11
 #include <X11/Xlib.h>
 #endif
 
@@ -37,7 +37,7 @@ void draw_cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
     cairo_set_source_rgba(cr, r, g, b, alpha / 255.0);
 }
 
-#if USEX
+#if X11
 Draw_t *draw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol) {
     Draw_t *draw = draw_calloc(1, sizeof(Draw_t));
 
@@ -58,7 +58,7 @@ Draw_t *draw_create_x11(Display *dpy, int screen, Window root, unsigned int w, u
 }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 Draw_t *draw_create_wl(int protocol) {
     Draw_t *draw = draw_calloc(1, sizeof(Draw_t));
 
@@ -83,7 +83,7 @@ void draw_resize(Draw_t *draw, unsigned int w, unsigned int h) {
     draw->w = w;
     draw->h = h;
 
-#if USEX
+#if X11
     if (draw->drawable)
         XFreePixmap(draw->dpy, draw->drawable);
 
@@ -92,7 +92,7 @@ void draw_resize(Draw_t *draw, unsigned int w, unsigned int h) {
 }
 
 void draw_free(Draw_t *draw) {
-#if USEX
+#if X11
     if (!draw->protocol) {
         XFreePixmap(draw->dpy, draw->drawable);
         XFreeGC(draw->dpy, draw->gc);
@@ -352,7 +352,7 @@ void draw_map(Draw_t *draw, Window win, int x, int y, unsigned int w, unsigned i
     if (!draw)
         return;
 
-#if USEX
+#if X11
     if (!draw->protocol) {
         XCopyArea(draw->dpy, draw->drawable, win, draw->gc, x, y, w, h, x, y);
         XSync(draw->dpy, False);

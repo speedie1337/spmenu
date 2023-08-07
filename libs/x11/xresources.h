@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 // This .Xresources array is read and compared to the xrdb. Simply add to the array if you need to.
-#if USEXRESOURCES
+#if XRESOURCES
 ResourcePref cols[] = {
     { "font",			             STRING,  &font },
     { "color10",                     STRING,  &col_caretfg },

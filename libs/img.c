@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USEIMAGE
+#if IMAGE
 
 #include <errno.h>
 #include <pwd.h>
@@ -16,10 +16,10 @@ static void loadimage(const char *file, int *width, int *height);
 static void loadimagecache(const char *file, int *width, int *height);
 static void resizetoimageheight(int imageheight);
 static void store_image_vars(void);
-#if USEWAYLAND
+#if WAYLAND
 static void resizetoimageheight_wl(int imageheight);
 #endif
-#if USEX
+#if X11
 static void resizetoimageheight_x11(int imageheight);
 #endif
 
@@ -334,20 +334,20 @@ void jumptoindex(unsigned int index) {
 
 void resizetoimageheight(int imageheight) {
     if (!imagetype) return;
-#if USEX
+#if X11
     if (!protocol) {
         resizetoimageheight_x11(imageheight);
     } else {
-#if USEWAYLAND
+#if WAYLAND
         resizetoimageheight_wl(imageheight);
 #endif
     }
-#elif USEWAYLAND
+#elif WAYLAND
     resizetoimageheight_wl(imageheight);
 #endif
 }
 
-#if USEX
+#if X11
 void resizetoimageheight_x11(int imageheight) {
     int mh = sp.mh, olines = lines;
     lines = img.setlines;
@@ -394,7 +394,7 @@ void resizetoimageheight_x11(int imageheight) {
 }
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 void resizetoimageheight_wl(int imageheight) {
     int mh = sp.mh, olines = lines;
     lines = img.setlines;

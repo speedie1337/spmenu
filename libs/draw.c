@@ -173,7 +173,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
         }
     }
 
-#if USEIMAGE
+#if IMAGE
     if (!hideimage && !imagetype) {
         draw_rect(draw, x, y, w, sp.bh, 1, 1, fgcol, bgcol, fga, bga);
         int nx = draw_icon(item, x, y + sp.lrpad / 4, sp.bh - sp.lrpad / 2, sp.bh - sp.lrpad / 2);
@@ -340,7 +340,7 @@ int drawitem(int x, int y, int w) {
     if (!strcmp(tx.capstext, ""))
         capsw = 0;
 
-#if USEIMAGE
+#if IMAGE
     int ox = 0; // original x position
 #endif
 
@@ -350,7 +350,7 @@ int drawitem(int x, int y, int w) {
         int rx = 0;
 
         // draw image first
-#if USEIMAGE
+#if IMAGE
         if (!hideimage && img.longestedge != 0 && imagetype) {
             rx = ox;
             rx += MAX((img.imagegaps * 2) + img.imagewidth + menumarginh, indentitems ? x : 0);
@@ -617,7 +617,7 @@ int drawcaps(int x, int y, int w) {
 
 void drawmenu(void) {
     sp.isdrawing = 1;
-#if USEWAYLAND
+#if WAYLAND
     if (protocol) {
         if (listfile) {
             readstdin();
@@ -636,14 +636,14 @@ void drawmenu(void) {
 
         drawmenu_layer();
 
-#if USEIMAGE
+#if IMAGE
         drawimage();
 #endif
 
         commit_drawable(&state);
     } else {
 #endif
-#if USEX
+#if X11
         if (listfile) {
             readstdin();
 
@@ -660,12 +660,12 @@ void drawmenu(void) {
 
         drawmenu_layer();
 
-#if USEIMAGE
+#if IMAGE
         drawimage();
 #endif
         draw_map(draw, win, 0, 0, sp.mw, sp.mh);
 #endif
-#if USEWAYLAND
+#if WAYLAND
     }
 #endif
 
@@ -678,7 +678,7 @@ void drawmenu_layer(void) {
 
     sp_strncpy(tx.modetext, sp.mode ? instext : normtext, sizeof(tx.modetext));
 
-#if USEREGEX
+#if REGEX
     if (regex && regextext && sp.mode) {
         sp_strncpy(tx.modetext, regextext, sizeof(tx.modetext));
     }

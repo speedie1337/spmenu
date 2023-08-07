@@ -6,7 +6,7 @@ void prepare_window_size_wl(void) {
 
     sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MAX(lines, 0);
-#if USEIMAGE
+#if IMAGE
     img.setlines = lines;
 #endif
 

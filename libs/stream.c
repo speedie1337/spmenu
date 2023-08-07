@@ -40,21 +40,21 @@ void readstdin(void) {
             o = 1;
         }
 
-#if !USEIMAGE
+#if !IMAGE
         if (o) {
             ;
         }
 #endif
     }
 
-#if USEIMAGE
+#if IMAGE
     if (!o) img.longestedge = img.imagegaps = 0;
 #endif
 
     // clean
     if (items) {
         items[i].text = NULL;
-#if USEIMAGE
+#if IMAGE
         items[i].image = NULL;
 #endif
     }
@@ -119,7 +119,7 @@ void readfile(void) {
                 o = 1;
             }
 
-#if !USEIMAGE
+#if !IMAGE
             if (o) {
                 ;
             }
@@ -128,7 +128,7 @@ void readfile(void) {
 
         lines = columns == 1 ? i : MIN(i, lines); // i = number of items
 
-#if USEIMAGE
+#if IMAGE
         if (!o) img.longestedge = img.imagegaps = 0;
 #endif
 
@@ -152,13 +152,13 @@ void readfile(void) {
 }
 
 int parsemarkup(int index) {
-#if USEIMAGE
+#if IMAGE
     int w, h;
     char *limg = NULL;
 #endif
 
     // parse image markup
-#if USEIMAGE
+#if IMAGE
     if (!strncmp("IMG:", items[index].text, strlen("IMG:")) || !strncmp("img://", items[index].text, strlen("img://"))) {
         if(!(items[index].image = malloc(strlen(items[index].text)+1)))
             fprintf(stderr, "spmenu: cannot malloc %lu bytes\n", strlen(items[index].text));

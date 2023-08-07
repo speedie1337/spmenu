@@ -1,27 +1,27 @@
 /* See LICENSE file for copyright and license details. */
-#if USECONFIG
-#if USEX
+#if CONFIG
+#if X11
 typedef struct {
     char *key;
     KeySym keysym;
 } KeyList;
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 typedef struct {
     char *key;
     xkb_keysym_t keysym;
 } WlKeyList;
 #endif
 
-#if USEX
+#if X11
 typedef struct {
     char *mod;
     unsigned int modifier;
 } ModList;
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 typedef struct {
     char *mod;
     char *modifier;
@@ -401,7 +401,7 @@ static FuncList fl[] = {
 };
 
 // list of modifiers that can be used in the config file
-#if USEX
+#if X11
 static ModList ml[] = {
     { "Ctrl+Shift", ShiftMask|ControlMask },
     { "Ctrl+Shift+Super", ShiftMask|ControlMask|Mod4Mask },
@@ -422,7 +422,7 @@ static ModList ml[] = {
 };
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 static WlModList wml[] = {
     { "Ctrl+Shift", WL_CtrlShift },
     { "Ctrl+Shift+Super", WL_CtrlShiftSuper },
@@ -443,7 +443,7 @@ static WlModList wml[] = {
 
 // list of keys that can be used in the config file
 // expand this array if you want more
-#if USEX
+#if X11
 static KeyList kl[] = {
     { "None",       0 },
     { "Space",      XK_space },
@@ -549,7 +549,7 @@ static KeyList kl[] = {
 
 // list of keys that can be used in the config file
 // expand this array if you want more
-#if USEWAYLAND
+#if WAYLAND
 static WlKeyList wkl[] = {
     { "None",       0 },
     { "Space",      XKB_KEY_space },
@@ -664,7 +664,7 @@ typedef struct {
     unsigned int click;
 } ClickType;
 
-#if USEX
+#if X11
 static ButtonType btp[] = {
     { "Left Click",   Button1 },
     { "Middle Click", Button2 },
@@ -674,7 +674,7 @@ static ButtonType btp[] = {
 };
 #endif
 
-#if USEWAYLAND
+#if WAYLAND
 static ButtonType w_btp[] = {
     { "Left Click",   WL_Left },
     { "Middle Click", WL_Middle },
@@ -694,7 +694,7 @@ static ClickType ctp[] = {
     { "ClickNumber",  ClickNumber },
     { "ClickCaps",    ClickCaps },
     { "ClickMode",    ClickMode },
-#if USEIMAGE
+#if IMAGE
     { "ClickImage",   ClickImage },
 #endif
     { "None",         ClickNone },

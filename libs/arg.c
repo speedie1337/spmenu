@@ -188,15 +188,15 @@ void moveend(Arg *arg) {
 }
 
 void paste(Arg *arg) {
-#if USEWAYLAND
+#if WAYLAND
     if (protocol) {
         paste_wl();
     } else {
-#if USEX
+#if X11
         paste_x11(arg->i);
 #endif
     }
-#elif USEX
+#elif X11
     paste_x11(arg->i);
 #endif
 }
@@ -408,14 +408,14 @@ void setlineheight(Arg *arg) {
 }
 
 void setimgsize(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
     setimagesize(img.imagewidth + arg->i, img.imageheight + arg->i);
     drawmenu();
 #endif
 }
 
 void flipimg(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
 
     if (!image) return;
 
@@ -427,7 +427,7 @@ void flipimg(Arg *arg) {
 }
 
 void setimgpos(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
     if (!image || hideimage) return;
 
     if (imageposition < 3) {
@@ -441,7 +441,7 @@ void setimgpos(Arg *arg) {
 }
 
 void setimggaps(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
     img.imagegaps += arg->i;
 
     if (img.imagegaps < 0)
@@ -511,7 +511,7 @@ void togglehighlight(Arg *arg) {
 }
 
 void toggleregex(Arg *arg) {
-#if USEREGEX
+#if REGEX
     regex = !regex;
 
     match();
@@ -528,7 +528,7 @@ void togglefuzzy(Arg *arg) {
 }
 
 void toggleimg(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
 
     hideimage = !hideimage;
 
@@ -538,7 +538,7 @@ void toggleimg(Arg *arg) {
 }
 
 void defaultimg(Arg *arg) {
-#if USEIMAGE
+#if IMAGE
 
     if (hideimage || !image) return;
 

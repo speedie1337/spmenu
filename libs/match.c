@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-#if USEREGEX
+#if REGEX
 #include "regex/regex.h"
 #include "regex/regex.c"
 #endif
@@ -11,7 +11,7 @@ static int matchregex(const char *t, const char *itt);
 static int compare_distance(const void *a, const void *b);
 
 int matchregex(const char *t, const char *itt) {
-#if USEREGEX
+#if REGEX
     re_t reg = re_compile(t);
     int len;
 

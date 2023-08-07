@@ -10,11 +10,11 @@
 #include <X11/extensions/Xrender.h>
 
 // include xinerama
-#if USEXINERAMA
+#if XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif
 
 // include xresources
-#if USEXRESOURCES
+#if XRESOURCES
 #include <X11/Xresource.h>
 #endif

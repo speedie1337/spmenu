@@ -9,7 +9,7 @@ void setupdisplay_x11(void) {
     prepare_window_size_x11();
 
     // resize client to image height if deemed necessary
-#if USEIMAGE
+#if IMAGE
     if (image) resizetoimageheight(img.imageheight);
 #endif
 
@@ -18,7 +18,7 @@ void setupdisplay_x11(void) {
         ? pango_prompt ? TEXTWM(prompt) : TEXTW(prompt) - sp.lrpad / 4 : 0; // prompt width
 
     // init xinerama screens
-#if USEXINERAMA
+#if XINERAMA
     XineramaScreenInfo *info;
     Window pw;
     int a, n, area = 0;
@@ -87,7 +87,7 @@ void setupdisplay_x11(void) {
     set_window_x11();
     set_prop_x11();
 
-#if USEIMAGE
+#if IMAGE
     setimageopts();
 #endif
 
@@ -128,7 +128,7 @@ void prepare_window_size_x11(void) {
 
     sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
     lines = MAX(lines, 0);
-#if USEIMAGE
+#if IMAGE
     img.setlines = lines;
 #endif
 
