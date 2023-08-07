@@ -1,44 +1,51 @@
 /* See LICENSE file for copyright and license details. */
 void drawhighlights(struct item *item, int x, int y, int w, int p, char *itemtext) {
-    int i, indent;
-    char *highlight;
-    char c;
+	char restorechar, text[sizeof tx.text], *highlight,  *ctext;
+	int indent, highlightlen;
 
-    // limitation in order to prevent highlighting from drawing when the text isn't visible
-    if (columns > 5 && lines > 1)
+    if ((columns > 5 && lines > 1) || (!(strlen(itemtext) && strlen(tx.text))) || strstr(itemtext, "</") || is_selected(item->index)) {
         return;
+    }
 
-    if (!(strlen(itemtext) && strlen(tx.text)))
-        return;
+	strcpy(text, tx.text);
 
-    if (strstr(itemtext, "</"))
-        return;
+	for (ctext = text; ctext; ctext = NULL) {
+		highlight = fstrstr(itemtext, ctext);
 
-    for (i = 0, highlight = itemtext; *highlight && tx.text[i];) {
-        if (((fuzzy && !fstrncmp(&(*highlight), &tx.text[i], 1)) || (!fuzzy && *highlight == tx.text[i]))) {
-            c = *highlight;
-            *highlight = '\0';
-            indent = TEXTW(itemtext) - sp.lrpad;
-            *highlight = c;
+		while (highlight) {
+			highlightlen = highlight - itemtext;
+			restorechar = *highlight;
 
-            // highlight character
-            c = highlight[1];
-            highlight[1] = '\0';
-            draw_text(
+			itemtext[highlightlen] = '\0';
+
+			indent = TEXTW(itemtext);
+			itemtext[highlightlen] = restorechar;
+
+			restorechar = highlight[strlen(ctext)];
+			highlight[strlen(ctext)] = '\0';
+
+			if (indent - (sp.lrpad / 2) - 1 < w) {
+                draw_text(
                     draw,
-                    x + indent + (p),
+                    x + indent - (sp.lrpad / 2) - 1,
                     y,
-                    MIN(w - indent - sp.lrpad, TEXTW(highlight) - sp.lrpad),
+					MIN(w - indent, TEXTW(highlight) - sp.lrpad),
                     sp.bh, 0, highlight, 0, False,
                     item == selecteditem ? col_hlselfg : col_hlnormfg,
                     item == selecteditem ? col_hlselbg : col_hlnormbg,
                     item == selecteditem ? alpha_hlselfg : alpha_hlnormfg,
-                    item == selecteditem ? alpha_hlselbg : alpha_hlnormbg);
-            highlight[1] = c;
-            i++;
-        }
-        highlight++;
-    }
+                    item == selecteditem ? alpha_hlselbg : alpha_hlnormbg
+                );
+            }
+
+			highlight[strlen(ctext)] = restorechar;
+
+			if (strlen(highlight) - strlen(ctext) < strlen(ctext))
+				break;
+
+			highlight = fstrstr(highlight + strlen(ctext), ctext);
+		}
+	}
 }
 
 char* get_text_n_sgr(struct item *item) {
@@ -80,7 +87,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     int bg = 0; // background
     int bgfg = 0; // both
     int ignore = 0; // ignore colors
-    int selitem = 0;
     int priitem = 0;
     char *bgcol;
     char *fgcol;
@@ -99,7 +105,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
 
     // memcpy the correct scheme
     if (item == selecteditem) {
-        selitem = 1;
         bgcol = col_itemselbg;
         fgcol = col_itemselfg;
         bga = alpha_itemselbg;
@@ -136,7 +141,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     if (is_selected(item->index)) {
-        selitem = (lines ? 1 : selitem);
         bgcol = col_itemmarkedbg;
         fgcol = col_itemmarkedfg;
         fga = alpha_itemmarkedfg;
@@ -144,7 +148,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     }
 
     // apply extra padding
-    if ((selitem && !priitem) && lines) {
+    if ((!priitem) && lines) {
         leftpadding += selitempadding;
     } else if (priitem && lines) {
         leftpadding += priitempadding;
@@ -166,7 +170,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     obgcol = bgcol;
     oleftpadding = leftpadding;
 
-    if (!hidepowerline && powerlineitems && selitem) {
+    if (!hidepowerline && powerlineitems) {
         if (itempwlstyle == 2) {
             draw_circle(draw, x - sp.plw, y, sp.plw, sp.bh, 0, col_menu, bgcol, alpha_menu, bga);
         } else {
@@ -200,11 +204,9 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                 apply_fribidi(buffer);
                 draw_text(draw, x, y, w, sp.bh, leftpadding, isrtl ? fribidi_text : buffer, 0, pango_item ? True : False, fgcol, bgcol, fga, bga);
 
-                // position and width
                 x += MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
                 w -= MIN(w, TEXTW(buffer) - sp.lrpad + leftpadding);
 
-                // no highlighting if colored text
                 leftpadding = 0;
 
                 char *c_character = item->text + escape + 1; // current character
@@ -310,7 +312,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
     if (!hidehighlight)
         drawhighlights(item, ox, oy, ow, oleftpadding, item->nsgrtext);
 
-    if (!hidepowerline && powerlineitems && selitem) {
+    if (!hidepowerline && powerlineitems) {
         if (itempwlstyle == 2) {
             draw_circle(draw, ret, y, sp.plw, sp.bh, 1, col_menu, obgcol, alpha_menu, obga);
         } else {
