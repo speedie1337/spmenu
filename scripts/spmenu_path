@@ -72,6 +72,9 @@ parse() {
         echo > /tmp/spmenu_out
     fi
 
+    # remove "@" entries
+    [ -f "$HISTORY" ] && grep -v "^@" "$HISTORY" > /tmp/f && mv /tmp/f "$HISTORY"
+
     while read -r sout; do
         command -v run_single_char_func > /dev/null && run_single_char_func "${sout:0:1}"
         command -v run_output_func > /dev/null && run_output_func "${sout}"
@@ -115,6 +118,7 @@ parse() {
 
         printf "Type: '%s'\n" "$EXEC" >> "$LOGFILE"
 
+        bookmark_spmenu
         exec_cmd "$args"
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
@@ -129,9 +133,7 @@ bookmark_path() {
     done < "$BOOKMARK_FILE"
 }
 
-print_bookmarks() {
-    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_bm[@]}" > /tmp/spmenu_out
-
+bookmark_spmenu() {
     while read -r sout; do
         command -v run_pre_bookmark_list_func > /dev/null && run_pre_bookmark_list_func "$sout"
         command -v run_single_char_pre_bookmark_list_func > /dev/null && run_single_char_pre_bookmark_list_func "${sout:0:1}"
@@ -139,13 +141,21 @@ print_bookmarks() {
         printf "Run launcher output: '%s'\n" "$sout" >> "$LOGFILE"
 
         sout_e="$(grep -- "$sout" "$BOOKMARK_FILE" | tail -n 1)"
-        printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
+        [ -n "${sout_e#*:}" ] && {
+            printf "%s\n" "${sout_e#*:}" | ${SHELL:-"/bin/sh"} &
+        } || return
         [ "$MULTISELECT" != "true" ] && break
     done < /tmp/spmenu_out
 
     command -v run_post_bookmark_list_func > /dev/null && run_post_bookmark_list_func
 
     exit 0
+}
+
+print_bookmarks() {
+    bookmark_path | sort "${sort_args[@]}" | $RUNLAUNCHER "${rl_bm[@]}" > /tmp/spmenu_out
+
+    bookmark_spmenu
 }
 
 exec_cmd() {
