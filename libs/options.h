@@ -77,7 +77,7 @@ static char *capslockofftext           = ""; /* Text to display for the caps loc
 static int borderwidth                 = 0; /* Width of the border */
 
 /* Font options */
-static char font[]                     = "Noto Sans Mono 8"; /* Font to draw text and Pango markup with. */
+static char font[]                     = "Noto Sans Mono 10"; /* Font to draw text and Pango markup with. */
 static int textpadding                 = 0; /* Global text padding */
 static int normitempadding             = 0; /* Text padding for normal items */
 static int selitempadding              = 0; /* Text padding for the selected item */
