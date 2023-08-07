@@ -112,7 +112,7 @@ void setupdisplay_x11(void) {
             XFree(dws);
         }
 
-        grabfocus();
+        grabfocus_x11();
     }
 
     // resize window and draw

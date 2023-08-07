@@ -180,15 +180,6 @@ static struct item *nextitem; // next item
 static struct item *selecteditem; // selected item
 static struct item *mouseitem; // clicked item
 
-// various headers
-#include "libs/draw.h"
-#include "libs/stream.h"
-#include "libs/arg.h"
-#include "libs/x11/inc.h"
-#include "libs/wl/inc.h"
-#include "libs/sort.h"
-#include "libs/history.h"
-
 static Draw_t *draw; // Draw_t type, see libs/draw/draw.c
 
 // high priority
@@ -230,16 +221,18 @@ static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
-#if USEX
-static void pastesel(void);
-static void grabfocus(void);
-#endif
-
 static char **list;
 static size_t listsize;
 
-// user configuration
+// various headers
 #include "libs/options.h"
+#include "libs/draw.h"
+#include "libs/stream.h"
+#include "libs/arg.h"
+#include "libs/x11/inc.h"
+#include "libs/wl/inc.h"
+#include "libs/sort.h"
+#include "libs/history.h"
 
 static char *fonts[] = { font };
 
@@ -482,12 +475,6 @@ char * cistrstr(const char *h, const char *n) {
     return NULL;
 }
 
-#if USEX
-void grabfocus(void) {
-    grabfocus_x11();
-}
-#endif
-
 void insert(const char *str, ssize_t n) {
     if (strlen(tx.text) + n > sizeof tx.text - 1)
         return; // length of text should not exceed size
@@ -536,14 +523,6 @@ size_t nextrune(int inc) {
 
     return rune;
 }
-
-#if USEX
-void pastesel(void) {
-    if (!protocol) {
-        pastesel_x11();
-    }
-}
-#endif
 
 void resizeclient(void) {
 #if USEWAYLAND

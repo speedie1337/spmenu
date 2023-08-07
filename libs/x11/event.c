@@ -24,14 +24,14 @@ void eventloop_x11(void) {
             case FocusIn:
                 // regrab focus from parent window
                 if (ev.xfocus.window != win)
-                    grabfocus();
+                    grabfocus_x11();
                 break;
             case KeyPress: // read key array and call functions
                 keypress_x11(&ev);
                 break;
             case SelectionNotify: // paste selection
                 if (ev.xselection.property == utf8)
-                    pastesel();
+                    pastesel_x11();
                 break;
             case VisibilityNotify:
                 if (ev.xvisibility.state != VisibilityUnobscured)
