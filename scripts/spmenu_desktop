@@ -6,10 +6,6 @@
 
 check_desktop() {
     [ ! -d "$CONFDIR/spmenu/run" ] && mkdir -p "$CONFDIR/spmenu/run"
-    if [ ! -f "$CONFDIR/spmenu/run/.first_run" ]; then
-        print_desktop_help
-        touch "$CONFDIR/spmenu/run/.first_run"
-    fi
 }
 
 print_desktop_help() {
