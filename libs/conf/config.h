@@ -1,5 +1,4 @@
 /* See LICENSE file for copyright and license details. */
-#include "../theme/theme.h"
 
 #if USEX
 typedef struct {
@@ -702,4 +701,5 @@ static ClickType ctp[] = {
 };
 
 static void conf_init(void);
+static void theme_load(void);
 static int bind_init(void);

@@ -373,15 +373,12 @@ static WlMouse wl_buttons[] = {
 #include "libs/schemes.c"
 #include "libs/argv.h"
 #include "libs/argv.c"
-
-// include x11 code
-#include "libs/x11/inc.c"
-#include "libs/wl/inc.c"
-
-// include more functions
 #include "libs/history.c"
 #include "libs/arg.c"
 #include "libs/stream.c"
+
+#include "libs/x11/inc.c"
+#include "libs/wl/inc.c"
 
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {
