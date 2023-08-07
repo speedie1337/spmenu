@@ -1,17 +1,18 @@
 /* See LICENSE file for copyright and license details. */
-void drawhighlights(struct item *item, int x, int y, int w, int p, const char *ittext) {
+void drawhighlights(struct item *item, int x, int y, int w, int p, char *itemtext) {
     int i, indent;
     char *highlight;
     char c;
 
     // limitation in order to prevent highlighting from drawing when the text isn't visible
-    if (columns > 5 && lines > 1) return;
+    if (columns > 5 && lines > 1)
+        return;
 
-    char *itemtext = strdup(ittext);
+    if (!(strlen(itemtext) && strlen(tx.text)))
+        return;
 
-    if (!(strlen(itemtext) && strlen(tx.text))) return;
-
-    if (strstr(itemtext, "</")) return;
+    if (strstr(itemtext, "</"))
+        return;
 
     for (i = 0, highlight = itemtext; *highlight && tx.text[i];) {
         if (((fuzzy && !fstrncmp(&(*highlight), &tx.text[i], 1)) || (!fuzzy && *highlight == tx.text[i]))) {
