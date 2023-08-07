@@ -1,5 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 
+static void readstdin(void);
+static void readfile(void);
+static int parsemarkup(int index);
+
 void readstdin(void) {
     char buf[sizeof tx.text], *p;
     size_t i, itemsiz = 0;

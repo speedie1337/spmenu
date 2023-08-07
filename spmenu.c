@@ -8,8 +8,9 @@
 #include <string.h>
 #include <locale.h>
 #include <unistd.h>
-#include "libs/draw/draw.h"
 #include "libs/main.c"
+
+#include "libs/draw/draw.h"
 
 #ifndef VERSION
 #define VERSION "unknown"
@@ -175,11 +176,10 @@ static size_t listsize;
 // various headers
 #include "libs/options.h"
 #include "libs/draw.h"
-#include "libs/stream.h"
 #include "libs/arg.h"
+
 #include "libs/x11/inc.h"
 #include "libs/wl/inc.h"
-#include "libs/sort.h"
 
 static char *fonts[] = { font };
 
@@ -190,12 +190,12 @@ static char *fonts[] = { font };
 #include "libs/sort.c"
 #include "libs/match.c"
 #include "libs/schemes.c"
+#include "libs/stream.c"
 #include "libs/draw.c"
 #include "libs/conf/config.c"
 #include "libs/argv.c"
 #include "libs/history.c"
 #include "libs/arg.c"
-#include "libs/stream.c"
 
 #if X11
 static Key keys[] = {
