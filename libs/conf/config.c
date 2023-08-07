@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
+#if USECONFIG
 #include <libconfig.h>
+#include "config.h"
 
 int bind_init(void) {
     char *xdg_conf;
@@ -1519,3 +1521,4 @@ void theme_load(void) {
     config_destroy(&cfg);
     return;
 }
+#endif

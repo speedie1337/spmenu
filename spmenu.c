@@ -213,7 +213,6 @@ static struct item *mouseitem; // clicked item
 #include "libs/main.h"
 #include "libs/draw.h"
 #include "libs/stream.h"
-#include "libs/schemes.h"
 #include "libs/arg.h"
 #include "libs/x11/inc.h"
 #include "libs/wl/inc.h"
@@ -350,28 +349,15 @@ static WlMouse wl_buttons[] = {
 };
 #endif
 
-// color array
-#include "libs/colors.h"
-
-// config file
-#if USECONFIG
-#include "libs/conf/config.h"
-#include "libs/conf/config.c"
-#endif
-
 // include functions
-#include "libs/img.h"
 #include "libs/img.c"
-#include "libs/icon.h"
 #include "libs/icon.c"
-#include "libs/rtl.h"
 #include "libs/rtl.c"
 #include "libs/sort.c"
-#include "libs/match.h"
 #include "libs/match.c"
-#include "libs/draw.c"
 #include "libs/schemes.c"
-#include "libs/argv.h"
+#include "libs/draw.c"
+#include "libs/conf/config.c"
 #include "libs/argv.c"
 #include "libs/history.c"
 #include "libs/arg.c"

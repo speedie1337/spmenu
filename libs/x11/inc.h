@@ -2,7 +2,6 @@
 #if USEX
 #include "lib.h"
 
-#include "def.h"
 #include "init.h"
 #include "event.h"
 #include "xrdb.h"

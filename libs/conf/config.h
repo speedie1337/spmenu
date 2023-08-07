@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-
+#if USECONFIG
 #if USEX
 typedef struct {
     char *key;
@@ -703,3 +703,4 @@ static ClickType ctp[] = {
 static void conf_init(void);
 static void theme_load(void);
 static int bind_init(void);
+#endif
