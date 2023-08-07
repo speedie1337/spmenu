@@ -180,7 +180,6 @@ static size_t listsize;
 #include "libs/x11/inc.h"
 #include "libs/wl/inc.h"
 #include "libs/sort.h"
-#include "libs/history.h"
 
 static char *fonts[] = { font };
 

@@ -1,5 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 
+static char **history;
+static size_t histsz, histpos;
+static void savehistory(char *input);
+
 void loadhistory(void) {
     FILE *fp = NULL;
     static size_t cap = 0;

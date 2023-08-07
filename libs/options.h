@@ -111,6 +111,7 @@ static int overridelines               = 1; /* Allow overriding lines using keyb
 static int overridecolumns             = 1; /* Allow overriding columns using keybinds */
 
 /* History options */
+static char *histfile                  = NULL; /* History file, NULL means no history file */
 static int maxhist                     = 64; /* Max number of history entries */
 static int histdup                     = 0;	/* If 1, record repeated histories */
 
