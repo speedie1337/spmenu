@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <math.h>
 #include <unistd.h>
 #include "libs/main.c"
 
