@@ -1,17 +1,13 @@
 /* spmenu - fancy dynamic menu
  * See LICENSE file for copyright and license details.
  */
-#include <ctype.h>
-#include <locale.h>
-#include <math.h>
+
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
-#include <time.h>
+#include <locale.h>
 #include <unistd.h>
-#include <signal.h>
-#include <fcntl.h>
 #include "libs/draw/draw.h"
 #include "libs/main.c"
 
@@ -653,10 +649,10 @@ void handle(void) {
 }
 
 int main(int argc, char *argv[]) {
-    readargs(argc, argv); // start by reading arguments
+    readargs(argc, argv);
 
     /* pledge limits what programs can do, so here we specify what spmenu should be allowed to do
-     * TODO: test this on a openbsd operating system
+     * TODO: Test this on an actual OpenBSD operating system
      */
 #ifdef __OpenBSD__
     if (pledge("stdio rpath wpath cpath", NULL) == -1)
@@ -665,5 +661,5 @@ int main(int argc, char *argv[]) {
 
     handle();
 
-    return 1; // should be unreachable
+    return 1;
 }
