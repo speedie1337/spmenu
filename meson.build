@@ -10,7 +10,6 @@ cc = meson.get_compiler('c')
 project_source_files = [
   'libs/draw/draw.c',
   'spmenu.c',
-  'libs/main.c',
 ]
 
 project_dependencies = [

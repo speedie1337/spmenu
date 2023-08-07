@@ -33,7 +33,7 @@ typedef struct {
 } Draw_t;
 
 /* Cairo color convertion */
-void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha);
+void draw_cairo_set_source_hex(cairo_t* cr, const char *col, int alpha);
 
 /* Cairo image drawing */
 void draw_img(Draw_t *draw, int x, int y);
@@ -67,3 +67,7 @@ void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int
 
 /* Screenshot functions */
 void draw_save_screen(Draw_t *draw, const char *file);
+
+/* Misc */
+void draw_die(const char *fmt, ...);
+void *draw_calloc(size_t nmemb, size_t size);

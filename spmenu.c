@@ -12,90 +12,62 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include "libs/draw/draw.h"
+#include "libs/main.c"
 
-// set version
 #ifndef VERSION
 #define VERSION "unknown"
 #endif
 
-// check if we should enable right to left language support
 #ifndef RTL
 #define USERTL 0
 #else
 #define USERTL 1
 #endif
 
-// check if we should enable image support
 #ifndef IMAGE
 #define USEIMAGE 0
 #else
 #define USEIMAGE 1
 #endif
 
-// check if we should enable multimonitor support using libXinerama
 #ifndef XINERAMA
 #define USEXINERAMA 0
 #else
 #define USEXINERAMA 1
 #endif
 
-// check if we should enable config file support using libconfig
 #ifndef CONFIG
 #define USECONFIG 0
 #else
 #define USECONFIG 1
 #endif
 
-// check if we should enable .Xresources support
 #ifndef XRESOURCES
 #define USEXRESOURCES 0
 #else
 #define USEXRESOURCES 1
 #endif
 
-// check if we should enable Wayland support
 #ifndef WAYLAND
 #define USEWAYLAND 0
 #else
 #define USEWAYLAND 1
 #endif
 
-// check if we should enable X11 support
 #ifndef X11
 #define USEX 0
 #else
 #define USEX 1
 #endif
 
-// check if we should enable regex matching
 #ifndef REGEX
 #define USEREGEX 0
 #else
 #define USEREGEX 1
 #endif
 
-// include fribidi used for right to left language support
-#if USERTL
-#include <fribidi.h>
-#endif
-
-// include libraries used for image support
-#if USEIMAGE
-#include <errno.h>
-#include <pwd.h>
-#include <Imlib2.h>
-#include <openssl/md5.h>
-#endif
-
-// include Xlib
-#if USEX
-#include <X11/Xlib.h>
-#endif
-
-// include macros and other defines
-#include "libs/define.c"
-
-enum { // click enum
+enum {
     ClickWindow,
     ClickPrompt,
     ClickInput,
@@ -209,8 +181,6 @@ static struct item *selecteditem; // selected item
 static struct item *mouseitem; // clicked item
 
 // various headers
-#include "libs/draw/draw.h"
-#include "libs/main.h"
 #include "libs/draw.h"
 #include "libs/stream.h"
 #include "libs/arg.h"
@@ -262,7 +232,7 @@ static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 #if USEX
 static void pastesel(void);
-static void grabfocus(void); // focus doesn't need to be grabbed on wayland
+static void grabfocus(void);
 #endif
 
 static char **list;
@@ -272,6 +242,20 @@ static size_t listsize;
 #include "libs/options.h"
 
 static char *fonts[] = { font };
+
+// include functions
+#include "libs/img.c"
+#include "libs/icon.c"
+#include "libs/rtl.c"
+#include "libs/sort.c"
+#include "libs/match.c"
+#include "libs/schemes.c"
+#include "libs/draw.c"
+#include "libs/conf/config.c"
+#include "libs/argv.c"
+#include "libs/history.c"
+#include "libs/arg.c"
+#include "libs/stream.c"
 
 #if USEX
 static Key keys[] = {
@@ -348,20 +332,6 @@ static WlMouse wl_buttons[] = {
     { ClickNone,            WL_Up,           moveprev,     {0} },
 };
 #endif
-
-// include functions
-#include "libs/img.c"
-#include "libs/icon.c"
-#include "libs/rtl.c"
-#include "libs/sort.c"
-#include "libs/match.c"
-#include "libs/schemes.c"
-#include "libs/draw.c"
-#include "libs/conf/config.c"
-#include "libs/argv.c"
-#include "libs/history.c"
-#include "libs/arg.c"
-#include "libs/stream.c"
 
 #include "libs/x11/inc.c"
 #include "libs/wl/inc.c"

@@ -8,7 +8,6 @@
 #include <math.h>
 
 #include "draw.h"
-#include "../main.h"
 
 #ifndef X11
 #define USEX 0
@@ -26,7 +25,7 @@
 #include <X11/Xlib.h>
 #endif
 
-void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
+void draw_cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
     unsigned int hex;
 
     sscanf(col, "#%x", &hex);
@@ -40,7 +39,7 @@ void cairo_set_source_hex(cairo_t* cr, const char *col, int alpha) {
 
 #if USEX
 Draw_t *draw_create_x11(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap, int protocol) {
-    Draw_t *draw = ecalloc(1, sizeof(Draw_t));
+    Draw_t *draw = draw_calloc(1, sizeof(Draw_t));
 
     draw->protocol = protocol;
     draw->dpy = dpy;
@@ -61,7 +60,7 @@ Draw_t *draw_create_x11(Display *dpy, int screen, Window root, unsigned int w, u
 
 #if USEWAYLAND
 Draw_t *draw_create_wl(int protocol) {
-    Draw_t *draw = ecalloc(1, sizeof(Draw_t));
+    Draw_t *draw = draw_calloc(1, sizeof(Draw_t));
 
     draw->protocol = protocol;
 
@@ -112,10 +111,10 @@ static Fnt *font_create(Draw_t *draw, const char *fontname) {
     PangoFontMetrics *metrics;
 
     if (!fontname) {
-        die("spmenu: no font specified.");
+        draw_die("font_create(): no font specified.");
     }
 
-    font = ecalloc(1, sizeof(Fnt));
+    font = draw_calloc(1, sizeof(Fnt));
     font->dpy = draw->dpy;
 
     fontmap = pango_cairo_font_map_new();
@@ -176,7 +175,7 @@ void draw_arrow(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int 
     }
     cairo_t *cr = cairo_create(sf);
 
-    cairo_set_source_hex(cr, prevcol, prevalpha);
+    draw_cairo_set_source_hex(cr, prevcol, prevalpha);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
     cairo_rectangle(cr, x, y, w, h);
@@ -187,7 +186,7 @@ void draw_arrow(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int 
     cairo_line_to(cr, x, y + h);
     cairo_close_path(cr);
 
-    cairo_set_source_hex(cr, nextcol, nextalpha);
+    draw_cairo_set_source_hex(cr, nextcol, nextalpha);
     cairo_fill(cr);
 
     cairo_destroy(cr);
@@ -208,7 +207,7 @@ void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int
 
     cairo_t *cr = cairo_create(sf);
 
-    cairo_set_source_hex(cr, prevcol, prevalpha);
+    draw_cairo_set_source_hex(cr, prevcol, prevalpha);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
     // draw rectangle
@@ -226,7 +225,7 @@ void draw_circle(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int
     cairo_arc(cr, cx, cy, rad, start, end);
     cairo_close_path(cr);
 
-    cairo_set_source_hex(cr, nextcol, nextalpha);
+    draw_cairo_set_source_hex(cr, nextcol, nextalpha);
     cairo_fill(cr);
 
     cairo_destroy(cr);
@@ -248,10 +247,10 @@ void draw_rect(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, int f
     cairo_t *cr = cairo_create(sf);
 
     if (!cr) {
-        die("failed to create cairo context");
+        draw_die("draw_rect(): failed to create cairo context");
     }
 
-    cairo_set_source_hex(cr, invert ? bgcol : fgcol, invert ? bgalpha : fgalpha);
+    draw_cairo_set_source_hex(cr, invert ? bgcol : fgcol, invert ? bgalpha : fgalpha);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
 
     if (filled) {
@@ -292,7 +291,7 @@ int draw_text(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, unsign
         draw->d = cairo_create(draw->surface);
 
         // draw bg
-        cairo_set_source_hex(draw->d, invert ? fgcol : bgcol, invert ? fgalpha : bgalpha);
+        draw_cairo_set_source_hex(draw->d, invert ? fgcol : bgcol, invert ? fgalpha : bgalpha);
         cairo_set_operator(draw->d, CAIRO_OPERATOR_SOURCE);
         cairo_rectangle(draw->d, x - lpad, y, w + lpad, h);
         cairo_fill(draw->d);
@@ -328,7 +327,7 @@ int draw_text(Draw_t *draw, int x, int y, unsigned int w, unsigned int h, unsign
                 pango_layout_set_single_paragraph_mode(draw->font->layout, True);
 
                 // draw fg
-                cairo_set_source_hex(draw->d, fgcol, fgalpha);
+                draw_cairo_set_source_hex(draw->d, fgcol, fgalpha);
                 cairo_move_to(draw->d, x, y + (h - draw->font->h) / 2);
 
                 // update and show layout
@@ -432,4 +431,29 @@ unsigned int draw_fontset_getwidth_clamp(Draw_t *draw, const char *text, unsigne
     if (draw && draw->font && text && n)
         tmp = draw_text(draw, 0, 0, 0, 0, 0, text, n, markup, "#000000", "#000000", 255, 255);
     return MIN(n, tmp);
+}
+
+void draw_die(const char *fmt, ...) {
+    va_list ap;
+
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+
+    if (fmt[0] && fmt[strlen(fmt)-1] == ':') {
+        fputc(' ', stderr);
+        perror(NULL);
+    } else {
+        fputc('\n', stderr);
+    }
+
+    exit(1);
+}
+
+void *draw_calloc(size_t nmemb, size_t size) {
+    void *p;
+
+    if (!(p = calloc(nmemb, size)))
+        draw_die("draw_calloc:");
+    return p;
 }

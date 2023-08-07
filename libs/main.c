@@ -1,18 +1,45 @@
 /* See LICENSE file for copyright and license details. */
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "main.h"
+#ifndef MAX
+#define MAX(A, B)               ((A) > (B) ? (A) : (B))
+#endif
+#ifndef MIN
+#define MIN(A, B)               ((A) < (B) ? (A) : (B))
+#endif
+#ifndef BETWEEN
+#define BETWEEN(X, A, B)        ((A) <= (X) && (X) <= (B))
+#endif
+#ifndef INTERSECT
+#define INTERSECT(x,y,w,h,r)    (MAX(0, MIN((x)+(w),(r).x_org+(r).width)  - MAX((x),(r).x_org)) \
+        && MAX(0, MIN((y)+(h),(r).y_org+(r).height) - MAX((y),(r).y_org)))
+#endif
+#ifndef LENGTH
+#define LENGTH(X)               (sizeof X / sizeof X[0])
+#endif
+#ifndef TEXTW
+#define TEXTW(X)                (draw_font_getwidth(draw, (X), False) + sp.lrpad)
+#endif
+#ifndef TEXTWM
+#define TEXTWM(X)               (draw_font_getwidth(draw, (X), True) + sp.lrpad)
+#endif
+#ifndef NUMBERSMAXDIGITS
+#define NUMBERSMAXDIGITS        100
+#endif
+#ifndef NUMBERSBUFSIZE
+#define NUMBERSBUFSIZE          (NUMBERSMAXDIGITS * 2) + 1
+#endif
+#ifndef MAXITEMLENGTH
+#define MAXITEMLENGTH           1024
+#endif
 
-void * ecalloc(size_t nmemb, size_t size) {
-    void *p;
-
-    if (!(p = calloc(nmemb, size)))
-        die("calloc:");
-    return p;
-}
+size_t sp_strncpy(char *restrict dst, const char *restrict src, size_t size);
+void die(const char *fmt, ...);
+void *ecalloc(size_t nmemb, size_t size);
 
 size_t sp_strncpy(char *restrict dst, const char *restrict src, size_t size) {
     int offset;
@@ -54,4 +81,12 @@ void die(const char *fmt, ...) {
     }
 
     exit(1);
+}
+
+void *ecalloc(size_t nmemb, size_t size) {
+    void *p;
+
+    if (!(p = calloc(nmemb, size)))
+        die("calloc:");
+    return p;
 }
