@@ -35,6 +35,22 @@ void execute_fifo_cmd(void) {
     } else if (!strcmp(fifot, "die")) {
         close(fd);
         die("FIFO told me to die.");
+    } else if (!strcmp(fifot, "loadconfig")) {
+#if CONFIG
+        conf_init();
+#endif
+    } else if (!strcmp(fifot, "output")) {
+        if (selecteditem) {
+            for (int i = 0; i < sel_size; i++) {
+                if (sel_index[i] != -1 && (!selecteditem || selecteditem->index != sel_index[i])) {
+                    puts(items[sel_index[i]].text);
+                }
+            }
+        }
+    } else if (!strcmp(fifot, "output_index")) {
+        if (printindex && selecteditem) {
+            fprintf(stdout, "%d\n", selecteditem->index);
+        }
     } else if (!strcmp(fifot, "exit_0")) {
         exit(0);
     } else if (!strcmp(fifot, "exit_1")) {

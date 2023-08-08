@@ -740,6 +740,29 @@ background color.
 
 **Note: Background colors will used until a reset sequence is found.**
 
+## FIFO
+
+spmenu has support for FIFO. This means you can tell spmenu to perform certain
+actions while it is running. spmenu checks the FIFO every 0.1 seconds. To use it,
+simply append a valid name to the FIFO file, which by default is /tmp/spmenu.fifo.
+
+You must append **without** a newline. Otherwise it will be considered invalid.
+It is recommended that you sleep for 0.1 seconds after appending to the file
+for performance reasons.
+
+| Name               | Description                                                                       |
+| :----------------- | :-------------------------------------------------------------------------------- |
+| drawmenu           | Draw the menu                                                                     |
+| match              | Match entries again, useful if you're loading items from file                     |
+| update             | Match and then draw the menu. Both drawmenu and match one after another           |
+| output             | Output selected item text                                                         |
+| output_index       | Output selected item index
+| loadconfig         | Reload config                                                                     |
+| test               | Print out 'Test print' to standard output                                         |
+| die                | Print out 'FIFO told me to die.' using the die() function                         |
+| exit_0             | Exit with exit code 0                                                             |
+| exit_1             | Exit with exit code 1                                                             |
+
 ## Pango markup and text formatting
 
 Because spmenu uses Pango and Cairo for text drawing, Pango markup can be used

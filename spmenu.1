@@ -860,6 +860,81 @@ foreground and background color.
 .PP
 \f[B]Note: Background colors will used until a reset sequence is
 found.\f[R]
+.SS FIFO
+.PP
+spmenu has support for FIFO.
+This means you can tell spmenu to perform certain actions while it is
+running.
+spmenu checks the FIFO every 0.1 seconds.
+To use it, simply append a valid name to the FIFO file, which by default
+is /tmp/spmenu.fifo.
+.PP
+You must append \f[B]without\f[R] a newline.
+Otherwise it will be considered invalid.
+It is recommended that you sleep for 0.1 seconds after appending to the
+file for performance reasons.
+.PP
+.TS
+tab(@);
+lw(12.7n) lw(57.3n).
+T{
+Name
+T}@T{
+Description
+T}
+_
+T{
+drawmenu
+T}@T{
+Draw the menu
+T}
+T{
+match
+T}@T{
+Match entries again, useful if you\[cq]re loading items from file
+T}
+T{
+update
+T}@T{
+Match and then draw the menu.
+Both drawmenu and match one after another
+T}
+T{
+output
+T}@T{
+Output selected item text
+T}
+T{
+output_index
+T}@T{
+Output selected item index
+T}
+T{
+loadconfig
+T}@T{
+Reload config
+T}
+T{
+test
+T}@T{
+Print out `Test print' to standard output
+T}
+T{
+die
+T}@T{
+Print out `FIFO told me to die.' using the die() function
+T}
+T{
+exit_0
+T}@T{
+Exit with exit code 0
+T}
+T{
+exit_1
+T}@T{
+Exit with exit code 1
+T}
+.TE
 .SS Pango markup and text formatting
 .PP
 Because spmenu uses Pango and Cairo for text drawing, Pango markup can
