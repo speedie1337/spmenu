@@ -60,6 +60,9 @@ static int generatecache               = 1; /* Generate image cache by default *
 static int maxcache                    = 512; /* Max image size to cache */
 static char *cachedir                  = "default"; /* Cache directory. Default means spmenu will determine automatically */
 
+/* Fifo options */
+static char *fifofile                  = "/tmp/spmenu.fifo"; /* spmenu FIFO path */
+
 /* Screenshot options */
 static char *screenshotfile            = NULL; /* Screenshot file path. If set to NULL, the default path will be used. */
 static char *screenshotname            = NULL; /* Screenshot file name. If set to NULL, the default name will be used. */

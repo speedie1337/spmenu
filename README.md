@@ -16,6 +16,7 @@ can be themed to look identical to dmenu.
 - Reading entries from standard input and file
 - Image and icon support
 - Run launcher, supporting both .desktop entries and $PATH
+- FIFO, allowing programs to communicate with spmenu
 - fzf-like Fuzzy matching
 - Vi-like modes (see docs/binds-vim.conf)
 - History buffer

@@ -86,6 +86,10 @@ if get_option('regex')
   build_args += [ '-DREGEX' ]
 endif
 
+if get_option('fifo')
+  build_args += [ '-DFIFO' ]
+endif
+
 project_target = executable(
   meson.project_name(),
   project_source_files, install : true,

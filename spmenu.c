@@ -181,7 +181,6 @@ static size_t listsize;
 
 static char *fonts[] = { font };
 
-// include functions
 #include "libs/img.c"
 #include "libs/icon.c"
 #include "libs/rtl.c"
@@ -194,6 +193,7 @@ static char *fonts[] = { font };
 #include "libs/argv.c"
 #include "libs/history.c"
 #include "libs/arg.c"
+#include "libs/fifo.c"
 
 #if X11
 static Key keys[] = {
@@ -555,6 +555,10 @@ void handle(void) {
 
         init_appearance(); // init colorschemes by reading arrays
 
+#if FIFO
+        init_fifo();
+#endif
+
         setupdisplay_x11(); // set up display and create window
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
 #endif
@@ -581,6 +585,10 @@ void handle(void) {
         readstdin();
         set_mode();
         init_appearance();
+
+#if FIFO
+        init_fifo();
+#endif
 
         handle_wl();
 #endif

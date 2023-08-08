@@ -10,6 +10,7 @@ xresources=${xresources:-true}
 wayland=${wayland:-true}
 x11=${x11:-true}
 regex=${regex:-true}
+fifo=${fifo:-true}
 
 prefix="${prefix:-/usr}"
 
@@ -307,6 +308,7 @@ build() {
             -Dwayland="$wayland" \
             -Dx11="$x11" \
             -Dregex="$regex" \
+            -Dfifo="$fifo" \
             --prefix "$prefix" \
             build || exit 1
     else
@@ -320,6 +322,7 @@ build() {
             -Dwayland="$wayland" \
             -Dx11="$x11" \
             -Dregex="$regex" \
+            -Dfifo="$fifo" \
             --prefix "$prefix" \
             build || exit 1
     fi

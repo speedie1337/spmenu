@@ -17,7 +17,7 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+X +wayland +imlib2 +ssl +regex +fribidi +config +xinerama +xrdb +doc +run +test +man"
+IUSE="+X +wayland +imlib2 +ssl +regex +fribidi +config +xinerama +xrdb +fifo +doc +run +test +man"
 REQUIRED_USE="
 	!wayland? ( X )
 	!X? ( wayland )
