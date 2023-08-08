@@ -492,8 +492,6 @@ void resizeclient(void) {
  */
 void get_width(void) {
     sp.inputw = sp.mw * inputwidth;
-
-    fprintf(stderr, "%f\n", inputwidth);
 }
 
 void get_mh(void) {
