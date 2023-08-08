@@ -124,15 +124,14 @@ static struct item *list_items;
 static struct item *matches;
 static struct item *matchend;
 
-static struct item *previousitem; // previous item
-static struct item *currentitem; // current item
-static struct item *nextitem; // next item
-static struct item *selecteditem; // selected item
-static struct item *mouseitem; // clicked item
+static struct item *previousitem;
+static struct item *currentitem;
+static struct item *nextitem;
+static struct item *selecteditem;
+static struct item *mouseitem;
 
-static Draw_t *draw; // Draw_t type, see libs/draw/draw.c
+static Draw_t *draw;
 
-// high priority
 static int hplength = 0;
 static char **hpitems = NULL;
 
@@ -150,7 +149,6 @@ static int isrtl = 1;
 static int isrtl = 0;
 #endif
 
-// declare functions
 static int is_selected(size_t index);
 static void calcoffsets(void);
 static void recalculatenumbers(void);
@@ -166,7 +164,6 @@ static void appenditem(struct item *item, struct item **list, struct item **last
 static int max_textw(void);
 static size_t nextrune(int inc);
 
-// matching
 static char * cistrstr(const char *s, const char *sub);
 static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char *(*fstrstr)(const char *, const char *) = cistrstr;
@@ -280,7 +277,7 @@ static WlMouse wl_buttons[] = {
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {
         if (sel_index[i] == index) {
-            return 1; // selected item index is size_t index
+            return 1;
         }
     }
 
@@ -305,12 +302,10 @@ void recalculatenumbers(void) {
     if (matchend) {
         numer++;
 
-        // walk through items that match and add to numer
         for (item = matchend; item && item->left; item = item->left)
             numer++;
     }
 
-    // walk through all items, matching or not and add to denom
     for (item = items; item && item->text; item++) {
         denom++;
     }
@@ -351,21 +346,19 @@ void calcoffsets(void) {
     if (lines > 0) {
         offset = lines * columns * sp.bh;
         sp.maxlen = sp.mw - (sp.promptw + modew + numberw + capsw + menumarginh);
-    } else { // no lines, therefore the size of items must be decreased to fit the menu elements
+    } else { /* no lines, therefore the size of items must be decreased to fit the menu elements */
         offset = sp.mw - (sp.promptw + sp.inputw + larroww + rarroww + modew + numberw + capsw + menumarginh);
         sp.maxlen = selecteditem ? sp.inputw : sp.mw - (sp.promptw + modew + numberw + capsw + (selecteditem ? larroww : 0) + (selecteditem ? rarroww : 0));
     }
 
-    // calculate which items will begin the next page
-    for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) {
+    for (i = 0, nextitem = currentitem; nextitem; nextitem = nextitem->right) { // next page
         nextitem->nsgrtext = get_text_n_sgr(nextitem);
 
         if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(nextitem->nsgrtext) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
             break;
     }
 
-    // calculate which items will begin the previous page
-    for (i = 0, previousitem = currentitem; previousitem && previousitem->left; previousitem = previousitem->left) {
+    for (i = 0, previousitem = currentitem; previousitem && previousitem->left; previousitem = previousitem->left) { // previous page
         previousitem->nsgrtext = get_text_n_sgr(previousitem);
 
         if ((i += (lines > 0) ? sp.bh : MIN(TEXTWM(previousitem->left->nsgrtext) + (powerlineitems ? !lines ? 3 * sp.plw : 0 : 0), offset)) > offset)
@@ -386,14 +379,12 @@ void cleanup(void) {
     size_t i;
 
 #if IMAGE
-    cleanupimage(); // function frees images
+    cleanupimage();
 #endif
 
-    // free high priority items
     for (i = 0; i < hplength; ++i)
         free(hpitems[i]);
 
-    // free drawing and close the display
     draw_free(draw);
 
 #if X11
@@ -405,7 +396,6 @@ void cleanup(void) {
     free(sel_index);
 }
 
-// This function handles case insensitive matching
 char * cistrstr(const char *h, const char *n) {
     size_t i;
 
@@ -425,7 +415,7 @@ char * cistrstr(const char *h, const char *n) {
 
 void insert(const char *str, ssize_t n) {
     if (strlen(tx.text) + n > sizeof tx.text - 1)
-        return; // length of text should not exceed size
+        return;
 
     static char l[BUFSIZ] = "";
 
@@ -440,12 +430,10 @@ void insert(const char *str, ssize_t n) {
             sizeof tx.text - sp.cursor - MAX(n, 0)
     );
 
-    // update cursor
     if (n > 0 && str && n) {
         memcpy(&tx.text[sp.cursor], str, n);
     }
 
-    // add to cursor position and continue matching
     sp.cursor += n;
     match();
 
@@ -486,7 +474,7 @@ void resizeclient(void) {
 #endif
 }
 
-/* Width reserved for input when !lines is a fixed size of the menu width / 3
+/* Width reserved for input when !lines is a fixed size of the menu width * inputwidth
  * This is reasonable, but in rare cases may cause input text to overlap
  * items.
  */
@@ -535,7 +523,6 @@ void set_mode(void) {
         sp_strncpy(tx.modetext, normtext, sizeof(tx.modetext));
     }
 
-    // normal mode disabled
     if (forceinsertmode) {
         sp.mode = 1;
         sp.allowkeys = 1;
@@ -551,11 +538,11 @@ void handle(void) {
             die("no fonts could be loaded.");
         }
 
-        loadhistory(); // read history entries
+        loadhistory();
 #if IMAGE
         store_image_vars();
 #endif
-        // fast (-f) means we grab keyboard before reading standard input
+
         if (fast && !isatty(0)) {
             grabkeyboard_x11();
             readstdin();
