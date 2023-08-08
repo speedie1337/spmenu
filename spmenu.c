@@ -518,11 +518,11 @@ void get_mh(void) {
 }
 
 void set_mode(void) {
-    if (!type) { // no typing allowed, require normal mode
+    if (!type) {
         sp.mode = 0;
     }
 
-    // set default mode, must be done before the event loop or keybindings will not work
+    // set default mode
     if (mode) {
         sp.mode = 1;
         sp.allowkeys = 1;

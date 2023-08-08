@@ -8,7 +8,6 @@
 #include <sys/mman.h>
 #include <time.h>
 #include <sys/timerfd.h>
-#include <assert.h>
 #include <signal.h>
 #include <poll.h>
 #include <wayland-client.h>
