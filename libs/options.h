@@ -9,6 +9,7 @@ static int loadconfig                  = 1; /* Load configuration (~/.config/spm
 static int loadtheme                   = 1; /* Load theme (~/.config/spmenu/theme.conf) on runtime */
 static int loadbinds                   = 1; /* Load keybind file (~/.config/spmenu/binds.conf) on runtime */
 static int mon                         = -1; /* Monitor to run spmenu on */
+static int managed                     = 0; /* Let your window manager manage spmenu? */
 
 /* Wayland options */
 static int scrolldistance              = 512; /* Distance to scroll for a scroll action to count */
@@ -25,13 +26,13 @@ static int alpha                       = 1; /* Enable alpha */
 static int menuposition                = 2; /* Position of the menu (0: Bottom, 1: Top, 2: Center */
 static int menupaddingv                = 0; /* Vertical padding inside the menu (px) */
 static int menupaddingh                = 0; /* Horizontal padding inside the menu (px) */
-static int menuwidth                   = 0; /* spmenu width */
+static int menuwidth                   = 0; /* spmenu window width */
 static int menumarginv                 = 0; /* Vertical padding around the menu */
 static int menumarginh                 = 0; /* Horizontal padding around the menu */
 static int centerwidth                 = 1000; /* Width when centered */
+static double inputwidth               = 0.3; /* Width reserved for input text, (Menu width * input width) */
 static int xpos                        = 0; /* X position to offset spmenu */
 static int ypos                        = 0; /* Y position to offset spmenu */
-static int managed                     = 0; /* Let your window manager manage spmenu? */
 
 /* Powerline options */
 static int powerlineprompt             = 1; /* Enable powerline for the prompt */

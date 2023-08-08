@@ -708,6 +708,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "fast", &fast); // spmenu.input.fast
             config_setting_lookup_int(conf, "type", &type); // spmenu.input.type
             config_setting_lookup_int(conf, "password", &passwd); // spmenu.input.password
+            config_setting_lookup_float(conf, "width", &inputwidth); // spmenu.input.width
         }
     }
 
