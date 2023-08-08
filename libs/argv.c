@@ -594,6 +594,16 @@ void comp_opts(void) {
 #else
     fprintf(stdout, "xrdb: Unsupported\n");
 #endif
+#if REGEX
+    fprintf(stdout, "Regex: Supported\n");
+#else
+    fprintf(stdout, "Regex: Unsupported\n");
+#endif
+#if FIFO
+    fprintf(stdout, "FIFO: Supported\n");
+#else
+    fprintf(stdout, "FIFO: Unsupported\n");
+#endif
 }
 
 void usage(int status) {
