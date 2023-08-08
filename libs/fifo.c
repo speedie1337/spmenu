@@ -1,6 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
 #if FIFO
+
+#include <fcntl.h>
+#include <sys/stat.h>
+
 static void init_fifo(void);
 static void execute_fifo_cmd(void);
 static int done = 1;
