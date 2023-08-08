@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <errno.h>
+#include <time.h>
+
 #ifndef MAX
 #define MAX(A, B)               ((A) > (B) ? (A) : (B))
 #endif
@@ -84,4 +87,23 @@ void *ecalloc(size_t nmemb, size_t size) {
     if (!(p = calloc(nmemb, size)))
         die("calloc:");
     return p;
+}
+
+int msleep(long sec) {
+    struct timespec ts;
+    int ret;
+
+    if (sec < 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = sec / 1000;
+    ts.tv_nsec = (sec % 1000) * 1000000;
+
+    do {
+        ret = nanosleep(&ts, &ts);
+    } while (ret && errno == EINTR);
+
+    return ret;
 }

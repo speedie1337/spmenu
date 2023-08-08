@@ -27,6 +27,9 @@ void execute_fifo_cmd(void) {
         drawmenu();
     } else if (!strcmp(fifot, "match")) {
         match();
+    } else if (!strcmp(fifot, "update")) {
+        match();
+        drawmenu();
     } else if (!strcmp(fifot, "test")) {
         fprintf(stderr, "Test print\n");
     } else if (!strcmp(fifot, "die")) {
@@ -47,7 +50,7 @@ void execute_fifo_cmd(void) {
 
 void *fifocmd(void *n) {
     for (;;) {
-        sleep(1);
+        msleep(0.1);
 
         if (done) {
             execute_fifo_cmd();
