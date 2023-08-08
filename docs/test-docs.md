@@ -13,7 +13,8 @@ be seen.
 spmenu_test will pass all arguments directly to spmenu, it doesn't use any
 arguments for itself. See spmenu(1) for a list of arguments you can
 pass to spmenu_test. If no arguments are passed, spmenu will be launched
-using `--no-alpha --lines 40 --columns 1 --prompt ...`.
+using `--pretext ... --hide-caret --no-allow-typing --top
+--lines 9000 --columns 1 --prompt ...`.
 
 ## License
 
