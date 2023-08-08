@@ -163,7 +163,7 @@ gen_gentoo_pkg() {
 gen_arch_pkg() {
     [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     [ ! -x "$(command -v makepkg)" ] && printf "makepkg required for this action.\n" && exit 1
-    [ -f "packaging/PKGBUILD" ] || exit 1
+    [ -f "packaging/spmenu.PKGBUILD" ] || exit 1
 
     rm -f PKGBUILD
 
@@ -177,7 +177,7 @@ gen_arch_pkg() {
         SHA256_SUM="$(sha256sum spmenu-${version}.tar.gz | cut -d ' ' -f 1)"
     fi
 
-    sed "s/VERSION/${version}/g; s/MD5SUM/$MD5_SUM/g; s/SHA256SUM/$SHA256_SUM/g" packaging/PKGBUILD > PKGBUILD
+    sed "s/VERSION/${version}/g; s/MD5SUM/$MD5_SUM/g; s/SHA256SUM/$SHA256_SUM/g" packaging/spmenu.PKGBUILD > PKGBUILD
 
     makepkg -sfr --sign || exit 1
 
