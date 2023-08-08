@@ -938,6 +938,62 @@ Programs like `pywal` do this to apply universal colorschemes.
 `spmenu.color0` through `spmenu.color15` and `spmenu.font` preferences
 are read by spmenu, these alter the font and colorscheme spmenu uses.
 
+| Xresources name    | spmenu name   |
+| :----------------- | :-------------|
+| font               | font          |
+| color10            | caretfg       |
+| color0             | caretbg       |
+| color4             | larrowfg      |
+| color4             | rarrowfg      |
+| color10            | itemnormfg    |
+| color10            | itemnormfg2   |
+| color10            | itemnormprifg |
+| color10            | inputfg       |
+| color10            | pretextfg     |
+| color0             | itemnormbg    |
+| color0             | itemnormbg2   |
+| color0             | itemnormpribg |
+| color0             | menu          |
+| color0             | larrowbg      |
+| color0             | rarrowbg      |
+| color0             | itemselfg     |
+| color0             | itemmarkedfg  |
+| color0             | itemselprifg  |
+| color0             | inputbg       |
+| color0             | pretextbg     |
+| color12            | promptbg      |
+| color0             | promptfg      |
+| color7             | capsbg        |
+| color0             | capsfg        |
+| color6             | itemselbg     |
+| color6             | itemmarkedbg  |
+| color6             | itemselpribg  |
+| color6             | border        |
+| color0             | numfg         |
+| color5             | numbg         |
+| color0             | modefg        |
+| color11            | modebg        |
+| color2             | hlnormbg      |
+| color3             | hlselbg       |
+| color0             | hlnormfg      |
+| color0             | hlselfg       |
+| color0             | sgr0          |
+| color1             | sgr1          |
+| color2             | sgr2          |
+| color3             | sgr3          |
+| color4             | sgr4          |
+| color5             | sgr5          |
+| color6             | sgr6          |
+| color7             | sgr7          |
+| color8             | sgr8          |
+| color9             | sgr9          |
+| color10            | sgr10         |
+| color11            | sgr11         |
+| color12            | sgr12         |
+| color13            | sgr13         |
+| color14            | sgr14         |
+| color15            | sgr15         |
+
 ## Themes
 
 You could just `@include` themes from the aforementioned `spmenu.conf`, but
