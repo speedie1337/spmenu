@@ -761,6 +761,7 @@ for performance reasons.
 | test               | Print out 'Test print' to standard output                                         |
 | die                | Print out 'FIFO told me to die.' using the die() function                         |
 | toggleinput        | Toggle input                                                                      |
+| togglepretext      | Toggle pretext                                                                    |
 | togglelarrow       | Toggle left arrow                                                                 |
 | togglerarrow       | Toggle right arrow                                                                |
 | toggleitem         | Toggle item                                                                       |
@@ -1112,6 +1113,8 @@ bind:
   - Reset image size to the default
 - `toggleinput`
   - Toggle input
+- `togglepretext`
+  - Toggle pretext
 - `togglelarrow`
   - Toggle left arrow
 - `togglerarrow`

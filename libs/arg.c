@@ -460,6 +460,11 @@ void toggleinput(Arg *arg) {
     drawmenu();
 }
 
+void togglepretext(Arg *arg) {
+    hidepretext = !hidepretext;
+    drawmenu();
+}
+
 void togglelarrow(Arg *arg) {
     hidelarrow = !hidelarrow;
     drawmenu();

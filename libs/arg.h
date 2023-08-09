@@ -61,6 +61,7 @@ static void quit(Arg *arg);
 
 /* toggle */
 static void toggleinput(Arg *arg);
+static void togglepretext(Arg *arg);
 static void togglelarrow(Arg *arg);
 static void togglerarrow(Arg *arg);
 static void toggleitem(Arg *arg);

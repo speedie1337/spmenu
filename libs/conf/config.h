@@ -378,6 +378,7 @@ static FuncList fl[] = {
     { "screenshot",       screenshot },
     { "setcolumns",       setcolumns },
     { "toggleinput",      toggleinput },
+    { "togglepretext",    togglepretext },
     { "togglelarrow",     togglelarrow },
     { "togglerarrow",     togglerarrow },
     { "toggleitem",       toggleitem },
