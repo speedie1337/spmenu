@@ -756,10 +756,25 @@ for performance reasons.
 | match              | Match entries again, useful if you're loading items from file                     |
 | update             | Match and then draw the menu. Both drawmenu and match one after another           |
 | output             | Output selected item text                                                         |
-| output_index       | Output selected item index
+| output_index       | Output selected item index                                                        |
 | loadconfig         | Reload config                                                                     |
 | test               | Print out 'Test print' to standard output                                         |
 | die                | Print out 'FIFO told me to die.' using the die() function                         |
+| toggleinput        | Toggle input                                                                      |
+| togglelarrow       | Toggle left arrow                                                                 |
+| togglerarrow       | Toggle right arrow                                                                |
+| toggleitem         | Toggle item                                                                       |
+| toggleprompt       | Toggle prompt                                                                     |
+| togglecaps         | Toggle caps lock indicator                                                        |
+| togglepowerline    | Toggle powerline                                                                  |
+| togglecaret        | Toggle caret                                                                      |
+| togglehighlight    | Toggle highlighting                                                               |
+| togglematchcount   | Toggle match count                                                                |
+| togglemode         | Toggle mode indicator                                                             |
+| toggleregex        | Toggle regex                                                                      |
+| togglefuzzy        | Toggle fuzzy                                                                      |
+| toggleimg          | Toggle images                                                                     |
+| toggleimgtype      | Toggle image type                                                                 |
 | exit_0             | Exit with exit code 0                                                             |
 | exit_1             | Exit with exit code 1                                                             |
 

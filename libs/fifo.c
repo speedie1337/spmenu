@@ -23,6 +23,9 @@ void execute_fifo_cmd(void) {
         return;
     }
 
+    /* These are the different commands that we can run
+     * by outputting text to the FIFO.
+     */
     if (!strcmp(fifot, "drawmenu")) {
         drawmenu();
     } else if (!strcmp(fifot, "match")) {
@@ -51,6 +54,51 @@ void execute_fifo_cmd(void) {
         if (printindex && selecteditem) {
             fprintf(stdout, "%d\n", selecteditem->index);
         }
+    } else if (!strcmp(fifot, "toggleinput")) {
+        Arg *arg;
+        toggleinput(arg);
+    } else if (!strcmp(fifot, "togglelarrow")) {
+        Arg *arg;
+        togglelarrow(arg);
+    } else if (!strcmp(fifot, "togglerarrow")) {
+        Arg *arg;
+        togglerarrow(arg);
+    } else if (!strcmp(fifot, "toggleitem")) {
+        Arg *arg;
+        toggleitem(arg);
+    } else if (!strcmp(fifot, "toggleprompt")) {
+        Arg *arg;
+        toggleprompt(arg);
+    } else if (!strcmp(fifot, "togglecaps")) {
+        Arg *arg;
+        togglecaps(arg);
+    } else if (!strcmp(fifot, "togglepowerline")) {
+        Arg *arg;
+        togglepowerline(arg);
+    } else if (!strcmp(fifot, "togglecaret")) {
+        Arg *arg;
+        togglecaret(arg);
+    } else if (!strcmp(fifot, "togglehighlight")) {
+        Arg *arg;
+        togglehighlight(arg);
+    } else if (!strcmp(fifot, "togglematchcount")) {
+        Arg *arg;
+        togglematchcount(arg);
+    } else if (!strcmp(fifot, "togglemode")) {
+        Arg *arg;
+        togglemode(arg);
+    } else if (!strcmp(fifot, "toggleregex")) {
+        Arg *arg;
+        toggleregex(arg);
+    } else if (!strcmp(fifot, "togglefuzzy")) {
+        Arg *arg;
+        togglefuzzy(arg);
+    } else if (!strcmp(fifot, "toggleimg")) {
+        Arg *arg;
+        toggleimg(arg);
+    } else if (!strcmp(fifot, "toggleimgtype")) {
+        Arg *arg;
+        toggleimgtype(arg);
     } else if (!strcmp(fifot, "exit_0")) {
         exit(0);
     } else if (!strcmp(fifot, "exit_1")) {
@@ -75,6 +123,7 @@ void *fifocmd(void *n) {
 }
 
 void init_fifo(void) {
+    remove(fifofile);
     mkfifo(fifofile, 0666);
 
     pthread_t tid;
