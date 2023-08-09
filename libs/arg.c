@@ -537,6 +537,12 @@ void toggleimg(Arg *arg) {
 #endif
 }
 
+void toggleimgtype(Arg *arg) {
+#if IMAGE
+    imagetype = !imagetype;
+#endif
+}
+
 void defaultimg(Arg *arg) {
 #if IMAGE
 

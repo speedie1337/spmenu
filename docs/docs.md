@@ -1123,6 +1123,8 @@ bind:
   - Toggle fuzzy matching
 - `toggleimg`
   - Toggle images
+- `toggleimgtype`
+  - Toggle image type
 - `flipimg`
   - Flip image, 0 means vertically, 1 means horizontally
 - `setimgpos`

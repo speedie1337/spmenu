@@ -391,6 +391,7 @@ static FuncList fl[] = {
     { "toggleregex",      toggleregex },
     { "togglefuzzy",      togglefuzzy },
     { "toggleimg",        toggleimg },
+    { "toggleimgtype",    toggleimgtype },
     { "setprofile",       setprofile },
     { "setlineheight",    setlineheight },
     { "switchmode",       switchmode },

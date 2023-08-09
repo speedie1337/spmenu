@@ -74,6 +74,7 @@ static void togglehighlight(Arg *arg);
 static void toggleregex(Arg *arg);
 static void togglefuzzy(Arg *arg);
 static void toggleimg(Arg *arg);
+static void toggleimgtype(Arg *arg);
 
 /* hover */
 static void selecthover(Arg *arg);
