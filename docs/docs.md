@@ -776,6 +776,28 @@ for performance reasons.
 | togglefuzzy        | Toggle fuzzy                                                                      |
 | toggleimg          | Toggle images                                                                     |
 | toggleimgtype      | Toggle image type                                                                 |
+| screenshot         | Screenshot spmenu                                                                 |
+| setprofile         | Open profile menu                                                                 |
+| setlines+          | Increase lines by 1                                                               |
+| setlines-          | Decrease lines by 1                                                               |
+| setcolumns+        | Increase columns by 1                                                             |
+| setcolumns-        | Decrease columns by 1                                                             |
+| moveup             | Move up one item                                                                  |
+| movedown           | Move down one item                                                                |
+| moveleft           | Move left one item                                                                |
+| moveright          | Move right one item                                                               |
+| movestart          | Move to the start                                                                 |
+| moveend            | Move to the end                                                                   |
+| movenext           | Move to the next page                                                             |
+| moveprev           | Move to the previous page                                                         |
+| moveword+          | Move caret to the next word                                                       |
+| moveword-          | Move caret to the previous word                                                   |
+| movecaret+         | Move caret to the next character                                                  |
+| movecaret-         | Move caret to the previous character                                              |
+| clear              | Clear input                                                                       |
+| viewhist           | View history buffer                                                               |
+| backspace          | Backspace                                                                         |
+| deleteword         | Remove one full word forward                                                      |
 | exit_0             | Exit with exit code 0                                                             |
 | exit_1             | Exit with exit code 1                                                             |
 
