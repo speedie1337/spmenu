@@ -197,7 +197,6 @@ void *fifocmd(void *n) {
 }
 
 void init_fifo(void) {
-    remove(fifofile);
     mkfifo(fifofile, 0666);
 
     pthread_t tid;
