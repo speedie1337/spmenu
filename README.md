@@ -168,12 +168,7 @@ free to contribute and try scripts on there.
 
 ## Screenshots
 
-![typing](screenshots/typing.gif)
-![.desktop launcher](screenshots/desktop-launcher.png)
-![.desktop launcher icons](screenshots/icons.png)
-![bliss](screenshots/bliss.png)
-![bliss](screenshots/layout-picker.png)
-![dmenu](screenshots/dmenu.png)
+See [this page](https://spmenu.speedie.site/Screenshots) for screenshots.
 
 ## License
 
