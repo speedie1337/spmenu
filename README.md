@@ -14,19 +14,19 @@ can be themed to look identical to dmenu.
 
 ## Features
 
-- X11 and Wayland support, most run launchers support only one
+- True color, 256 color and 16 color support
 - Reading entries from standard input and file
-- Image and icon support
 - Run launcher, supporting both .desktop entries and $PATH
+- X11 and Wayland support, most run launchers support only one
+- Image and icon support
+- Pango markup support
+- Right to left language support
 - FIFO, allowing programs to communicate with spmenu
-- fzf-like Fuzzy matching
 - Vi-like modes (see docs/binds-vim.conf)
 - History buffer
 - Configuration file, allowing customizable keybinds
 - Mouse binds
-- XDG base directory compliant
 - Theming
-- Written in C
 - ..and more
 
 ## Dependencies
