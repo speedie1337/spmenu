@@ -393,6 +393,10 @@ void cleanup(void) {
     }
 #endif
 
+#if FIFO
+    remove(fifofile);
+#endif
+
     free(sel_index);
 }
 
