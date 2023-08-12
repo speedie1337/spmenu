@@ -10,10 +10,7 @@ struct wl_buffer *create_buffer(struct state *state) {
     size_t siz = stride * height;
 
     int fd = create_shm_file(siz);
-
-    if (fd == -1) {
-        die("create_buffer(): fd == -1");
-    }
+    assert(fd != -1);
 
     void *data = mmap(NULL, siz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
@@ -89,7 +86,7 @@ char *wl_clipboard(void) {
     fp = popen("which wl-paste > /dev/null && wl-paste -t text/plain", "r");
 
     if (fp == NULL) {
-        fprintf(stderr, "wl_clipboard(): Failed to open command\n");
+        fprintf(stderr, "spmenu: Failed to open command\n");
         return NULL;
     }
 
@@ -247,7 +244,7 @@ void keyboard_keymap(void *data, struct wl_keyboard *wl_keyboard, uint32_t forma
 	char *map_shm = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
 	if (map_shm == MAP_FAILED) {
 		close(fd);
-        die("keyboard_keymap(): MAP_FAILED");
+        die("MAP_FAILED");
 		return;
 	}
 	state->xkb_keymap = xkb_keymap_new_from_string(state->xkb_context, map_shm, XKB_KEYMAP_FORMAT_TEXT_V1, 0);
@@ -483,11 +480,11 @@ void create_drawable(struct state *state) {
     state->buffer = create_buffer(state);
 
     if (draw == NULL) {
-        die("create_drawable(): A drawable was not created.");
+        die("spmenu: draw == NULL");
     }
 
     if (state->buffer == NULL) {
-        die("create_drawable(): Buffer state->buffer could not be created.");
+        die("state->buffer == NULL");
     }
 
     draw_create_surface_wl(draw, state->data, state->width, state->height);
@@ -572,13 +569,13 @@ int await_dispatch(struct state *state) {
 
         do {
 			if (wl_display_flush(state->display) == -1 && errno != EAGAIN) {
-				fprintf(stderr, "await_dispatch(): wl_display_flush failed: %s\n", strerror(errno));
+				fprintf(stderr, "spmenu: wl_display_flush failed: %s\n", strerror(errno));
 				break;
 			}
 		} while (errno == EAGAIN);
 
         if (poll(fds, nfds, -1) < 0) {
-			fprintf(stderr, "await_dispatch(): poll failed: %s\n", strerror(errno));
+			fprintf(stderr, "spmenu: poll failed: %s\n", strerror(errno));
 			break;
 		}
 
@@ -611,17 +608,13 @@ int init_disp(struct state *state) {
     wl_registry_add_listener(registry, &registry_listener, state);
     wl_display_roundtrip(state->display);
 
-    if (state->compositor == NULL) {
-        die("init_disp(): No Wayland compositor.");
-    }
+    assert(state->compositor != NULL);
 
     if (state->layer_shell == NULL) {
-        die("init_disp(): Your compositor does not implement the wlr-layer-shell protocol.");
+        die("spmenu: Your compositor does not implement the wlr-layer-shell protocol. Run spmenu in X11 mode.");
     }
 
-    if (state->shm == NULL) {
-        die("init_disp(): Could not create shared memory buffer.\n");
-    }
+    assert(state->shm != NULL);
 
     wl_display_roundtrip(state->display);
 
@@ -660,7 +653,7 @@ void resizeclient_wl(struct state *state) {
     state->buffer = create_buffer(state);
 
     if (draw == NULL) {
-        die("resizeclient_wl(): Draw_t is NULL.");
+        die("spmenu: draw == NULL");
     }
 
     if (state->buffer == NULL) {
@@ -698,19 +691,12 @@ int init_keys(struct state *state) {
 }
 
 int create_layer(struct state *state, char *name) {
-    if (state->compositor == NULL) {
-        die("create_layer(): No Wayland compositor.");
-    }
+    assert(state->compositor != NULL);
 
     state->surface = wl_compositor_create_surface(state->compositor);
 
-    if (state->surface == NULL) {
-        die("create_layer(): Could not create surface state->surface using state->compositor");
-    }
-
-    if (state->layer_shell == NULL) {
-        die("create_layer(): Your compositor does not implement the wlr-layer-shell protocol. Run spmenu in X11 mode.");
-    }
+    assert(state->surface != NULL);
+    assert(state->layer_shell != NULL);
 
     wl_surface_add_listener(state->surface, &surface_listener, state);
     state->layer_surface = zwlr_layer_shell_v1_get_layer_surface(
@@ -720,18 +706,13 @@ int create_layer(struct state *state, char *name) {
             ZWLR_LAYER_SHELL_V1_LAYER_TOP,
             name);
 
-    if (state->layer_surface == NULL) {
-        die("create_layer(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
 
     return 0;
 }
 
 int anchor_layer(struct state *state, int position) {
-    if (state->layer_surface == NULL) {
-        die("anchor_layer(): Could not get layer_surface state->layer_surface");
-    }
-
+    assert(state->layer_surface != NULL);
     zwlr_layer_surface_v1_set_anchor(
             state->layer_surface,
             ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT |
@@ -744,9 +725,7 @@ int anchor_layer(struct state *state, int position) {
 }
 
 int set_layer_size(struct state *state, int32_t width, int32_t height) {
-    if (state->layer_surface != NULL) {
-        die("set_layer_size(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
 
     zwlr_layer_surface_v1_set_size(state->layer_surface, width, height);
 
@@ -754,9 +733,7 @@ int set_layer_size(struct state *state, int32_t width, int32_t height) {
 }
 
 int set_exclusive_zone(struct state *state, unsigned int val) {
-    if (state->layer_surface == NULL) {
-        die("set_exclusive_zone(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
 
     zwlr_layer_surface_v1_set_exclusive_zone(state->layer_surface, val);
 
@@ -764,9 +741,7 @@ int set_exclusive_zone(struct state *state, unsigned int val) {
 }
 
 int set_keyboard(struct state *state, int interactivity) {
-    if (state->layer_surface == NULL) {
-        die("set_keyboard(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
 
     zwlr_layer_surface_v1_set_keyboard_interactivity(state->layer_surface, interactivity ? true : false);
 
@@ -774,9 +749,7 @@ int set_keyboard(struct state *state, int interactivity) {
 }
 
 int add_layer_listener(struct state *state) {
-    if (state->layer_surface == NULL) {
-        die("add_layer_listener(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
 
     zwlr_layer_surface_v1_add_listener(state->layer_surface, &layer_surface_listener, state);
 
@@ -784,9 +757,8 @@ int add_layer_listener(struct state *state) {
 }
 
 int set_visible_layer(struct state *state) {
-    if (state->layer_surface == NULL) {
-        die("set_visible_layer(): Could not get layer_surface state->layer_surface");
-    }
+    assert(state->layer_surface != NULL);
+    assert(state->surface != NULL);
 
     wl_surface_commit(state->surface);
 

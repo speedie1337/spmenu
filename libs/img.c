@@ -365,8 +365,8 @@ void resizetoimageheight_x11(int imageheight) {
         x = (mo.output_width - sp.mw) / 2 + xpos;
         y = (mo.output_height - sp.mh) / 2 - ypos;
     } else { // top or bottom
-        x = 0;
-        y = menuposition ? 0 : mo.output_width - sp.mh - ypos;
+        x = xpos;
+        y = menuposition ? (-ypos) : (mo.output_height - sp.mh - ypos);
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
