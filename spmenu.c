@@ -555,11 +555,10 @@ void handle(void) {
 
         init_appearance(); // init colorschemes by reading arrays
 
+        setupdisplay_x11(); // set up display and create window
 #if FIFO
         init_fifo();
 #endif
-
-        setupdisplay_x11(); // set up display and create window
         eventloop_x11(); // function is a loop which checks X11 events and calls other functions accordingly
 #endif
 #if WAYLAND

@@ -20,6 +20,8 @@ void execute_fifo_cmd(void) {
 
     if (!r) {
         close(fd);
+        done = 1;
+
         return;
     }
 
@@ -115,7 +117,7 @@ void execute_fifo_cmd(void) {
         setlines(&arg);
     } else if (!strcmp(fifot, "setcolumns+")) {
         Arg arg;
-        arg.i = +1;
+        arg.i = 1;
         setcolumns(&arg);
     } else if (!strcmp(fifot, "setcolumns-")) {
         Arg arg;
@@ -183,22 +185,24 @@ void execute_fifo_cmd(void) {
 
     close(fd);
 
+    remove(fifofile);
+    mkfifo(fifofile, 0660);
+
     done = 1;
 }
 
 void *fifocmd(void *n) {
     for (;;) {
-        msleep(0.1);
-
         if (done) {
             execute_fifo_cmd();
         }
+
+        msleep(0.1);
     }
 }
 
 void init_fifo(void) {
-    mkfifo(fifofile, 0666);
-
+    mkfifo(fifofile, 0660);
     pthread_t tid;
     pthread_create(&tid, NULL, &fifocmd, NULL);
 }
