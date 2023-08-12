@@ -109,7 +109,7 @@ void execute_fifo_cmd(void) {
         setprofile(&arg);
     } else if (!strcmp(fifot, "setlines+")) {
         Arg arg;
-        arg.i = +1;
+        arg.i = 1;
         setlines(&arg);
     } else if (!strcmp(fifot, "setlines-")) {
         Arg arg;
@@ -123,6 +123,30 @@ void execute_fifo_cmd(void) {
         Arg arg;
         arg.i = -1;
         setcolumns(&arg);
+    } else if (!strcmp(fifot, "setx+")) {
+        Arg arg;
+        arg.i = 1;
+        setx(&arg);
+    } else if (!strcmp(fifot, "setx-")) {
+        Arg arg;
+        arg.i = -1;
+        setx(&arg);
+    } else if (!strcmp(fifot, "sety+")) {
+        Arg arg;
+        arg.i = 1;
+        sety(&arg);
+    } else if (!strcmp(fifot, "sety-")) {
+        Arg arg;
+        arg.i = -1;
+        sety(&arg);
+    } else if (!strcmp(fifot, "setw+")) {
+        Arg arg;
+        arg.i = 1;
+        setw(&arg);
+    } else if (!strcmp(fifot, "setw-")) {
+        Arg arg;
+        arg.i = -1;
+        setw(&arg);
     } else if (!strcmp(fifot, "moveup")) {
         Arg arg;
         moveup(&arg);

@@ -70,7 +70,6 @@ void set_prop_x11(void) {
 }
 
 void resizeclient_x11(void) {
-    int mh = sp.mh;
     int x, y;
     struct item *item;
     int ic = 0; // item count
@@ -98,13 +97,10 @@ void resizeclient_x11(void) {
         x = (mo.output_width - sp.mw) / 2 + xpos;
         y = (mo.output_height - sp.mh) / 2 - ypos;
     } else { // top or bottom
-        x = 0;
-        y = menuposition ? 0 : mo.output_height - sp.mh - ypos;
+        x = xpos;
+        y = menuposition ? (-ypos) : (mo.output_height - sp.mh - ypos);
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
-
-    // no window/invalid window or menu height we had before is the same as the current window height
-    if (!win || mh == sp.mh) return;
 
     XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
     draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);

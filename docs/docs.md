@@ -782,6 +782,12 @@ for performance reasons.
 | setlines-          | Decrease lines by 1                                                               |
 | setcolumns+        | Increase columns by 1                                                             |
 | setcolumns-        | Decrease columns by 1                                                             |
+| setx+              | Increase X position by 1                                                          |
+| setx-              | Decrease X position by 1                                                          |
+| sety+              | Increase Y position by 1                                                          |
+| sety-              | Decrease Y position by 1                                                          |
+| setw+              | Increase width by 1                                                               |
+| setw-              | Decrease width by 1                                                               |
 | moveup             | Move up one item                                                                  |
 | movedown           | Move down one item                                                                |
 | moveleft           | Move left one item                                                                |
@@ -1175,6 +1181,10 @@ bind:
   - Set lines to passed argument
 - `setcolumns`
   - Set columns to passed argument
+- `setx`
+  - Set X position to passed argument
+- `sety`
+  - Set Y position to passed argument
 - `setlineheight`
   - Set line height to passed argument
 - `setprofile`

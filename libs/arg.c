@@ -600,6 +600,27 @@ void setcolumns(Arg *arg) {
     drawmenu();
 }
 
+void setx(Arg *arg) {
+    xpos += arg->i;
+
+    resizeclient();
+    drawmenu();
+}
+
+void sety(Arg *arg) {
+    ypos += arg->i;
+
+    resizeclient();
+    drawmenu();
+}
+
+void setw(Arg *arg) {
+    menuwidth += arg->i;
+
+    resizeclient();
+    drawmenu();
+}
+
 void spawn(Arg *arg) {
     if (!system(arg->c))
         die("spmenu: failed to execute command '%s'", arg->c);
