@@ -29,12 +29,16 @@ void execute_fifo_cmd(void) {
      * by outputting text to the FIFO.
      */
     if (!strcmp(fifot, "drawmenu")) {
-        drawmenu();
+        if (!sp.isdrawing) {
+            drawmenu();
+        }
     } else if (!strcmp(fifot, "match")) {
         match();
     } else if (!strcmp(fifot, "update")) {
-        match();
-        drawmenu();
+        if (!sp.isdrawing) {
+            match();
+            drawmenu();
+        }
     } else if (!strcmp(fifot, "test")) {
         fprintf(stderr, "Test print\n");
     } else if (!strcmp(fifot, "die")) {
