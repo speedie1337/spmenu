@@ -750,6 +750,10 @@ You must append **without** a newline. Otherwise it will be considered invalid.
 It is recommended that you sleep for 0.1 seconds after appending to the file
 for performance reasons.
 
+**NOTE: Please remove /tmp/spmenu.fifo if it exists after usage, especially in
+scripts. Otherwise the FIFO action may be carried over to the user's next
+spmenu use. If you love your users, do not ignore this warning.**
+
 | Name               | Description                                                                       |
 | :----------------- | :-------------------------------------------------------------------------------- |
 | drawmenu           | Draw the menu                                                                     |

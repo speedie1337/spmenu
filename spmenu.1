@@ -874,6 +874,12 @@ Otherwise it will be considered invalid.
 It is recommended that you sleep for 0.1 seconds after appending to the
 file for performance reasons.
 .PP
+\f[B]NOTE: Please remove /tmp/spmenu.fifo if it exists after usage,
+especially in scripts.
+Otherwise the FIFO action may be carried over to the user\[cq]s next
+spmenu use.
+If you love your users, do not ignore this warning.\f[R]
+.PP
 .TS
 tab(@);
 lw(12.7n) lw(57.3n).
