@@ -102,8 +102,10 @@ void resizeclient_x11(void) {
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
-    XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
-    draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    if (win) {
+        XMoveResizeWindow(dpy, win, x + sp.sp, y + sp.vp, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+        draw_resize(draw, sp.mw - 2 * sp.sp - borderwidth * 2, sp.mh);
+    }
 }
 
 void xinitvisual(void) {

@@ -370,9 +370,7 @@ void resizetoimageheight_x11(int imageheight) {
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
 
-    if (
-        !win ||
-        mh == sp.mh) {
+    if (!win || mh == sp.mh) {
         return;
     }
 
