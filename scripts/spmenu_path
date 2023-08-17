@@ -19,6 +19,8 @@ path() {
                 compgen -c | \
                 grep -vE "$HIDDEN_KEYWORDS" | \
                 grep -E "$KEYWORDS"
+
+                [ "$DISPLAY_BOOKMARKS" != "false" ] && bookmark_path
             }
 
             if [ "$SORT_BY_RECENT" != "false" ]; then

@@ -27,6 +27,7 @@ SORT_ARGS="${SORT_ARGS:-}"
 UNIQ_ARGS="${UNIQ_ARGS:-}"
 HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-spmenu}"
 KEYWORDS="${KEYWORDS:-}"
+DISPLAY_BOOKMARKS="${DISPLAY_BOOKMARKS:-true}"
 DISPLAY_DUPLICATES="${DISPLAY_DUPLICATES:-false}"
 DISPLAY_DESCRIPTION="${DISPLAY_DESCRIPTION:-false}"
 DISPLAY_COMMENT="${DISPLAY_COMMENT:-true}"
@@ -201,6 +202,7 @@ GENERIC="\${GENERIC:-\$TERMINAL -e \$EDITOR}" # Generic, used to open unknown fi
 WEB_GREP="$WEB_GREP" # Needs to be in grep -E syntax
 MAGNET_GREP="$MAGNET_GREP" # Needs to be in grep -E syntax
 HISTORY="\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu/spmenu_run.hist" # History file, spmenu (meaning your user) must have permission to read and write to it.
+DISPLAY_BOOKMARKS="$DISPLAY_BOOKMARKS" # Display bookmarks in regular list (true/false)
 BOOKMARK_FILE="\${BOOKMARK_FILE:-\${XDG_CACHE_HOME:-\$HOME/.cache/}/spmenu/spmenu_run.bookmarks}" # Bookmark file, spmenu_run must have permission to read and write to it.
 BOOKMARK_PROMPT="$BOOKMARK_PROMPT" # Bookmark prompt (-p)
 
