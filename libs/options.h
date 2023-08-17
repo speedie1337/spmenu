@@ -115,6 +115,7 @@ static int lines                       = 0; /* Default number of lines */
 static int columns                     = 10; /* Default number of columns */
 static int overridelines               = 1; /* Allow overriding lines using keybinds */
 static int overridecolumns             = 1; /* Allow overriding columns using keybinds */
+static int minlines                    = 0; /* Minimum number of lines allowed */
 
 /* History options */
 static char *histfile                  = NULL; /* History file, NULL means no history file */

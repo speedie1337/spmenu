@@ -633,7 +633,7 @@ void resizeclient_wl(struct state *state) {
     for (item = items; item && item->text; item++)
         ic++;
 
-    lines = MIN(ic, MAX(lines, 0));
+    lines = MAX(MIN(ic, MAX(lines, 0)), minlines);
 #if IMAGE
     img.setlines = lines;
 #endif

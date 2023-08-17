@@ -63,7 +63,7 @@ void readstdin(void) {
 #endif
     }
 
-    lines = MIN(lines, i);
+    lines = MAX(MIN(lines, i), minlines);
 }
 
 void readfile(void) {
@@ -130,7 +130,7 @@ void readfile(void) {
 #endif
         }
 
-        lines = columns == 1 ? i : MIN(i, lines); // i = number of items
+        lines = MAX(columns == 1 ? i : MIN(i, lines), minlines);
 
 #if IMAGE
         if (!o) img.longestedge = img.imagegaps = 0;

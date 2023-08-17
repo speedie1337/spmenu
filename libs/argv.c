@@ -321,8 +321,10 @@ void readargs(int argc, char *argv[]) {
         } else if (!strcmp(argv[i], "-l") || (!strcmp(argv[i], "--lines"))) { // number of lines in grid
             lines = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-mh") || (!strcmp(argv[i], "--lineheight")) || (!strcmp(argv[i], "--line-height"))) { // line height
-            lineheight += atoi(argv[++i]);
+            lineheight = atoi(argv[++i]);
             if (columns == 0) columns = 1;
+        } else if (!strcmp(argv[i], "-ml") || (!strcmp(argv[i], "--min-lines"))) {
+            minlines = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-cw") || (!strcmp(argv[i], "--center-width")) || (!strcmp(argv[i], "-mw") || (!strcmp(argv[i], "--min-width")))) { // center width
             centerwidth = atoi(argv[++i]);
         } else if (!strcmp(argv[i], "-txp") || (!strcmp(argv[i], "--text-padding"))) { // text padding
@@ -612,10 +614,11 @@ void usage(int status) {
     fputs(VERSION, status ? stderr : stdout);
     fputs(": fancy dynamic menu\n\n"
             "- Arguments -\n"
-            "spmenu -l,       --lines <line>                              Set line count to stdin\n"
             "spmenu -mh,      --line-height <height>                      Set spmenu line height to <height>\n"
             "spmenu -cw,      --center-width <width>                      Set width to <width> when centered\n"
+            "spmenu -l,       --lines <line>                              Set line count to stdin\n"
             "spmenu -g,       --columns <grid>                            Set the number of grids to <grid>\n"
+            "spmenu -ml,      --min-lines <lines>                         Minimum number of lines allowed\n"
             "spmenu -gc,      --generate-cache                            Generate image cache\n"
             "spmenu -ngc,     --no-generate-cache                         Don't generate image cache\n"
             "spmenu -mc,      --max-cache <size>                          Set max image cache size to <size>\n"

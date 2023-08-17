@@ -567,7 +567,9 @@ void setlines(Arg *arg) {
     insert(NULL, 0 - sp.cursor);
     selecteditem = currentitem = matches;
 
-    lines += arg->i;
+    if (lines + arg->i >= minlines) {
+        lines += arg->i;
+    }
 
     if (lines < 0) {
         lines = 0;

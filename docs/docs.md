@@ -43,8 +43,14 @@ in the config files.
 `-cw, --center-width width`
 :   Set width to width when centered
 
+`-l, --lines lines`
+:   Set the number of lines to lines
+
 `-g, --columns grid`
 :   Set the number of grids to grid
+
+`-ml, --min-lines`
+:   Set minimum number of lines allowed to lines
 
 `-gc, --generate-cache`
 :   Generate image cache
