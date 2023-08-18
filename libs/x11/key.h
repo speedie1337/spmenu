@@ -1,3 +1,5 @@
+#ifndef KEY_H
+#define KEY_H
 /* See LICENSE file for copyright and license details. */
 
 typedef struct {
@@ -23,3 +25,4 @@ static void getcapsstate(void);
 
 static Key ckeys[256];
 static Key hkeys[1] = { { -1, Ctrl|Alt, XK_Delete, quit, {0} } };
+#endif

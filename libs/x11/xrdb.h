@@ -1,3 +1,5 @@
+#ifndef XRDB_H
+#define XRDB_H
 /* See LICENSE file for copyright and license details. */
 
 #if XRESOURCES
@@ -16,4 +18,5 @@ typedef struct {
 // declare functions
 static void load_xresources(void);
 static void resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst);
+#endif
 #endif

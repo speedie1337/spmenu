@@ -1,3 +1,5 @@
+#ifndef ARG_H
+#define ARG_H
 /* See LICENSE file for copyright and license details. */
 typedef union {
     int i; // integer
@@ -84,3 +86,4 @@ static void toggleimgtype(Arg *arg);
 static void selecthover(Arg *arg);
 static void outputhover(Arg *arg);
 static void markhover(Arg *arg);
+#endif

@@ -1,3 +1,5 @@
+#ifndef X_INC_H
+#define X_INC_H
 /* See LICENSE file for copyright and license details. */
 #if X11
 #include "lib.h"
@@ -10,4 +12,5 @@
 #include "mouse.h"
 #include "focus.h"
 #include "clipboard.h"
+#endif
 #endif

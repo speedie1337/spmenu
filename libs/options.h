@@ -1,3 +1,5 @@
+#ifndef OPTIONS_H
+#define OPTIONS_H
 /* See LICENSE file for copyright and license details. */
 
 /* spmenu options */
@@ -284,3 +286,4 @@ static int incremental                 = 0; /* Print text every time a key is pr
 static int coloritems                  = 1; /* Color items (0/1) */
 static int sgr                         = 1; /* Support SGR sequences (0/1) */
 static char *worddelimiters            = " /?\"&[]"; /* Word delimiters used for keybinds that change words, Space is default. */
+#endif

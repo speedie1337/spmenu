@@ -1,3 +1,5 @@
+#ifndef LIB_H
+#define LIB_H
 /* See LICENSE file for copyright and license details. */
 
 // include libraries
@@ -17,4 +19,5 @@
 // include xresources
 #if XRESOURCES
 #include <X11/Xresource.h>
+#endif
 #endif

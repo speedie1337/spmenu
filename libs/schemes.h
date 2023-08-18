@@ -1,3 +1,5 @@
+#ifndef SCHEMES_H
+#define SCHEMES_H
 /* See LICENSE file for copyright and license details. */
 
 static char *textcolors[] = {
@@ -260,3 +262,4 @@ static char *textcolors[] = {
 
 static char *txtcols[256];
 static void init_appearance(void);
+#endif

@@ -1,3 +1,5 @@
+#ifndef XRESOURCES_H
+#define XRESOURCES_H
 /* See LICENSE file for copyright and license details. */
 
 // This .Xresources array is read and compared to the xrdb. Simply add to the array if you need to.
@@ -57,4 +59,5 @@ ResourcePref cols[] = {
     { "color14",                     STRING,  &col_sgr14 },
     { "color15",                     STRING,  &col_sgr15 },
 };
+#endif
 #endif

@@ -1,3 +1,5 @@
+#ifndef WAYLAND_H
+#define WAYLAND_H
 /* See LICENSE file for copyright and license details. */
 
 #include <errno.h>
@@ -221,3 +223,4 @@ struct wl_seat_listener seat_listener = {
 static const struct wl_buffer_listener buffer_listener = {
     .release = zero,
 };
+#endif

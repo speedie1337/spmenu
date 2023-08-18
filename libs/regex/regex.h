@@ -1,3 +1,5 @@
+#ifndef REGEX_H
+#define REGEX_H
 /*
  *
  * Mini regex-module inspired by Rob Pike's regex code described in:
@@ -63,3 +65,4 @@ int re_match(const char* pattern, const char* text, int* matchlength);
 #endif
 
 #endif /* ifndef _TINY_REGEX_C */
+#endif

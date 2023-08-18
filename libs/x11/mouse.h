@@ -1,3 +1,5 @@
+#ifndef MOUSE_H
+#define MOUSE_H
 /* See LICENSE file for copyright and license details. */
 
 typedef struct {
@@ -9,3 +11,4 @@ typedef struct {
 
 static Mouse cbuttons[256];
 static void buttonpress_x11(XEvent *e);
+#endif

@@ -1,3 +1,5 @@
+#ifndef DRAW_H
+#define DRAW_H
 /* See LICENSE file for copyright and license details. */
 
 // declare functions
@@ -10,3 +12,4 @@ static int drawmode(int x, int y, int w);
 static int drawcaps(int x, int y, int w);
 static int drawlarrow(int x, int y, int w);
 static int drawrarrow(int x, int y, int w);
+#endif

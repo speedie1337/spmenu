@@ -1,3 +1,5 @@
+#ifndef CLIENT_H
+#define CLIENT_H
 /* See LICENSE file for copyright and license details. */
 
 static void hexconv(const char *hex, unsigned short *r, unsigned short *g, unsigned short *b);
@@ -6,3 +8,4 @@ static void set_window_x11(void);
 static void set_prop_x11(void);
 static void resizeclient_x11(void);
 static void xinitvisual(void);
+#endif

@@ -1,3 +1,5 @@
+#ifndef LIBDRAW
+#define LIBDRAW
 /* See LICENSE file for copyright and license details. */
 
 #include <cairo/cairo.h>
@@ -71,3 +73,4 @@ void draw_save_screen(Draw_t *draw, const char *file);
 /* Misc */
 void draw_die(const char *fmt, ...);
 void *draw_calloc(size_t nmemb, size_t size);
+#endif
