@@ -214,7 +214,6 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                 // parse hex colors, m is always the last character
                 while (*c_character != 'm') {
                     unsigned nextchar = strtoul(c_character + 1, &c_character, 10);
-                    fprintf(stderr, "Test: %d\n", nextchar);
                     if (ignore)
                         continue;
                     if (bgfg) {
