@@ -214,6 +214,7 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                 // parse hex colors, m is always the last character
                 while (*c_character != 'm') {
                     unsigned nextchar = strtoul(c_character + 1, &c_character, 10);
+                    fprintf(stderr, "Test: %d\n", nextchar);
                     if (ignore)
                         continue;
                     if (bgfg) {
@@ -263,6 +264,12 @@ int drawitemtext(struct item *item, int x, int y, int w) {
                         fgcol = txtcols[fg];
                     } else if (nextchar >= 40 && nextchar <= 47) {
                         bg = nextchar % 10;
+                        bgcol = txtcols[bg];
+                    } else if (nextchar >= 90 && nextchar <= 97) {
+                        fg = (nextchar - 60) % 10 | (fg & 8);
+                        fgcol = txtcols[fg];
+                    } else if (nextchar >= 100 && nextchar <= 107) {
+                        bg = (nextchar - 60) % 10;
                         bgcol = txtcols[bg];
                     } else if (nextchar == 48) {
                         int r, g, b, c;

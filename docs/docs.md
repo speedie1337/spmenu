@@ -708,6 +708,8 @@ and that this isn't the only way to format them.
 | \033[1;3nm         | Set foreground color to bright color index 'n' (0-7)                              |
 | \033[0;4nm         | Set background color to normal color index 'n' (0-7)                              |
 | \033[1;4nm         | Set background color to bright color index 'n' (0-7)                              |
+| \033[9nm           | Set foreground color to bright color index 'n' (0-7)                              |
+| \033[10nm          | Set background color to bright color index 'n' (0-7)                              |
 | \033[38;2;r;g;bm   | Set foreground color to a specified RGB color, r is red, g is green, b is blue    |
 | \033[48;2;r;g;bm   | Set background color to a specified RGB color, r is red, g is green, b is blue    |
 | \033[38;5;nm       | Set foreground color to color index 'n' (0-256)                                   |
@@ -898,52 +900,27 @@ These are the default keybinds.
 
 | Mode               | Modifier           | Key                | Function           | Argument           |
 | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
-| -1                 | 0                  | Return             | selectitem         | +1                 |
-| -1                 | Shift              | Return             | selectitem         | 0                  |
-| -1                 | Ctrl               | Return             | markitem           | 0                  |
-| -1                 | 0                  | Tab                | complete           | 0                  |
+| -1                 | None               | Enter              | selectitem         | +1                 |
+| -1                 | Shift              | Enter              | selectitem         | 0                  |
+| -1                 | Ctrl               | Enter              | markitem           | 0                  |
+| -1                 | None               | Tab                | complete           | 0                  |
 | -1                 | Ctrl               | v                  | paste              | 2                  |
-| -1                 | Ctrl+Shift         | v                  | paste              | 1                  |
-| -1                 | 0                  | BackSpace          | backspace          | 0                  |
-| -1                 | Ctrl               | BackSpace          | deleteword         | 0                  |
-| -1                 | Ctrl               | Left               | moveword           | -1                 |
-| -1                 | Ctrl               | Right              | moveword           | +1                 |
-| -1                 | 0                  | Left               | movecursor         | -1                 |
-| -1                 | 0                  | Right              | movecursor         | +1                 |
+| -1                 | None               | Backspace          | backspace          | 0                  |
+| -1                 | Ctrl               | Backspace          | deleteword         | 0                  |
 | -1                 | Ctrl+Shift         | p                  | setprofile         | 0                  |
-| -1                 | Ctrl               | k                  | setlines           | +1                 |
-| -1                 | Ctrl               | j                  | setlines           | -1                 |
-| -1                 | Ctrl               | h                  | setcolumns         | +1                 |
-| -1                 | Ctrl               | l                  | setcolumns         | -1                 |
-| -1                 | 0                  | Print              | screenshot         | 0                  |
-| 0                  | 0                  | i                  | switchmode         | 0                  |
-| 0                  | Ctrl               | equal              | setimgsize         | +10                |
-| 0                  | Ctrl               | minus              | setimgsize         | -10                |
-| 0                  | Shift              | 0                  | defaultimg         | 0                  |
-| 0                  | 0                  | o                  | setimgpos          | +1                 |
-| 0                  | Ctrl               | 1                  | setimggaps         | -10                |
-| 0                  | Ctrl               | 2                  | setimggaps         | +10                |
-| 0                  | 0                  | t                  | toggleimg          | 0                  |
-| 0                  | 0                  | p                  | paste              | 2                  |
-| 0                  | 0                  | q                  | flipimg            | 1                  |
-| 0                  | 0                  | w                  | flipimg            | 0                  |
-| 0                  | 0                  | k                  | moveup             | 0                  |
-| 0                  | 0                  | j                  | movedown           | 0                  |
-| 0                  | 0                  | h                  | moveleft           | 0                  |
-| 0                  | 0                  | l                  | moveright          | 0                  |
-| 0                  | Ctrl               | u                  | moveup             | 5                  |
-| 0                  | Ctrl               | d                  | movedown           | 5                  |
-| 0                  | 0                  | u                  | togglehighlight    | 0                  |
-| 0                  | Shift              | h                  | viewhist           | 0                  |
-| 0                  | 0                  | d                  | clear              | 0                  |
-| 0                  | Shift              | d                  | clearins           | 0                  |
-| 0                  | 0                  | Escape             | quit               | 0                  |
-| 0                  | 0                  | g                  | movestart          | 0                  |
-| 0                  | Shift              | g                  | moveend            | 0                  |
-| 0                  | Ctrl               | p                  | navhistory         | -1                 |
-| 0                  | Ctrl               | n                  | navhistory         | +1                 |
-| 1                  | 0                  | Escape             | switchmode         | 0                  |
-| 1                  | Ctrl               | r                  | toggleregex        | 0                  |
+| -1                 | Ctrl               | =                  | setimgsize         | +10                |
+| -1                 | Ctrl               | -                  | setimgsize         | -10                |
+| -1                 | None               | Up                 | moveup             | 0                  |
+| -1                 | None               | Down               | movedown           | 0                  |
+| -1                 | None               | Left               | moveleft           | 0                  |
+| -1                 | None               | Right              | moveright          | 0                  |
+| -1                 | Ctrl               | u                  | moveup             | 5                  |
+| -1                 | Ctrl               | d                  | movedown           | 5                  |
+| -1                 | Ctrl               | h                  | viewhist           | 0                  |
+| -1                 | None               | Esc                | quit               | 0                  |
+| -1                 | Ctrl               | p                  | navhistory         | -1                 |
+| -1                 | Ctrl               | n                  | navhistory         | +1                 |
+| -1                 | None               | PrintScr           | screenshot         | 0                  |
 
 ## Mouse
 
