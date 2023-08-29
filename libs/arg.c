@@ -404,7 +404,9 @@ out:
 void setlineheight(Arg *arg) {
     lineheight += arg->i;
     sp.bh = MAX(draw->font->h, draw->font->h + 2 + lineheight);
+
     resizeclient();
+    drawmenu();
 }
 
 void setimgsize(Arg *arg) {
