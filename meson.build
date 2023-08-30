@@ -21,14 +21,6 @@ project_dependencies = [
 
 build_args = [
   '-DVERSION=' + meson.project_version(),
-
-  '-D_DEFAULT_SOURCE',
-  '-D_BSD_SOURCE',
-  '-D_XOPEN_SOURCE=700L',
-  '-D_POSIX_C_SOURCE=200809L',
-
-  '-std=c99',
-  '-pedantic',
   '-Wall',
   '-Wno-unused-parameter',
   '-Wno-sign-compare',
