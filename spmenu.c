@@ -504,7 +504,7 @@ void get_mh(void) {
         sp.mh = MIN(sp.mh, mo.output_height - epad);
 
         if (sp.mh == mo.output_height - epad) {
-            lines = ((mo.output_height - epad) / sp.bh) - 1;
+            lines = ((mo.output_height - epad) / sp.bh);
         }
     }
 }
