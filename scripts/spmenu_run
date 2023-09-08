@@ -60,7 +60,7 @@ RUNLAUNCHER_DESKTOP_PRETEXT="Type in keywords to search for a program.."
 RUNLAUNCHER_FM_PRETEXT="Type in keywords to search for a file or directory.."
 RUNLAUNCHER_HELP_PRETEXT=""
 
-DESKTOP_DIR="${DESKTOP_DIR:-/usr/share/applications /usr/local/share/applications ${HOME}/.local/share/applications}"
+DESKTOP_DIR="${DESKTOP_DIR:-/usr/share/applications /usr/local/share/applications ${HOME}/.local/share/applications /var/lib/flatpak/exports/share/applications ${HOME}/.local/share/flatpak/exports/share/applications}"
 ICON_DIR="${ICON_DIR:-/usr/share/icons/hicolor /usr/local/share/icons/hicolor ${HOME}/.local/share/icons/hicolor /usr/share/pixmaps /usr/local/share/pixmaps}"
 IMAGE="${IMAGE:-true}"
 LOGFILE="${LOGFILE:-/tmp/spmenu_run.log}"
