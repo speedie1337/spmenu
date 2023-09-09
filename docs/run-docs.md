@@ -52,6 +52,11 @@ cache (useful if you just installed/uninstalled a program) run `spmenu_run -cc`.
 **NOTE: By default it will hide any entries matching `spmenu` (for convenience)
 but you can unhide these if you wish through the configuration file.**
 
+Flatpaks are also functional, provided they use valid .desktop entries. You
+can use Flatpaks with spmenu_run by passing `-d`. $DESKTOP_DIR and
+$ICON_DIR must contain Flatpak paths though. If you have a new config,
+these variables should be defined properly already.
+
 ## Bookmarking
 
 spmenu_run provides bookmarking entries or just general text if preferred. To

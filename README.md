@@ -182,3 +182,5 @@ Before contributing, please see [this article](https://spmenu.speedie.site/Contr
 spmenu has [a wiki](https://spmenu.speedie.site) for more extensive
 documentation. Contributions to the wiki are appreciated, and
 can be done through [the Git repository](https://git.speedie.site/speedie/spmenu-wiki).
+
+If you need help, you can also check out [my Matrix space](https://matrix.speedie.site).
