@@ -67,7 +67,7 @@ print_desktop_list() {
 
 	[ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
-        icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
+        icons="$(find -L "${icondir[@]}" -type f 2>/dev/null)"
         [ -z "$entry" ] && entry="$(find -L "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
         [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
