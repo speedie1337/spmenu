@@ -50,7 +50,7 @@ print_desktop_list() {
 
     # autorefreshing
     if [ "$AUTOREFRESH" = "true" ] && [ "$1" != "noc" ]; then
-        entry_c="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null | grep -c "")"
+        entry_c="$(find -L "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null | grep -c "")"
         [ -f "$FILEFILE" ] && cached_c="$(grep -c "" < "$FILEFILE")" || cached_c="0"
 
         printf "%s: %d\n%s: %d\n" "Cached" "$cached_c" "Entries" "$entry_c" >> "$LOGFILE"
@@ -68,7 +68,7 @@ print_desktop_list() {
 	[ "$PRINT_LOGS_STDERR" = "true" ] && printf "spmenu_run: Updating .desktop entries.\n" >> /dev/stderr
 
         icons="$(find "${icondir[@]}" -type f 2>/dev/null)"
-        [ -z "$entry" ] && entry="$(find "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
+        [ -z "$entry" ] && entry="$(find -L "${desktopdir[@]}" -type f -name '*.desktop' 2>/dev/null)"
         [ -z "$entry_c" ] && entry_c="$(printf "%s\n" "$entry" | grep -c "")"
 
         rm -f "$TITLEFILE" "$ICONFILE" "$DESCFILE" "$EXECFILE" "$FILEFILE" "$TERMFILE" "$DISPLAYFILE" "$ONLYFILE" "$COMMENTFILE"
