@@ -5,30 +5,19 @@
 # See LICENSE file for copyright and license details.
 
 path() {
-    [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
-    [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
-    SORT_ARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
-
-    read -ra uniq_args <<< "${UNIQ_ARGS}"
-    read -ra sort_args <<< "${SORT_ARGS}"
-
     HIDDEN_KEYWORDS="${HIDDEN_KEYWORDS:-NULL_ENTRY}"
 
     print_menu() {
         print() {
-                compgen -c | \
-                grep -vE "$HIDDEN_KEYWORDS" | \
-                grep -E "$KEYWORDS"
+            compgen -c | \
+            grep -vE "$HIDDEN_KEYWORDS" | \
+            grep -E "$KEYWORDS"
 
-                [ "$DISPLAY_BOOKMARKS" != "false" ] && bookmark_path
-            }
-
-            if [ "$SORT_BY_RECENT" != "false" ]; then
-                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-            else
-                print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
-            fi
+            [ "$DISPLAY_BOOKMARKS" != "false" ] && bookmark_path
         }
+
+        print | sort "${sort_args[@]}" | cut -d' ' -f 2 2>&1
+    }
 
     # uniq
     if [ "$DISPLAY_DUPLICATES" != "false" ]; then

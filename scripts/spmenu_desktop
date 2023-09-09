@@ -143,12 +143,19 @@ print_desktop_list() {
         mapfile -t it_only < "$ONLYFILE"
         mapfile -t it_comment < "$COMMENTFILE"
 
-        d_print_array
+        d_print_array | \
+            sort -k 2 "${sort_args[@]}" | \
+            uniq "${uniq_args[@]}" | \
+            grep -vE "$HIDDEN_ENTRY_KEYWORDS" | \
+            grep -E "$ENTRY_KEYWORDS"
     fi
 }
 
 d_print_array() {
     command -v print_array > /dev/null && print_array && return
+
+    printf "SORT_ARGS: %s\n" "${sort_args[*]}" >> "$LOGFILE"
+    printf "UNIQ_ARGS: %s\n" "${uniq_args[*]}" >> "$LOGFILE"
 
     for i in "${!it_title[@]}"; do
         [ "$RESPECT_ONLYSHOWIN" != "false" ] && [ "${it_only[i]}" != "false" ] && continue
@@ -214,7 +221,7 @@ print_desktop_menu() {
 
     HIDDEN_ENTRY_KEYWORDS="${HIDDEN_ENTRY_KEYWORDS:-NULL_ENTRY}"
 
-    print_desktop_list "" | uniq "${uniq_args[@]}" | sort "${sort_args[@]}" | grep -vE "$HIDDEN_ENTRY_KEYWORDS" | grep -E "$ENTRY_KEYWORDS" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
+    print_desktop_list "" | $RUNLAUNCHER "${rl_desktop[@]}" > /tmp/spmenu_out
 
     while read -r menusel; do
         [ "$menusel" = "?" ] && print_desktop_help && print_desktop_menu

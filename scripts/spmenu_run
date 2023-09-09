@@ -20,8 +20,8 @@ RUNLAUNCHER="${RUNLAUNCHER:-spmenu}"
 PREFIX="${PREFIX:-/usr}"
 DESTDIR="${DESTDIR:-}"
 STDOUT="${STDOUT:-false}"
-SORT_BY_NUMBER="${SORT_BY_NUMBER:-true}"
-SORT_IN_REVERSE="${SORT_IN_REVERSE:-true}"
+SORT_BY_NUMBER="${SORT_BY_NUMBER:-false}"
+SORT_IN_REVERSE="${SORT_IN_REVERSE:-false}"
 SORT_BY_RECENT="${SORT_BY_RECENT:-false}"
 SORT_ARGS="${SORT_ARGS:-}"
 UNIQ_ARGS="${UNIQ_ARGS:-}"
@@ -434,6 +434,13 @@ main() {
         rl_help+=("$RUNLAUNCHER_HELP_PRETEXT")
         rl_bm+=("$RUNLAUNCHER_BM_PRETEXT")
     fi
+
+    [ "$SORT_BY_NUMBER" != "false" ] && NUMBERSORTARG="-n"
+    [ "$SORT_IN_REVERSE" != "false" ] && REVERSESORTARG="-r"
+    SORT_ARGS="$NUMBERSORTARG $REVERSESORTARG $SORT_ARGS"
+
+    read -ra uniq_args <<< "${UNIQ_ARGS}"
+    read -ra sort_args <<< "${SORT_ARGS}"
 
     # $PATH listing
     case "$function" in
