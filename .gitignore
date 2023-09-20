@@ -10,9 +10,9 @@ build
 *.ebuild*
 PKGBUILD
 
-libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
-libs/wl/wlr-layer-shell-unstable-v1-protocol.c
-libs/wl/xdg-output-unstable-v1-protocol.c
-libs/wl/xdg-output-unstable-v1-client-protocol.h
-libs/wl/xdg-shell-client-protocol.h
-libs/wl/xdg-shell-protocol.c
+src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c
+src/libs/wl/xdg-output-unstable-v1-protocol.c
+src/libs/wl/xdg-output-unstable-v1-client-protocol.h
+src/libs/wl/xdg-shell-client-protocol.h
+src/libs/wl/xdg-shell-protocol.c

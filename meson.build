@@ -8,8 +8,8 @@ project(
 cc = meson.get_compiler('c')
 
 project_source_files = [
-  'libs/draw/draw.c',
-  'spmenu.c',
+  'src/libs/draw/draw.c',
+  'src/spmenu.c',
 ]
 
 project_dependencies = [
@@ -40,12 +40,12 @@ if get_option('wayland')
 
   run_command('protocols/generate.sh', check : true)
 
-  project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
-  project_source_files += [ 'libs/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
-  project_source_files += [ 'libs/wl/xdg-output-unstable-v1-client-protocol.h' ]
-  project_source_files += [ 'libs/wl/xdg-output-unstable-v1-protocol.c' ]
-  project_source_files += [ 'libs/wl/xdg-shell-client-protocol.h' ]
-  project_source_files += [ 'libs/wl/xdg-shell-protocol.c' ]
+  project_source_files += [ 'src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
+  project_source_files += [ 'src/libs/wl/xdg-output-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'src/libs/wl/xdg-output-unstable-v1-protocol.c' ]
+  project_source_files += [ 'src/libs/wl/xdg-shell-client-protocol.h' ]
+  project_source_files += [ 'src/libs/wl/xdg-shell-protocol.c' ]
   build_args += [ '-DWAYLAND' ]
 endif
 
@@ -100,7 +100,6 @@ endif
 
 if get_option('docs')
   install_data(sources : 'docs/spmenu.conf', install_dir : 'share/spmenu')
-  install_data(sources : 'docs/binds-vim.conf', install_dir : 'share/spmenu')
   install_data(sources : 'docs/spmenu_run.desktop', install_dir : 'share/applications')
   install_data(sources : 'docs/spmenu_desktop.desktop', install_dir : 'share/applications')
   install_data(sources : 'docs/spmenu_filemanager.desktop', install_dir : 'share/applications')

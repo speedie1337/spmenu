@@ -605,9 +605,7 @@ regex can be used as well.
 ## Modes
 
 There are two modes. Normal mode and Insert mode. These modes are of
-course similar to Vim. While modes are used by default, it is possible
-to move all keybinds to Insert mode, restoring the original dmenu
-behavior.
+course similar to Vim.
 
 Normal mode is the mode spmenu starts in unless a mode argument is specified
 or another mode is set in the configuration file. Note that if `forceinsertmode`

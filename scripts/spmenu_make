@@ -14,7 +14,7 @@ fifo=${fifo:-true}
 
 prefix="${prefix:-/usr}"
 
-reconfigure=${reconfigure:-false}
+reconfigure=${reconfigure:-true}
 static=${static:-false}
 
 clean() {
@@ -23,7 +23,7 @@ clean() {
 }
 
 check_correct_dir() {
-    [ ! -f "spmenu.c" ] && printf "Incorrect directory.\n" && exit 1
+    [ ! -f "src/spmenu.c" ] && printf "Incorrect directory.\n" && exit 1
 }
 
 gen_arg_list() {
@@ -65,42 +65,42 @@ headers() {
     wayland-scanner \
         client-header \
         protocols/wlr-layer-shell-unstable-v1.xml \
-        libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+        src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
 
     wayland-scanner \
         client-header \
         protocols/xdg-shell.xml \
-        libs/wl/xdg-shell-client-protocol.h
+        src/libs/wl/xdg-shell-client-protocol.h
 
     wayland-scanner \
         client-header \
         protocols/xdg-output-unstable-v1.xml \
-        libs/wl/xdg-output-unstable-v1-client-protocol.h
+        src/libs/wl/xdg-output-unstable-v1-client-protocol.h
 
     wayland-scanner \
         public-code \
         protocols/wlr-layer-shell-unstable-v1.xml \
-        libs/wl/wlr-layer-shell-unstable-v1-protocol.c
+        src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c
 
     wayland-scanner \
         public-code \
         protocols/xdg-shell.xml \
-        libs/wl/xdg-shell-protocol.c
+        src/libs/wl/xdg-shell-protocol.c
 
     wayland-scanner \
         public-code \
         protocols/xdg-output-unstable-v1.xml \
-        libs/wl/xdg-output-unstable-v1-protocol.c
+        src/libs/wl/xdg-output-unstable-v1-protocol.c
 }
 
 clean_headers() {
     rm -f \
-        libs/wl/xdg-output-unstable-v1-protocol.c \
-        libs/wl/xdg-shell-protocol.c \
-        libs/wl/wlr-layer-shell-unstable-v1-protocol.c \
-        libs/wl/xdg-output-unstable-v1-client-protocol.h \
-        libs/wl/xdg-shell-client-protocol.h \
-        libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+        src/libs/wl/xdg-output-unstable-v1-protocol.c \
+        src/libs/wl/xdg-shell-protocol.c \
+        src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c \
+        src/libs/wl/xdg-output-unstable-v1-client-protocol.h \
+        src/libs/wl/xdg-shell-client-protocol.h \
+        src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
 }
 
 gen_pkg() {
@@ -113,13 +113,12 @@ gen_pkg() {
 	    LICENSE \
 	    meson.build \
 	    meson_options.txt \
-	    *.c \
 	    spmenu.1 \
 	    spmenu_run.1 \
 	    spmenu_test.1 \
 	    scripts/ \
 	    docs/ \
-	    libs/ \
+	    src/ \
 	    protocols/ \
 	    packaging \
 	    "spmenu-${version}"
@@ -182,36 +181,38 @@ gen_arch_pkg() {
 
     makepkg -sfr --sign || exit 1
 
-    rm -rf src/ pkg/
+    rm -rf pkg/ src/spmenu-${version}.tar.gz src/spmenu-${version}.tar.gz.sig src/spmenu-${version}
 
     mv PKGBUILD spmenu-${version}.PKGBUILD
 
-    if [ -x "$(command -v md5sum)" ]; then
+    # generate MD5 checksum
+    [ -x "$(command -v md5sum)" ] && \
         md5sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.md5
-    fi
 
-    if [ -x "$(command -v sha256sum)" ]; then
+    # generate SHA256 checksum
+    [ -x "$(command -v sha256sum)" ] && \
         sha256sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.sha256
-    fi
 }
 
 generate_theme() {
-declare -a color
-
-read_colors() {
-    i=1
+    declare -a color
     color=()
+    i=1
 
+    [ ! -f "$1" ] && printf "File does not exist.\n" && exit 1
+    [ "$(grep -c "" "$1")" != "18" ] && printf "Color list is not 18 lines long.\n" && exit 1
+
+    # assign colors to variables
     while true; do
         color[i]="$(sed -n ${i},${i}p $1)"
         ccol="${color[i]}"
+
         [ "${#ccol}" != "7" ] || [ "${ccol:0:1}" != "#" ] && color[i]="#000000"
         [ "$i" = "18" ] && break
+
         i=$((i+1))
     done
-}
 
-write_array() {
 cat << EOF
 /* spmenu colorscheme generated from ${1:-None} */
 theme = {
@@ -272,13 +273,6 @@ theme = {
     file = ( { global = 0; } );
 };
 EOF
-}
-
-[ ! -f "$1" ] && printf "File does not exist.\n" && exit 1
-[ "$(grep -c "" "$1")" != "18" ] && printf "Color list is not 18 lines long.\n" && exit 1
-
-read_colors "$1"
-write_array "$1"
 }
 
 build() {
