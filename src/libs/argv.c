@@ -224,13 +224,15 @@ void readargs(int argc, char *argv[]) {
         } else if (!strcmp(argv[i], "-hpr") || (!strcmp(argv[i], "--hide-prompt"))) {   // hide prompt
             hideprompt = 1;
         } else if (!strcmp(argv[i], "-hpt") || (!strcmp(argv[i], "--hide-pretext"))) {   // hide pretext
-            hideprompt = 1;
+            hidepretext = 1;
         } else if (!strcmp(argv[i], "-hpl") || (!strcmp(argv[i], "--hide-powerline"))) {   // hide powerline
             hidepowerline = 1;
         } else if (!strcmp(argv[i], "-hin") || (!strcmp(argv[i], "--hide-input"))) {   // hide input
             hideinput = 1;
         } else if (!strcmp(argv[i], "-spr") || (!strcmp(argv[i], "--show-prompt"))) {  // show prompt
             hideprompt = 0;
+        } else if (!strcmp(argv[i], "-spt") || (!strcmp(argv[i], "--show-pretext"))) {  // show pretext
+            hidepretext = 0;
         } else if (!strcmp(argv[i], "-spl") || (!strcmp(argv[i], "--show-powerline"))) {  // show prompt
             hidepowerline = 0;
         } else if (!strcmp(argv[i], "-sin") || (!strcmp(argv[i], "--show-input"))) {  // show input
@@ -702,6 +704,7 @@ void usage(int status) {
             "spmenu -sra,     --show-right-arrow                          Show right arrow\n"
             "spmenu -sit,     --show-item                                 Show items\n"
             "spmenu -spr,     --show-prompt                               Show prompt\n"
+            "spmenu -spt,     --show-pretext                              Show pretext\n"
             "spmenu -sin,     --show-input                                Show input\n"
             "spmenu -spl,     --show-powerline                            Show powerline\n"
             "spmenu -sc,      --show-caret, --show-cursor                 Show caret\n"

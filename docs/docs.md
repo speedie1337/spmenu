@@ -283,6 +283,9 @@ in the config files.
 `-sin, --show-input`
 :   Show input
 
+`-spt, --show-pretext`
+:   Show pretext
+
 `-spl, --show-powerline`
 :   Show powerline
 
