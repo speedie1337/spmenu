@@ -51,7 +51,7 @@ void handle_wl(void) {
 
     anchor_layer(&state, menuposition);
     set_exclusive_zone(&state, -1);
-    set_keyboard(&state, 1);
+    set_keyboard(&state, grabkeyboard ? 1 : 0);
     add_layer_listener(&state);
     set_visible_layer(&state);
 

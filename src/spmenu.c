@@ -548,11 +548,17 @@ void handle(void) {
 #endif
 
         if (fast && !isatty(0)) {
-            grabkeyboard_x11();
+            if (grabkeyboard) {
+                grabkeyboard_x11();
+            }
+
             readstdin();
         } else {
             readstdin();
-            grabkeyboard_x11();
+
+            if (grabkeyboard) {
+                grabkeyboard_x11();
+            }
         }
 
         set_mode();

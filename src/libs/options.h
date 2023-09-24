@@ -12,6 +12,7 @@ static int loadtheme                   = 1; /* Load theme (~/.config/spmenu/them
 static int loadbinds                   = 1; /* Load keybind file (~/.config/spmenu/binds.conf) on runtime */
 static int mon                         = -1; /* Monitor to run spmenu on */
 static int managed                     = 0; /* Let your window manager manage spmenu? */
+static int grabkeyboard                = 1; /* Grab keyboard/general input */
 
 /* Wayland options */
 static int scrolldistance              = 512; /* Distance to scroll for a scroll action to count */

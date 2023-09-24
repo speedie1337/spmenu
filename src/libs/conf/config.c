@@ -286,6 +286,7 @@ void conf_init(void) {
             config_setting_lookup_int(conf, "width", &menuwidth); // spmenu.window.width
             config_setting_lookup_int(conf, "border", &borderwidth); // spmenu.window.border
             config_setting_lookup_int(conf, "managed", &managed); // spmenu.window.managed
+            config_setting_lookup_int(conf, "grabkeyboard", &grabkeyboard); // spmenu.window.grabkeyboard
             config_setting_lookup_int(conf, "monitor", &mon); // spmenu.window.monitor
             config_setting_lookup_int(conf, "alpha", &alpha); // spmenu.window.alpha
 

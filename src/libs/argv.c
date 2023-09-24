@@ -181,6 +181,10 @@ void readargs(int argc, char *argv[]) {
             managed = 1;
         } else if (!strcmp(argv[i], "-nwm") || (!strcmp(argv[i], "--unmanaged"))) { // don't display as managed wm window
             managed = 0;
+        } else if (!strcmp(argv[i], "-gk") || (!strcmp(argv[i], "--grab-keyboard"))) { // grab keyboard
+            grabkeyboard = 1;
+        } else if (!strcmp(argv[i], "-ngk") || (!strcmp(argv[i], "--no-grab-keyboard"))) { // don't grab keyboard
+            grabkeyboard = 0;
         } else if (!strcmp(argv[i], "-na") || (!strcmp(argv[i], "--no-alpha"))) { // disable alpha
             alpha = 0;
         } else if (!strcmp(argv[i], "-a") || (!strcmp(argv[i], "--alpha"))) { // alpha
@@ -744,6 +748,19 @@ void usage(int status) {
     fputs(
             "spmenu -wm,      --managed, --x11-client                     Spawn spmenu as a window manager controlled client/window (X11 only)\n"
             "spmenu -nwm,     --unmanaged                                 Don't spawn spmenu as a window manager controlled client/window (X11 only)\n"
+            "spmenu -gk,      --grab-keyboard                             Grab keyboard on runtime\n"
+            "spmenu -ngk,     --no-grab-keyboard                          Don't grab keyboard on runtime\n"
+            "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
+            "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
+            "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
+            "spmenu -bf,      --bind-file <file>                          Exclusively load binds from <file>\n"
+            "spmenu -lbi,     --load-binds                                Load spmenu binds (~/.config/spmenu/binds.conf)\n"
+            "spmenu -nlbi,    --no-load-binds                             Don't load spmenu binds (~/.config/spmenu/binds.conf)\n"
+            "spmenu -tm,      --theme <theme>                             Load theme <theme>\n"
+            "spmenu -ltm,     --load-theme                                Load theme\n"
+            "spmenu -nltm,    --no-load-theme                             Don't load theme\n"
+            "spmenu -x11,     --x11                                       Run spmenu in X11 mode\n"
+            "spmenu -wl,      --wayland                                   Run spmenu in Wayland mode\n"
             "spmenu -cf,      --config-file <file>                        Set config file to load to <file>\n"
             "spmenu -lcfg,    --load-config                               Load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"
             "spmenu -ncfg,    --no-load-config                            Don't load spmenu configuration (~/.config/spmenu/spmenu.conf)\n"

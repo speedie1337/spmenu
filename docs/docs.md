@@ -376,6 +376,12 @@ in the config files.
 `-nwm, --unmanaged`
 :   Don't spawn spmenu as a window manager controlled client/window (X11 only)
 
+`-gk, --grab-keyboard`
+:   Grab keyboard on runtime
+
+`-ngk, --no-grab-keyboard`
+:   Grab keyboard on runtime
+
 `-cf, --config-file file`
 :   Set config file to load to file
 
