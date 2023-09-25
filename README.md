@@ -102,8 +102,9 @@ Configure the build by running these commands:
 `mkdir -p build/ # Create a build/ directory, Meson will use this as the working
 directory`
 
-`meson setup build # This will check to make sure all dependencies are found.
-If you're recompiling you may want to pass --reconfigure as an argument`
+`meson setup build --prefix=/usr # This will check to make sure all
+dependencies are found. If you're recompiling you may want to pass
+--reconfigure as an argument`
 
 This is where you can enable/disable certain features, as well as set
 compiler options.
