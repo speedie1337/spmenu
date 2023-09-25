@@ -11,6 +11,7 @@ wayland=${wayland:-true}
 x11=${x11:-true}
 regex=${regex:-true}
 fifo=${fifo:-true}
+library=${library:-true}
 
 prefix="${prefix:-/usr}"
 
@@ -19,7 +20,7 @@ static=${static:-false}
 
 clean() {
     clean_headers
-    rm -rf ./*.zst* ./*.tar* ./*.sig* *.PKGBUILD *.ebuild *.ebuild* build/
+    rm -rf ./*.zst* ./*.tar* ./*.sig* *.PKGBUILD *.ebuild *.ebuild* build/ PKGBUILD
 }
 
 check_correct_dir() {
@@ -158,12 +159,27 @@ gen_gentoo_pkg() {
             sha256sum spmenu-${version}.ebuild | cut -d ' ' -f 1 > spmenu-${version}.ebuild.sha256
         fi
     fi
+
+    if [ -f "packaging/libspmenu.ebuild" ] && [ "$library" != "false" ]; then
+        cp packaging/libspmenu.ebuild libspmenu-${version}.ebuild
+
+        if [ -x "$(command -v gpg)" ]; then
+            gpg --detach-sign --yes --local-user $(whoami) libspmenu-${version}.ebuild
+        fi
+
+        if [ -x "$(command -v md5sum)" ]; then
+            md5sum libspmenu-${version}.ebuild | cut -d ' ' -f 1 > libspmenu-${version}.ebuild.md5
+        fi
+
+        if [ -x "$(command -v sha256sum)" ]; then
+            sha256sum libspmenu-${version}.ebuild | cut -d ' ' -f 1 > libspmenu-${version}.ebuild.sha256
+        fi
+    fi
 }
 
 gen_arch_pkg() {
     [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     [ ! -x "$(command -v makepkg)" ] && printf "makepkg required for this action.\n" && exit 1
-    [ -f "packaging/spmenu.PKGBUILD" ] || exit 1
 
     rm -f PKGBUILD
 
@@ -188,10 +204,14 @@ gen_arch_pkg() {
     # generate MD5 checksum
     [ -x "$(command -v md5sum)" ] && \
         md5sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.md5
+    [ -x "$(command -v md5sum)" ] && \
+        md5sum libspmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > libspmenu-${version}-1-x86_64.pkg.tar.zst.md5
 
     # generate SHA256 checksum
     [ -x "$(command -v sha256sum)" ] && \
         sha256sum spmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > spmenu-${version}-1-x86_64.pkg.tar.zst.sha256
+    [ -x "$(command -v sha256sum)" ] && \
+        sha256sum libspmenu-${version}-1-x86_64.pkg.tar.zst | cut -d ' ' -f 1 > libspmenu-${version}-1-x86_64.pkg.tar.zst.sha256
 }
 
 generate_theme() {
@@ -325,6 +345,13 @@ build() {
 
     [ "$cp_build" = "true" ] && cp meson.build meson.build.used
     mv -f meson.build.orig meson.build
+
+    if [ "$library" != "false" ]; then
+        cd src/libspmenu/ || exit 1
+        meson setup --prefix "$prefix" build || exit 1
+        ninja -C build
+        cd ../../ || exit 1
+    fi
 }
 
 install() {
@@ -335,6 +362,14 @@ install() {
     cd .. || exit 1
     [ "$reconfigure" = "true" ] && rm -rf build/
     [ "$reconfigure" = "true" ] && clean_headers
+
+    if [ "$library" != "false" ]; then
+        cd src/libspmenu/build/ || exit 1
+        meson install
+        cd ..
+        [ "$reconfigure" = "true" ] && rm -rf build/
+        cd ../../
+    fi
 }
 
 help() {

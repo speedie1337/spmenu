@@ -141,7 +141,7 @@ directory**. If you want to generate a pacman package, run
 
 When creating a release, do the following:
 
-1. Bump version in meson.build (optional)
+1. Bump version in meson.build and src/libspmenu/meson.build (optional)
 2. Run `scripts/spmenu_make docs`. This will generate new documentation.
 3. `git commit -a` to bump version
 4. Run `scripts/spmenu_make dist`. This will generate a tarball, along

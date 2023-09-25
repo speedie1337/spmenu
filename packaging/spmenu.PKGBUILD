@@ -1,6 +1,7 @@
 # Maintainer: speedie <speedie@speedie.site>
 
-pkgname=spmenu
+pkgname=('spmenu' 'libspmenu')
+pkgbase="spmenu"
 pkgver=VERSION
 pkgrel=1
 pkgdesc="Fancy dynamic menu for X11 and Wayland, compatible with dmenu!"
@@ -29,15 +30,13 @@ makedepends=(
 
 optdepends=(
     'wl-clipboard: Clipboard support on Wayland'
+    'libspmenu: C++ library for spmenu'
 )
 
 provides=($pkgname)
-conflicts=($pkgname)
 source=(
-    "$pkgname-$pkgver.tar.gz"
-    "$pkgname-$pkgver.tar.gz.sig"
-    #"https://ls.speedie.site/releases/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz"
-    #"https://ls.speedie.site/releases/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz.sig"
+    "$pkgbase-$pkgver.tar.gz"
+    "$pkgbase-$pkgver.tar.gz.sig"
 )
 
 md5sums=(
@@ -50,15 +49,19 @@ sha256sums=(
     'SKIP'
 )
 
-build(){
-  cd $pkgname-$pkgver
-  mkdir -p build/
+package_spmenu() {
+  cd "$pkgbase-$pkgver"
   meson setup --reconfigure --prefix=${pkgdir}/usr build
-  ninja -C build
+  cd build/
+  meson install
 }
 
-package() {
-  cd "$pkgname-$pkgver"
+package_libspmenu() {
+  pkgdesc="C++ library for spmenu"
+  optdepends=()
 
-  meson install -C build
+  cd "$pkgbase-$pkgver/src/libspmenu"
+  meson setup --reconfigure --prefix=${pkgdir}/usr build
+  cd build/
+  meson install
 }
