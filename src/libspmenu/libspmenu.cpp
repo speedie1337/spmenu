@@ -11,33 +11,18 @@
 #include <array>
 #include "libspmenu.h"
 
-bool spmenu::checkBool(bool Bool) {
-    return (Bool == 0 || Bool == 1);
-}
-
 std::string spmenu::addArgument(std::string Argument, std::string Value) {
-    std::string str;
-
-    str += " " + Argument + " \"" + Value + "\"";
-
-    return str;
+    return " " + Argument + " \"" + Value + "\"";
 }
 
-std::string spmenu::addArgument(std::string enabledArgument, std::string disabledArgument, bool Value) {
-    std::string str{};
-
-    std::cout << spmenu::checkBool(Value) << std::endl;
-    if (!spmenu::checkBool(Value)) {
-        return str;
-    }
-
+std::string spmenu::addArgument(std::string enabledArgument, std::string disabledArgument, std::string Value) {
     if (disabledArgument.empty() || enabledArgument.empty()) {
-        return str;
+        return "";
+    } else if (Value.compare("True") && Value.compare("true") && Value.compare("False") && Value.compare("false") || Value.compare("0") || Value.compare("1")) {
+        return "";
     }
 
-    str += " " + (Value ? enabledArgument : disabledArgument);
-
-    return str;
+    return " " + ((!Value.compare("True") || !Value.compare("true") || !Value.compare("1")) ? enabledArgument : disabledArgument);
 }
 
 std::string spmenu::generateArguments(spmenu::spmenuSettings *settings) {
@@ -172,11 +157,11 @@ std::string spmenu::generateArguments(spmenu::spmenuSettings *settings) {
 
     if (!settings->windowPosition.empty()) {
         std::string argument = "";
-        if (settings->windowPosition.compare("Top")) {
+        if (!settings->windowPosition.compare("Top")) {
             argument = "--top";
-        } else if (settings->windowPosition.compare("Bottom")) {
+        } else if (!settings->windowPosition.compare("Bottom")) {
             argument = "--bottom";
-        } else if (settings->windowPosition.compare("Center")) {
+        } else if (!settings->windowPosition.compare("Center")) {
             argument = "--center";
         }
 
@@ -185,9 +170,9 @@ std::string spmenu::generateArguments(spmenu::spmenuSettings *settings) {
 
     if (!settings->itemPosition.empty()) {
         std::string argument = "";
-        if (settings->itemPosition.compare("Top")) {
+        if (!settings->itemPosition.compare("Top")) {
             argument = "--item-top";
-        } else if (settings->itemPosition.compare("Bottom")) {
+        } else if (!settings->itemPosition.compare("Bottom")) {
             argument = "--item-bottom";
         }
 
@@ -196,13 +181,13 @@ std::string spmenu::generateArguments(spmenu::spmenuSettings *settings) {
 
     if (!settings->imagePosition.empty()) {
         std::string argument = "";
-        if (settings->imagePosition.compare("Top")) {
+        if (!settings->imagePosition.compare("Top")) {
             argument = "--image-top";
-        } else if (settings->imagePosition.compare("Bottom")) {
+        } else if (!settings->imagePosition.compare("Bottom")) {
             argument = "--image-bottom";
-        } else if (settings->imagePosition.compare("Center")) {
+        } else if (!settings->imagePosition.compare("Center")) {
             argument = "--image-center";
-        } else if (settings->imagePosition.compare("Top Center")) {
+        } else if (!settings->imagePosition.compare("Top Center")) {
             argument = "--image-topcenter";
         }
 

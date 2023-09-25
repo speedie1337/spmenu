@@ -6,7 +6,7 @@
 namespace spmenu {
     using Integer = std::string;
     using String = std::string;
-    using Bool = bool;
+    using Bool = std::string;
     class spmenuSettings {
         public:
             String userArguments{};
@@ -146,8 +146,7 @@ namespace spmenu {
     std::string Run(spmenuSettings *settings);
     std::string generateArguments(spmenuSettings *settings);
     std::string addArgument(std::string Argument, std::string Value);
-    std::string addArgument(std::string enabledArgument, std::string disabledArgument, Bool Value);
-    Bool checkBool(bool);
+    std::string addArgument(std::string enabledArgument, std::string disabledArgument, std::string Value);
 }
 
 #endif

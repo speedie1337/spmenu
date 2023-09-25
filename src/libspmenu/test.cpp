@@ -1,6 +1,6 @@
+/* g++ test.cpp -o test -lspmenu */
 #include <iostream>
-#include "libspmenu.h"
-#include "libspmenu.cpp"
+#include <libspmenu/libspmenu.h>
 
 int main() {
     spmenu::spmenuSettings settings;
