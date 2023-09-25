@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 #include <array>
-#include "libspmenu.hpp"
+#include "libspmenu.h"
 
 bool spmenu::checkBool(bool Bool) {
     return (Bool == 0 || Bool == 1);

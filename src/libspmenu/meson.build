@@ -15,4 +15,5 @@ build_args = [
 
 so_version = meson.project_version()
 
+install_headers('libspmenu.h', subdir : 'libspmenu')
 lib_shared = shared_library('spmenu', project_source_files, version : so_version, install : true)

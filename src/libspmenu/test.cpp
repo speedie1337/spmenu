@@ -1,5 +1,5 @@
 #include <iostream>
-#include "libspmenu.hpp"
+#include "libspmenu.h"
 #include "libspmenu.cpp"
 
 int main() {
