@@ -18,7 +18,7 @@ std::string spmenu::addArgument(std::string Argument, std::string Value) {
 std::string spmenu::addArgument(std::string enabledArgument, std::string disabledArgument, std::string Value) {
     if (disabledArgument.empty() || enabledArgument.empty()) {
         return "";
-    } else if (Value.compare("True") && Value.compare("true") && Value.compare("False") && Value.compare("false") || Value.compare("0") || Value.compare("1")) {
+    } else if (Value.compare("True") && Value.compare("true") && Value.compare("False") && Value.compare("false") && Value.compare("0") && Value.compare("1")) {
         return "";
     }
 
