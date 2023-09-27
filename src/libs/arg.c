@@ -564,7 +564,7 @@ void defaultimg(Arg *arg) {
 }
 
 void setlines(Arg *arg) {
-    if (!overridelines) return;
+    if (!overridelines || (hideprompt && hideinput && hidemode && hidematchcount && hidecaps)) return;
 
     insert(NULL, 0 - sp.cursor);
     selecteditem = currentitem = matches;
@@ -587,7 +587,7 @@ void setlines(Arg *arg) {
 }
 
 void setcolumns(Arg *arg) {
-    if (!overridecolumns) return;
+    if (!overridecolumns || (hideprompt && hideinput && hidemode && hidematchcount && hidecaps)) return;
 
     columns += arg->i;
 
