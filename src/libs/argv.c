@@ -231,7 +231,7 @@ void readargs(int argc, char *argv[]) {
             hidepretext = 1;
         } else if (!strcmp(argv[i], "-hpl") || (!strcmp(argv[i], "--hide-powerline"))) {   // hide powerline
             hidepowerline = 1;
-        } else if (!strcmp(argv[i], "-hin") || (!strcmp(argv[i], "--hide-input"))) {   // hide input
+        } else if (!strcmp(argv[i], "-hip") || (!strcmp(argv[i], "--hide-input"))) {   // hide input
             hideinput = 1;
         } else if (!strcmp(argv[i], "-spr") || (!strcmp(argv[i], "--show-prompt"))) {  // show prompt
             hideprompt = 0;

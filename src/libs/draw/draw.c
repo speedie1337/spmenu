@@ -404,7 +404,7 @@ void draw_set_img(Draw_t *draw, void *data, int w, int h) {
 }
 
 void draw_img(Draw_t *draw, int x, int y) {
-    if (!draw) {
+    if (!draw || !draw->img_surface) {
         return;
     }
 
