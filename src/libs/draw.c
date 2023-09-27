@@ -468,7 +468,7 @@ int drawinput(int x, int y, int w) {
         fh = sp.bh - sp.lrpad / 4;
     }
 
-    if (passwd) {
+    if (passwd && !hideinput) {
         censort = ecalloc(1, sizeof(tx.text));
 
         for (int i = 0; i < strlen(tx.text); i++)
@@ -481,7 +481,7 @@ int drawinput(int x, int y, int w) {
 
         free(censort);
     } else if (!passwd) {
-        if (strlen(tx.text)) {
+        if (strlen(tx.text) && !hideinput) {
             char ptext[BUFSIZ];
             char *p;
 
@@ -500,16 +500,16 @@ int drawinput(int x, int y, int w) {
 
             curpos = TEXTW(ptext) - TEXTW(&ptext[sp.cursor]);
         } else if (pretext != NULL) {
-	    if (hidepretext) {
-		pretext = "";
-	    }
+            if (hidepretext) {
+                pretext = "";
+            }
 
             apply_fribidi(pretext);
             draw_text(draw, x + fw, y, w, sp.bh, sp.lrpad / 2, isrtl ? fribidi_text : pretext, 0, pango_pretext ? True : False, col_pretextfg, col_pretextbg, alpha_pretextfg, alpha_pretextbg);
         }
     }
 
-    if ((curpos += sp.lrpad / 2 - 1) < w && !hidecaret) {
+    if ((curpos += sp.lrpad / 2 - 1) < w && !hidecaret && !hideinput) {
         curpos += fp;
         draw_rect(draw, x + curpos, 2 + (sp.bh - fh) / 2 + y, fw, fh - 4, 1, 0, col_caretfg, col_caretbg, alpha_caretfg, alpha_caretbg);
     }
@@ -736,10 +736,8 @@ void drawmenu_layer(void) {
         x = drawprompt(x, y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0), w);
     }
 
-    if (!hideinput) {
-        w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
-        x = drawinput(x, y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0), w);
-    }
+    w = (lines > 0 || !matches) ? sp.mw - x : sp.inputw;
+    x = drawinput(x, y + (nh ? lines ? itemposition ? (sp.mh - sp.bh) : 0 : 0 : 0), w);
 
     // draw the items, this function also calls drawrarrow() and drawlarrow()
     if (!hideitem) {
