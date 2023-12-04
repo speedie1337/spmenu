@@ -217,7 +217,13 @@ std::string spmenu::Run(spmenu::spmenuSettings *settings) {
     }
 
     while (fgets(buf.data(), buf.size(), pipe.get()) != NULL) {
-        ret += buf.data();
+        size_t len = strlen(buf.data());
+
+        if (len > 0 && buf[len - 1] == '\n') {
+            ret += std::string(buf.data(), len - 1);
+        } else {
+            ret += buf.data();
+        }
     }
 
     return ret;
