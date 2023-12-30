@@ -51,6 +51,8 @@ void setupdisplay_x11(void) {
 
         mo.output_width = info[i].width;
         mo.output_height = info[i].height;
+        mo.output_xpos = info[i].x_org;
+        mo.output_ypos = info[i].y_org;
 
         XFree(info);
     } else
@@ -68,13 +70,14 @@ void setupdisplay_x11(void) {
 
     if (menuposition == 2) { // centered
         sp.mw = MIN(MAX(max_textw() + sp.promptw, centerwidth), mo.output_width);
-        x = (mo.output_width - sp.mw) / 2 + xpos;
-        y = (mo.output_height - sp.mh) / 2 - ypos;
+        x = mo.output_xpos + ((mo.output_width  - sp.mw) / 2 + xpos);
+        y = mo.output_ypos + ((mo.output_height - sp.mh) / 2 - ypos);
     } else { // top or bottom
-        x = xpos;
-        y = menuposition ? (-ypos) : (mo.output_height - sp.mh - ypos);
+        x = mo.output_xpos + xpos;
+        y = mo.output_ypos + menuposition ? (-ypos) : (mo.output_height - sp.mh - ypos);
         sp.mw = (menuwidth > 0 ? menuwidth : mo.output_width);
     }
+
 
     // create menu window and set properties for it
     create_window_x11(

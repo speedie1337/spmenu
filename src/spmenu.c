@@ -76,6 +76,8 @@ struct sp {
 struct mo {
     int output_width; // output width
     int output_height; // output height
+    int output_xpos; // output x position
+    int output_ypos; // output y position
 };
 
 #if IMAGE
