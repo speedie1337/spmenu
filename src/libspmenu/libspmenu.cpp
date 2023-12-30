@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <array>
+#include <cstring>
 #include "libspmenu.h"
 
 std::string spmenu::addArgument(std::string Argument, std::string Value) {
