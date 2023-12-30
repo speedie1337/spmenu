@@ -111,24 +111,33 @@ gen_pkg() {
     rm -f spmenu spmenu-${version}.tar.gz spmenu-${version}.PKGBUILD *.o *zst*
     mkdir -p spmenu-${version}
     cp -rf \
-	    LICENSE \
-	    meson.build \
-	    meson_options.txt \
-	    spmenu.1 \
-	    spmenu_run.1 \
-	    spmenu_test.1 \
-	    scripts/ \
-	    docs/ \
-	    src/ \
-	    protocols/ \
-	    packaging \
-	    "spmenu-${version}"
+        LICENSE \
+        meson.build \
+        meson_options.txt \
+        spmenu.1 \
+        spmenu_run.1 \
+        spmenu_test.1 \
+        scripts/ \
+        docs/ \
+        src/ \
+        protocols/ \
+        packaging \
+        "spmenu-${version}"
     tar -cf spmenu-${version}.tar spmenu-${version}
     gzip spmenu-${version}.tar
     rm -rf spmenu-${version}
 
+    USER="$(whoami)"
+    printf "Is your GPG key '$(whoami)'?\n"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes) USER="$(whoami)"; break ;;
+            No) printf "\n> "; read -r USER; break ;;
+        esac
+    done
+
     if [ -x "$(command -v gpg)" ]; then
-        gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.tar.gz
+        gpg --detach-sign --yes --local-user "${USER}" spmenu-${version}.tar.gz
     fi
 
     if [ -x "$(command -v md5sum)" ]; then
@@ -144,11 +153,20 @@ gen_gentoo_pkg() {
     [ "$(id -u)" = "0" ] && printf "Do not run as root.\n" && exit 1
     version="$(grep "version : '" meson.build | awk '{ print $3 }' | sed "s/'\"//g; s/\"',//g")"
 
+    USER="$(whoami)"
+    printf "Is your GPG key '$(whoami)'?\n"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes) USER="$(whoami)"; break ;;
+            No) printf "\n> "; read -r USER; break ;;
+        esac
+    done
+
     if [ -f "packaging/spmenu.ebuild" ]; then
         cp packaging/spmenu.ebuild spmenu-${version}.ebuild
 
         if [ -x "$(command -v gpg)" ]; then
-            gpg --detach-sign --yes --local-user $(whoami) spmenu-${version}.ebuild
+            gpg --detach-sign --yes --local-user "${USER}" spmenu-${version}.ebuild
         fi
 
         if [ -x "$(command -v md5sum)" ]; then
@@ -164,7 +182,7 @@ gen_gentoo_pkg() {
         cp packaging/libspmenu.ebuild libspmenu-${version}.ebuild
 
         if [ -x "$(command -v gpg)" ]; then
-            gpg --detach-sign --yes --local-user $(whoami) libspmenu-${version}.ebuild
+            gpg --detach-sign --yes --local-user "${USER}" libspmenu-${version}.ebuild
         fi
 
         if [ -x "$(command -v md5sum)" ]; then
@@ -307,8 +325,6 @@ build() {
 
     mkdir -p build/
 
-    chown -R $(whoami) build/ || exit 1
-
     [ "$static" = "true" ] && STATIC="--prefer-static"
 
     if [ "$reconfigure" = "true" ]; then
@@ -397,7 +413,7 @@ main() {
         "dist") action="dist" ;;
         "arglist") action="arglist" ;;
         "pkg_arch") action="arch" ;;
-	    "pkg_gentoo") action="gentoo" ;;
+        "pkg_gentoo") action="gentoo" ;;
         "help") action="help" ;;
         "install") action="install" ;;
         "theme") action="theme" ;;
@@ -419,7 +435,7 @@ main() {
         "build") build ;;
         "install") install ;;
         "arch") gen_arch_pkg ;;
-	    "gentoo") gen_gentoo_pkg ;;
+        "gentoo") gen_gentoo_pkg ;;
         "theme") generate_theme "$2" ;;
         "help") help ;;
         "arglist") gen_arg_list ;;
