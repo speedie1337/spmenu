@@ -33,6 +33,7 @@ RDEPEND="
 	imlib2? ( media-libs/imlib2 )
 	ssl? ( dev-libs/openssl )
 	fribidi? ( dev-libs/fribidi )
+	config? ( dev-libs/libconfig )
 	x11-libs/pango
 	x11-libs/cairo
 "
