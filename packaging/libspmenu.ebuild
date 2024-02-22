@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://git.speedie.site/speedie/spmenu"
 else
 	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~riscv ~x86"
-	SRC_URI="https://ls.speedie.site/spmenu-3.4.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://ls.speedie.site/spmenu-${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/spmenu-${PV}"
 fi
 
