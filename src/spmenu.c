@@ -9,9 +9,9 @@
 #include <locale.h>
 #include <math.h>
 #include <unistd.h>
-#include "libs/main.c"
+#include "main.c"
 
-#include "libs/draw/draw.h"
+#include "draw/draw.h"
 
 #ifndef VERSION
 #define VERSION "unknown"
@@ -174,28 +174,28 @@ static char **list;
 static size_t listsize;
 
 // various headers
-#include "libs/options.h"
-#include "libs/draw.h"
-#include "libs/arg.h"
+#include "options.h"
+#include "draw.h"
+#include "arg.h"
 
-#include "libs/x11/inc.h"
-#include "libs/wl/inc.h"
+#include "x11/inc.h"
+#include "wl/inc.h"
 
 static char *fonts[] = { font };
 
-#include "libs/img.c"
-#include "libs/icon.c"
-#include "libs/rtl.c"
-#include "libs/sort.c"
-#include "libs/match.c"
-#include "libs/schemes.c"
-#include "libs/stream.c"
-#include "libs/draw.c"
-#include "libs/conf/config.c"
-#include "libs/argv.c"
-#include "libs/history.c"
-#include "libs/arg.c"
-#include "libs/fifo.c"
+#include "img.c"
+#include "icon.c"
+#include "rtl.c"
+#include "sort.c"
+#include "match.c"
+#include "schemes.c"
+#include "stream.c"
+#include "draw.c"
+#include "conf/config.c"
+#include "argv.c"
+#include "history.c"
+#include "arg.c"
+#include "fifo.c"
 
 #if X11
 static Key keys[] = {
@@ -273,8 +273,8 @@ static WlMouse wl_buttons[] = {
 };
 #endif
 
-#include "libs/x11/inc.c"
-#include "libs/wl/inc.c"
+#include "x11/inc.c"
+#include "wl/inc.c"
 
 int is_selected(size_t index) {
     for (int i = 0; i < sel_size; i++) {

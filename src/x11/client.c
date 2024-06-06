@@ -20,7 +20,7 @@ void create_window_x11(int x, int y, int w, int h) {
         ExposureMask | // mapping the drawing
         KeyPressMask | // keypresses
         VisibilityChangeMask | // whether or not client is visible
-        ButtonPressMask |  // see buttonpress in libs/mouse.c for usage
+        ButtonPressMask |  // see buttonpress in mouse.c for usage
         PointerMotionMask; // we need pointer for selecting entries using the mouse
 
     // create client

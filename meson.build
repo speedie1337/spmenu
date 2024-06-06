@@ -8,7 +8,7 @@ project(
 cc = meson.get_compiler('c')
 
 project_source_files = [
-  'src/libs/draw/draw.c',
+  'src/draw/draw.c',
   'src/spmenu.c',
 ]
 
@@ -40,12 +40,12 @@ if get_option('wayland')
 
   run_command('protocols/generate.sh', check : true)
 
-  project_source_files += [ 'src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
-  project_source_files += [ 'src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
-  project_source_files += [ 'src/libs/wl/xdg-output-unstable-v1-client-protocol.h' ]
-  project_source_files += [ 'src/libs/wl/xdg-output-unstable-v1-protocol.c' ]
-  project_source_files += [ 'src/libs/wl/xdg-shell-client-protocol.h' ]
-  project_source_files += [ 'src/libs/wl/xdg-shell-protocol.c' ]
+  project_source_files += [ 'src/wl/wlr-layer-shell-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'src/wl/wlr-layer-shell-unstable-v1-protocol.c' ]
+  project_source_files += [ 'src/wl/xdg-output-unstable-v1-client-protocol.h' ]
+  project_source_files += [ 'src/wl/xdg-output-unstable-v1-protocol.c' ]
+  project_source_files += [ 'src/wl/xdg-shell-client-protocol.h' ]
+  project_source_files += [ 'src/wl/xdg-shell-protocol.c' ]
   build_args += [ '-DWAYLAND' ]
 endif
 

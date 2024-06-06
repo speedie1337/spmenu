@@ -66,42 +66,42 @@ headers() {
     wayland-scanner \
         client-header \
         protocols/wlr-layer-shell-unstable-v1.xml \
-        src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+        src/wl/wlr-layer-shell-unstable-v1-client-protocol.h
 
     wayland-scanner \
         client-header \
         protocols/xdg-shell.xml \
-        src/libs/wl/xdg-shell-client-protocol.h
+        src/wl/xdg-shell-client-protocol.h
 
     wayland-scanner \
         client-header \
         protocols/xdg-output-unstable-v1.xml \
-        src/libs/wl/xdg-output-unstable-v1-client-protocol.h
+        src/wl/xdg-output-unstable-v1-client-protocol.h
 
     wayland-scanner \
         public-code \
         protocols/wlr-layer-shell-unstable-v1.xml \
-        src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c
+        src/wl/wlr-layer-shell-unstable-v1-protocol.c
 
     wayland-scanner \
         public-code \
         protocols/xdg-shell.xml \
-        src/libs/wl/xdg-shell-protocol.c
+        src/wl/xdg-shell-protocol.c
 
     wayland-scanner \
         public-code \
         protocols/xdg-output-unstable-v1.xml \
-        src/libs/wl/xdg-output-unstable-v1-protocol.c
+        src/wl/xdg-output-unstable-v1-protocol.c
 }
 
 clean_headers() {
     rm -f \
-        src/libs/wl/xdg-output-unstable-v1-protocol.c \
-        src/libs/wl/xdg-shell-protocol.c \
-        src/libs/wl/wlr-layer-shell-unstable-v1-protocol.c \
-        src/libs/wl/xdg-output-unstable-v1-client-protocol.h \
-        src/libs/wl/xdg-shell-client-protocol.h \
-        src/libs/wl/wlr-layer-shell-unstable-v1-client-protocol.h
+        src/wl/xdg-output-unstable-v1-protocol.c \
+        src/wl/xdg-shell-protocol.c \
+        src/wl/wlr-layer-shell-unstable-v1-protocol.c \
+        src/wl/xdg-output-unstable-v1-client-protocol.h \
+        src/wl/xdg-shell-client-protocol.h \
+        src/wl/wlr-layer-shell-unstable-v1-client-protocol.h
 }
 
 gen_pkg() {
